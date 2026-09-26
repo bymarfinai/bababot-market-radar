@@ -700,8 +700,8 @@ BabaBot Market Radar adalah:
 
 Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti checklist berikut:
 
-- [ ] Scan semua Binance USDT Perpetual tiap ±5 menit
-- [ ] Detect coin yang mulai bergerak
+- [x] Scan semua Binance USDT Perpetual tiap ±5 menit
+- [x] Detect coin yang mulai bergerak
 - [ ] Classify IGNITION / EXPANSION / EXHAUSTION
 - [ ] Calculate LONG_SCORE / SHORT_SCORE
 - [ ] Read volume
