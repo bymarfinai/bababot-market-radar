@@ -268,9 +268,41 @@ SHORT count
 NO TRADE count
 ```
 
-Still not implemented yet (by design):
+### Stage 7 — RADAR SIDE COMPLETE / EXISTING MCP BRIDGE PENDING
 
-- MCP — Stage 7
+Frozen requirement:
+
+> Expose deterministic Market Radar data through MCP for AI inspection.
+
+Implemented in Market Radar:
+
+- minimal read-only HTTP API using Python standard library only
+- no new framework dependency
+- API is opt-in with `--serve`, so existing scanner behavior is unchanged
+- deployed as isolated Railway service `market-radar`
+- health endpoint: `GET /health`
+- latest compact radar state: `GET /radar/latest`
+- moving candidates: `GET /radar/candidates`
+- optional candidate filters: `decision` and `stage`
+- symbol inspection: `GET /radar/symbol/{symbol}`
+- full detector/scoring/decision logic remains inside Market Radar
+- MCP adapter contract documented in `MCP_ADAPTER.md`
+
+Minimal existing-MCP tool contract:
+
+```text
+get_market_radar
+get_moving_coins
+inspect_symbol
+```
+
+The existing BabaBot 54-tool MCP Worker source is not present in the connected GitHub repositories and no Cloudflare management connector is available in this environment. Therefore the production MCP Worker has intentionally **not** been modified blindly and no second MCP server was created.
+
+The frozen blueprint Stage 7 checkbox remains open until those three read-only proxy tools are actually added to the existing BabaBot MCP Worker.
+
+Still not implemented yet:
+
+- existing BabaBot MCP bridge — remaining Stage 7 integration
 - dashboard/alerts — Stage 8
 - execution — Stage 9
 
