@@ -17,6 +17,7 @@ from .moving_detector import (
     MovementDetectorConfig,
     detect_movement,
 )
+from .stage_classifier import MOVEMENT_STAGE_VERSION, classify_movement_stage
 
 
 @dataclass(frozen=True)
@@ -178,6 +179,7 @@ def scan_all_usdt_perpetuals(
                     movement_skipped_count += 1
                 else:
                     movement_evaluated_count += 1
+                    movement = classify_movement_stage(movement)
                     if movement.is_moving:
                         moving_candidates.append(movement)
             except Exception as exc:
@@ -199,6 +201,10 @@ def scan_all_usdt_perpetuals(
         reverse=True,
     )
 
+    ignition_count = sum(1 for item in moving_candidates if item.stage == "IGNITION")
+    expansion_count = sum(1 for item in moving_candidates if item.stage == "EXPANSION")
+    exhaustion_count = sum(1 for item in moving_candidates if item.stage == "EXHAUSTION")
+
     finished = int(time.time() * 1000)
 
     close_times = {item.candle_close_time_ms for item in snapshots}
@@ -217,6 +223,10 @@ def scan_all_usdt_perpetuals(
         movement_evaluated_count=movement_evaluated_count,
         movement_skipped_count=movement_skipped_count,
         moving_candidate_count=len(moving_candidates),
+        movement_stage_version=MOVEMENT_STAGE_VERSION,
+        ignition_count=ignition_count,
+        expansion_count=expansion_count,
+        exhaustion_count=exhaustion_count,
         symbols=snapshots,
         moving_candidates=moving_candidates,
         errors=errors,
