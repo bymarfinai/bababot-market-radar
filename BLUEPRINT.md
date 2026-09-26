@@ -702,7 +702,7 @@ Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti che
 
 - [x] Scan semua Binance USDT Perpetual tiap ±5 menit
 - [x] Detect coin yang mulai bergerak
-- [ ] Classify IGNITION / EXPANSION / EXHAUSTION
+- [x] Classify IGNITION / EXPANSION / EXHAUSTION
 - [ ] Calculate LONG_SCORE / SHORT_SCORE
 - [ ] Read volume
 - [ ] Read breakout / breakdown
