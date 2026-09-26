@@ -268,27 +268,36 @@ SHORT count
 NO TRADE count
 ```
 
-### Stage 7 — RADAR SIDE COMPLETE / EXISTING MCP BRIDGE PENDING
+### Stage 7 — COMPLETE
 
 Frozen requirement:
 
 > Expose deterministic Market Radar data through MCP for AI inspection.
 
-Implemented in Market Radar:
+Final implementation is deliberately minimal and read-only:
 
-- minimal read-only HTTP API using Python standard library only
-- no new framework dependency
-- API is opt-in with `--serve`, so existing scanner behavior is unchanged
-- deployed as isolated Railway service `market-radar`
-- health endpoint: `GET /health`
-- latest compact radar state: `GET /radar/latest`
-- moving candidates: `GET /radar/candidates`
-- optional candidate filters: `decision` and `stage`
-- symbol inspection: `GET /radar/symbol/{symbol}`
-- full detector/scoring/decision logic remains inside Market Radar
-- MCP adapter contract documented in `MCP_ADAPTER.md`
+- MCP is exposed directly by the standalone `market-radar` Railway service
+- no second calculation engine
+- no dependency on BabaBot Discovery
+- no dependency on the legacy BabaBot MCP Worker
+- no FastAPI/Starlette/MCP framework dependency
+- existing Stage 1–6 logic is untouched
+- scanner cadence remains the same 5-minute closed-candle boundary scheduler
+- MCP reads the latest deterministic `latest_scan.json` snapshot only
 
-Minimal existing-MCP tool contract:
+Production MCP endpoint:
+
+```text
+https://market-radar-production-d307.up.railway.app/mcp
+```
+
+MCP protocol:
+
+```text
+2025-11-25 handshake-era Streamable HTTP
+```
+
+Exactly three read-only MCP tools are exposed:
 
 ```text
 get_market_radar
@@ -296,13 +305,35 @@ get_moving_coins
 inspect_symbol
 ```
 
-The existing BabaBot 54-tool MCP Worker source is not present in the connected GitHub repositories and no Cloudflare management connector is available in this environment. Therefore the production MCP Worker has intentionally **not** been modified blindly and no second MCP server was created.
+Tool responsibilities:
 
-The frozen blueprint Stage 7 checkbox remains open until those three read-only proxy tools are actually added to the existing BabaBot MCP Worker.
+- `get_market_radar` — latest compact radar scan and candidate list
+- `get_moving_coins` — current candidates with optional `decision` / `stage` filters
+- `inspect_symbol` — inspect one symbol's stage, scores, context, final decision, and reasons; non-moving symbols return their latest Stage 1 snapshot
+
+The MCP layer does **not**:
+
+- rescan Binance
+- calculate movement
+- recalculate scores
+- reinterpret OI
+- calculate regime
+- alter `LONG / SHORT / NO TRADE`
+- execute trades
+
+Non-MCP read endpoints remain available for dashboard/operations:
+
+```text
+GET /health
+GET /radar/latest
+GET /radar/candidates
+GET /radar/symbol/{symbol}
+```
+
+Stage 7 contract and scope are documented in `MCP_ADAPTER.md`.
 
 Still not implemented yet:
 
-- existing BabaBot MCP bridge — remaining Stage 7 integration
 - dashboard/alerts — Stage 8
 - execution — Stage 9
 
