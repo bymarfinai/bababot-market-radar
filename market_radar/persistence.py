@@ -817,6 +817,7 @@ def get_pending_entry_signals(
     """Return fresh actionable signals that do not yet have a Stage 11 review."""
     current_ms = int(now_ms if now_ms is not None else time.time() * 1000)
     cutoff = current_ms - max(1, int(max_age_ms))
+    retry_before = current_ms - 60_000
     safe_limit = max(1, min(int(limit), 100))
 
     if path is not None or persistence_backend() == "sqlite":
@@ -827,12 +828,15 @@ def get_pending_entry_signals(
                 select s.*
                 from signals s
                 left join entry_approvals a on a.signal_id = s.signal_id
-                where a.signal_id is null
+                where (
+                        a.signal_id is null
+                        or (a.ai_verdict = 'ERROR' and a.reviewed_at_ms <= ?)
+                      )
                   and s.signal_time_ms >= ?
                 order by s.signal_time_ms asc, s.signal_id
                 limit ?
                 """,
-                (cutoff, safe_limit),
+                (retry_before, cutoff, safe_limit),
             ).fetchall()
             return [dict(row) for row in rows]
 
@@ -844,12 +848,15 @@ def get_pending_entry_signals(
                 select s.*
                 from signals s
                 left join entry_approvals a on a.signal_id = s.signal_id
-                where a.signal_id is null
+                where (
+                        a.signal_id is null
+                        or (a.ai_verdict = 'ERROR' and a.reviewed_at_ms <= %s)
+                      )
                   and s.signal_time_ms >= %s
                 order by s.signal_time_ms asc, s.signal_id
                 limit %s
                 """,
-                (cutoff, safe_limit),
+                (retry_before, cutoff, safe_limit),
             )
             return [dict(row) for row in cur.fetchall()]
 
