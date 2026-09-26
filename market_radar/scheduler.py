@@ -4,6 +4,7 @@ import sys
 import time
 from collections.abc import Callable
 
+from .ai_approval import start_pending_approval_worker
 from .binance import BinancePublicClient
 from .execution_handoff import (
     default_execution_handoff_path,
@@ -68,6 +69,8 @@ def run_forever(
                 file=sys.stderr,
                 flush=True,
             )
+
+        start_pending_approval_worker()
         if close_time is not None:
             last_processed_close = close_time
 
