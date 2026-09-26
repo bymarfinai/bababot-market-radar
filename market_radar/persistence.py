@@ -89,6 +89,24 @@ create table if not exists ai_reviews (
 create index if not exists idx_ai_reviews_signal_time
 on ai_reviews(signal_id, reviewed_at_ms desc);
 
+create table if not exists entry_approvals (
+    signal_id text primary key references signals(signal_id) on delete cascade,
+    reviewed_at_ms integer not null,
+    risk_verdict text not null,
+    ai_verdict text not null,
+    final_verdict text not null,
+    confidence real,
+    model text,
+    approval_version text not null,
+    prompt_version text,
+    risk_reasons_json text not null default '[]',
+    ai_reasons_json text not null default '[]',
+    raw_json text
+);
+
+create index if not exists idx_entry_approvals_verdict_time
+on entry_approvals(final_verdict, reviewed_at_ms desc);
+
 create table if not exists positions (
     position_id text primary key,
     signal_id text references signals(signal_id),
@@ -196,6 +214,24 @@ create table if not exists ai_reviews (
 
 create index if not exists idx_ai_reviews_signal_time
 on ai_reviews(signal_id, reviewed_at_ms desc);
+
+create table if not exists entry_approvals (
+    signal_id text primary key references signals(signal_id) on delete cascade,
+    reviewed_at_ms bigint not null,
+    risk_verdict text not null,
+    ai_verdict text not null,
+    final_verdict text not null,
+    confidence double precision,
+    model text,
+    approval_version text not null,
+    prompt_version text,
+    risk_reasons_json text not null default '[]',
+    ai_reasons_json text not null default '[]',
+    raw_json text
+);
+
+create index if not exists idx_entry_approvals_verdict_time
+on entry_approvals(final_verdict, reviewed_at_ms desc);
 
 create table if not exists positions (
     position_id text primary key,
@@ -767,4 +803,317 @@ def persistence_summary(
         "backend": "postgres",
         "sqlite_migrated_this_call": migration["migrated"],
         **values,
+    }
+
+
+
+def get_pending_entry_signals(
+    *,
+    max_age_ms: int,
+    limit: int = 12,
+    now_ms: int | None = None,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Return fresh actionable signals that do not yet have a Stage 11 review."""
+    current_ms = int(now_ms if now_ms is not None else time.time() * 1000)
+    cutoff = current_ms - max(1, int(max_age_ms))
+    safe_limit = max(1, min(int(limit), 100))
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            rows = conn.execute(
+                """
+                select s.*
+                from signals s
+                left join entry_approvals a on a.signal_id = s.signal_id
+                where a.signal_id is null
+                  and s.signal_time_ms >= ?
+                order by s.signal_time_ms asc, s.signal_id
+                limit ?
+                """,
+                (cutoff, safe_limit),
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                select s.*
+                from signals s
+                left join entry_approvals a on a.signal_id = s.signal_id
+                where a.signal_id is null
+                  and s.signal_time_ms >= %s
+                order by s.signal_time_ms asc, s.signal_id
+                limit %s
+                """,
+                (cutoff, safe_limit),
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def save_entry_approval(
+    *,
+    signal_id: str,
+    reviewed_at_ms: int,
+    risk_verdict: str,
+    ai_verdict: str,
+    final_verdict: str,
+    confidence: float | None,
+    model: str | None,
+    approval_version: str,
+    prompt_version: str | None,
+    risk_reasons: list[str],
+    ai_reasons: list[str],
+    raw: dict[str, Any],
+    path: str | os.PathLike[str] | None = None,
+) -> None:
+    """Persist one idempotent Stage 11 entry approval."""
+    risk_json = json.dumps(risk_reasons, separators=(",", ":"))
+    ai_json = json.dumps(ai_reasons, separators=(",", ":"))
+    raw_json = json.dumps(raw, separators=(",", ":"), allow_nan=False)
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            conn.execute(
+                """
+                insert into entry_approvals (
+                    signal_id, reviewed_at_ms, risk_verdict, ai_verdict,
+                    final_verdict, confidence, model, approval_version,
+                    prompt_version, risk_reasons_json, ai_reasons_json, raw_json
+                ) values (?,?,?,?,?,?,?,?,?,?,?,?)
+                on conflict(signal_id) do update set
+                    reviewed_at_ms=excluded.reviewed_at_ms,
+                    risk_verdict=excluded.risk_verdict,
+                    ai_verdict=excluded.ai_verdict,
+                    final_verdict=excluded.final_verdict,
+                    confidence=excluded.confidence,
+                    model=excluded.model,
+                    approval_version=excluded.approval_version,
+                    prompt_version=excluded.prompt_version,
+                    risk_reasons_json=excluded.risk_reasons_json,
+                    ai_reasons_json=excluded.ai_reasons_json,
+                    raw_json=excluded.raw_json
+                """,
+                (
+                    signal_id, reviewed_at_ms, risk_verdict, ai_verdict,
+                    final_verdict, confidence, model, approval_version,
+                    prompt_version, risk_json, ai_json, raw_json,
+                ),
+            )
+            if ai_verdict not in {"NOT_CALLED", "ERROR"}:
+                conn.execute(
+                    """
+                    insert into ai_reviews (
+                        signal_id, reviewed_at_ms, verdict, confidence,
+                        model, reasons_json, raw_json
+                    ) values (?,?,?,?,?,?,?)
+                    """,
+                    (
+                        signal_id, reviewed_at_ms, ai_verdict,
+                        None if confidence is None else str(confidence),
+                        model, ai_json, raw_json,
+                    ),
+                )
+            conn.execute(
+                """
+                insert into trade_events (
+                    signal_id, position_id, event_type,
+                    event_time_ms, payload_json
+                ) values (?, null, 'ENTRY_APPROVAL_COMPLETED', ?, ?)
+                """,
+                (
+                    signal_id,
+                    reviewed_at_ms,
+                    json.dumps(
+                        {
+                            "risk_verdict": risk_verdict,
+                            "ai_verdict": ai_verdict,
+                            "final_verdict": final_verdict,
+                            "confidence": confidence,
+                            "approval_version": approval_version,
+                        },
+                        separators=(",", ":"),
+                    ),
+                ),
+            )
+        return
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                insert into entry_approvals (
+                    signal_id, reviewed_at_ms, risk_verdict, ai_verdict,
+                    final_verdict, confidence, model, approval_version,
+                    prompt_version, risk_reasons_json, ai_reasons_json, raw_json
+                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                on conflict(signal_id) do update set
+                    reviewed_at_ms=excluded.reviewed_at_ms,
+                    risk_verdict=excluded.risk_verdict,
+                    ai_verdict=excluded.ai_verdict,
+                    final_verdict=excluded.final_verdict,
+                    confidence=excluded.confidence,
+                    model=excluded.model,
+                    approval_version=excluded.approval_version,
+                    prompt_version=excluded.prompt_version,
+                    risk_reasons_json=excluded.risk_reasons_json,
+                    ai_reasons_json=excluded.ai_reasons_json,
+                    raw_json=excluded.raw_json
+                """,
+                (
+                    signal_id, reviewed_at_ms, risk_verdict, ai_verdict,
+                    final_verdict, confidence, model, approval_version,
+                    prompt_version, risk_json, ai_json, raw_json,
+                ),
+            )
+            if ai_verdict not in {"NOT_CALLED", "ERROR"}:
+                cur.execute(
+                    """
+                    insert into ai_reviews (
+                        signal_id, reviewed_at_ms, verdict, confidence,
+                        model, reasons_json, raw_json
+                    ) values (%s,%s,%s,%s,%s,%s,%s)
+                    """,
+                    (
+                        signal_id, reviewed_at_ms, ai_verdict,
+                        None if confidence is None else str(confidence),
+                        model, ai_json, raw_json,
+                    ),
+                )
+            cur.execute(
+                """
+                insert into trade_events (
+                    signal_id, position_id, event_type,
+                    event_time_ms, payload_json
+                ) values (%s, null, 'ENTRY_APPROVAL_COMPLETED', %s, %s)
+                """,
+                (
+                    signal_id,
+                    reviewed_at_ms,
+                    json.dumps(
+                        {
+                            "risk_verdict": risk_verdict,
+                            "ai_verdict": ai_verdict,
+                            "final_verdict": final_verdict,
+                            "confidence": confidence,
+                            "approval_version": approval_version,
+                        },
+                        separators=(",", ":"),
+                    ),
+                ),
+            )
+
+    # Maintain the SQLite volume as the Stage 10/11 safety ledger too.
+    try:
+        save_entry_approval(
+            signal_id=signal_id,
+            reviewed_at_ms=reviewed_at_ms,
+            risk_verdict=risk_verdict,
+            ai_verdict=ai_verdict,
+            final_verdict=final_verdict,
+            confidence=confidence,
+            model=model,
+            approval_version=approval_version,
+            prompt_version=prompt_version,
+            risk_reasons=risk_reasons,
+            ai_reasons=ai_reasons,
+            raw=raw,
+            path=database_path(),
+        )
+    except Exception:
+        pass
+
+
+def list_entry_approvals(
+    *,
+    limit: int = 100,
+    verdict: str | None = None,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(int(limit), 500))
+    normalized = verdict.upper() if verdict else None
+    if normalized and normalized not in {"APPROVE", "VETO", "WATCH"}:
+        raise ValueError("verdict must be APPROVE, VETO, or WATCH")
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        query = """
+            select a.*, s.symbol, s.side, s.signal_time_ms, s.signal_price,
+                   s.stage, s.long_score, s.short_score, s.score_edge
+            from entry_approvals a
+            join signals s on s.signal_id = a.signal_id
+        """
+        params: list[Any] = []
+        if normalized:
+            query += " where a.final_verdict = ?"
+            params.append(normalized)
+        query += " order by a.reviewed_at_ms desc limit ?"
+        params.append(safe_limit)
+        with _sqlite_connect(db_path) as conn:
+            rows = [dict(row) for row in conn.execute(query, tuple(params)).fetchall()]
+    else:
+        initialize_postgres()
+        query = """
+            select a.*, s.symbol, s.side, s.signal_time_ms, s.signal_price,
+                   s.stage, s.long_score, s.short_score, s.score_edge
+            from entry_approvals a
+            join signals s on s.signal_id = a.signal_id
+        """
+        params = []
+        if normalized:
+            query += " where a.final_verdict = %s"
+            params.append(normalized)
+        query += " order by a.reviewed_at_ms desc limit %s"
+        params.append(safe_limit)
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(query, tuple(params))
+                rows = [dict(row) for row in cur.fetchall()]
+
+    for row in rows:
+        row["risk_reasons"] = json.loads(row.pop("risk_reasons_json") or "[]")
+        row["ai_reasons"] = json.loads(row.pop("ai_reasons_json") or "[]")
+        if row.get("raw_json"):
+            try:
+                row["raw"] = json.loads(row.pop("raw_json"))
+            except Exception:
+                row["raw"] = row.pop("raw_json")
+    return rows
+
+
+def entry_approval_summary(
+    path: str | os.PathLike[str] | None = None,
+) -> dict[str, Any]:
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            total = conn.execute("select count(*) from entry_approvals").fetchone()[0]
+            approve = conn.execute("select count(*) from entry_approvals where final_verdict='APPROVE'").fetchone()[0]
+            veto = conn.execute("select count(*) from entry_approvals where final_verdict='VETO'").fetchone()[0]
+            watch = conn.execute("select count(*) from entry_approvals where final_verdict='WATCH'").fetchone()[0]
+        backend = "sqlite"
+    else:
+        initialize_postgres()
+        with _postgres_connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("select count(*) from entry_approvals")
+                total = cur.fetchone()[0]
+                cur.execute("select count(*) from entry_approvals where final_verdict='APPROVE'")
+                approve = cur.fetchone()[0]
+                cur.execute("select count(*) from entry_approvals where final_verdict='VETO'")
+                veto = cur.fetchone()[0]
+                cur.execute("select count(*) from entry_approvals where final_verdict='WATCH'")
+                watch = cur.fetchone()[0]
+        backend = "postgres"
+    return {
+        "backend": backend,
+        "total_reviews": total,
+        "approve_count": approve,
+        "veto_count": veto,
+        "watch_count": watch,
     }
