@@ -22,6 +22,66 @@ class SymbolSnapshot:
     price_change_pct_24h: float
 
 
+
+
+@dataclass(frozen=True)
+class MarketContext:
+    """Stage 5 context attached to a moving candidate.
+
+    Context describes the market state. It is not the Stage 6 trade decision.
+    """
+
+    context_version: str
+
+    # Volume/activity
+    quote_volume_5m: float
+    quote_volume_24h: float
+    volume_ratio: float
+    volume_confirmed: bool
+
+    # Structure
+    prev_20_high: float
+    prev_20_low: float
+    breakout_up_pct: float
+    breakdown_down_pct: float
+    breakout: bool
+    breakdown: bool
+    failed_breakout: bool
+    failed_breakdown: bool
+    structure_status: str
+
+    # Aggressive taker flow from the same closed 5m kline
+    taker_buy_quote_volume_5m: float
+    taker_sell_quote_volume_5m: float
+    taker_buy_sell_ratio: float
+    taker_buy_share: float
+    taker_bias: str
+
+    # Raw Binance open interest (contracts/coins, never USD-valued OI)
+    raw_oi_first: float | None
+    raw_oi_last: float | None
+    raw_oi_change_pct: float | None
+    raw_oi_window_minutes: int | None
+    oi_interpretation: str | None
+
+    # Funding
+    funding_rate: float | None
+
+    # Existing causal regime logic ported from BabaBot Discovery
+    market_regime: str | None
+    regime_ema7: float | None
+    regime_ema20: float | None
+    regime_atr14: float | None
+    regime_hh: int | None
+    regime_hl: int | None
+    regime_lh: int | None
+    regime_ll: int | None
+    regime_source_version: str | None
+    regime_bar_close_time_ms: int | None
+
+    context_errors: tuple[str, ...] = ()
+
+
 @dataclass(frozen=True)
 class MovementDetection:
     """Stage 2 movement result.
@@ -57,6 +117,8 @@ class MovementDetection:
     long_score_components: dict[str, float] = field(default_factory=dict)
     short_score_components: dict[str, float] = field(default_factory=dict)
     direction_score_version: str | None = None
+    market_context: MarketContext | None = None
+    market_context_version: str | None = None
 
 
 @dataclass
@@ -75,6 +137,9 @@ class MarketScan:
     moving_candidate_count: int
     movement_stage_version: str
     direction_score_version: str
+    market_context_version: str
+    context_complete_count: int
+    context_partial_count: int
     ignition_count: int
     expansion_count: int
     exhaustion_count: int
