@@ -2,12 +2,52 @@ from __future__ import annotations
 
 import unittest
 
+from market_radar.moving_detector import (
+    InsufficientHistoryError,
+    detect_movement,
+)
 from market_radar.scheduler import next_five_minute_run_ms
 from market_radar.stage1_scanner import (
     filter_usdt_perpetuals,
     latest_closed_kline,
     snapshot_from_kline,
 )
+
+
+def make_klines(
+    closes: list[float],
+    quote_volumes: list[float] | None = None,
+    ranges: list[float] | None = None,
+    trades: list[int] | None = None,
+) -> list[list]:
+    quote_volumes = quote_volumes or [100.0] * len(closes)
+    ranges = ranges or [0.2] * len(closes)
+    trades = trades or [100] * len(closes)
+
+    rows: list[list] = []
+    for idx, close in enumerate(closes):
+        previous = closes[idx - 1] if idx > 0 else close
+        half_range = ranges[idx] / 2.0
+        open_time = idx * 300_000
+        close_time = (idx + 1) * 300_000 - 1
+
+        rows.append(
+            [
+                open_time,
+                str(previous),
+                str(close + half_range),
+                str(close - half_range),
+                str(close),
+                "1",
+                close_time,
+                str(quote_volumes[idx]),
+                trades[idx],
+                "0.5",
+                str(quote_volumes[idx] * 0.5),
+                "0",
+            ]
+        )
+    return rows
 
 
 class Stage1ScannerTests(unittest.TestCase):
@@ -63,6 +103,117 @@ class Stage1ScannerTests(unittest.TestCase):
         ]
         selected = latest_closed_kline(rows, now_ms=599_999)
         self.assertEqual(int(selected[6]), 299_999)
+
+
+class Stage2MovementDetectorTests(unittest.TestCase):
+    def test_flat_market_is_noise_not_candidate(self):
+        rows = make_klines([100.0] * 40)
+        result = detect_movement("FLATUSDT", rows, now_ms=40 * 300_000 + 1)
+
+        self.assertEqual(result.movement_state, "NOISE")
+        self.assertFalse(result.is_moving)
+        self.assertEqual(result.direction_hint, "FLAT")
+
+    def test_abnormal_fresh_move_is_early_movement(self):
+        closes = [100.0] * 39 + [100.5]
+        volumes = [100.0] * 39 + [250.0]
+        ranges = [0.2] * 39 + [0.8]
+        trades = [100] * 39 + [180]
+
+        result = detect_movement(
+            "EARLYUSDT",
+            make_klines(closes, volumes, ranges, trades),
+            now_ms=40 * 300_000 + 1,
+        )
+
+        self.assertTrue(result.is_moving)
+        self.assertEqual(result.movement_state, "EARLY_MOVEMENT")
+        self.assertEqual(result.direction_hint, "UP")
+        self.assertGreaterEqual(result.evidence_count, 3)
+
+    def test_persistent_move_is_strong_continuation(self):
+        closes = [100.0] * 37 + [100.25, 100.55, 101.0]
+        volumes = [100.0] * 37 + [130.0, 160.0, 250.0]
+        ranges = [0.2] * 37 + [0.3, 0.4, 0.9]
+        trades = [100] * 37 + [120, 140, 220]
+
+        result = detect_movement(
+            "STRONGUSDT",
+            make_klines(closes, volumes, ranges, trades),
+            now_ms=40 * 300_000 + 1,
+        )
+
+        self.assertTrue(result.is_moving)
+        self.assertTrue(result.directional_persistence)
+        self.assertEqual(result.movement_state, "STRONG_CONTINUATION")
+
+    def test_already_extended_move_is_flagged_late_not_stage3_exhaustion(self):
+        closes = [100.0] * 37 + [100.25, 100.55, 101.0]
+        volumes = [100.0] * 37 + [130.0, 160.0, 250.0]
+        ranges = [0.2] * 37 + [0.3, 0.4, 0.9]
+        trades = [100] * 37 + [120, 140, 220]
+
+        result = detect_movement(
+            "LATEUSDT",
+            make_klines(closes, volumes, ranges, trades),
+            now_ms=40 * 300_000 + 1,
+            ret_24h_pct=35.0,
+        )
+
+        self.assertTrue(result.is_moving)
+        self.assertEqual(result.movement_state, "LATE_MOVEMENT")
+        self.assertNotEqual(result.movement_state, "EXHAUSTION")
+
+    def test_down_move_is_raw_direction_hint_not_short_trade_decision(self):
+        closes = [100.0] * 39 + [99.5]
+        volumes = [100.0] * 39 + [250.0]
+        ranges = [0.2] * 39 + [0.8]
+        trades = [100] * 39 + [180]
+
+        result = detect_movement(
+            "DOWNUSDT",
+            make_klines(closes, volumes, ranges, trades),
+            now_ms=40 * 300_000 + 1,
+        )
+
+        self.assertTrue(result.is_moving)
+        self.assertEqual(result.direction_hint, "DOWN")
+        self.assertFalse(hasattr(result, "long_score"))
+        self.assertFalse(hasattr(result, "short_score"))
+        self.assertFalse(hasattr(result, "decision"))
+
+    def test_in_progress_spike_cannot_leak_into_detection(self):
+        closed = make_klines([100.0] * 40)
+        open_spike = [
+            40 * 300_000,
+            "100",
+            "120",
+            "99",
+            "118",
+            "1000",
+            41 * 300_000 - 1,
+            "100000",
+            10000,
+            "900",
+            "90000",
+            "0",
+        ]
+        rows = closed + [open_spike]
+
+        result = detect_movement(
+            "CAUSALUSDT",
+            rows,
+            now_ms=40 * 300_000 + 1000,
+        )
+
+        self.assertFalse(result.is_moving)
+        self.assertEqual(result.movement_state, "NOISE")
+        self.assertEqual(result.candle_close_time_ms, 40 * 300_000 - 1)
+
+    def test_new_listing_without_baseline_is_skipped_cleanly(self):
+        rows = make_klines([100.0] * 10)
+        with self.assertRaises(InsufficientHistoryError):
+            detect_movement("NEWUSDT", rows, now_ms=10 * 300_000 + 1)
 
 
 if __name__ == "__main__":
