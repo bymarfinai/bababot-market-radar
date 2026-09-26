@@ -3,18 +3,22 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+import time
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+import psycopg2
+import psycopg2.extras
+
 from .models import MarketScan
 
 
-PERSISTENCE_VERSION = "stage10-v1"
+PERSISTENCE_VERSION = "stage10-v2-postgres"
 DEFAULT_DB_PATH = "data/market_radar.sqlite3"
 
 
-SCHEMA_SQL = """
+SQLITE_SCHEMA_SQL = """
 create table if not exists signals (
     signal_id text primary key,
     symbol text not null,
@@ -122,11 +126,134 @@ on trade_events(event_time_ms desc);
 """
 
 
+POSTGRES_SCHEMA_SQL = """
+create table if not exists signals (
+    signal_id text primary key,
+    symbol text not null,
+    side text not null check (side in ('LONG','SHORT')),
+    signal_time_ms bigint not null,
+    signal_price double precision,
+    stage text,
+    long_score double precision,
+    short_score double precision,
+    score_edge double precision,
+    volume_ratio double precision,
+    structure_status text,
+    taker_bias text,
+    raw_oi_change_pct double precision,
+    funding_rate double precision,
+    market_regime text,
+    decision_context_balance integer,
+    decision_reasons_json text not null default '[]',
+    snapshot_json text not null,
+    first_seen_at_ms bigint not null,
+    last_seen_at_ms bigint not null,
+    persistence_version text not null
+);
+
+create index if not exists idx_signals_time
+on signals(signal_time_ms desc);
+
+create index if not exists idx_signals_symbol_time
+on signals(symbol, signal_time_ms desc);
+
+create index if not exists idx_signals_side_time
+on signals(side, signal_time_ms desc);
+
+create table if not exists signal_outcomes (
+    signal_id text primary key references signals(signal_id) on delete cascade,
+    status text not null default 'PENDING',
+    updated_at_ms bigint not null,
+    future_5m_return_pct double precision,
+    future_15m_return_pct double precision,
+    future_30m_return_pct double precision,
+    future_1h_return_pct double precision,
+    future_2h_return_pct double precision,
+    mfe_15m_pct double precision,
+    mae_15m_pct double precision,
+    mfe_1h_pct double precision,
+    mae_1h_pct double precision,
+    mfe_2h_pct double precision,
+    mae_2h_pct double precision,
+    hit_0_5pct integer,
+    hit_1pct integer,
+    hit_2pct integer,
+    time_to_0_5pct_minutes integer,
+    time_to_1pct_minutes integer,
+    time_to_2pct_minutes integer
+);
+
+create table if not exists ai_reviews (
+    review_id bigserial primary key,
+    signal_id text not null references signals(signal_id) on delete cascade,
+    reviewed_at_ms bigint not null,
+    verdict text,
+    confidence text,
+    model text,
+    reasons_json text not null default '[]',
+    raw_json text
+);
+
+create index if not exists idx_ai_reviews_signal_time
+on ai_reviews(signal_id, reviewed_at_ms desc);
+
+create table if not exists positions (
+    position_id text primary key,
+    signal_id text references signals(signal_id),
+    symbol text not null,
+    side text not null check (side in ('LONG','SHORT')),
+    status text not null,
+    opened_at_ms bigint,
+    closed_at_ms bigint,
+    entry_price double precision,
+    exit_price double precision,
+    quantity double precision,
+    stop_loss double precision,
+    take_profit double precision,
+    realized_pnl double precision,
+    realized_pnl_pct double precision,
+    close_reason text,
+    mode text not null,
+    raw_json text
+);
+
+create index if not exists idx_positions_status_time
+on positions(status, opened_at_ms desc);
+
+create table if not exists trade_events (
+    event_id bigserial primary key,
+    signal_id text references signals(signal_id),
+    position_id text references positions(position_id),
+    event_type text not null,
+    event_time_ms bigint not null,
+    payload_json text not null default '{}'
+);
+
+create index if not exists idx_trade_events_time
+on trade_events(event_time_ms desc);
+
+create table if not exists persistence_meta (
+    key text primary key,
+    value text,
+    updated_at_ms bigint not null
+);
+"""
+
+
 def database_path() -> Path:
     return Path(os.environ.get("BABABOT_DB_PATH", DEFAULT_DB_PATH))
 
 
-def _connect(path: str | os.PathLike[str] | None = None) -> sqlite3.Connection:
+def database_url() -> str | None:
+    value = os.environ.get("DATABASE_URL")
+    return value.strip() if value and value.strip() else None
+
+
+def persistence_backend() -> str:
+    return "postgres" if database_url() else "sqlite"
+
+
+def _sqlite_connect(path: str | os.PathLike[str] | None = None) -> sqlite3.Connection:
     db_path = Path(path) if path is not None else database_path()
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path, timeout=15.0)
@@ -140,13 +267,36 @@ def _connect(path: str | os.PathLike[str] | None = None) -> sqlite3.Connection:
     return conn
 
 
-def initialize_database(
+def _postgres_connect():
+    url = database_url()
+    if not url:
+        raise RuntimeError("DATABASE_URL is not configured")
+    return psycopg2.connect(url, connect_timeout=10)
+
+
+def initialize_sqlite(
     path: str | os.PathLike[str] | None = None,
 ) -> Path:
     db_path = Path(path) if path is not None else database_path()
-    with _connect(db_path) as conn:
-        conn.executescript(SCHEMA_SQL)
+    with _sqlite_connect(db_path) as conn:
+        conn.executescript(SQLITE_SCHEMA_SQL)
     return db_path
+
+
+def initialize_postgres() -> None:
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(POSTGRES_SCHEMA_SQL)
+
+
+def initialize_database(
+    path: str | os.PathLike[str] | None = None,
+) -> str | Path:
+    if path is not None or persistence_backend() == "sqlite":
+        return initialize_sqlite(path)
+    initialize_postgres()
+    migrate_sqlite_history_once()
+    return "postgres"
 
 
 def _price_map(scan: MarketScan) -> dict[str, float]:
@@ -157,42 +307,54 @@ def _signal_id(symbol: str, candle_close_time_ms: int, side: str) -> str:
     return f"{symbol.upper()}:{int(candle_close_time_ms)}:{side}"
 
 
-def record_actionable_signals(
+def _candidate_payload(scan: MarketScan, candidate: Any, price: float | None) -> tuple[Any, ...]:
+    ctx = candidate.market_context
+    snapshot = asdict(candidate)
+    reasons = list(candidate.decision_reasons or ())
+    return (
+        _signal_id(candidate.symbol, candidate.candle_close_time_ms, candidate.decision),
+        candidate.symbol.upper(),
+        candidate.decision,
+        candidate.candle_close_time_ms,
+        price,
+        candidate.stage,
+        candidate.long_score,
+        candidate.short_score,
+        candidate.score_edge,
+        candidate.volume_ratio,
+        ctx.structure_status if ctx else None,
+        ctx.taker_bias if ctx else None,
+        ctx.raw_oi_change_pct if ctx else None,
+        ctx.funding_rate if ctx else None,
+        ctx.market_regime if ctx else None,
+        candidate.decision_context_balance,
+        json.dumps(reasons, separators=(",", ":")),
+        json.dumps(snapshot, separators=(",", ":"), allow_nan=False),
+        scan.scan_finished_at_ms,
+        scan.scan_finished_at_ms,
+        PERSISTENCE_VERSION,
+    )
+
+
+def _record_sqlite(
     scan: MarketScan,
     path: str | os.PathLike[str] | None = None,
 ) -> dict[str, int]:
-    """Persist Stage 6 LONG/SHORT decisions exactly once.
-
-    NO TRADE never enters the signal ledger. Re-processing the same closed
-    candle updates last_seen_at_ms but cannot duplicate the signal.
-    """
-    db_path = initialize_database(path)
+    db_path = initialize_sqlite(path)
     prices = _price_map(scan)
     inserted = 0
     updated = 0
 
-    with _connect(db_path) as conn:
+    with _sqlite_connect(db_path) as conn:
         for candidate in scan.moving_candidates:
-            side = candidate.decision
-            if side not in {"LONG", "SHORT"}:
+            if candidate.decision not in {"LONG", "SHORT"}:
                 continue
-
-            symbol = candidate.symbol.upper()
-            signal_id = _signal_id(
-                symbol,
-                candidate.candle_close_time_ms,
-                side,
-            )
-            ctx = candidate.market_context
-            snapshot = asdict(candidate)
-            reasons = list(candidate.decision_reasons or ())
-            price = prices.get(symbol)
-
+            values = _candidate_payload(scan, candidate, prices.get(candidate.symbol.upper()))
+            signal_id = values[0]
             existed = conn.execute(
                 "select 1 from signals where signal_id = ?",
                 (signal_id,),
             ).fetchone() is not None
-
             conn.execute(
                 """
                 insert into signals (
@@ -205,33 +367,11 @@ def record_actionable_signals(
                 ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 on conflict(signal_id) do update set
                     last_seen_at_ms = excluded.last_seen_at_ms,
-                    snapshot_json = excluded.snapshot_json
+                    snapshot_json = excluded.snapshot_json,
+                    persistence_version = excluded.persistence_version
                 """,
-                (
-                    signal_id,
-                    symbol,
-                    side,
-                    candidate.candle_close_time_ms,
-                    price,
-                    candidate.stage,
-                    candidate.long_score,
-                    candidate.short_score,
-                    candidate.score_edge,
-                    candidate.volume_ratio,
-                    ctx.structure_status if ctx else None,
-                    ctx.taker_bias if ctx else None,
-                    ctx.raw_oi_change_pct if ctx else None,
-                    ctx.funding_rate if ctx else None,
-                    ctx.market_regime if ctx else None,
-                    candidate.decision_context_balance,
-                    json.dumps(reasons, separators=(",", ":")),
-                    json.dumps(snapshot, separators=(",", ":"), allow_nan=False),
-                    scan.scan_finished_at_ms,
-                    scan.scan_finished_at_ms,
-                    PERSISTENCE_VERSION,
-                ),
+                values,
             )
-
             if existed:
                 updated += 1
             else:
@@ -256,10 +396,10 @@ def record_actionable_signals(
                         scan.scan_finished_at_ms,
                         json.dumps(
                             {
-                                "symbol": symbol,
-                                "side": side,
+                                "symbol": candidate.symbol.upper(),
+                                "side": candidate.decision,
                                 "stage": candidate.stage,
-                                "signal_price": price,
+                                "signal_price": prices.get(candidate.symbol.upper()),
                                 "long_score": candidate.long_score,
                                 "short_score": candidate.short_score,
                             },
@@ -267,8 +407,224 @@ def record_actionable_signals(
                         ),
                     ),
                 )
-
     return {"inserted": inserted, "updated": updated}
+
+
+def _record_postgres(scan: MarketScan) -> dict[str, int]:
+    initialize_postgres()
+    migrate_sqlite_history_once()
+    prices = _price_map(scan)
+    inserted = 0
+    updated = 0
+
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            for candidate in scan.moving_candidates:
+                if candidate.decision not in {"LONG", "SHORT"}:
+                    continue
+                values = _candidate_payload(scan, candidate, prices.get(candidate.symbol.upper()))
+                signal_id = values[0]
+                cur.execute("select 1 from signals where signal_id = %s", (signal_id,))
+                existed = cur.fetchone() is not None
+                cur.execute(
+                    """
+                    insert into signals (
+                        signal_id, symbol, side, signal_time_ms, signal_price,
+                        stage, long_score, short_score, score_edge, volume_ratio,
+                        structure_status, taker_bias, raw_oi_change_pct,
+                        funding_rate, market_regime, decision_context_balance,
+                        decision_reasons_json, snapshot_json,
+                        first_seen_at_ms, last_seen_at_ms, persistence_version
+                    ) values (
+                        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
+                    )
+                    on conflict(signal_id) do update set
+                        last_seen_at_ms = excluded.last_seen_at_ms,
+                        snapshot_json = excluded.snapshot_json,
+                        persistence_version = excluded.persistence_version
+                    """,
+                    values,
+                )
+                if existed:
+                    updated += 1
+                else:
+                    inserted += 1
+                    cur.execute(
+                        """
+                        insert into signal_outcomes (
+                            signal_id, status, updated_at_ms
+                        ) values (%s, 'PENDING', %s)
+                        on conflict(signal_id) do nothing
+                        """,
+                        (signal_id, scan.scan_finished_at_ms),
+                    )
+                    cur.execute(
+                        """
+                        insert into trade_events (
+                            signal_id, position_id, event_type,
+                            event_time_ms, payload_json
+                        ) values (%s, null, 'SIGNAL_CREATED', %s, %s)
+                        """,
+                        (
+                            signal_id,
+                            scan.scan_finished_at_ms,
+                            json.dumps(
+                                {
+                                    "symbol": candidate.symbol.upper(),
+                                    "side": candidate.decision,
+                                    "stage": candidate.stage,
+                                    "signal_price": prices.get(candidate.symbol.upper()),
+                                    "long_score": candidate.long_score,
+                                    "short_score": candidate.short_score,
+                                },
+                                separators=(",", ":"),
+                            ),
+                        ),
+                    )
+    return {"inserted": inserted, "updated": updated}
+
+
+def record_actionable_signals(
+    scan: MarketScan,
+    path: str | os.PathLike[str] | None = None,
+) -> dict[str, int]:
+    """Persist Stage 6 LONG/SHORT decisions exactly once.
+
+    PostgreSQL is primary when DATABASE_URL is configured. SQLite remains a
+    safe fallback when PostgreSQL is unavailable/not configured.
+    """
+    if path is not None or persistence_backend() == "sqlite":
+        return _record_sqlite(scan, path)
+    return _record_postgres(scan)
+
+
+def _sqlite_history_rows(
+    path: str | os.PathLike[str],
+) -> dict[str, list[dict[str, Any]]]:
+    initialize_sqlite(path)
+    tables = ["signals", "signal_outcomes", "ai_reviews", "positions", "trade_events"]
+    result: dict[str, list[dict[str, Any]]] = {}
+    with _sqlite_connect(path) as conn:
+        for table in tables:
+            result[table] = [dict(row) for row in conn.execute(f"select * from {table}")]
+    return result
+
+
+def migrate_sqlite_history_once() -> dict[str, int]:
+    """Copy historical Stage 10 SQLite rows into PostgreSQL exactly once."""
+    if persistence_backend() != "postgres":
+        return {"migrated": 0}
+    sqlite_path = database_path()
+    if not sqlite_path.exists():
+        return {"migrated": 0}
+
+    initialize_postgres()
+    marker = "sqlite_stage10_migration_complete"
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute("select value from persistence_meta where key = %s", (marker,))
+            if cur.fetchone() is not None:
+                return {"migrated": 0}
+
+    rows = _sqlite_history_rows(sqlite_path)
+    migrated = 0
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            for row in rows["signals"]:
+                cols = list(row)
+                values = [row[c] for c in cols]
+                placeholders = ",".join(["%s"] * len(cols))
+                updates = ",".join(
+                    f"{c}=excluded.{c}"
+                    for c in cols
+                    if c != "signal_id"
+                )
+                cur.execute(
+                    f"""
+                    insert into signals ({",".join(cols)})
+                    values ({placeholders})
+                    on conflict(signal_id) do update set {updates}
+                    """,
+                    values,
+                )
+                migrated += 1
+
+            for row in rows["signal_outcomes"]:
+                cols = list(row)
+                vals = [row[c] for c in cols]
+                placeholders = ",".join(["%s"] * len(cols))
+                updates = ",".join(
+                    f"{c}=excluded.{c}"
+                    for c in cols
+                    if c != "signal_id"
+                )
+                cur.execute(
+                    f"""
+                    insert into signal_outcomes ({",".join(cols)})
+                    values ({placeholders})
+                    on conflict(signal_id) do update set {updates}
+                    """,
+                    vals,
+                )
+
+            for row in rows["positions"]:
+                cols = list(row)
+                vals = [row[c] for c in cols]
+                placeholders = ",".join(["%s"] * len(cols))
+                updates = ",".join(
+                    f"{c}=excluded.{c}"
+                    for c in cols
+                    if c != "position_id"
+                )
+                cur.execute(
+                    f"""
+                    insert into positions ({",".join(cols)})
+                    values ({placeholders})
+                    on conflict(position_id) do update set {updates}
+                    """,
+                    vals,
+                )
+
+            for row in rows["ai_reviews"]:
+                cur.execute(
+                    """
+                    insert into ai_reviews (
+                        signal_id, reviewed_at_ms, verdict, confidence,
+                        model, reasons_json, raw_json
+                    ) values (%s,%s,%s,%s,%s,%s,%s)
+                    """,
+                    (
+                        row["signal_id"], row["reviewed_at_ms"], row["verdict"],
+                        row["confidence"], row["model"], row["reasons_json"],
+                        row["raw_json"],
+                    ),
+                )
+
+            for row in rows["trade_events"]:
+                cur.execute(
+                    """
+                    insert into trade_events (
+                        signal_id, position_id, event_type,
+                        event_time_ms, payload_json
+                    ) values (%s,%s,%s,%s,%s)
+                    """,
+                    (
+                        row["signal_id"], row["position_id"], row["event_type"],
+                        row["event_time_ms"], row["payload_json"],
+                    ),
+                )
+
+            cur.execute(
+                """
+                insert into persistence_meta (key, value, updated_at_ms)
+                values (%s,%s,%s)
+                on conflict(key) do update set
+                    value = excluded.value,
+                    updated_at_ms = excluded.updated_at_ms
+                """,
+                (marker, str(migrated), int(time.time() * 1000)),
+            )
+    return {"migrated": migrated}
 
 
 def list_signals(
@@ -278,91 +634,124 @@ def list_signals(
     symbol: str | None = None,
     side: str | None = None,
 ) -> list[dict[str, Any]]:
-    db_path = initialize_database(path)
-    clauses: list[str] = []
-    params: list[Any] = []
-
-    if symbol:
-        clauses.append("symbol = ?")
-        params.append(symbol.upper())
     if side:
         normalized = side.upper().replace("_", " ")
         if normalized not in {"LONG", "SHORT"}:
             raise ValueError("side must be LONG or SHORT")
-        clauses.append("side = ?")
-        params.append(normalized)
+        side = normalized
 
-    where = " where " + " and ".join(clauses) if clauses else ""
     safe_limit = max(1, min(int(limit), 500))
-    params.append(safe_limit)
 
-    with _connect(db_path) as conn:
-        rows = conn.execute(
-            f"""
-            select
-                signal_id, symbol, side, signal_time_ms, signal_price,
-                stage, long_score, short_score, score_edge, volume_ratio,
-                structure_status, taker_bias, raw_oi_change_pct,
-                funding_rate, market_regime, decision_context_balance,
-                decision_reasons_json, first_seen_at_ms, last_seen_at_ms,
-                persistence_version
-            from signals
-            {where}
-            order by signal_time_ms desc, signal_id
-            limit ?
-            """,
-            tuple(params),
-        ).fetchall()
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        clauses: list[str] = []
+        params: list[Any] = []
+        if symbol:
+            clauses.append("symbol = ?")
+            params.append(symbol.upper())
+        if side:
+            clauses.append("side = ?")
+            params.append(side)
+        where = " where " + " and ".join(clauses) if clauses else ""
+        params.append(safe_limit)
+        with _sqlite_connect(db_path) as conn:
+            rows = conn.execute(
+                f"""
+                select signal_id, symbol, side, signal_time_ms, signal_price,
+                    stage, long_score, short_score, score_edge, volume_ratio,
+                    structure_status, taker_bias, raw_oi_change_pct,
+                    funding_rate, market_regime, decision_context_balance,
+                    decision_reasons_json, first_seen_at_ms, last_seen_at_ms,
+                    persistence_version
+                from signals {where}
+                order by signal_time_ms desc, signal_id
+                limit ?
+                """,
+                tuple(params),
+            ).fetchall()
+            result = [dict(row) for row in rows]
+    else:
+        initialize_postgres()
+        migrate_sqlite_history_once()
+        clauses = []
+        params = []
+        if symbol:
+            clauses.append("symbol = %s")
+            params.append(symbol.upper())
+        if side:
+            clauses.append("side = %s")
+            params.append(side)
+        where = " where " + " and ".join(clauses) if clauses else ""
+        params.append(safe_limit)
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(
+                    f"""
+                    select signal_id, symbol, side, signal_time_ms, signal_price,
+                        stage, long_score, short_score, score_edge, volume_ratio,
+                        structure_status, taker_bias, raw_oi_change_pct,
+                        funding_rate, market_regime, decision_context_balance,
+                        decision_reasons_json, first_seen_at_ms, last_seen_at_ms,
+                        persistence_version
+                    from signals {where}
+                    order by signal_time_ms desc, signal_id
+                    limit %s
+                    """,
+                    tuple(params),
+                )
+                result = [dict(row) for row in cur.fetchall()]
 
-    result: list[dict[str, Any]] = []
-    for row in rows:
-        item = dict(row)
+    for item in result:
         item["decision_reasons"] = json.loads(
             item.pop("decision_reasons_json") or "[]"
         )
-        result.append(item)
     return result
 
 
 def persistence_summary(
     path: str | os.PathLike[str] | None = None,
 ) -> dict[str, Any]:
-    db_path = initialize_database(path)
-    with _connect(db_path) as conn:
-        signal_count = conn.execute(
-            "select count(*) from signals"
-        ).fetchone()[0]
-        long_count = conn.execute(
-            "select count(*) from signals where side = 'LONG'"
-        ).fetchone()[0]
-        short_count = conn.execute(
-            "select count(*) from signals where side = 'SHORT'"
-        ).fetchone()[0]
-        pending_outcomes = conn.execute(
-            "select count(*) from signal_outcomes where status = 'PENDING'"
-        ).fetchone()[0]
-        position_count = conn.execute(
-            "select count(*) from positions"
-        ).fetchone()[0]
-        event_count = conn.execute(
-            "select count(*) from trade_events"
-        ).fetchone()[0]
-        first_signal = conn.execute(
-            "select min(signal_time_ms) from signals"
-        ).fetchone()[0]
-        last_signal = conn.execute(
-            "select max(signal_time_ms) from signals"
-        ).fetchone()[0]
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            values = {
+                "signal_count": conn.execute("select count(*) from signals").fetchone()[0],
+                "long_count": conn.execute("select count(*) from signals where side='LONG'").fetchone()[0],
+                "short_count": conn.execute("select count(*) from signals where side='SHORT'").fetchone()[0],
+                "pending_outcomes": conn.execute("select count(*) from signal_outcomes where status='PENDING'").fetchone()[0],
+                "position_count": conn.execute("select count(*) from positions").fetchone()[0],
+                "trade_event_count": conn.execute("select count(*) from trade_events").fetchone()[0],
+                "first_signal_time_ms": conn.execute("select min(signal_time_ms) from signals").fetchone()[0],
+                "last_signal_time_ms": conn.execute("select max(signal_time_ms) from signals").fetchone()[0],
+            }
+        return {
+            "persistence_version": PERSISTENCE_VERSION,
+            "backend": "sqlite",
+            "database_path": str(db_path),
+            **values,
+        }
 
+    initialize_postgres()
+    migration = migrate_sqlite_history_once()
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            queries = {
+                "signal_count": "select count(*) from signals",
+                "long_count": "select count(*) from signals where side='LONG'",
+                "short_count": "select count(*) from signals where side='SHORT'",
+                "pending_outcomes": "select count(*) from signal_outcomes where status='PENDING'",
+                "position_count": "select count(*) from positions",
+                "trade_event_count": "select count(*) from trade_events",
+                "first_signal_time_ms": "select min(signal_time_ms) from signals",
+                "last_signal_time_ms": "select max(signal_time_ms) from signals",
+            }
+            values: dict[str, Any] = {}
+            for key, query in queries.items():
+                cur.execute(query)
+                values[key] = cur.fetchone()[0]
     return {
         "persistence_version": PERSISTENCE_VERSION,
-        "database_path": str(db_path),
-        "signal_count": signal_count,
-        "long_count": long_count,
-        "short_count": short_count,
-        "pending_outcomes": pending_outcomes,
-        "position_count": position_count,
-        "trade_event_count": event_count,
-        "first_signal_time_ms": first_signal,
-        "last_signal_time_ms": last_signal,
+        "backend": "postgres",
+        "sqlite_migrated_this_call": migration["migrated"],
+        **values,
     }
