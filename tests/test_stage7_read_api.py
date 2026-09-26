@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
-from market_radar.read_api import candidates_view, latest_summary, symbol_view
+from market_radar.read_api import (
+    MCP_PROTOCOL_VERSION,
+    candidates_view,
+    latest_summary,
+    mcp_dispatch,
+    symbol_view,
+)
 
 
 def sample_scan() -> dict:
@@ -126,6 +135,137 @@ class Stage7ReadApiTests(unittest.TestCase):
 
     def test_symbol_view_returns_none_when_unknown(self):
         self.assertIsNone(symbol_view(sample_scan(), "UNKNOWNUSDT"))
+
+
+
+class Stage7McpTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.scan_path = Path(self.tmp.name) / "latest_scan.json"
+        self.scan_path.write_text(
+            json.dumps(sample_scan()),
+            encoding="utf-8",
+        )
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def rpc(self, method: str, params: dict | None = None, request_id: int = 1):
+        return mcp_dispatch(
+            {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "method": method,
+                "params": params or {},
+            },
+            scan_path=self.scan_path,
+        )
+
+    def test_initialize(self):
+        status, payload = self.rpc(
+            "initialize",
+            {
+                "protocolVersion": MCP_PROTOCOL_VERSION,
+                "clientInfo": {"name": "test", "version": "1"},
+                "capabilities": {},
+            },
+        )
+        self.assertEqual(status, 200)
+        result = payload["result"]
+        self.assertEqual(result["protocolVersion"], MCP_PROTOCOL_VERSION)
+        self.assertIn("tools", result["capabilities"])
+        self.assertEqual(result["serverInfo"]["name"], "bababot-market-radar")
+
+    def test_tools_list_exposes_exactly_three_read_only_tools(self):
+        status, payload = self.rpc("tools/list")
+        self.assertEqual(status, 200)
+        names = [tool["name"] for tool in payload["result"]["tools"]]
+        self.assertEqual(
+            names,
+            ["get_market_radar", "get_moving_coins", "inspect_symbol"],
+        )
+
+    def test_get_market_radar_tool(self):
+        status, payload = self.rpc(
+            "tools/call",
+            {"name": "get_market_radar", "arguments": {}},
+        )
+        self.assertEqual(status, 200)
+        result = payload["result"]
+        self.assertFalse(result["isError"])
+        self.assertEqual(result["structuredContent"]["universe_count"], 500)
+
+    def test_get_moving_coins_tool_filter(self):
+        status, payload = self.rpc(
+            "tools/call",
+            {
+                "name": "get_moving_coins",
+                "arguments": {"decision": "LONG"},
+            },
+        )
+        self.assertEqual(status, 200)
+        result = payload["result"]
+        self.assertEqual(result["structuredContent"]["count"], 1)
+        self.assertEqual(
+            result["structuredContent"]["candidates"][0]["symbol"],
+            "SOLUSDT",
+        )
+
+    def test_inspect_symbol_tool(self):
+        status, payload = self.rpc(
+            "tools/call",
+            {
+                "name": "inspect_symbol",
+                "arguments": {"symbol": "SOLUSDT"},
+            },
+        )
+        self.assertEqual(status, 200)
+        result = payload["result"]
+        self.assertEqual(
+            result["structuredContent"]["candidate"]["decision"],
+            "LONG",
+        )
+
+    def test_unknown_tool_is_protocol_error(self):
+        status, payload = self.rpc(
+            "tools/call",
+            {"name": "place_order", "arguments": {}},
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(payload["error"]["code"], -32601)
+
+    def test_scan_not_ready_is_tool_error(self):
+        missing = Path(self.tmp.name) / "missing.json"
+        status, payload = mcp_dispatch(
+            {
+                "jsonrpc": "2.0",
+                "id": 9,
+                "method": "tools/call",
+                "params": {
+                    "name": "get_market_radar",
+                    "arguments": {},
+                },
+            },
+            scan_path=missing,
+        )
+        self.assertEqual(status, 200)
+        self.assertTrue(payload["result"]["isError"])
+        self.assertEqual(
+            payload["result"]["structuredContent"]["error"],
+            "scan_not_ready",
+        )
+
+    def test_initialized_notification_returns_202_without_body(self):
+        status, payload = mcp_dispatch(
+            {
+                "jsonrpc": "2.0",
+                "method": "notifications/initialized",
+                "params": {},
+            },
+            scan_path=self.scan_path,
+        )
+        self.assertEqual(status, 202)
+        self.assertIsNone(payload)
 
 
 if __name__ == "__main__":
