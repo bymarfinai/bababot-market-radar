@@ -387,9 +387,89 @@ Operational deployment note:
 
 Stage 8 remains read-only. It does not alter Stage 1–7 calculations or execute orders.
 
-Still not implemented yet:
+### Stage 9 — COMPLETE
 
-- execution — Stage 9
+Frozen requirement:
+
+> Future execution integration possible.
+
+Stage 9 implements a **safe execution handoff**, not live auto-trading.
+
+After every completed scan, Market Radar atomically writes:
+
+```text
+data/execution_intents.json
+```
+
+Only final Stage 6 decisions:
+
+```text
+LONG
+SHORT
+```
+
+become execution intents. `NO TRADE` is never forwarded.
+
+Each intent is deterministic and candle-scoped:
+
+```text
+symbol + candle_close_time_ms + side
+```
+
+Example:
+
+```text
+SOLUSDT:1790398799999:LONG
+```
+
+Every intent is created in the following frozen safety state:
+
+```text
+execution_mode     = HANDOFF_ONLY
+risk_confirmation  = PENDING
+execution_status   = BLOCKED
+executable         = false
+
+entry_price        = null
+quantity           = null
+stop_loss          = null
+take_profit        = null
+```
+
+The top-level handoff explicitly reports:
+
+```text
+live_order_submission_enabled = false
+```
+
+A read-only integration endpoint is available:
+
+```text
+GET /execution/intents
+```
+
+This allows a future AI/risk/execution consumer to inspect the current actionable
+handoff without modifying Market Radar or accessing its container directly.
+
+Stage 9 deliberately does **not** invent entry timing, position sizing, stop-loss,
+take-profit, leverage, or Binance order rules because those rules have not been
+frozen or live-validated yet.
+
+Production verification:
+
+- `latest_scan.json` and `execution_intents.json` were written together by the live Singapore deployment
+- verified handoff version: `stage9-v1`
+- verified execution mode: `HANDOFF_ONLY`
+- verified `live_order_submission_enabled = false`
+- one verified production scan produced 8 actionable intents
+- all 8 were `BLOCKED`, `PENDING`, and `executable=false`
+- all entry/quantity/SL/TP fields remained null
+
+The Stage 9 contract is documented in `EXECUTION_HANDOFF.md`.
+
+The frozen 9-stage Market Radar product plan is now fully implemented.
+
+> Important: **Stage 9 complete means execution integration is ready. It does not mean live order submission is enabled.**
 
 ## Run once
 
