@@ -267,6 +267,11 @@ class Stage7McpTests(unittest.TestCase):
         self.assertEqual(status, 202)
         self.assertIsNone(payload)
 
+    def test_dashboard_payload_contains_price(self):
+        result = latest_summary(sample_scan())
+        sol = next(x for x in result["candidates"] if x["symbol"] == "SOLUSDT")
+        self.assertIsNone(sol["price"])
+
 
 if __name__ == "__main__":
     unittest.main()
