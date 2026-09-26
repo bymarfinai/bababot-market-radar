@@ -2,9 +2,14 @@ from __future__ import annotations
 
 import unittest
 
+from market_radar.models import MovementDetection
 from market_radar.moving_detector import (
     InsufficientHistoryError,
     detect_movement,
+)
+from market_radar.stage_classifier import (
+    VALID_STAGES,
+    classify_movement_stage,
 )
 from market_radar.scheduler import next_five_minute_run_ms
 from market_radar.stage1_scanner import (
@@ -214,6 +219,57 @@ class Stage2MovementDetectorTests(unittest.TestCase):
         rows = make_klines([100.0] * 10)
         with self.assertRaises(InsufficientHistoryError):
             detect_movement("NEWUSDT", rows, now_ms=10 * 300_000 + 1)
+
+
+class Stage3MovementStageTests(unittest.TestCase):
+    def movement(self, state: str, is_moving: bool = True) -> MovementDetection:
+        return MovementDetection(
+            symbol="TESTUSDT",
+            detector_version="stage2-v1",
+            candle_close_time_ms=1_000,
+            movement_state=state,
+            direction_hint="UP" if is_moving else "FLAT",
+            is_moving=is_moving,
+            ret_5m_pct=0.5 if is_moving else 0.0,
+            ret_15m_pct=0.7 if is_moving else 0.0,
+            ret_1h_pct=1.0 if is_moving else 0.0,
+            ret_24h_pct=2.0 if is_moving else 0.0,
+            median_abs_ret_5m_pct=0.1,
+            return_expansion_ratio=5.0 if is_moving else 0.0,
+            volume_ratio=2.0 if is_moving else 1.0,
+            range_ratio=2.0 if is_moving else 1.0,
+            trades_ratio=2.0 if is_moving else 1.0,
+            directional_persistence=is_moving,
+            evidence_count=5 if is_moving else 0,
+            reasons=(),
+        )
+
+    def test_early_movement_maps_to_ignition(self):
+        result = classify_movement_stage(self.movement("EARLY_MOVEMENT"))
+        self.assertEqual(result.stage, "IGNITION")
+        self.assertIn(result.stage, VALID_STAGES)
+
+    def test_strong_continuation_maps_to_expansion(self):
+        result = classify_movement_stage(self.movement("STRONG_CONTINUATION"))
+        self.assertEqual(result.stage, "EXPANSION")
+
+    def test_late_movement_maps_to_exhaustion(self):
+        result = classify_movement_stage(self.movement("LATE_MOVEMENT"))
+        self.assertEqual(result.stage, "EXHAUSTION")
+
+    def test_non_moving_observation_has_no_stage(self):
+        result = classify_movement_stage(self.movement("NOISE", is_moving=False))
+        self.assertIsNone(result.stage)
+
+    def test_unknown_moving_state_fails_closed(self):
+        with self.assertRaises(ValueError):
+            classify_movement_stage(self.movement("UNKNOWN_MOVEMENT"))
+
+    def test_stage3_still_has_no_long_short_score_or_decision(self):
+        result = classify_movement_stage(self.movement("EARLY_MOVEMENT"))
+        self.assertFalse(hasattr(result, "long_score"))
+        self.assertFalse(hasattr(result, "short_score"))
+        self.assertFalse(hasattr(result, "decision"))
 
 
 if __name__ == "__main__":
