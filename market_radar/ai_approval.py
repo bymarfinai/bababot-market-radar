@@ -389,13 +389,33 @@ def start_pending_approval_worker() -> bool:
     def _runner() -> None:
         try:
             result = process_pending_approvals()
+            results = result.get("results") or []
+            risk_fail = sum(
+                1 for item in results
+                if item.get("risk_verdict") == "FAIL"
+            )
+            ai_error = sum(
+                1 for item in results
+                if item.get("ai_verdict") == "ERROR"
+            )
+            sample_issue = next(
+                (
+                    (item.get("risk_reasons") or item.get("ai_reasons") or [None])[0]
+                    for item in results
+                    if item.get("final_verdict") != "APPROVE"
+                ),
+                None,
+            )
             print(
                 "Stage 11 approvals: "
                 f"status={result.get('status')} "
                 f"processed={result.get('processed', 0)} "
                 f"approve={result.get('approve', 0)} "
                 f"veto={result.get('veto', 0)} "
-                f"watch={result.get('watch', 0)}",
+                f"watch={result.get('watch', 0)} "
+                f"risk_fail={risk_fail} "
+                f"ai_error={ai_error} "
+                f"sample_issue={sample_issue}",
                 flush=True,
             )
         except Exception as exc:
