@@ -186,7 +186,7 @@ class Stage2MovementDetectorTests(unittest.TestCase):
         self.assertEqual(result.direction_hint, "DOWN")
         self.assertIsNone(result.long_score)
         self.assertIsNone(result.short_score)
-        self.assertFalse(hasattr(result, "decision"))
+        self.assertIsNone(result.decision)
 
     def test_in_progress_spike_cannot_leak_into_detection(self):
         closed = make_klines([100.0] * 40)
@@ -270,7 +270,7 @@ class Stage3MovementStageTests(unittest.TestCase):
         result = classify_movement_stage(self.movement("EARLY_MOVEMENT"))
         self.assertIsNone(result.long_score)
         self.assertIsNone(result.short_score)
-        self.assertFalse(hasattr(result, "decision"))
+        self.assertIsNone(result.decision)
 
 
 class Stage4DirectionScoreTests(unittest.TestCase):
@@ -379,7 +379,7 @@ class Stage4DirectionScoreTests(unittest.TestCase):
                 persistent=True,
             )
         )
-        self.assertFalse(hasattr(result, "decision"))
+        self.assertIsNone(result.decision)
         self.assertIsNotNone(result.long_score)
         self.assertIsNotNone(result.short_score)
 
