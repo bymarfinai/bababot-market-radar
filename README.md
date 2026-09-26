@@ -144,9 +144,60 @@ Those remain frozen for Stage 5.
 
 Stage 4 also **does not** output `LONG / SHORT / NO TRADE`. A higher score is evidence, not yet an execution decision.
 
+### Stage 5 — COMPLETE
+
+Frozen requirement:
+
+> Read volume, breakout/breakdown, taker flow, raw OI, funding, and existing market regime.
+
+Implemented candidate context:
+
+- **Volume**
+  - current closed 5m quote volume
+  - 24h quote volume
+  - relative 5m volume ratio vs the symbol's own baseline
+  - volume-confirmation flag
+- **Breakout / breakdown**
+  - previous 20 closed 5m high / low
+  - confirmed `BREAKOUT`
+  - confirmed `BREAKDOWN`
+  - `FAILED_BREAKOUT`
+  - `FAILED_BREAKDOWN`
+  - `FAILED_BOTH_SIDES`
+  - `NO_STRUCTURAL_BREAK`
+- **Taker flow**
+  - read directly from the exact closed 5m Binance kline used by the detector
+  - taker-buy quote volume
+  - derived taker-sell quote volume
+  - buy/sell ratio
+  - buy share
+  - `BUY / SELL / BALANCED` bias
+- **Raw Open Interest**
+  - Binance `sumOpenInterest` only
+  - `sumOpenInterestValue` is intentionally ignored
+  - causal OI timestamp filtering
+  - raw OI change %
+  - context interpretation:
+    - price up + OI up → fresh long participation
+    - price up + OI down → short covering
+    - price down + OI up → fresh short participation
+    - price down + OI down → long liquidation
+- **Funding**
+  - current Binance `lastFundingRate`
+- **Existing market regime**
+  - existing causal BabaBot Discovery B27AG 4H `SwingRegime(lookback=5, swing_atr=0.5)` semantics ported into this repo
+  - `BULL`: HH>=2 + HL>=2 + EMA7>EMA20 + completed close>EMA20
+  - `BEAR`: LH>=2 + LL>=2 + EMA7<EMA20 + completed close<EMA20
+  - otherwise `SIDEWAYS`
+  - only completed 4H bars are admitted
+  - Market Radar never calls Discovery at runtime
+
+Additional OI/funding/regime API calls are made **only for moving candidates**, while Stage 1 continues scanning the full Binance USDT-perpetual universe.
+
+Stage 5 is context only. It does **not** change Stage 4 scores and does **not** output a final trade decision.
+
 Still not implemented yet (by design):
 
-- breakout/taker/OI/funding/regime context — Stage 5
 - `LONG / SHORT / NO TRADE` — Stage 6
 - MCP — Stage 7
 - dashboard/alerts — Stage 8
