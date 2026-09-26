@@ -9,7 +9,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
 )
-from .persistence import record_actionable_signals
+from .persistence import persistence_backend, record_actionable_signals
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
 
 
@@ -54,7 +54,14 @@ def run_forever(
             default_execution_handoff_path(cfg.output_path),
         )
         try:
-            record_actionable_signals(scan)
+            persistence_result = record_actionable_signals(scan)
+            print(
+                "Stage 10 persisted: "
+                f"backend={persistence_backend()} "
+                f"inserted={persistence_result['inserted']} "
+                f"updated={persistence_result['updated']}",
+                flush=True,
+            )
         except Exception as exc:
             print(
                 f"Stage 10 persistence error: {exc}",
