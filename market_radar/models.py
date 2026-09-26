@@ -48,6 +48,8 @@ class MovementDetection:
     directional_persistence: bool
     evidence_count: int
     reasons: tuple[str, ...] = ()
+    stage: str | None = None
+    stage_classifier_version: str | None = None
 
 
 @dataclass
@@ -64,6 +66,10 @@ class MarketScan:
     movement_evaluated_count: int
     movement_skipped_count: int
     moving_candidate_count: int
+    movement_stage_version: str
+    ignition_count: int
+    expansion_count: int
+    exhaustion_count: int
     symbols: list[SymbolSnapshot] = field(default_factory=list)
     moving_candidates: list[MovementDetection] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
