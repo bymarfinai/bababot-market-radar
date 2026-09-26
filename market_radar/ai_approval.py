@@ -24,6 +24,8 @@ MINIMAX_BASE_URL = os.environ.get(
 
 _VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
 _processing_lock = threading.Lock()
+_provider_rate_lock = threading.Lock()
+_last_provider_call_monotonic = 0.0
 
 
 SYSTEM_PROMPT = """You are BabaBot's AI Entry Supervisor.
@@ -74,7 +76,17 @@ def _max_per_scan() -> int:
 
 
 def _workers() -> int:
-    return max(1, min(int(os.environ.get("AI_APPROVAL_WORKERS", "4")), 8))
+    return max(1, min(int(os.environ.get("AI_APPROVAL_WORKERS", "1")), 4))
+
+
+def _min_call_interval_seconds() -> float:
+    return max(
+        0.0,
+        min(
+            float(os.environ.get("AI_APPROVAL_MIN_CALL_INTERVAL_SECONDS", "2")),
+            15.0,
+        ),
+    )
 
 
 def _timeout_seconds() -> float:
@@ -237,28 +249,65 @@ def call_ai_entry_review(signal: dict[str, Any]) -> dict[str, Any]:
         raise RuntimeError("MINIMAX_API_KEY is not configured")
 
     payload = _signal_for_ai(signal)
-    response = requests.post(
-        f"{MINIMAX_BASE_URL}/v1/messages",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-        json={
-            "model": MINIMAX_MODEL,
-            "max_tokens": 650,
-            "temperature": 0.1,
-            "system": SYSTEM_PROMPT,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": json.dumps(payload, separators=(",", ":"), allow_nan=False),
-                }
-            ],
-        },
-        timeout=_timeout_seconds(),
-    )
-    response.raise_for_status()
-    return _parse_ai_response(response.json())
+    request_body = {
+        "model": MINIMAX_MODEL,
+        "max_tokens": 650,
+        "temperature": 0.1,
+        "system": SYSTEM_PROMPT,
+        "messages": [
+            {
+                "role": "user",
+                "content": json.dumps(
+                    payload,
+                    separators=(",", ":"),
+                    allow_nan=False,
+                ),
+            }
+        ],
+    }
+
+    global _last_provider_call_monotonic
+    last_error: Exception | None = None
+    for attempt in range(3):
+        with _provider_rate_lock:
+            now = time.monotonic()
+            wait = (
+                _min_call_interval_seconds()
+                - (now - _last_provider_call_monotonic)
+            )
+            if wait > 0:
+                time.sleep(wait)
+
+            response = requests.post(
+                f"{MINIMAX_BASE_URL}/v1/messages",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json=request_body,
+                timeout=_timeout_seconds(),
+            )
+            _last_provider_call_monotonic = time.monotonic()
+
+        if response.status_code == 429:
+            retry_after = response.headers.get("Retry-After")
+            try:
+                delay = float(retry_after) if retry_after else 4.0 * (attempt + 1)
+            except ValueError:
+                delay = 4.0 * (attempt + 1)
+            last_error = RuntimeError(
+                "MiniMax rate limited (HTTP 429): "
+                + response.text[:180].replace("\n", " ")
+            )
+            if attempt < 2:
+                time.sleep(max(1.0, min(delay, 15.0)))
+                continue
+            raise last_error
+
+        response.raise_for_status()
+        return _parse_ai_response(response.json())
+
+    raise last_error or RuntimeError("MiniMax review failed")
 
 
 def review_signal(
