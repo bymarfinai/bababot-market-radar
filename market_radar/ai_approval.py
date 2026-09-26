@@ -26,6 +26,11 @@ _VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
 _processing_lock = threading.Lock()
 _provider_rate_lock = threading.Lock()
 _last_provider_call_monotonic = 0.0
+_provider_blocked_until_monotonic = 0.0
+
+
+class AIProviderQuotaError(RuntimeError):
+    pass
 
 
 SYSTEM_PROMPT = """You are BabaBot's AI Entry Supervisor.
@@ -242,11 +247,15 @@ def _parse_ai_response(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def call_ai_entry_review(signal: dict[str, Any]) -> dict[str, Any]:
+    global _provider_blocked_until_monotonic
     api_key = os.environ.get("MINIMAX_API_KEY", "").strip()
     if not approval_enabled():
         raise RuntimeError("AI_APPROVAL_ENABLED is false")
     if not api_key:
         raise RuntimeError("MINIMAX_API_KEY is not configured")
+
+    if time.monotonic() < _provider_blocked_until_monotonic:
+        raise AIProviderQuotaError("MiniMax provider quota circuit is open")
 
     payload = _signal_for_ai(signal)
     request_body = {
@@ -290,14 +299,25 @@ def call_ai_entry_review(signal: dict[str, Any]) -> dict[str, Any]:
             _last_provider_call_monotonic = time.monotonic()
 
         if response.status_code == 429:
+            body = response.text[:300].replace("\n", " ")
+            body_lower = body.lower()
+            if (
+                "usage limit reached" in body_lower
+                or "purchase credits" in body_lower
+                or "upgrade your token plan" in body_lower
+            ):
+                _provider_blocked_until_monotonic = time.monotonic() + 900.0
+                raise AIProviderQuotaError(
+                    "MiniMax token plan/credits exhausted (HTTP 429)"
+                )
+
             retry_after = response.headers.get("Retry-After")
             try:
                 delay = float(retry_after) if retry_after else 4.0 * (attempt + 1)
             except ValueError:
                 delay = 4.0 * (attempt + 1)
             last_error = RuntimeError(
-                "MiniMax rate limited (HTTP 429): "
-                + response.text[:180].replace("\n", " ")
+                "MiniMax rate limited (HTTP 429): " + body
             )
             if attempt < 2:
                 time.sleep(max(1.0, min(delay, 15.0)))
@@ -346,6 +366,23 @@ def review_signal(
                 "ai_reasons": ai["reasons"],
                 "risk": risk,
                 "ai": ai,
+                "ai_latency_ms": int((time.monotonic() - started) * 1000),
+            }
+        except AIProviderQuotaError as exc:
+            result = {
+                "signal_id": signal["signal_id"],
+                "risk_verdict": "PASS",
+                "ai_verdict": "PROVIDER_BLOCKED",
+                "final_verdict": "VETO",
+                "confidence": None,
+                "model": MINIMAX_MODEL,
+                "risk_reasons": [],
+                "ai_reasons": ["provider_quota_exhausted"],
+                "risk": risk,
+                "ai": {
+                    "error_type": type(exc).__name__,
+                    "error": str(exc)[:500],
+                },
                 "ai_latency_ms": int((time.monotonic() - started) * 1000),
             }
         except Exception as exc:
@@ -447,6 +484,10 @@ def start_pending_approval_worker() -> bool:
                 1 for item in results
                 if item.get("ai_verdict") == "ERROR"
             )
+            provider_blocked = sum(
+                1 for item in results
+                if item.get("ai_verdict") == "PROVIDER_BLOCKED"
+            )
             sample_issue = next(
                 (
                     (item.get("risk_reasons") or item.get("ai_reasons") or [None])[0]
@@ -472,6 +513,7 @@ def start_pending_approval_worker() -> bool:
                 f"watch={result.get('watch', 0)} "
                 f"risk_fail={risk_fail} "
                 f"ai_error={ai_error} "
+                f"provider_blocked={provider_blocked} "
                 f"sample_issue={sample_issue} "
                 f"error_type={sample_error.get('error_type')} "
                 f"error={str(sample_error.get('error') or '')[:180]}",
