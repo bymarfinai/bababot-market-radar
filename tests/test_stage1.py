@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from market_radar.direction_scorer import score_directions
 from market_radar.models import MovementDetection
 from market_radar.moving_detector import (
     InsufficientHistoryError,
@@ -265,11 +266,150 @@ class Stage3MovementStageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             classify_movement_stage(self.movement("UNKNOWN_MOVEMENT"))
 
-    def test_stage3_still_has_no_long_short_score_or_decision(self):
+    def test_stage3_does_not_calculate_scores_or_decision(self):
         result = classify_movement_stage(self.movement("EARLY_MOVEMENT"))
-        self.assertFalse(hasattr(result, "long_score"))
-        self.assertFalse(hasattr(result, "short_score"))
+        self.assertIsNone(result.long_score)
+        self.assertIsNone(result.short_score)
         self.assertFalse(hasattr(result, "decision"))
+
+
+class Stage4DirectionScoreTests(unittest.TestCase):
+    def movement(
+        self,
+        *,
+        r5: float,
+        r15: float,
+        r60: float,
+        direction: str,
+        persistent: bool,
+        state: str = "EARLY_MOVEMENT",
+    ) -> MovementDetection:
+        stage = {
+            "EARLY_MOVEMENT": "IGNITION",
+            "STRONG_CONTINUATION": "EXPANSION",
+            "LATE_MOVEMENT": "EXHAUSTION",
+        }[state]
+        return MovementDetection(
+            symbol="SCOREUSDT",
+            detector_version="stage2-v1",
+            candle_close_time_ms=1_000,
+            movement_state=state,
+            direction_hint=direction,
+            is_moving=True,
+            ret_5m_pct=r5,
+            ret_15m_pct=r15,
+            ret_1h_pct=r60,
+            ret_24h_pct=3.0 if direction == "UP" else -3.0,
+            median_abs_ret_5m_pct=0.10,
+            return_expansion_ratio=4.0,
+            volume_ratio=2.2,
+            range_ratio=1.9,
+            trades_ratio=1.8,
+            directional_persistence=persistent,
+            evidence_count=5,
+            reasons=(),
+            stage=stage,
+            stage_classifier_version="stage3-v1",
+        )
+
+    def test_up_move_scores_long_above_short(self):
+        result = score_directions(
+            self.movement(
+                r5=0.60,
+                r15=1.10,
+                r60=2.20,
+                direction="UP",
+                persistent=True,
+            )
+        )
+        self.assertGreater(result.long_score, result.short_score)
+        self.assertGreater(result.score_gap, 0.0)
+
+    def test_down_move_scores_short_above_long(self):
+        result = score_directions(
+            self.movement(
+                r5=-0.60,
+                r15=-1.10,
+                r60=-2.20,
+                direction="DOWN",
+                persistent=True,
+            )
+        )
+        self.assertGreater(result.short_score, result.long_score)
+        self.assertLess(result.score_gap, 0.0)
+
+    def test_scores_are_bounded_zero_to_one_hundred(self):
+        result = score_directions(
+            self.movement(
+                r5=20.0,
+                r15=40.0,
+                r60=80.0,
+                direction="UP",
+                persistent=True,
+                state="STRONG_CONTINUATION",
+            )
+        )
+        self.assertGreaterEqual(result.long_score, 0.0)
+        self.assertLessEqual(result.long_score, 100.0)
+        self.assertGreaterEqual(result.short_score, 0.0)
+        self.assertLessEqual(result.short_score, 100.0)
+
+    def test_long_short_scores_are_independent_not_complements(self):
+        # Current 5m reverses down while 15m/1h context remains positive.
+        result = score_directions(
+            self.movement(
+                r5=-0.35,
+                r15=0.60,
+                r60=1.50,
+                direction="DOWN",
+                persistent=False,
+            )
+        )
+        self.assertGreater(result.long_score, 0.0)
+        self.assertGreater(result.short_score, 0.0)
+        self.assertNotAlmostEqual(result.long_score + result.short_score, 100.0)
+
+    def test_stage4_does_not_create_final_trade_decision(self):
+        result = score_directions(
+            self.movement(
+                r5=0.50,
+                r15=0.80,
+                r60=1.20,
+                direction="UP",
+                persistent=True,
+            )
+        )
+        self.assertFalse(hasattr(result, "decision"))
+        self.assertIsNotNone(result.long_score)
+        self.assertIsNotNone(result.short_score)
+
+    def test_non_moving_scores_zero(self):
+        movement = MovementDetection(
+            symbol="FLATUSDT",
+            detector_version="stage2-v1",
+            candle_close_time_ms=1_000,
+            movement_state="NOISE",
+            direction_hint="FLAT",
+            is_moving=False,
+            ret_5m_pct=0.0,
+            ret_15m_pct=0.0,
+            ret_1h_pct=0.0,
+            ret_24h_pct=0.0,
+            median_abs_ret_5m_pct=0.1,
+            return_expansion_ratio=1.0,
+            volume_ratio=1.0,
+            range_ratio=1.0,
+            trades_ratio=1.0,
+            directional_persistence=False,
+            evidence_count=0,
+            reasons=(),
+            stage=None,
+            stage_classifier_version="stage3-v1",
+        )
+        result = score_directions(movement)
+        self.assertEqual(result.long_score, 0.0)
+        self.assertEqual(result.short_score, 0.0)
+        self.assertEqual(result.score_edge, 0.0)
 
 
 if __name__ == "__main__":
