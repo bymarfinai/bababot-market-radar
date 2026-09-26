@@ -92,6 +92,22 @@ def sample_scan() -> dict:
         ],
         "symbols": [
             {
+                "symbol": "SOLUSDT",
+                "candle_close_time_ms": 150,
+                "close": 201.5,
+                "quote_volume_5m": 5000000.0,
+                "quote_volume_24h": 1200000000.0,
+                "price_change_pct_24h": 4.2,
+            },
+            {
+                "symbol": "ENAUSDT",
+                "candle_close_time_ms": 150,
+                "close": 0.88,
+                "quote_volume_5m": 1500000.0,
+                "quote_volume_24h": 300000000.0,
+                "price_change_pct_24h": 2.1,
+            },
+            {
                 "symbol": "BTCUSDT",
                 "candle_close_time_ms": 150,
                 "close": 80000.0,
@@ -270,7 +286,7 @@ class Stage7McpTests(unittest.TestCase):
     def test_dashboard_payload_contains_price(self):
         result = latest_summary(sample_scan())
         sol = next(x for x in result["candidates"] if x["symbol"] == "SOLUSDT")
-        self.assertIsNone(sol["price"])
+        self.assertEqual(sol["price"], 201.5)
 
 
 if __name__ == "__main__":
