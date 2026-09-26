@@ -332,9 +332,63 @@ GET /radar/symbol/{symbol}
 
 Stage 7 contract and scope are documented in `MCP_ADAPTER.md`.
 
+### Stage 8 — COMPLETE
+
+Frozen requirement:
+
+> Dashboard live + alert.
+
+Implemented:
+
+- standalone live dashboard deployment
+- dashboard reads only the read-only Market Radar API
+- 15-second auto refresh
+- market universe / moving / LONG / SHORT / NO TRADE summary
+- candidate table with:
+  - symbol
+  - current closed-candle price
+  - IGNITION / EXPANSION / EXHAUSTION
+  - LONG_SCORE / SHORT_SCORE
+  - final LONG / SHORT / NO TRADE
+  - structure
+  - taker bias
+  - raw OI change
+  - market regime
+- candidate detail panel with:
+  - funding
+  - context balance
+  - decision reasons
+- system status and latest candle timestamp
+- browser-local actionable signal history
+- browser notifications for **new LONG / SHORT decisions only**
+- no alert for NO TRADE or ordinary market scans
+- AI inspection panel points to the existing Stage 7 MCP tool for the selected symbol; no second AI engine was added
+
+Production dashboard:
+
+```text
+https://market-radar-dashboard-production.up.railway.app
+```
+
+Production radar/API/MCP:
+
+```text
+https://market-radar-production-d307.up.railway.app
+```
+
+Operational deployment note:
+
+- the first Market Radar Railway deployment in `us-west2` received Binance HTTP 451
+- only the deployment region was changed to Railway Singapore `asia-southeast1-eqsg3a`
+- scanner/source/start command/decision logic were not changed
+- after the Singapore deployment, `data/latest_scan.json` was created successfully
+- verified live scan contained `completed_count = 527`
+- no new Binance HTTP 451 was observed after the Singapore deployment
+
+Stage 8 remains read-only. It does not alter Stage 1–7 calculations or execute orders.
+
 Still not implemented yet:
 
-- dashboard/alerts — Stage 8
 - execution — Stage 9
 
 ## Run once
