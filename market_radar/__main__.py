@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 import threading
 
 from .binance import BinancePublicClient
@@ -10,7 +11,11 @@ from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
 )
-from .persistence import database_path, record_actionable_signals
+from .persistence import (
+    database_path,
+    persistence_summary,
+    record_actionable_signals,
+)
 from .read_api import serve_read_api
 from .scheduler import run_forever
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
@@ -77,6 +82,24 @@ def main() -> int:
     args = parser.parse_args()
 
     cfg = Stage1Config(workers=max(1, args.workers), output_path=args.output)
+
+    try:
+        summary = persistence_summary()
+        print(
+            "Stage 10 persistence ready: "
+            f"backend={summary.get('backend')} "
+            f"signals={summary.get('signal_count')} "
+            f"long={summary.get('long_count')} "
+            f"short={summary.get('short_count')} "
+            f"pending_outcomes={summary.get('pending_outcomes')}",
+            flush=True,
+        )
+    except Exception as exc:
+        print(
+            f"Stage 10 persistence startup check failed: {exc}",
+            file=sys.stderr,
+            flush=True,
+        )
 
     if args.once:
         client = BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
