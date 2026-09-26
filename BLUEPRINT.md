@@ -704,12 +704,12 @@ Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti che
 - [x] Detect coin yang mulai bergerak
 - [x] Classify IGNITION / EXPANSION / EXHAUSTION
 - [x] Calculate LONG_SCORE / SHORT_SCORE
-- [ ] Read volume
-- [ ] Read breakout / breakdown
-- [ ] Read taker flow
-- [ ] Read raw Open Interest
-- [ ] Read funding
-- [ ] Read existing market regime
+- [x] Read volume
+- [x] Read breakout / breakdown
+- [x] Read taker flow
+- [x] Read raw Open Interest
+- [x] Read funding
+- [x] Read existing market regime
 - [ ] Output LONG / SHORT / NO TRADE
 - [ ] Expose data through MCP
 - [ ] AI can inspect live radar data
