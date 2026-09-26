@@ -10,12 +10,19 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .binance import BinancePublicClient
-from .models import MarketScan, SymbolSnapshot
+from .models import MarketScan, MovementDetection, SymbolSnapshot
+from .moving_detector import (
+    MOVEMENT_DETECTOR_VERSION,
+    InsufficientHistoryError,
+    MovementDetectorConfig,
+    detect_movement,
+)
 
 
 @dataclass(frozen=True)
 class Stage1Config:
     interval: str = "5m"
+    history_limit: int = 50
     workers: int = 12
     request_timeout: float = 8.0
     retries: int = 2
@@ -94,15 +101,37 @@ def scan_symbol(
     ticker: dict[str, Any] | None,
     now_ms: int,
     interval: str,
-) -> SymbolSnapshot:
-    rows = client.klines(symbol=symbol, interval=interval, limit=3)
+    history_limit: int,
+    movement_config: MovementDetectorConfig | None = None,
+) -> tuple[SymbolSnapshot, MovementDetection | None]:
+    rows = client.klines(
+        symbol=symbol,
+        interval=interval,
+        limit=max(3, history_limit),
+    )
     row = latest_closed_kline(rows, now_ms=now_ms)
-    return snapshot_from_kline(symbol, row, ticker)
+    snapshot = snapshot_from_kline(symbol, row, ticker)
+
+    try:
+        movement = detect_movement(
+            symbol=symbol,
+            klines=rows,
+            now_ms=now_ms,
+            ret_24h_pct=snapshot.price_change_pct_24h,
+            config=movement_config,
+        )
+    except InsufficientHistoryError:
+        # Newly listed markets still remain part of Stage 1's full-universe
+        # snapshot even when Stage 2 cannot yet establish a robust baseline.
+        movement = None
+
+    return snapshot, movement
 
 
 def scan_all_usdt_perpetuals(
     client: BinancePublicClient | None = None,
     config: Stage1Config | None = None,
+    movement_config: MovementDetectorConfig | None = None,
 ) -> MarketScan:
     cfg = config or Stage1Config()
     client = client or BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
@@ -120,7 +149,10 @@ def scan_all_usdt_perpetuals(
     }
 
     snapshots: list[SymbolSnapshot] = []
+    moving_candidates: list[MovementDetection] = []
     errors: list[str] = []
+    movement_evaluated_count = 0
+    movement_skipped_count = 0
 
     with ThreadPoolExecutor(max_workers=max(1, cfg.workers)) as pool:
         futures = {
@@ -131,18 +163,42 @@ def scan_all_usdt_perpetuals(
                 tickers.get(symbol),
                 server_time,
                 cfg.interval,
+                cfg.history_limit,
+                movement_config,
             ): symbol
             for symbol in universe
         }
         for future in as_completed(futures):
             symbol = futures[future]
             try:
-                snapshots.append(future.result())
+                snapshot, movement = future.result()
+                snapshots.append(snapshot)
+
+                if movement is None:
+                    movement_skipped_count += 1
+                else:
+                    movement_evaluated_count += 1
+                    if movement.is_moving:
+                        moving_candidates.append(movement)
             except Exception as exc:
                 errors.append(f"{symbol}: {exc}")
 
     snapshots.sort(key=lambda item: item.symbol)
     errors.sort()
+
+    # No LONG/SHORT score exists in Stage 2. Ranking is only for display:
+    # more independent movement evidence first, then stronger return/activity
+    # expansion relative to that symbol's own baseline.
+    moving_candidates.sort(
+        key=lambda item: (
+            item.evidence_count,
+            item.return_expansion_ratio,
+            item.volume_ratio,
+            item.range_ratio,
+        ),
+        reverse=True,
+    )
+
     finished = int(time.time() * 1000)
 
     close_times = {item.candle_close_time_ms for item in snapshots}
@@ -157,7 +213,12 @@ def scan_all_usdt_perpetuals(
         completed_count=len(snapshots),
         failed_count=len(errors),
         candle_close_time_ms=common_close,
+        movement_detector_version=MOVEMENT_DETECTOR_VERSION,
+        movement_evaluated_count=movement_evaluated_count,
+        movement_skipped_count=movement_skipped_count,
+        moving_candidate_count=len(moving_candidates),
         symbols=snapshots,
+        moving_candidates=moving_candidates,
         errors=errors,
     )
 
