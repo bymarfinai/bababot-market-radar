@@ -495,7 +495,20 @@ def record_actionable_signals(
     """
     if path is not None or persistence_backend() == "sqlite":
         return _record_sqlite(scan, path)
-    return _record_postgres(scan)
+
+    # PostgreSQL is the primary Stage 10 store. Keep SQLite on the persistent
+    # Railway volume as a local safety copy so a temporary DB outage never
+    # causes signal-history loss.
+    try:
+        primary = _record_postgres(scan)
+    except Exception:
+        return _record_sqlite(scan, database_path())
+
+    try:
+        _record_sqlite(scan, database_path())
+    except Exception:
+        pass
+    return primary
 
 
 def _sqlite_history_rows(
