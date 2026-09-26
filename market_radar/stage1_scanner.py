@@ -11,6 +11,7 @@ from typing import Any, Iterable
 
 from .binance import BinancePublicClient
 from .direction_scorer import DIRECTION_SCORE_VERSION, score_directions
+from .market_context import MARKET_CONTEXT_VERSION, attach_market_context
 from .models import MarketScan, MovementDetection, SymbolSnapshot
 from .moving_detector import (
     MOVEMENT_DETECTOR_VERSION,
@@ -18,6 +19,7 @@ from .moving_detector import (
     MovementDetectorConfig,
     detect_movement,
 )
+from .regime_context import classify_regime
 from .stage_classifier import MOVEMENT_STAGE_VERSION, classify_movement_stage
 
 
@@ -25,6 +27,7 @@ from .stage_classifier import MOVEMENT_STAGE_VERSION, classify_movement_stage
 class Stage1Config:
     interval: str = "5m"
     history_limit: int = 50
+    regime_history_limit: int = 500
     workers: int = 12
     request_timeout: float = 8.0
     retries: int = 2
@@ -104,6 +107,7 @@ def scan_symbol(
     now_ms: int,
     interval: str,
     history_limit: int,
+    regime_history_limit: int,
     movement_config: MovementDetectorConfig | None = None,
 ) -> tuple[SymbolSnapshot, MovementDetection | None]:
     rows = client.klines(
@@ -126,6 +130,50 @@ def scan_symbol(
         # Newly listed markets still remain part of Stage 1's full-universe
         # snapshot even when Stage 2 cannot yet establish a robust baseline.
         movement = None
+
+    if movement is not None:
+        movement = classify_movement_stage(movement)
+        movement = score_directions(movement)
+
+        # Stage 5 network-heavy context is candidate-only. The full universe
+        # remains Stage 1 scanned, but OI/funding/regime requests are made only
+        # after Stage 2 confirms that the symbol is moving.
+        if movement.is_moving:
+            context_errors: list[str] = []
+
+            oi_hist = None
+            try:
+                oi_hist = client.open_interest_hist(symbol, period="5m", limit=7)
+            except Exception as exc:
+                context_errors.append(f"oi_fetch:{exc}")
+
+            premium = None
+            try:
+                premium = client.premium_index(symbol)
+            except Exception as exc:
+                context_errors.append(f"funding_fetch:{exc}")
+
+            regime = None
+            try:
+                klines_4h = client.klines(
+                    symbol=symbol,
+                    interval="4h",
+                    limit=max(25, regime_history_limit),
+                )
+                regime = classify_regime(klines_4h, now_ms=now_ms)
+            except Exception as exc:
+                context_errors.append(f"regime_fetch:{exc}")
+
+            movement = attach_market_context(
+                movement=movement,
+                snapshot=snapshot,
+                klines_5m=rows,
+                now_ms=now_ms,
+                oi_hist=oi_hist,
+                premium=premium,
+                regime=regime,
+                external_errors=context_errors,
+            )
 
     return snapshot, movement
 
@@ -166,6 +214,7 @@ def scan_all_usdt_perpetuals(
                 server_time,
                 cfg.interval,
                 cfg.history_limit,
+                cfg.regime_history_limit,
                 movement_config,
             ): symbol
             for symbol in universe
@@ -180,8 +229,6 @@ def scan_all_usdt_perpetuals(
                     movement_skipped_count += 1
                 else:
                     movement_evaluated_count += 1
-                    movement = classify_movement_stage(movement)
-                    movement = score_directions(movement)
                     if movement.is_moving:
                         moving_candidates.append(movement)
             except Exception as exc:
@@ -199,6 +246,19 @@ def scan_all_usdt_perpetuals(
             item.evidence_count,
         ),
         reverse=True,
+    )
+
+    context_complete_count = sum(
+        1
+        for item in moving_candidates
+        if item.market_context is not None
+        and not item.market_context.context_errors
+    )
+    context_partial_count = sum(
+        1
+        for item in moving_candidates
+        if item.market_context is not None
+        and bool(item.market_context.context_errors)
     )
 
     ignition_count = sum(1 for item in moving_candidates if item.stage == "IGNITION")
@@ -225,6 +285,9 @@ def scan_all_usdt_perpetuals(
         moving_candidate_count=len(moving_candidates),
         movement_stage_version=MOVEMENT_STAGE_VERSION,
         direction_score_version=DIRECTION_SCORE_VERSION,
+        market_context_version=MARKET_CONTEXT_VERSION,
+        context_complete_count=context_complete_count,
+        context_partial_count=context_partial_count,
         ignition_count=ignition_count,
         expansion_count=expansion_count,
         exhaustion_count=exhaustion_count,
