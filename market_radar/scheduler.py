@@ -4,6 +4,10 @@ import time
 from collections.abc import Callable
 
 from .binance import BinancePublicClient
+from .execution_handoff import (
+    default_execution_handoff_path,
+    write_execution_handoff_atomic,
+)
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
 
 
@@ -43,6 +47,10 @@ def run_forever(
             continue
 
         write_scan_atomic(scan, cfg.output_path)
+        write_execution_handoff_atomic(
+            scan,
+            default_execution_handoff_path(cfg.output_path),
+        )
         if close_time is not None:
             last_processed_close = close_time
 
