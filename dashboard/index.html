@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BabaBot Market Radar</title>
+<style>
+:root{
+  --bg:#071018;--panel:#0d1722;--panel2:#101d2a;--line:#213244;
+  --text:#e8f0f7;--muted:#7f94a7;--green:#36e59b;--red:#ff6376;
+  --amber:#ffc857;--blue:#58a6ff;--cyan:#54d7e8;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);
+font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit}.wrap{max-width:1500px;margin:auto;padding:18px}
+header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:14px}
+.brand h1{font-size:20px;margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.status{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--amber)}
+.dot.ok{background:var(--green);box-shadow:0 0 12px rgba(54,229,155,.5)}
+.dot.bad{background:var(--red)}
+.grid{display:grid;gap:12px}.stats{grid-template-columns:repeat(6,minmax(110px,1fr));margin-bottom:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px}
+.stat .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.stat .value{font-size:22px;font-weight:750;margin-top:5px}.green{color:var(--green)}.red{color:var(--red)}
+.amber{color:var(--amber)}.blue{color:var(--blue)}.muted{color:var(--muted)}
+.main{grid-template-columns:minmax(0,2fr) minmax(320px,1fr)}
+.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.filters{display:flex;gap:6px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--muted);
+border-radius:8px;padding:7px 10px;cursor:pointer;font-size:12px}.btn.active,.btn:hover{border-color:var(--cyan);color:var(--text)}
+.btn.alert{border-color:#416451;color:var(--green)}
+.table-wrap{overflow:auto;max-height:620px;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+th{position:sticky;top:0;background:#0b1620;color:var(--muted);text-align:left;padding:9px;border-bottom:1px solid var(--line);font-size:10px;text-transform:uppercase}
+td{padding:9px;border-bottom:1px solid rgba(33,50,68,.65)}tr.data{cursor:pointer}tr.data:hover{background:#122334}
+.badge{display:inline-flex;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:700;border:1px solid var(--line)}
+.badge.long{color:var(--green);border-color:#285b48;background:#0d2b21}
+.badge.short{color:var(--red);border-color:#63303b;background:#2b1117}
+.badge.no{color:var(--muted)}.badge.ign{color:var(--amber);border-color:#66552b}.badge.exp{color:var(--cyan);border-color:#285866}
+.detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.detail-head h2{margin:0;font-size:18px}.detail-head .price{font-size:18px;font-weight:750}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.kv div{background:var(--panel2);border-radius:8px;padding:9px}
+.kv span{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}.kv strong{font-size:12px}
+.reasons{margin-top:12px}.reasons h3,.alerts h3,.system h3,.ai h3{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase}
+.reason{font-size:11px;border-left:2px solid var(--line);padding:5px 8px;margin:4px 0;color:#c7d5e1}
+.side{display:grid;gap:12px}.alert-item{font-size:11px;padding:8px;background:var(--panel2);border-radius:8px;margin:6px 0}
+.alert-item .time{color:var(--muted);font-size:10px}.system-line{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid rgba(33,50,68,.5)}
+.ai p{font-size:11px;color:var(--muted);line-height:1.5}.code{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;background:#08131c;border:1px solid var(--line);padding:9px;border-radius:8px;color:#cce5f3;overflow:auto}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+footer{color:var(--muted);font-size:10px;margin-top:12px;text-align:right}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(3,1fr)}.main{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{padding:10px}.stats{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><h1>BabaBot Market Radar</h1><p>Moving Coin Detector · live deterministic radar</p></div>
+  <div class="status"><span id="statusDot" class="dot"></span><span id="statusText">Connecting…</span></div>
+</header>
+
+<section class="grid stats">
+  <div class="card stat"><div class="label">Universe</div><div id="sUniverse" class="value">—</div></div>
+  <div class="card stat"><div class="label">Moving</div><div id="sMoving" class="value amber">—</div></div>
+  <div class="card stat"><div class="label">Long</div><div id="sLong" class="value green">—</div></div>
+  <div class="card stat"><div class="label">Short</div><div id="sShort" class="value red">—</div></div>
+  <div class="card stat"><div class="label">No Trade</div><div id="sNo" class="value muted">—</div></div>
+  <div class="card stat"><div class="label">Scan Age</div><div id="sAge" class="value blue" style="font-size:16px">—</div></div>
+</section>
+
+<section class="grid main">
+  <div class="card">
+    <div class="toolbar">
+      <div class="filters">
+        <button class="btn active" data-filter="ALL">All</button>
+        <button class="btn" data-filter="ACTIONABLE">LONG / SHORT</button>
+        <button class="btn" data-filter="IGNITION">Ignition</button>
+        <button class="btn" data-filter="EXPANSION">Expansion</button>
+      </div>
+      <button id="alertBtn" class="btn alert">Enable Alerts</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Symbol</th><th>Price</th><th>Stage</th><th>Decision</th>
+          <th>Long</th><th>Short</th><th>Structure</th><th>Taker</th>
+          <th>OI %</th><th>Regime</th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="10" class="empty">Waiting for radar data…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <aside class="side">
+    <div class="card" id="detailCard">
+      <div class="detail-head"><div><h2 id="dSymbol">Select a candidate</h2><div id="dStage" class="muted" style="font-size:11px;margin-top:3px">—</div></div><div id="dPrice" class="price">—</div></div>
+      <div class="kv">
+        <div><span>LONG SCORE</span><strong id="dLong">—</strong></div>
+        <div><span>SHORT SCORE</span><strong id="dShort">—</strong></div>
+        <div><span>STRUCTURE</span><strong id="dStructure">—</strong></div>
+        <div><span>TAKER</span><strong id="dTaker">—</strong></div>
+        <div><span>RAW OI Δ</span><strong id="dOi">—</strong></div>
+        <div><span>FUNDING</span><strong id="dFunding">—</strong></div>
+        <div><span>REGIME</span><strong id="dRegime">—</strong></div>
+        <div><span>CONTEXT BALANCE</span><strong id="dBalance">—</strong></div>
+      </div>
+      <div class="reasons"><h3>Decision reasons</h3><div id="dReasons" class="muted" style="font-size:11px">Select a row.</div></div>
+    </div>
+
+    <div class="card alerts"><h3>Alert history</h3><div id="alertHistory" class="muted" style="font-size:11px">No alerts yet.</div></div>
+
+    <div class="card system"><h3>System status</h3>
+      <div class="system-line"><span>Radar API</span><strong id="sysApi">—</strong></div>
+      <div class="system-line"><span>Completed</span><strong id="sysCompleted">—</strong></div>
+      <div class="system-line"><span>Failed symbols</span><strong id="sysFailed">—</strong></div>
+      <div class="system-line"><span>Last candle</span><strong id="sysCandle">—</strong></div>
+    </div>
+
+    <div class="card ai"><h3>AI inspection</h3>
+      <p>Stage 7 MCP is ready. AI reads the same deterministic candidate snapshot; it does not recalculate or alter the decision.</p>
+      <div id="aiHint" class="code">inspect_symbol(symbol="SOLUSDT")</div>
+    </div>
+  </aside>
+</section>
+<footer>Auto refresh: 15s · alerts only for new LONG / SHORT decisions</footer>
+</div>
+
+<script>
+const API='https://market-radar-production-d307.up.railway.app';
+const $=id=>document.getElementById(id);
+let data=null, filter='ALL', selected=null, bootstrapped=false;
+const seenKey='bababot_radar_seen_v1', historyKey='bababot_radar_alert_history_v1';
+let seen=new Set(JSON.parse(localStorage.getItem(seenKey)||'[]'));
+let alertHistory=JSON.parse(localStorage.getItem(historyKey)||'[]');
+
+function n(v,d=2){return v==null?'—':Number(v).toFixed(d)}
+function price(v){
+  if(v==null)return '—';
+  const x=Number(v);
+  if(x>=1000)return x.toLocaleString(undefined,{maximumFractionDigits:2});
+  if(x>=1)return x.toLocaleString(undefined,{maximumFractionDigits:4});
+  return x.toPrecision(5);
+}
+function age(ms){
+  if(!ms)return '—';
+  const s=Math.max(0,Math.round((Date.now()-ms)/1000));
+  if(s<60)return s+'s';
+  return Math.floor(s/60)+'m '+(s%60)+'s';
+}
+function dt(ms){return ms?new Date(ms).toLocaleString():'—'}
+function clsDecision(v){return v==='LONG'?'long':v==='SHORT'?'short':'no'}
+function clsStage(v){return v==='IGNITION'?'ign':v==='EXPANSION'?'exp':'no'}
+
+function renderStats(){
+  $('sUniverse').textContent=data?.universe_count??'—';
+  $('sMoving').textContent=data?.moving_candidate_count??'—';
+  $('sLong').textContent=data?.long_decision_count??'—';
+  $('sShort').textContent=data?.short_decision_count??'—';
+  $('sNo').textContent=data?.no_trade_decision_count??'—';
+  $('sAge').textContent=age(data?.scan_finished_at_ms);
+  $('sysApi').textContent='ONLINE';
+  $('sysApi').className='green';
+  $('sysCompleted').textContent=(data?.completed_count??'—')+' / '+(data?.universe_count??'—');
+  $('sysFailed').textContent=data?.failed_count??'—';
+  $('sysCandle').textContent=dt(data?.candle_close_time_ms);
+}
+
+function filteredRows(){
+  const rows=data?.candidates||[];
+  if(filter==='ACTIONABLE') return rows.filter(x=>x.decision==='LONG'||x.decision==='SHORT');
+  if(filter==='IGNITION'||filter==='EXPANSION') return rows.filter(x=>x.stage===filter);
+  return rows;
+}
+function renderTable(){
+  const rows=filteredRows();
+  $('rows').innerHTML=rows.length?rows.map((x,i)=>`
+    <tr class="data" data-symbol="${x.symbol}">
+      <td><strong>${x.symbol}</strong></td>
+      <td>${price(x.price)}</td>
+      <td><span class="badge ${clsStage(x.stage)}">${x.stage||'—'}</span></td>
+      <td><span class="badge ${clsDecision(x.decision)}">${x.decision||'—'}</span></td>
+      <td class="green">${n(x.long_score,1)}</td>
+      <td class="red">${n(x.short_score,1)}</td>
+      <td>${x.structure_status||'—'}</td>
+      <td>${x.taker_bias||'—'}</td>
+      <td>${x.raw_oi_change_pct==null?'—':(x.raw_oi_change_pct>=0?'+':'')+n(x.raw_oi_change_pct,2)}</td>
+      <td>${x.market_regime||'—'}</td>
+    </tr>`).join(''):'<tr><td colspan="10" class="empty">No candidates for this filter.</td></tr>';
+  document.querySelectorAll('tr.data').forEach(tr=>tr.onclick=()=>select(tr.dataset.symbol));
+  if(!selected && rows.length) select(rows[0].symbol);
+}
+
+function select(symbol){
+  selected=(data?.candidates||[]).find(x=>x.symbol===symbol)||null;
+  if(!selected)return;
+  const x=selected;
+  $('dSymbol').textContent=x.symbol;
+  $('dStage').innerHTML='<span class="badge '+clsDecision(x.decision)+'">'+(x.decision||'—')+'</span> · '+(x.stage||'—');
+  $('dPrice').textContent=price(x.price);
+  $('dLong').textContent=n(x.long_score,1); $('dLong').className='green';
+  $('dShort').textContent=n(x.short_score,1); $('dShort').className='red';
+  $('dStructure').textContent=x.structure_status||'—';
+  $('dTaker').textContent=x.taker_bias||'—';
+  $('dOi').textContent=x.raw_oi_change_pct==null?'—':(x.raw_oi_change_pct>=0?'+':'')+n(x.raw_oi_change_pct,2)+'%';
+  $('dFunding').textContent=x.funding_rate==null?'—':n(x.funding_rate,6);
+  $('dRegime').textContent=x.market_regime||'—';
+  $('dBalance').textContent=x.decision_context_balance??'—';
+  $('dReasons').innerHTML=(x.decision_reasons||[]).length?(x.decision_reasons||[]).map(r=>'<div class="reason">'+r+'</div>').join(''):'<span class="muted">No reasons.</span>';
+  $('aiHint').textContent='inspect_symbol(symbol="'+x.symbol+'")';
+}
+
+function renderHistory(){
+  $('alertHistory').innerHTML=alertHistory.length?alertHistory.slice(0,12).map(a=>`
+    <div class="alert-item">
+      <strong class="${a.decision==='LONG'?'green':'red'}">${a.decision} · ${a.symbol}</strong>
+      <div>${a.stage} · L ${n(a.long_score,1)} / S ${n(a.short_score,1)}</div>
+      <div class="time">${new Date(a.at).toLocaleString()}</div>
+    </div>`).join(''):'<span class="muted">No alerts yet.</span>';
+}
+
+function saveSeen(){localStorage.setItem(seenKey,JSON.stringify([...seen].slice(-500)))}
+function saveHistory(){localStorage.setItem(historyKey,JSON.stringify(alertHistory.slice(0,100)))}
+
+function inspectAlerts(){
+  const actionable=(data?.candidates||[]).filter(x=>x.decision==='LONG'||x.decision==='SHORT');
+  if(!bootstrapped){
+    actionable.forEach(x=>seen.add(x.symbol+':'+x.candle_close_time_ms+':'+x.decision));
+    saveSeen(); bootstrapped=true; return;
+  }
+  for(const x of actionable){
+    const key=x.symbol+':'+x.candle_close_time_ms+':'+x.decision;
+    if(seen.has(key))continue;
+    seen.add(key);
+    const entry={symbol:x.symbol,decision:x.decision,stage:x.stage,long_score:x.long_score,short_score:x.short_score,at:Date.now()};
+    alertHistory.unshift(entry); saveHistory();
+    if(Notification.permission==='granted'){
+      new Notification('BabaBot '+x.decision+' · '+x.symbol,{
+        body:(x.stage||'')+' · LONG '+n(x.long_score,1)+' / SHORT '+n(x.short_score,1)+' · '+(x.market_regime||''),
+      });
+    }
+  }
+  saveSeen(); renderHistory();
+}
+
+async function load(){
+  try{
+    const r=await fetch(API+'/radar/latest',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    data=await r.json();
+    $('statusDot').className='dot ok';
+    $('statusText').textContent='LIVE · '+age(data.scan_finished_at_ms)+' old';
+    renderStats(); renderTable(); inspectAlerts();
+  }catch(e){
+    $('statusDot').className='dot bad';
+    $('statusText').textContent='OFFLINE · '+e.message;
+    $('sysApi').textContent='OFFLINE'; $('sysApi').className='red';
+  }
+}
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); filter=b.dataset.filter; selected=null; renderTable();
+});
+$('alertBtn').onclick=async()=>{
+  if(!('Notification'in window)){alert('Browser notifications are not supported here.');return}
+  const p=await Notification.requestPermission();
+  $('alertBtn').textContent=p==='granted'?'Alerts Enabled':'Alerts Blocked';
+};
+if('Notification'in window && Notification.permission==='granted') $('alertBtn').textContent='Alerts Enabled';
+renderHistory(); load(); setInterval(load,15000); setInterval(()=>{if(data){$('sAge').textContent=age(data.scan_finished_at_ms);$('statusText').textContent='LIVE · '+age(data.scan_finished_at_ms)+' old'}},1000);
+</script>
+</body>
+</html>
