@@ -6,6 +6,10 @@ import os
 import threading
 
 from .binance import BinancePublicClient
+from .execution_handoff import (
+    default_execution_handoff_path,
+    write_execution_handoff_atomic,
+)
 from .read_api import serve_read_api
 from .scheduler import run_forever
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
@@ -77,12 +81,17 @@ def main() -> int:
         client = BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
         scan = scan_all_usdt_perpetuals(client=client, config=cfg)
         path = write_scan_atomic(scan, cfg.output_path)
+        handoff_path = write_execution_handoff_atomic(
+            scan,
+            default_execution_handoff_path(cfg.output_path),
+        )
 
         if args.json:
             print(json.dumps(scan.to_dict(), indent=2, sort_keys=True))
         else:
             _print_candidates(scan)
             print(f"Output: {path}")
+            print(f"Execution handoff: {handoff_path}")
 
         return 0 if scan.completed_count > 0 else 1
 
