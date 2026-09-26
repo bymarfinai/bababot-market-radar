@@ -119,6 +119,13 @@ class MovementDetection:
     direction_score_version: str | None = None
     market_context: MarketContext | None = None
     market_context_version: str | None = None
+    decision: str | None = None
+    decision_side_candidate: str | None = None
+    decision_context_confirmations: int | None = None
+    decision_context_conflicts: int | None = None
+    decision_context_balance: int | None = None
+    decision_reasons: tuple[str, ...] = ()
+    decision_version: str | None = None
 
 
 @dataclass
@@ -140,6 +147,10 @@ class MarketScan:
     market_context_version: str
     context_complete_count: int
     context_partial_count: int
+    decision_version: str
+    long_decision_count: int
+    short_decision_count: int
+    no_trade_decision_count: int
     ignition_count: int
     expansion_count: int
     exhaustion_count: int
