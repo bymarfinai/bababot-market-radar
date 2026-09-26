@@ -184,8 +184,8 @@ class Stage2MovementDetectorTests(unittest.TestCase):
 
         self.assertTrue(result.is_moving)
         self.assertEqual(result.direction_hint, "DOWN")
-        self.assertFalse(hasattr(result, "long_score"))
-        self.assertFalse(hasattr(result, "short_score"))
+        self.assertIsNone(result.long_score)
+        self.assertIsNone(result.short_score)
         self.assertFalse(hasattr(result, "decision"))
 
     def test_in_progress_spike_cannot_leak_into_detection(self):
