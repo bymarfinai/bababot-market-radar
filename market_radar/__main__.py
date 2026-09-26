@@ -10,6 +10,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
 )
+from .persistence import database_path, record_actionable_signals
 from .read_api import serve_read_api
 from .scheduler import run_forever
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
@@ -85,6 +86,7 @@ def main() -> int:
             scan,
             default_execution_handoff_path(cfg.output_path),
         )
+        persistence_result = record_actionable_signals(scan)
 
         if args.json:
             print(json.dumps(scan.to_dict(), indent=2, sort_keys=True))
@@ -92,6 +94,11 @@ def main() -> int:
             _print_candidates(scan)
             print(f"Output: {path}")
             print(f"Execution handoff: {handoff_path}")
+            print(
+                f"Persistent DB: {database_path()} "
+                f"(inserted={persistence_result['inserted']}, "
+                f"updated={persistence_result['updated']})"
+            )
 
         return 0 if scan.completed_count > 0 else 1
 
