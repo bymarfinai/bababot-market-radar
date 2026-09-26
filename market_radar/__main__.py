@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import threading
 
 from .binance import BinancePublicClient
+from .read_api import serve_read_api
 from .scheduler import run_forever
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
 
@@ -55,6 +58,17 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=12)
     parser.add_argument("--output", default="data/latest_scan.json")
     parser.add_argument("--offset-seconds", type=int, default=3)
+    parser.add_argument(
+        "--serve",
+        action="store_true",
+        help="also expose the Stage 7 read-only HTTP API",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.environ.get("PORT", "8080")),
+        help="read-only API port (defaults to $PORT or 8080)",
+    )
     args = parser.parse_args()
 
     cfg = Stage1Config(workers=max(1, args.workers), output_path=args.output)
@@ -71,6 +85,18 @@ def main() -> int:
             print(f"Output: {path}")
 
         return 0 if scan.completed_count > 0 else 1
+
+    if args.serve:
+        api_thread = threading.Thread(
+            target=serve_read_api,
+            kwargs={
+                "port": max(1, args.port),
+                "scan_path": cfg.output_path,
+            },
+            daemon=True,
+            name="market-radar-read-api",
+        )
+        api_thread.start()
 
     run_forever(config=cfg, offset_seconds=max(0, args.offset_seconds))
     return 0
