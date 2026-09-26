@@ -6,6 +6,7 @@ import os
 import sys
 import threading
 
+from .ai_approval import start_pending_approval_worker
 from .binance import BinancePublicClient
 from .execution_handoff import (
     default_execution_handoff_path,
@@ -101,6 +102,8 @@ def main() -> int:
             flush=True,
         )
 
+    start_pending_approval_worker()
+
     if args.once:
         client = BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
         scan = scan_all_usdt_perpetuals(client=client, config=cfg)
@@ -110,6 +113,7 @@ def main() -> int:
             default_execution_handoff_path(cfg.output_path),
         )
         persistence_result = record_actionable_signals(scan)
+        start_pending_approval_worker()
 
         if args.json:
             print(json.dumps(scan.to_dict(), indent=2, sort_keys=True))
