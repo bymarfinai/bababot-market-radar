@@ -710,7 +710,7 @@ Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti che
 - [x] Read raw Open Interest
 - [x] Read funding
 - [x] Read existing market regime
-- [ ] Output LONG / SHORT / NO TRADE
+- [x] Output LONG / SHORT / NO TRADE
 - [ ] Expose data through MCP
 - [ ] AI can inspect live radar data
 - [ ] Dashboard live available
