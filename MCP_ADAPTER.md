@@ -1,118 +1,141 @@
-# BabaBot Market Radar — MCP Adapter Contract
+# BabaBot Market Radar — MCP Interface
 
-Status: Stage 7 integration contract.
+Status: **Stage 7 COMPLETE**
 
-This document intentionally keeps the MCP layer thin.
+## Final architecture
 
-## Principle
-
-The existing BabaBot MCP must **not** duplicate any Market Radar logic.
-
-MCP only reads deterministic Market Radar output.
+Stage 7 is implemented directly inside the standalone Market Radar service.
 
 ```text
-Market Radar
-    ↓
-read-only HTTP API
-    ↓
-existing BabaBot MCP
-    ↓
-AI inspection
+Market Radar deterministic engine
+        ↓
+latest_scan.json
+        ↓
+read-only HTTP + MCP interface
+        ↓
+AI / MCP client inspection
 ```
 
-The MCP layer must not:
+This keeps Market Radar runtime-independent from BabaBot Discovery and avoids
+creating another calculation engine.
 
-- rescan Binance
-- calculate movement stage
-- recalculate LONG_SCORE / SHORT_SCORE
-- reinterpret Open Interest
-- calculate regime
-- change LONG / SHORT / NO TRADE
-- execute orders
+The existing BabaBot MCP Worker is not modified and is not required for Market
+Radar to operate.
 
-## Minimal tool set
-
-Only three read-only tools are required.
-
-### 1. get_market_radar
-
-Purpose: retrieve the latest compact radar state.
-
-Backend:
+## MCP endpoint
 
 ```text
-GET /radar/latest
+POST /mcp
 ```
+
+Production service:
+
+```text
+https://market-radar-production-d307.up.railway.app/mcp
+```
+
+The implementation supports the MCP handshake-era protocol revision:
+
+```text
+2025-11-25
+```
+
+The server is stateless. Tool calls read the latest deterministic radar snapshot
+from disk.
+
+## Tools
+
+Exactly three read-only tools are exposed.
+
+### get_market_radar
 
 Arguments: none.
 
-### 2. get_moving_coins
+Returns:
 
-Purpose: list current moving candidates.
+- latest scan timestamps
+- market universe/completion counts
+- candidate counts
+- IGNITION / EXPANSION / EXHAUSTION counts
+- LONG / SHORT / NO TRADE counts
+- compact current candidate list
 
-Backend:
+### get_moving_coins
 
-```text
-GET /radar/candidates
-```
-
-Optional filters:
-
-```text
-decision=LONG|SHORT|NO_TRADE
-stage=IGNITION|EXPANSION|EXHAUSTION
-```
-
-Examples:
+Optional arguments:
 
 ```text
-GET /radar/candidates?decision=LONG
-GET /radar/candidates?stage=IGNITION
+decision = LONG | SHORT | NO TRADE
+stage    = IGNITION | EXPANSION | EXHAUSTION
 ```
 
-### 3. inspect_symbol
+Returns the current moving candidates after optional filtering.
 
-Purpose: inspect one symbol.
+### inspect_symbol
 
-Backend:
+Required argument:
 
 ```text
-GET /radar/symbol/{symbol}
+symbol
 ```
 
-Argument:
+If the symbol is currently moving, returns:
 
-```text
-symbol: string
-```
+- stage
+- final decision
+- LONG_SCORE / SHORT_SCORE
+- score gap / edge
+- movement returns
+- volume ratio
+- breakout/breakdown context
+- taker context
+- raw OI context
+- funding
+- market regime
+- decision reasons
 
-If the symbol is a moving candidate, the endpoint returns the candidate's stage,
-scores, decision, context, and decision reasons.
+If the symbol is not currently moving, returns the latest basic Stage 1 snapshot.
 
-If the symbol is not moving, it returns only the latest basic Stage 1 snapshot.
-
-## Health endpoint
+## Non-MCP read endpoints
 
 ```text
 GET /health
+GET /radar/latest
+GET /radar/candidates
+GET /radar/symbol/{symbol}
 ```
 
-This is operational only and does not need to be an MCP tool.
+These endpoints expose the same deterministic output for dashboard/operational use.
 
-## Runtime command
+## Scope boundary
 
-The existing scanner behavior remains unchanged unless API serving is explicitly enabled.
+The MCP layer does **not**:
 
-```bash
+- rescan Binance
+- calculate movement state
+- classify IGNITION / EXPANSION / EXHAUSTION
+- recalculate LONG_SCORE / SHORT_SCORE
+- reinterpret Open Interest
+- calculate market regime
+- change LONG / SHORT / NO TRADE
+- execute orders
+
+All calculations remain inside Stage 1–6. MCP is read-only inspection only.
+
+## Runtime
+
+Railway service:
+
+```text
+market-radar
+```
+
+Start command:
+
+```text
 python -m market_radar --serve
 ```
 
-Railway can supply the HTTP port using `PORT`.
-
-## Important
-
-Do not create a second independent MCP server for Market Radar while the existing
-BabaBot MCP is available.
-
-The intended final integration is to add the three read-only proxy tools above to
-the existing BabaBot MCP Worker.
+MCP and the ordinary read API run in the same service/process boundary as a
+small read-only server thread. The scanner itself remains on its existing
+5-minute closed-candle scheduler.
