@@ -10,7 +10,7 @@ from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_a
 
 def _print_candidates(scan) -> None:
     print(
-        f"Stage 1+2+3+4+5 scan complete: {scan.completed_count}/{scan.universe_count} symbols, "
+        f"Stage 1+2+3+4+5+6 scan complete: {scan.completed_count}/{scan.universe_count} symbols, "
         f"moving={scan.moving_candidate_count}, "
         f"evaluated={scan.movement_evaluated_count}, "
         f"skipped={scan.movement_skipped_count}, "
@@ -19,7 +19,10 @@ def _print_candidates(scan) -> None:
         f"EXPANSION={scan.expansion_count}, "
         f"EXHAUSTION={scan.exhaustion_count}, "
         f"context_ok={scan.context_complete_count}, "
-        f"context_partial={scan.context_partial_count}"
+        f"context_partial={scan.context_partial_count}, "
+        f"LONG={scan.long_decision_count}, "
+        f"SHORT={scan.short_decision_count}, "
+        f"NO_TRADE={scan.no_trade_decision_count}"
     )
 
     if not scan.moving_candidates:
@@ -28,26 +31,25 @@ def _print_candidates(scan) -> None:
 
     print()
     print(
-        f"{'SYMBOL':>14} {'STAGE':>12} {'LONG':>7} {'SHORT':>7} "
-        f"{'STRUCT':>18} {'TAKER':>8} {'OI%':>8} {'FUND':>10} {'REGIME':>10}"
+        f"{'SYMBOL':>14} {'DECISION':>10} {'STAGE':>12} {'LONG':>7} {'SHORT':>7} "
+        f"{'STRUCT':>18} {'TAKER':>8} {'OI%':>8} {'REGIME':>10}"
     )
     print("-" * 90)
     for item in scan.moving_candidates:
         ctx = item.market_context
         oi = ctx.raw_oi_change_pct if ctx and ctx.raw_oi_change_pct is not None else 0.0
-        funding = ctx.funding_rate if ctx and ctx.funding_rate is not None else 0.0
         print(
-            f"{item.symbol:>14} {str(item.stage):>12} "
+            f"{item.symbol:>14} {str(item.decision or 'N/A'):>10} {str(item.stage):>12} "
             f"{(item.long_score or 0.0):>7.1f} {(item.short_score or 0.0):>7.1f} "
             f"{(ctx.structure_status if ctx else 'N/A'):>18} "
             f"{(ctx.taker_bias if ctx else 'N/A'):>8} "
-            f"{oi:>+8.3f} {funding:>+10.6f} "
+            f"{oi:>+8.3f} "
             f"{(ctx.market_regime if ctx and ctx.market_regime else 'N/A'):>10}"
         )
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="BabaBot Market Radar — Stage 1+2+3+4+5")
+    parser = argparse.ArgumentParser(description="BabaBot Market Radar — Stage 1+2+3+4+5+6")
     parser.add_argument("--once", action="store_true", help="run one full-universe scan and exit")
     parser.add_argument("--json", action="store_true", help="print the scan JSON")
     parser.add_argument("--workers", type=int, default=12)
