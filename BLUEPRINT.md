@@ -713,15 +713,15 @@ Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti che
 - [x] Output LONG / SHORT / NO TRADE
 - [x] Expose data through MCP
 - [x] AI can inspect live radar data
-- [ ] Dashboard live available
-- [ ] Alert available
+- [x] Dashboard live available
+- [x] Alert available
 - [ ] Future execution integration possible
 - [ ] No backtest engine inside Market Radar
 - [ ] No strategy discovery engine inside Market Radar
 - [ ] No new Regime Engine developed as separate scope
-- [ ] Market Radar runs independently without BabaBot Discovery
-- [ ] Runtime dependency on `bababot-discovery` = ZERO
-- [ ] Market Radar remains an MCD live product, not a Discovery engine
+- [x] Market Radar runs independently without BabaBot Discovery
+- [x] Runtime dependency on `bababot-discovery` = ZERO
+- [x] Market Radar remains an MCD live product, not a Discovery engine
 
 ---
 
