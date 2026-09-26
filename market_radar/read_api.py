@@ -12,7 +12,12 @@ from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
 )
-from .persistence import list_signals, persistence_summary
+from .persistence import (
+    entry_approval_summary,
+    list_entry_approvals,
+    list_signals,
+    persistence_summary,
+)
 
 
 READ_API_VERSION = "stage7-v2"
@@ -534,6 +539,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "execution_mode": "HANDOFF_ONLY",
                     "signal_history": "/history/signals",
                     "persistence_summary": "/history/summary",
+                    "entry_approvals": "/approval/reviews",
+                    "entry_approval_summary": "/approval/summary",
                 },
             )
             return
@@ -632,6 +639,53 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 {
                     "count": len(rows),
                     "signals": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/approval/summary":
+            try:
+                self._json(HTTPStatus.OK, entry_approval_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_approval_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/approval/reviews":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                verdict = query.get("verdict", [None])[0]
+                rows = list_entry_approvals(
+                    limit=limit,
+                    verdict=verdict,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_approval_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_approval_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "reviews": rows,
                 },
             )
             return
