@@ -9,7 +9,55 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 
-READ_API_VERSION = "stage7-v1"
+READ_API_VERSION = "stage7-v2"
+MCP_PROTOCOL_VERSION = "2025-11-25"
+MCP_SERVER_NAME = "bababot-market-radar"
+MCP_SERVER_VERSION = "stage7-v1"
+
+MCP_TOOLS: list[dict[str, Any]] = [
+    {
+        "name": "get_market_radar",
+        "description": "Read the latest compact BabaBot Market Radar scan and deterministic decisions.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "get_moving_coins",
+        "description": "List current moving candidates, optionally filtered by final decision or movement stage.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "decision": {
+                    "type": "string",
+                    "enum": ["LONG", "SHORT", "NO TRADE", "NO_TRADE"],
+                },
+                "stage": {
+                    "type": "string",
+                    "enum": ["IGNITION", "EXPANSION", "EXHAUSTION"],
+                },
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "inspect_symbol",
+        "description": "Inspect one symbol from the latest radar scan. Returns full compact candidate context when moving, otherwise the latest Stage 1 snapshot.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "minLength": 1,
+                }
+            },
+            "required": ["symbol"],
+            "additionalProperties": False,
+        },
+    },
+]
 
 
 def load_latest_scan(path: str | os.PathLike[str]) -> dict[str, Any]:
@@ -24,11 +72,7 @@ def load_latest_scan(path: str | os.PathLike[str]) -> dict[str, Any]:
 
 
 def compact_candidate(item: dict[str, Any]) -> dict[str, Any]:
-    """Return only fields AI/MCP needs for inspection.
-
-    Full raw scan remains on disk. The read API deliberately avoids duplicating
-    internal detector state that is not useful to an MCP caller.
-    """
+    """Return only fields AI/MCP needs for inspection."""
     ctx = item.get("market_context") or {}
     return {
         "symbol": item.get("symbol"),
@@ -99,11 +143,19 @@ def candidates_view(
 
     if decision:
         wanted = decision.strip().upper().replace("_", " ")
-        rows = [row for row in rows if str(row.get("decision") or "").upper() == wanted]
+        rows = [
+            row
+            for row in rows
+            if str(row.get("decision") or "").upper() == wanted
+        ]
 
     if stage:
         wanted_stage = stage.strip().upper()
-        rows = [row for row in rows if str(row.get("stage") or "").upper() == wanted_stage]
+        rows = [
+            row
+            for row in rows
+            if str(row.get("stage") or "").upper() == wanted_stage
+        ]
 
     return {
         "api_version": READ_API_VERSION,
@@ -124,7 +176,6 @@ def symbol_view(scan: dict[str, Any], symbol: str) -> dict[str, Any] | None:
                 "candidate": compact_candidate(item),
             }
 
-    # Symbol may be in the full scan but not currently moving.
     for item in scan.get("symbols", []):
         if not isinstance(item, dict):
             continue
@@ -144,21 +195,281 @@ def symbol_view(scan: dict[str, Any], symbol: str) -> dict[str, Any] | None:
     return None
 
 
+def _rpc_result(request_id: Any, result: dict[str, Any]) -> dict[str, Any]:
+    return {"jsonrpc": "2.0", "id": request_id, "result": result}
+
+
+def _rpc_error(
+    request_id: Any,
+    code: int,
+    message: str,
+    data: Any | None = None,
+) -> dict[str, Any]:
+    error: dict[str, Any] = {"code": code, "message": message}
+    if data is not None:
+        error["data"] = data
+    return {"jsonrpc": "2.0", "id": request_id, "error": error}
+
+
+def _tool_result(payload: dict[str, Any], *, is_error: bool = False) -> dict[str, Any]:
+    return {
+        "content": [
+            {
+                "type": "text",
+                "text": json.dumps(
+                    payload,
+                    separators=(",", ":"),
+                    allow_nan=False,
+                ),
+            }
+        ],
+        "structuredContent": payload,
+        "isError": is_error,
+    }
+
+
+def mcp_dispatch(
+    request: Any,
+    *,
+    scan_path: str | os.PathLike[str],
+) -> tuple[int, dict[str, Any] | None]:
+    """Handle the minimal read-only MCP surface.
+
+    The server intentionally implements the latest handshake-era MCP revision
+    (2025-11-25). Modern MCP clients can negotiate/fallback to this revision.
+    No session state is required because all tools read the latest immutable
+    scan snapshot from disk.
+    """
+    if not isinstance(request, dict):
+        return HTTPStatus.BAD_REQUEST, _rpc_error(
+            None, -32600, "Invalid Request"
+        )
+
+    request_id = request.get("id")
+    if request.get("jsonrpc") != "2.0":
+        return HTTPStatus.BAD_REQUEST, _rpc_error(
+            request_id, -32600, "Invalid Request"
+        )
+
+    method = request.get("method")
+    params = request.get("params") or {}
+    if not isinstance(params, dict):
+        return HTTPStatus.BAD_REQUEST, _rpc_error(
+            request_id, -32602, "Invalid params"
+        )
+
+    if method == "notifications/initialized":
+        return HTTPStatus.ACCEPTED, None
+
+    if method == "initialize":
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            {
+                "protocolVersion": MCP_PROTOCOL_VERSION,
+                "capabilities": {"tools": {}},
+                "serverInfo": {
+                    "name": MCP_SERVER_NAME,
+                    "version": MCP_SERVER_VERSION,
+                },
+                "instructions": (
+                    "Read-only live BabaBot Market Radar. "
+                    "Market data, scores, context, and decisions are produced "
+                    "deterministically by the radar before MCP exposure."
+                ),
+            },
+        )
+
+    if method == "ping":
+        return HTTPStatus.OK, _rpc_result(request_id, {})
+
+    if method == "tools/list":
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            {"tools": MCP_TOOLS},
+        )
+
+    if method != "tools/call":
+        return HTTPStatus.OK, _rpc_error(
+            request_id, -32601, "Method not found"
+        )
+
+    name = params.get("name")
+    arguments = params.get("arguments") or {}
+    if not isinstance(name, str) or not isinstance(arguments, dict):
+        return HTTPStatus.OK, _rpc_error(
+            request_id, -32602, "Invalid params"
+        )
+
+    try:
+        scan = load_latest_scan(scan_path)
+    except FileNotFoundError:
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            _tool_result(
+                {"error": "scan_not_ready"},
+                is_error=True,
+            ),
+        )
+    except Exception as exc:
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            _tool_result(
+                {"error": "scan_read_failed", "detail": str(exc)},
+                is_error=True,
+            ),
+        )
+
+    if name == "get_market_radar":
+        if arguments:
+            return HTTPStatus.OK, _rpc_result(
+                request_id,
+                _tool_result(
+                    {"error": "get_market_radar takes no arguments"},
+                    is_error=True,
+                ),
+            )
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            _tool_result(latest_summary(scan)),
+        )
+
+    if name == "get_moving_coins":
+        decision = arguments.get("decision")
+        stage = arguments.get("stage")
+        allowed_decisions = {None, "LONG", "SHORT", "NO TRADE", "NO_TRADE"}
+        allowed_stages = {None, "IGNITION", "EXPANSION", "EXHAUSTION"}
+        if decision not in allowed_decisions or stage not in allowed_stages:
+            return HTTPStatus.OK, _rpc_result(
+                request_id,
+                _tool_result(
+                    {"error": "invalid decision or stage filter"},
+                    is_error=True,
+                ),
+            )
+        extra = set(arguments) - {"decision", "stage"}
+        if extra:
+            return HTTPStatus.OK, _rpc_result(
+                request_id,
+                _tool_result(
+                    {"error": "unexpected arguments", "fields": sorted(extra)},
+                    is_error=True,
+                ),
+            )
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            _tool_result(
+                candidates_view(
+                    scan,
+                    decision=decision,
+                    stage=stage,
+                )
+            ),
+        )
+
+    if name == "inspect_symbol":
+        extra = set(arguments) - {"symbol"}
+        symbol = arguments.get("symbol")
+        if extra or not isinstance(symbol, str) or not symbol.strip():
+            return HTTPStatus.OK, _rpc_result(
+                request_id,
+                _tool_result(
+                    {"error": "symbol is required"},
+                    is_error=True,
+                ),
+            )
+        view = symbol_view(scan, symbol)
+        if view is None:
+            return HTTPStatus.OK, _rpc_result(
+                request_id,
+                _tool_result(
+                    {
+                        "error": "symbol_not_found",
+                        "symbol": symbol.strip().upper(),
+                    },
+                    is_error=True,
+                ),
+            )
+        return HTTPStatus.OK, _rpc_result(
+            request_id,
+            _tool_result(view),
+        )
+
+    return HTTPStatus.OK, _rpc_error(
+        request_id,
+        -32601,
+        "Unknown tool",
+        {"name": name},
+    )
+
+
 class RadarReadHandler(BaseHTTPRequestHandler):
     scan_path = "data/latest_scan.json"
 
     def log_message(self, _format: str, *_args: Any) -> None:
-        # Keep scanner logs clean; Railway already records request status.
         return
 
-    def _json(self, status: int, payload: dict[str, Any]) -> None:
-        body = json.dumps(payload, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    def _json(
+        self,
+        status: int,
+        payload: dict[str, Any],
+        *,
+        mcp: bool = False,
+    ) -> None:
+        body = json.dumps(
+            payload,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        if mcp:
+            self.send_header("MCP-Protocol-Version", MCP_PROTOCOL_VERSION)
         self.end_headers()
         self.wfile.write(body)
+
+    def _empty(self, status: int) -> None:
+        self.send_response(status)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def do_POST(self) -> None:  # noqa: N802 - stdlib handler method
+        parsed = urlparse(self.path)
+        if parsed.path != "/mcp":
+            self._json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
+            return
+
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            length = 0
+        if length <= 0 or length > 1_000_000:
+            self._json(
+                HTTPStatus.BAD_REQUEST,
+                _rpc_error(None, -32700, "Invalid request body"),
+                mcp=True,
+            )
+            return
+
+        try:
+            request = json.loads(self.rfile.read(length))
+        except Exception:
+            self._json(
+                HTTPStatus.BAD_REQUEST,
+                _rpc_error(None, -32700, "Parse error"),
+                mcp=True,
+            )
+            return
+
+        status, payload = mcp_dispatch(
+            request,
+            scan_path=self.scan_path,
+        )
+        if payload is None:
+            self._empty(status)
+            return
+        self._json(status, payload, mcp=True)
 
     def do_GET(self) -> None:  # noqa: N802 - stdlib handler method
         parsed = urlparse(self.path)
@@ -166,14 +477,30 @@ class RadarReadHandler(BaseHTTPRequestHandler):
         if parsed.path == "/health":
             self._json(
                 HTTPStatus.OK,
-                {"ok": True, "service": "bababot-market-radar", "api_version": READ_API_VERSION},
+                {
+                    "ok": True,
+                    "service": "bababot-market-radar",
+                    "api_version": READ_API_VERSION,
+                    "mcp": "/mcp",
+                    "mcp_protocol_version": MCP_PROTOCOL_VERSION,
+                },
             )
+            return
+
+        if parsed.path == "/mcp":
+            self.send_response(HTTPStatus.METHOD_NOT_ALLOWED)
+            self.send_header("Allow", "POST")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
             return
 
         try:
             scan = load_latest_scan(self.scan_path)
         except FileNotFoundError:
-            self._json(HTTPStatus.SERVICE_UNAVAILABLE, {"error": "scan_not_ready"})
+            self._json(
+                HTTPStatus.SERVICE_UNAVAILABLE,
+                {"error": "scan_not_ready"},
+            )
             return
         except Exception as exc:
             self._json(
@@ -192,7 +519,11 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             stage = query.get("stage", [None])[0]
             self._json(
                 HTTPStatus.OK,
-                candidates_view(scan, decision=decision, stage=stage),
+                candidates_view(
+                    scan,
+                    decision=decision,
+                    stage=stage,
+                ),
             )
             return
 
@@ -200,11 +531,20 @@ class RadarReadHandler(BaseHTTPRequestHandler):
         if parsed.path.startswith(prefix):
             symbol = parsed.path[len(prefix) :].strip()
             if not symbol:
-                self._json(HTTPStatus.BAD_REQUEST, {"error": "symbol_required"})
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "symbol_required"},
+                )
                 return
             view = symbol_view(scan, symbol)
             if view is None:
-                self._json(HTTPStatus.NOT_FOUND, {"error": "symbol_not_found", "symbol": symbol.upper()})
+                self._json(
+                    HTTPStatus.NOT_FOUND,
+                    {
+                        "error": "symbol_not_found",
+                        "symbol": symbol.upper(),
+                    },
+                )
                 return
             self._json(HTTPStatus.OK, view)
             return
