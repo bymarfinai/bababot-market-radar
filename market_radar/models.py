@@ -50,6 +50,13 @@ class MovementDetection:
     reasons: tuple[str, ...] = ()
     stage: str | None = None
     stage_classifier_version: str | None = None
+    long_score: float | None = None
+    short_score: float | None = None
+    score_gap: float | None = None
+    score_edge: float | None = None
+    long_score_components: dict[str, float] = field(default_factory=dict)
+    short_score_components: dict[str, float] = field(default_factory=dict)
+    direction_score_version: str | None = None
 
 
 @dataclass
@@ -67,6 +74,7 @@ class MarketScan:
     movement_skipped_count: int
     moving_candidate_count: int
     movement_stage_version: str
+    direction_score_version: str
     ignition_count: int
     expansion_count: int
     exhaustion_count: int
