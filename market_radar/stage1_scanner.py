@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .binance import BinancePublicClient
+from .decision_engine import DECISION_VERSION, decide
 from .direction_scorer import DIRECTION_SCORE_VERSION, score_directions
 from .market_context import MARKET_CONTEXT_VERSION, attach_market_context
 from .models import MarketScan, MovementDetection, SymbolSnapshot
@@ -175,6 +176,10 @@ def scan_symbol(
                 external_errors=context_errors,
             )
 
+            # Stage 6 final deterministic decision comes only after Stage 5
+            # context has been attached.
+            movement = decide(movement)
+
     return snapshot, movement
 
 
@@ -237,10 +242,11 @@ def scan_all_usdt_perpetuals(
     snapshots.sort(key=lambda item: item.symbol)
     errors.sort()
 
-    # Stage 4 scores are evidence only, not a trade decision. Sorting is for
-    # operator visibility: strongest directional evidence first.
+    # Actionable Stage 6 decisions first, then strongest directional evidence.
+    decision_rank = {"LONG": 2, "SHORT": 2, "NO TRADE": 1, None: 0}
     moving_candidates.sort(
         key=lambda item: (
+            decision_rank.get(item.decision, 0),
             max(item.long_score or 0.0, item.short_score or 0.0),
             item.score_edge or 0.0,
             item.evidence_count,
@@ -259,6 +265,16 @@ def scan_all_usdt_perpetuals(
         for item in moving_candidates
         if item.market_context is not None
         and bool(item.market_context.context_errors)
+    )
+
+    long_decision_count = sum(
+        1 for item in moving_candidates if item.decision == "LONG"
+    )
+    short_decision_count = sum(
+        1 for item in moving_candidates if item.decision == "SHORT"
+    )
+    no_trade_decision_count = sum(
+        1 for item in moving_candidates if item.decision == "NO TRADE"
     )
 
     ignition_count = sum(1 for item in moving_candidates if item.stage == "IGNITION")
@@ -288,6 +304,10 @@ def scan_all_usdt_perpetuals(
         market_context_version=MARKET_CONTEXT_VERSION,
         context_complete_count=context_complete_count,
         context_partial_count=context_partial_count,
+        decision_version=DECISION_VERSION,
+        long_decision_count=long_decision_count,
+        short_decision_count=short_decision_count,
+        no_trade_decision_count=no_trade_decision_count,
         ignition_count=ignition_count,
         expansion_count=expansion_count,
         exhaustion_count=exhaustion_count,
