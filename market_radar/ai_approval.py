@@ -406,6 +406,14 @@ def start_pending_approval_worker() -> bool:
                 ),
                 None,
             )
+            sample_error = next(
+                (
+                    item.get("ai") or {}
+                    for item in results
+                    if item.get("ai_verdict") == "ERROR"
+                ),
+                {},
+            )
             print(
                 "Stage 11 approvals: "
                 f"status={result.get('status')} "
@@ -415,7 +423,9 @@ def start_pending_approval_worker() -> bool:
                 f"watch={result.get('watch', 0)} "
                 f"risk_fail={risk_fail} "
                 f"ai_error={ai_error} "
-                f"sample_issue={sample_issue}",
+                f"sample_issue={sample_issue} "
+                f"error_type={sample_error.get('error_type')} "
+                f"error={str(sample_error.get('error') or '')[:180]}",
                 flush=True,
             )
         except Exception as exc:
