@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .binance import BinancePublicClient
+from .direction_scorer import DIRECTION_SCORE_VERSION, score_directions
 from .models import MarketScan, MovementDetection, SymbolSnapshot
 from .moving_detector import (
     MOVEMENT_DETECTOR_VERSION,
@@ -180,6 +181,7 @@ def scan_all_usdt_perpetuals(
                 else:
                     movement_evaluated_count += 1
                     movement = classify_movement_stage(movement)
+                    movement = score_directions(movement)
                     if movement.is_moving:
                         moving_candidates.append(movement)
             except Exception as exc:
@@ -188,15 +190,13 @@ def scan_all_usdt_perpetuals(
     snapshots.sort(key=lambda item: item.symbol)
     errors.sort()
 
-    # No LONG/SHORT score exists in Stage 2. Ranking is only for display:
-    # more independent movement evidence first, then stronger return/activity
-    # expansion relative to that symbol's own baseline.
+    # Stage 4 scores are evidence only, not a trade decision. Sorting is for
+    # operator visibility: strongest directional evidence first.
     moving_candidates.sort(
         key=lambda item: (
+            max(item.long_score or 0.0, item.short_score or 0.0),
+            item.score_edge or 0.0,
             item.evidence_count,
-            item.return_expansion_ratio,
-            item.volume_ratio,
-            item.range_ratio,
         ),
         reverse=True,
     )
@@ -224,6 +224,7 @@ def scan_all_usdt_perpetuals(
         movement_skipped_count=movement_skipped_count,
         moving_candidate_count=len(moving_candidates),
         movement_stage_version=MOVEMENT_STAGE_VERSION,
+        direction_score_version=DIRECTION_SCORE_VERSION,
         ignition_count=ignition_count,
         expansion_count=expansion_count,
         exhaustion_count=exhaustion_count,
