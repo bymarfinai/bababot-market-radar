@@ -64,3 +64,17 @@ class BinancePublicClient:
             "/fapi/v1/klines",
             {"symbol": symbol, "interval": interval, "limit": limit},
         )
+
+    def open_interest_hist(
+        self,
+        symbol: str,
+        period: str = "5m",
+        limit: int = 7,
+    ) -> list[dict[str, Any]]:
+        return self.get(
+            "/futures/data/openInterestHist",
+            {"symbol": symbol, "period": period, "limit": limit},
+        )
+
+    def premium_index(self, symbol: str) -> dict[str, Any]:
+        return self.get("/fapi/v1/premiumIndex", {"symbol": symbol})
