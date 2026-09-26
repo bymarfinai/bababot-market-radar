@@ -12,6 +12,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
 )
+from .persistence import list_signals, persistence_summary
 
 
 READ_API_VERSION = "stage7-v2"
@@ -531,6 +532,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "mcp_protocol_version": MCP_PROTOCOL_VERSION,
                     "execution_handoff": "/execution/intents",
                     "execution_mode": "HANDOFF_ONLY",
+                    "signal_history": "/history/signals",
+                    "persistence_summary": "/history/summary",
                 },
             )
             return
@@ -582,6 +585,55 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 )
                 return
             self._json(HTTPStatus.OK, handoff)
+            return
+
+        if parsed.path == "/history/summary":
+            try:
+                self._json(HTTPStatus.OK, persistence_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "persistence_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/history/signals":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                symbol = query.get("symbol", [None])[0]
+                side = query.get("side", [None])[0]
+                rows = list_signals(
+                    limit=limit,
+                    symbol=symbol,
+                    side=side,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_history_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "signal_history_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "signals": rows,
+                },
+            )
             return
 
         if parsed.path == "/radar/candidates":
