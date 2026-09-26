@@ -1,0 +1,9 @@
+[project]
+name = "bababot-market-radar"
+version = "0.1.0"
+description = "Standalone live Moving Coin Detector product for Binance USDT perpetual markets"
+requires-python = ">=3.11"
+dependencies = ["requests>=2.32,<3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
