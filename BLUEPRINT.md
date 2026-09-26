@@ -711,8 +711,8 @@ Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti che
 - [x] Read funding
 - [x] Read existing market regime
 - [x] Output LONG / SHORT / NO TRADE
-- [ ] Expose data through MCP
-- [ ] AI can inspect live radar data
+- [x] Expose data through MCP
+- [x] AI can inspect live radar data
 - [ ] Dashboard live available
 - [ ] Alert available
 - [ ] Future execution integration possible
