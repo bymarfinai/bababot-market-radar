@@ -71,12 +71,17 @@ def load_latest_scan(path: str | os.PathLike[str]) -> dict[str, Any]:
     return payload
 
 
-def compact_candidate(item: dict[str, Any]) -> dict[str, Any]:
-    """Return only fields AI/MCP needs for inspection."""
+def compact_candidate(
+    item: dict[str, Any],
+    *,
+    price: float | None = None,
+) -> dict[str, Any]:
+    """Return only fields AI/MCP/dashboard needs for inspection."""
     ctx = item.get("market_context") or {}
     return {
         "symbol": item.get("symbol"),
         "candle_close_time_ms": item.get("candle_close_time_ms"),
+        "price": price,
         "stage": item.get("stage"),
         "decision": item.get("decision"),
         "long_score": item.get("long_score"),
@@ -104,8 +109,16 @@ def compact_candidate(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def latest_summary(scan: dict[str, Any]) -> dict[str, Any]:
+    prices = {
+        str(item.get("symbol") or "").upper(): item.get("close")
+        for item in scan.get("symbols", [])
+        if isinstance(item, dict)
+    }
     candidates = [
-        compact_candidate(item)
+        compact_candidate(
+            item,
+            price=prices.get(str(item.get("symbol") or "").upper()),
+        )
         for item in scan.get("moving_candidates", [])
         if isinstance(item, dict)
     ]
@@ -135,8 +148,16 @@ def candidates_view(
     decision: str | None = None,
     stage: str | None = None,
 ) -> dict[str, Any]:
+    prices = {
+        str(item.get("symbol") or "").upper(): item.get("close")
+        for item in scan.get("symbols", [])
+        if isinstance(item, dict)
+    }
     rows = [
-        compact_candidate(item)
+        compact_candidate(
+            item,
+            price=prices.get(str(item.get("symbol") or "").upper()),
+        )
         for item in scan.get("moving_candidates", [])
         if isinstance(item, dict)
     ]
@@ -173,7 +194,18 @@ def symbol_view(scan: dict[str, Any], symbol: str) -> dict[str, Any] | None:
         if str(item.get("symbol") or "").upper() == wanted:
             return {
                 "api_version": READ_API_VERSION,
-                "candidate": compact_candidate(item),
+                "candidate": compact_candidate(
+                    item,
+                    price=next(
+                        (
+                            snap.get("close")
+                            for snap in scan.get("symbols", [])
+                            if isinstance(snap, dict)
+                            and str(snap.get("symbol") or "").upper() == wanted
+                        ),
+                        None,
+                    ),
+                ),
             }
 
     for item in scan.get("symbols", []):
@@ -424,6 +456,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        self.send_header("Access-Control-Allow-Origin", "*")
         if mcp:
             self.send_header("MCP-Protocol-Version", MCP_PROTOCOL_VERSION)
         self.end_headers()
@@ -431,6 +464,14 @@ class RadarReadHandler(BaseHTTPRequestHandler):
 
     def _empty(self, status: int) -> None:
         self.send_response(status)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def do_OPTIONS(self) -> None:  # noqa: N802 - stdlib handler method
+        self.send_response(HTTPStatus.NO_CONTENT)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type,MCP-Protocol-Version")
         self.send_header("Content-Length", "0")
         self.end_headers()
 
