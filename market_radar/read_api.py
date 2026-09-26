@@ -8,6 +8,11 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
+from .execution_handoff import (
+    default_execution_handoff_path,
+    load_execution_handoff,
+)
+
 
 READ_API_VERSION = "stage7-v2"
 MCP_PROTOCOL_VERSION = "2025-11-25"
@@ -524,6 +529,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "api_version": READ_API_VERSION,
                     "mcp": "/mcp",
                     "mcp_protocol_version": MCP_PROTOCOL_VERSION,
+                    "execution_handoff": "/execution/intents",
+                    "execution_mode": "HANDOFF_ONLY",
                 },
             )
             return
@@ -552,6 +559,29 @@ class RadarReadHandler(BaseHTTPRequestHandler):
 
         if parsed.path == "/radar/latest":
             self._json(HTTPStatus.OK, latest_summary(scan))
+            return
+
+        if parsed.path == "/execution/intents":
+            try:
+                handoff = load_execution_handoff(
+                    default_execution_handoff_path(self.scan_path)
+                )
+            except FileNotFoundError:
+                self._json(
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                    {"error": "execution_handoff_not_ready"},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "execution_handoff_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(HTTPStatus.OK, handoff)
             return
 
         if parsed.path == "/radar/candidates":
