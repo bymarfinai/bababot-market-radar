@@ -22,6 +22,34 @@ class SymbolSnapshot:
     price_change_pct_24h: float
 
 
+@dataclass(frozen=True)
+class MovementDetection:
+    """Stage 2 movement result.
+
+    direction_hint is raw price movement (UP/DOWN/FLAT), not a LONG/SHORT
+    trading decision. Stage 3 and Stage 4 own the later stage/score semantics.
+    """
+
+    symbol: str
+    detector_version: str
+    candle_close_time_ms: int
+    movement_state: str
+    direction_hint: str
+    is_moving: bool
+    ret_5m_pct: float
+    ret_15m_pct: float
+    ret_1h_pct: float
+    ret_24h_pct: float
+    median_abs_ret_5m_pct: float
+    return_expansion_ratio: float
+    volume_ratio: float
+    range_ratio: float
+    trades_ratio: float
+    directional_persistence: bool
+    evidence_count: int
+    reasons: tuple[str, ...] = ()
+
+
 @dataclass
 class MarketScan:
     scan_started_at_ms: int
@@ -32,7 +60,12 @@ class MarketScan:
     completed_count: int
     failed_count: int
     candle_close_time_ms: int | None
+    movement_detector_version: str
+    movement_evaluated_count: int
+    movement_skipped_count: int
+    moving_candidate_count: int
     symbols: list[SymbolSnapshot] = field(default_factory=list)
+    moving_candidates: list[MovementDetection] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
