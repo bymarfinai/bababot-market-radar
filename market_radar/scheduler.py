@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 import time
 from collections.abc import Callable
 
@@ -8,6 +9,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
 )
+from .persistence import record_actionable_signals
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
 
 
@@ -51,6 +53,14 @@ def run_forever(
             scan,
             default_execution_handoff_path(cfg.output_path),
         )
+        try:
+            record_actionable_signals(scan)
+        except Exception as exc:
+            print(
+                f"Stage 10 persistence error: {exc}",
+                file=sys.stderr,
+                flush=True,
+            )
         if close_time is not None:
             last_processed_close = close_time
 
