@@ -104,10 +104,49 @@ EXPANSION
 EXHAUSTION
 ```
 
+### Stage 4 — COMPLETE
+
+Frozen requirement:
+
+> Calculate independent `LONG_SCORE / SHORT_SCORE`.
+
+Implemented:
+
+- every moving candidate receives two independent scores on a `0–100` scale
+- scores are **not complements** and are not forced to sum to 100
+- positive `score_gap = LONG_SCORE - SHORT_SCORE`
+- `score_edge = abs(score_gap)`
+- scoring uses only evidence already available from Stage 2/3:
+  - signed 5m momentum
+  - signed 15m momentum
+  - signed 1h momentum
+  - short-term acceleration
+  - movement/return expansion
+  - existing volume expansion ratio
+  - existing range expansion ratio
+  - existing trade-count expansion ratio
+  - directional persistence
+  - multi-timeframe directional consistency
+- component breakdown is retained separately for LONG and SHORT for auditability
+
+Important scope boundary:
+
+```text
+Stage 4 DOES NOT read:
+breakout / breakdown
+taker flow
+open interest
+funding
+market regime
+```
+
+Those remain frozen for Stage 5.
+
+Stage 4 also **does not** output `LONG / SHORT / NO TRADE`. A higher score is evidence, not yet an execution decision.
+
 Still not implemented yet (by design):
 
-- `LONG_SCORE / SHORT_SCORE` — Stage 4
-- OI/funding/regime context — Stage 5
+- breakout/taker/OI/funding/regime context — Stage 5
 - `LONG / SHORT / NO TRADE` — Stage 6
 - MCP — Stage 7
 - dashboard/alerts — Stage 8
