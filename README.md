@@ -196,9 +196,80 @@ Additional OI/funding/regime API calls are made **only for moving candidates**, 
 
 Stage 5 is context only. It does **not** change Stage 4 scores and does **not** output a final trade decision.
 
+### Stage 6 — COMPLETE
+
+Frozen requirement:
+
+> Output final `LONG / SHORT / NO TRADE`.
+
+Stage 6 is deterministic and runs only after Stage 5 context has been attached.
+
+Base score gates preserve the existing MCD prototype defaults:
+
+```text
+winning directional score >= 68
+score edge vs opposite side >= 10
+```
+
+Decision flow:
+
+```text
+moving candidate
+→ valid IGNITION / EXPANSION / EXHAUSTION
+→ EXHAUSTION = NO TRADE
+→ choose higher LONG_SCORE or SHORT_SCORE as candidate side
+→ require score >=68
+→ require edge >=10
+→ require complete OI + funding + regime context
+→ evaluate context confirmations and conflicts
+→ reject confirmed structural break against the candidate side
+→ require positive context balance
+→ LONG / SHORT / NO TRADE
+```
+
+Context voting:
+
+- volume expansion can confirm either directional candidate
+- aligned confirmed breakout/breakdown confirms
+- failed opposite-side break can confirm a reclaim/rejection
+- aligned taker bias confirms; opposite taker bias conflicts
+- fresh raw-OI participation aligned with the proposed direction confirms
+- fresh raw-OI participation against the proposed direction conflicts
+- aligned 4H regime confirms; opposite regime conflicts; SIDEWAYS is neutral
+- funding is retained and exposed as positioning context but does **not** independently trigger or veto a trade
+
+Stage-specific confirmation gate:
+
+```text
+IGNITION  : minimum 2 context confirmations
+EXPANSION : minimum 1 context confirmation
+EXHAUSTION: always NO TRADE
+```
+
+A moving candidate that fails any gate receives `NO TRADE` with explicit `decision_reasons`.
+
+Final candidate output now includes:
+
+```text
+decision
+decision_side_candidate
+decision_context_confirmations
+decision_context_conflicts
+decision_context_balance
+decision_reasons
+decision_version
+```
+
+Per scan, Market Radar also reports:
+
+```text
+LONG count
+SHORT count
+NO TRADE count
+```
+
 Still not implemented yet (by design):
 
-- `LONG / SHORT / NO TRADE` — Stage 6
 - MCP — Stage 7
 - dashboard/alerts — Stage 8
 - execution — Stage 9
