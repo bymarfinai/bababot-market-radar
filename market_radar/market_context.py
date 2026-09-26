@@ -111,7 +111,7 @@ def _taker_context(latest_row: list[Any]) -> dict[str, Any]:
     if sell_quote > 0:
         ratio = buy_quote / sell_quote
     elif buy_quote > 0:
-        ratio = float("inf")
+        ratio = 999999.0
     else:
         ratio = 1.0
 
@@ -304,9 +304,7 @@ def attach_market_context(
         taker_sell_quote_volume_5m=round(
             taker["taker_sell_quote_volume_5m"], 12
         ),
-        taker_buy_sell_ratio=round(
-            taker["taker_buy_sell_ratio"], 6
-        ) if math.isfinite(taker["taker_buy_sell_ratio"]) else float("inf"),
+        taker_buy_sell_ratio=round(taker["taker_buy_sell_ratio"], 6),
         taker_buy_share=round(taker["taker_buy_share"], 6),
         taker_bias=taker["taker_bias"],
         raw_oi_first=(
