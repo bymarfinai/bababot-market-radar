@@ -13,6 +13,25 @@ EXECUTION_HANDOFF_VERSION = "stage9-v1"
 EXECUTION_MODE = "HANDOFF_ONLY"
 
 
+def default_execution_handoff_path(
+    scan_output_path: str | os.PathLike[str],
+) -> Path:
+    return Path(scan_output_path).with_name("execution_intents.json")
+
+
+def load_execution_handoff(
+    path: str | os.PathLike[str],
+) -> dict[str, Any]:
+    handoff_path = Path(path)
+    if not handoff_path.exists():
+        raise FileNotFoundError(f"execution handoff not available: {handoff_path}")
+    with handoff_path.open("r", encoding="utf-8") as handle:
+        payload = json.load(handle)
+    if not isinstance(payload, dict):
+        raise ValueError("execution handoff must be a JSON object")
+    return payload
+
+
 def _intent_from_candidate(item: Any) -> dict[str, Any] | None:
     decision = getattr(item, "decision", None)
     if decision not in {"LONG", "SHORT"}:
