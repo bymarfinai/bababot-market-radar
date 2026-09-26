@@ -495,3 +495,59 @@ python -m market_radar
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+
+### Stage 10 — COMPLETE
+
+Persistent Signal & Trade Database.
+
+Primary persistence is now a dedicated Railway PostgreSQL service in the same
+production project and Singapore region.
+
+Runtime behavior:
+
+```text
+Market Radar
+  ↓
+PostgreSQL primary persistence
+  ↓
+SQLite persistent-volume safety copy
+```
+
+PostgreSQL is selected automatically when `DATABASE_URL` is configured.
+The existing SQLite database at `BABABOT_DB_PATH` remains as a fallback and
+safety copy, so a temporary PostgreSQL outage does not drop actionable signals.
+
+Tables:
+
+```text
+signals
+signal_outcomes
+ai_reviews
+positions
+trade_events
+persistence_meta
+```
+
+Every Stage 6 `LONG / SHORT` is persisted with its original signal price,
+scores, stage, context, decision reasons, and full deterministic snapshot.
+`NO TRADE` is not inserted into the actionable signal ledger.
+
+Signal identity is deterministic:
+
+```text
+symbol + candle_close_time_ms + side
+```
+
+Historical SQLite Stage 10 rows are migrated once into PostgreSQL using an
+idempotent migration marker.
+
+Read-only history API:
+
+```text
+GET /history/summary
+GET /history/signals
+GET /history/signals?symbol=SOLUSDT
+GET /history/signals?side=LONG
+GET /history/signals?limit=100
+```
