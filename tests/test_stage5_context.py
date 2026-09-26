@@ -314,7 +314,7 @@ class Stage5ContextTests(unittest.TestCase):
             premium={"lastFundingRate": "0"},
             regime=None,
         )
-        self.assertFalse(hasattr(result, "decision"))
+        self.assertIsNone(result.decision)
 
 
 if __name__ == "__main__":
