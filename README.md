@@ -67,9 +67,45 @@ evidence count
 reasons
 ```
 
+### Stage 3 — COMPLETE
+
+Frozen requirement:
+
+> Classify `IGNITION / EXPANSION / EXHAUSTION`.
+
+Stage 3 is a deterministic downstream classification of Stage 2 movement:
+
+```text
+EARLY_MOVEMENT
+→ IGNITION
+
+STRONG_CONTINUATION
+→ EXPANSION
+
+LATE_MOVEMENT
+→ EXHAUSTION
+```
+
+`NOISE` and `NORMAL` remain outside the movement-stage pipeline and receive no Stage 3 label.
+
+Important scope boundary:
+
+- `IGNITION / EXPANSION / EXHAUSTION` describe the **phase of detected movement**
+- `UP / DOWN / FLAT` remains only a raw price-direction hint
+- no `LONG_SCORE`
+- no `SHORT_SCORE`
+- no `LONG / SHORT / NO TRADE` decision yet
+
+The scanner also reports per-cycle counts for:
+
+```text
+IGNITION
+EXPANSION
+EXHAUSTION
+```
+
 Still not implemented yet (by design):
 
-- `IGNITION / EXPANSION / EXHAUSTION` — Stage 3
 - `LONG_SCORE / SHORT_SCORE` — Stage 4
 - OI/funding/regime context — Stage 5
 - `LONG / SHORT / NO TRADE` — Stage 6
