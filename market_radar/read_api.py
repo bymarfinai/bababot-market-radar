@@ -15,7 +15,9 @@ from .execution_handoff import (
 from .persistence import (
     entry_approval_summary,
     list_entry_approvals,
+    list_model_reviews,
     list_signals,
+    model_review_summary,
     persistence_summary,
 )
 
@@ -541,6 +543,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "persistence_summary": "/history/summary",
                     "entry_approvals": "/approval/reviews",
                     "entry_approval_summary": "/approval/summary",
+                    "model_reviews": "/approval/models",
+                    "model_review_summary": "/approval/models/summary",
                 },
             )
             return
@@ -677,6 +681,49 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     {
                         "error": "entry_approval_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "reviews": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/approval/models/summary":
+            try:
+                self._json(HTTPStatus.OK, model_review_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "model_review_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/approval/models":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                model = query.get("model", [None])[0]
+                role = query.get("role", [None])[0]
+                rows = list_model_reviews(
+                    limit=limit,
+                    model=model,
+                    role=role,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "model_review_read_failed",
                         "detail": str(exc),
                     },
                 )
