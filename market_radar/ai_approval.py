@@ -7,8 +7,14 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
-import requests
 
+from .ai_provider import (
+    AIProviderQuotaError,
+    active_model,
+    call_entry_review,
+    parse_provider_response,
+    provider_name,
+)
 from .persistence import get_pending_entry_signals, save_entry_approval
 
 
@@ -16,21 +22,7 @@ AI_APPROVAL_VERSION = "stage11-v1"
 RISK_GATE_VERSION = "stage11-risk-v1"
 PROMPT_VERSION = "stage11-entry-review-v1"
 
-MINIMAX_MODEL = os.environ.get("MINIMAX_MODEL", "MiniMax-M2.7")
-MINIMAX_BASE_URL = os.environ.get(
-    "MINIMAX_BASE_URL",
-    "https://api.minimax.io/anthropic",
-).rstrip("/")
-
-_VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
 _processing_lock = threading.Lock()
-_provider_rate_lock = threading.Lock()
-_last_provider_call_monotonic = 0.0
-_provider_blocked_until_monotonic = 0.0
-
-
-class AIProviderQuotaError(RuntimeError):
-    pass
 
 
 SYSTEM_PROMPT = """You are BabaBot's AI Entry Supervisor.
@@ -82,20 +74,6 @@ def _max_per_scan() -> int:
 
 def _workers() -> int:
     return max(1, min(int(os.environ.get("AI_APPROVAL_WORKERS", "1")), 4))
-
-
-def _min_call_interval_seconds() -> float:
-    return max(
-        0.0,
-        min(
-            float(os.environ.get("AI_APPROVAL_MIN_CALL_INTERVAL_SECONDS", "2")),
-            15.0,
-        ),
-    )
-
-
-def _timeout_seconds() -> float:
-    return max(5.0, min(float(os.environ.get("AI_APPROVAL_TIMEOUT_SECONDS", "30")), 60.0))
 
 
 def evaluate_entry_risk(
@@ -211,123 +189,17 @@ def _signal_for_ai(signal: dict[str, Any]) -> dict[str, Any]:
 
 
 def _parse_ai_response(data: dict[str, Any]) -> dict[str, Any]:
-    text = ""
-    for block in data.get("content", []):
-        if isinstance(block, dict) and block.get("type") == "text":
-            text += str(block.get("text") or "")
-    text = text.strip()
-    fence = chr(96) * 3
-    if text.startswith(fence):
-        text = text.split("\n", 1)[1].rsplit(fence, 1)[0].strip()
-
-    parsed = json.loads(text)
-    verdict = str(parsed.get("verdict") or "").upper()
-    if verdict not in _VALID_AI_VERDICTS:
-        raise ValueError("AI verdict must be APPROVE, VETO, or WATCH")
-
-    confidence = max(0.0, min(float(parsed.get("confidence", 0.0)), 1.0))
-    reasons = [
-        str(item)[:300]
-        for item in (parsed.get("reasons") or [])
-        if str(item).strip()
-    ][:8]
-    risk_flags = [
-        str(item)[:200]
-        for item in (parsed.get("risk_flags") or [])
-        if str(item).strip()
-    ][:8]
-
-    return {
-        "verdict": verdict,
-        "confidence": confidence,
-        "reasons": reasons,
-        "risk_flags": risk_flags,
-        "raw_text": text,
-    }
+    """Backward-compatible parser wrapper used by Stage 11 tests."""
+    return parse_provider_response(data)
 
 
 def call_ai_entry_review(signal: dict[str, Any]) -> dict[str, Any]:
-    global _provider_blocked_until_monotonic
-    api_key = os.environ.get("MINIMAX_API_KEY", "").strip()
     if not approval_enabled():
         raise RuntimeError("AI_APPROVAL_ENABLED is false")
-    if not api_key:
-        raise RuntimeError("MINIMAX_API_KEY is not configured")
-
-    if time.monotonic() < _provider_blocked_until_monotonic:
-        raise AIProviderQuotaError("MiniMax provider quota circuit is open")
-
-    payload = _signal_for_ai(signal)
-    request_body = {
-        "model": MINIMAX_MODEL,
-        "max_tokens": 650,
-        "temperature": 0.1,
-        "system": SYSTEM_PROMPT,
-        "messages": [
-            {
-                "role": "user",
-                "content": json.dumps(
-                    payload,
-                    separators=(",", ":"),
-                    allow_nan=False,
-                ),
-            }
-        ],
-    }
-
-    global _last_provider_call_monotonic
-    last_error: Exception | None = None
-    for attempt in range(3):
-        with _provider_rate_lock:
-            now = time.monotonic()
-            wait = (
-                _min_call_interval_seconds()
-                - (now - _last_provider_call_monotonic)
-            )
-            if wait > 0:
-                time.sleep(wait)
-
-            response = requests.post(
-                f"{MINIMAX_BASE_URL}/v1/messages",
-                headers={
-                    "Authorization": f"Bearer {api_key}",
-                    "Content-Type": "application/json",
-                },
-                json=request_body,
-                timeout=_timeout_seconds(),
-            )
-            _last_provider_call_monotonic = time.monotonic()
-
-        if response.status_code == 429:
-            body = response.text[:300].replace("\n", " ")
-            body_lower = body.lower()
-            if (
-                "usage limit reached" in body_lower
-                or "purchase credits" in body_lower
-                or "upgrade your token plan" in body_lower
-            ):
-                _provider_blocked_until_monotonic = time.monotonic() + 900.0
-                raise AIProviderQuotaError(
-                    "MiniMax token plan/credits exhausted (HTTP 429)"
-                )
-
-            retry_after = response.headers.get("Retry-After")
-            try:
-                delay = float(retry_after) if retry_after else 4.0 * (attempt + 1)
-            except ValueError:
-                delay = 4.0 * (attempt + 1)
-            last_error = RuntimeError(
-                "MiniMax rate limited (HTTP 429): " + body
-            )
-            if attempt < 2:
-                time.sleep(max(1.0, min(delay, 15.0)))
-                continue
-            raise last_error
-
-        response.raise_for_status()
-        return _parse_ai_response(response.json())
-
-    raise last_error or RuntimeError("MiniMax review failed")
+    return call_entry_review(
+        _signal_for_ai(signal),
+        system_prompt=SYSTEM_PROMPT,
+    )
 
 
 def review_signal(
@@ -361,7 +233,7 @@ def review_signal(
                 "ai_verdict": ai["verdict"],
                 "final_verdict": ai["verdict"],
                 "confidence": ai["confidence"],
-                "model": MINIMAX_MODEL,
+                "model": active_model(),
                 "risk_reasons": [],
                 "ai_reasons": ai["reasons"],
                 "risk": risk,
@@ -375,7 +247,7 @@ def review_signal(
                 "ai_verdict": "PROVIDER_BLOCKED",
                 "final_verdict": "VETO",
                 "confidence": None,
-                "model": MINIMAX_MODEL,
+                "model": active_model(),
                 "risk_reasons": [],
                 "ai_reasons": ["provider_quota_exhausted"],
                 "risk": risk,
@@ -392,7 +264,7 @@ def review_signal(
                 "ai_verdict": "ERROR",
                 "final_verdict": "VETO",
                 "confidence": None,
-                "model": MINIMAX_MODEL,
+                "model": active_model(),
                 "risk_reasons": [],
                 "ai_reasons": ["ai_review_failed"],
                 "risk": risk,
@@ -506,6 +378,8 @@ def start_pending_approval_worker() -> bool:
             )
             print(
                 "Stage 11 approvals: "
+                f"provider={provider_name()} "
+                f"model={active_model()} "
                 f"status={result.get('status')} "
                 f"processed={result.get('processed', 0)} "
                 f"approve={result.get('approve', 0)} "
