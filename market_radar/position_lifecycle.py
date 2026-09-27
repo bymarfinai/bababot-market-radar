@@ -66,8 +66,8 @@ def _mfe_mae(
         favorable = 100.0 * (high / entry - 1.0)
         adverse = 100.0 * (low / entry - 1.0)
     else:
-        favorable = 100.0 * (entry / low - 1.0) if low > 0 else 0.0
-        adverse = 100.0 * (entry / high - 1.0) if high > 0 else 0.0
+        favorable = 100.0 * (entry - low) / entry if low > 0 else 0.0
+        adverse = 100.0 * (entry - high) / entry if high > 0 else 0.0
     mfe = max(previous_mfe or 0.0, favorable)
     mae = min(previous_mae or 0.0, adverse)
     return round(mfe, 6), round(mae, 6)
