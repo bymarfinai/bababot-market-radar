@@ -15,6 +15,7 @@ from .ai_provider import (
     parse_provider_response,
     provider_name,
 )
+from .multi_model import run_stage11b
 from .persistence import get_pending_entry_signals, save_entry_approval
 
 
@@ -227,18 +228,32 @@ def review_signal(
         started = time.monotonic()
         try:
             ai = call_ai_entry_review(signal)
+            primary_latency_ms = int((time.monotonic() - started) * 1000)
+            primary = {
+                **ai,
+                "model": active_model(),
+                "latency_ms": primary_latency_ms,
+            }
+            stage11b = run_stage11b(
+                signal_id=signal["signal_id"],
+                reviewed_at_ms=reviewed_at_ms,
+                payload=_signal_for_ai(signal),
+                system_prompt=SYSTEM_PROMPT,
+                primary=primary,
+            )
             result = {
                 "signal_id": signal["signal_id"],
                 "risk_verdict": "PASS",
                 "ai_verdict": ai["verdict"],
-                "final_verdict": ai["verdict"],
+                "final_verdict": stage11b["final_verdict"],
                 "confidence": ai["confidence"],
                 "model": active_model(),
                 "risk_reasons": [],
                 "ai_reasons": ai["reasons"],
                 "risk": risk,
                 "ai": ai,
-                "ai_latency_ms": int((time.monotonic() - started) * 1000),
+                "stage11b": stage11b,
+                "ai_latency_ms": primary_latency_ms,
             }
         except AIProviderQuotaError as exc:
             result = {
@@ -376,6 +391,16 @@ def start_pending_approval_worker() -> bool:
                 ),
                 {},
             )
+            escalated = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("escalated")
+            )
+            shadow_disagree = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "OK"
+                and (item.get("stage11b") or {}).get("shadow", {}).get("verdict")
+                    != (item.get("stage11b") or {}).get("primary", {}).get("verdict")
+            )
             print(
                 "Stage 11 approvals: "
                 f"provider={provider_name()} "
@@ -388,6 +413,8 @@ def start_pending_approval_worker() -> bool:
                 f"risk_fail={risk_fail} "
                 f"ai_error={ai_error} "
                 f"provider_blocked={provider_blocked} "
+                f"stage11b_escalated={escalated} "
+                f"shadow_disagree={shadow_disagree} "
                 f"sample_issue={sample_issue} "
                 f"error_type={sample_error.get('error_type')} "
                 f"error={str(sample_error.get('error') or '')[:180]}",
