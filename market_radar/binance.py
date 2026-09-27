@@ -59,11 +59,20 @@ class BinancePublicClient:
     def ticker_24h(self) -> list[dict[str, Any]]:
         return self.get("/fapi/v1/ticker/24hr")
 
-    def klines(self, symbol: str, interval: str = "5m", limit: int = 3) -> list[list[Any]]:
+    def klines(
+        self,
+        symbol: str,
+        interval: str = "5m",
+        limit: int = 3,
+    ) -> list[list[Any]]:
         return self.get(
             "/fapi/v1/klines",
             {"symbol": symbol, "interval": interval, "limit": limit},
         )
+
+    def ticker_price(self, symbol: str) -> float:
+        payload = self.get("/fapi/v1/ticker/price", {"symbol": symbol})
+        return float(payload["price"])
 
     def open_interest_hist(
         self,
