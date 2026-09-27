@@ -107,6 +107,29 @@ create table if not exists entry_approvals (
 create index if not exists idx_entry_approvals_verdict_time
 on entry_approvals(final_verdict, reviewed_at_ms desc);
 
+create table if not exists ai_model_reviews (
+    review_id integer primary key autoincrement,
+    signal_id text not null references signals(signal_id) on delete cascade,
+    reviewed_at_ms integer not null,
+    role text not null,
+    model text not null,
+    verdict text,
+    confidence real,
+    reasons_json text not null default '[]',
+    risk_flags_json text not null default '[]',
+    latency_ms integer,
+    status text not null,
+    error_text text,
+    raw_json text,
+    unique(signal_id, role, model)
+);
+
+create index if not exists idx_ai_model_reviews_signal
+on ai_model_reviews(signal_id, reviewed_at_ms desc);
+
+create index if not exists idx_ai_model_reviews_model
+on ai_model_reviews(model, reviewed_at_ms desc);
+
 create table if not exists positions (
     position_id text primary key,
     signal_id text references signals(signal_id),
@@ -232,6 +255,29 @@ create table if not exists entry_approvals (
 
 create index if not exists idx_entry_approvals_verdict_time
 on entry_approvals(final_verdict, reviewed_at_ms desc);
+
+create table if not exists ai_model_reviews (
+    review_id bigserial primary key,
+    signal_id text not null references signals(signal_id) on delete cascade,
+    reviewed_at_ms bigint not null,
+    role text not null,
+    model text not null,
+    verdict text,
+    confidence double precision,
+    reasons_json text not null default '[]',
+    risk_flags_json text not null default '[]',
+    latency_ms integer,
+    status text not null,
+    error_text text,
+    raw_json text,
+    unique(signal_id, role, model)
+);
+
+create index if not exists idx_ai_model_reviews_signal
+on ai_model_reviews(signal_id, reviewed_at_ms desc);
+
+create index if not exists idx_ai_model_reviews_model
+on ai_model_reviews(model, reviewed_at_ms desc);
 
 create table if not exists positions (
     position_id text primary key,
@@ -1123,4 +1169,206 @@ def entry_approval_summary(
         "approve_count": approve,
         "veto_count": veto,
         "watch_count": watch,
+    }
+
+
+
+def save_model_review(
+    *,
+    signal_id: str,
+    reviewed_at_ms: int,
+    role: str,
+    model: str,
+    verdict: str | None,
+    confidence: float | None,
+    reasons: list[str],
+    risk_flags: list[str],
+    latency_ms: int | None,
+    status: str,
+    error_text: str | None,
+    raw: dict[str, Any] | None,
+    path: str | os.PathLike[str] | None = None,
+) -> None:
+    """Persist one idempotent Stage 11B per-model review."""
+    reasons_json = json.dumps(reasons, separators=(",", ":"))
+    flags_json = json.dumps(risk_flags, separators=(",", ":"))
+    raw_json = (
+        json.dumps(raw, separators=(",", ":"), allow_nan=False)
+        if raw is not None
+        else None
+    )
+
+    values = (
+        signal_id, reviewed_at_ms, role, model, verdict, confidence,
+        reasons_json, flags_json, latency_ms, status, error_text, raw_json,
+    )
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            conn.execute(
+                """
+                insert into ai_model_reviews (
+                    signal_id, reviewed_at_ms, role, model, verdict,
+                    confidence, reasons_json, risk_flags_json, latency_ms,
+                    status, error_text, raw_json
+                ) values (?,?,?,?,?,?,?,?,?,?,?,?)
+                on conflict(signal_id, role, model) do update set
+                    reviewed_at_ms=excluded.reviewed_at_ms,
+                    verdict=excluded.verdict,
+                    confidence=excluded.confidence,
+                    reasons_json=excluded.reasons_json,
+                    risk_flags_json=excluded.risk_flags_json,
+                    latency_ms=excluded.latency_ms,
+                    status=excluded.status,
+                    error_text=excluded.error_text,
+                    raw_json=excluded.raw_json
+                """,
+                values,
+            )
+        return
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                insert into ai_model_reviews (
+                    signal_id, reviewed_at_ms, role, model, verdict,
+                    confidence, reasons_json, risk_flags_json, latency_ms,
+                    status, error_text, raw_json
+                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                on conflict(signal_id, role, model) do update set
+                    reviewed_at_ms=excluded.reviewed_at_ms,
+                    verdict=excluded.verdict,
+                    confidence=excluded.confidence,
+                    reasons_json=excluded.reasons_json,
+                    risk_flags_json=excluded.risk_flags_json,
+                    latency_ms=excluded.latency_ms,
+                    status=excluded.status,
+                    error_text=excluded.error_text,
+                    raw_json=excluded.raw_json
+                """,
+                values,
+            )
+
+    try:
+        save_model_review(
+            signal_id=signal_id,
+            reviewed_at_ms=reviewed_at_ms,
+            role=role,
+            model=model,
+            verdict=verdict,
+            confidence=confidence,
+            reasons=reasons,
+            risk_flags=risk_flags,
+            latency_ms=latency_ms,
+            status=status,
+            error_text=error_text,
+            raw=raw,
+            path=database_path(),
+        )
+    except Exception:
+        pass
+
+
+def list_model_reviews(
+    *,
+    limit: int = 100,
+    model: str | None = None,
+    role: str | None = None,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(int(limit), 500))
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        query = """
+            select r.*, s.symbol, s.side, s.signal_time_ms, s.signal_price
+            from ai_model_reviews r
+            join signals s on s.signal_id = r.signal_id
+        """
+        clauses: list[str] = []
+        params: list[Any] = []
+        if model:
+            clauses.append("r.model = ?")
+            params.append(model)
+        if role:
+            clauses.append("r.role = ?")
+            params.append(role)
+        if clauses:
+            query += " where " + " and ".join(clauses)
+        query += " order by r.reviewed_at_ms desc limit ?"
+        params.append(safe_limit)
+        with _sqlite_connect(db_path) as conn:
+            rows = [dict(row) for row in conn.execute(query, tuple(params)).fetchall()]
+    else:
+        initialize_postgres()
+        query = """
+            select r.*, s.symbol, s.side, s.signal_time_ms, s.signal_price
+            from ai_model_reviews r
+            join signals s on s.signal_id = r.signal_id
+        """
+        clauses = []
+        params = []
+        if model:
+            clauses.append("r.model = %s")
+            params.append(model)
+        if role:
+            clauses.append("r.role = %s")
+            params.append(role)
+        if clauses:
+            query += " where " + " and ".join(clauses)
+        query += " order by r.reviewed_at_ms desc limit %s"
+        params.append(safe_limit)
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(query, tuple(params))
+                rows = [dict(row) for row in cur.fetchall()]
+
+    for row in rows:
+        row["reasons"] = json.loads(row.pop("reasons_json") or "[]")
+        row["risk_flags"] = json.loads(row.pop("risk_flags_json") or "[]")
+        if row.get("raw_json"):
+            try:
+                row["raw"] = json.loads(row.pop("raw_json"))
+            except Exception:
+                row["raw"] = row.pop("raw_json")
+    return rows
+
+
+def model_review_summary(
+    path: str | os.PathLike[str] | None = None,
+) -> dict[str, Any]:
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            rows = conn.execute(
+                """
+                select model, role, status, verdict, count(*) as n
+                from ai_model_reviews
+                group by model, role, status, verdict
+                order by model, role, status, verdict
+                """
+            ).fetchall()
+            data = [dict(row) for row in rows]
+        backend = "sqlite"
+    else:
+        initialize_postgres()
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(
+                    """
+                    select model, role, status, verdict, count(*) as n
+                    from ai_model_reviews
+                    group by model, role, status, verdict
+                    order by model, role, status, verdict
+                    """
+                )
+                data = [dict(row) for row in cur.fetchall()]
+        backend = "postgres"
+
+    return {
+        "backend": backend,
+        "rows": data,
     }
