@@ -357,7 +357,7 @@ def create_position(
     )
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
-            conn.execute(
+            cur = conn.execute(
                 """
                 insert or ignore into positions (
                     position_id, signal_id, symbol, side, status,
@@ -367,15 +367,16 @@ def create_position(
                 """,
                 values,
             )
-            conn.execute(
-                """
-                insert into trade_events (
-                    signal_id, position_id, event_type,
-                    event_time_ms, payload_json
-                ) values (?,?,'PAPER_POSITION_OPENED',?,?)
-                """,
-                (signal_id, position_id, opened_at_ms, raw),
-            )
+            if cur.rowcount:
+                conn.execute(
+                    """
+                    insert into trade_events (
+                        signal_id, position_id, event_type,
+                        event_time_ms, payload_json
+                    ) values (?,?,'PAPER_POSITION_OPENED',?,?)
+                    """,
+                    (signal_id, position_id, opened_at_ms, raw),
+                )
         return
 
     with _postgres_connect() as conn:
@@ -388,18 +389,21 @@ def create_position(
                     mode, raw_json
                 ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                 on conflict(position_id) do nothing
+                returning position_id
                 """,
                 values,
             )
-            cur.execute(
-                """
-                insert into trade_events (
-                    signal_id, position_id, event_type,
-                    event_time_ms, payload_json
-                ) values (%s,%s,'PAPER_POSITION_OPENED',%s,%s)
-                """,
-                (signal_id, position_id, opened_at_ms, raw),
-            )
+            inserted = cur.fetchone() is not None
+            if inserted:
+                cur.execute(
+                    """
+                    insert into trade_events (
+                        signal_id, position_id, event_type,
+                        event_time_ms, payload_json
+                    ) values (%s,%s,'PAPER_POSITION_OPENED',%s,%s)
+                    """,
+                    (signal_id, position_id, opened_at_ms, raw),
+                )
 
 
 def update_position_reduce(
@@ -536,7 +540,14 @@ def list_unacted_lifecycle_actions(limit: int = 100) -> list[dict[str, Any]]:
         join positions p on p.position_id=e.position_id
         left join paper_orders o
           on o.source_type='LIFECYCLE' and o.source_id=e.evaluation_id
-        where e.final_action in ('REDUCE','CLOSE')
+        where e.evaluation_id = (
+              select e2.evaluation_id
+              from position_evaluations e2
+              where e2.position_id = e.position_id
+              order by e2.candle_close_time_ms desc
+              limit 1
+          )
+          and e.final_action in ('REDUCE','CLOSE')
           and p.mode='PAPER'
           and p.status in ('OPEN','REDUCED')
           and o.order_id is null
