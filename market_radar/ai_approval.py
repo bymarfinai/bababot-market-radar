@@ -12,8 +12,14 @@ from .ai_provider import (
     AIProviderQuotaError,
     active_model,
     call_entry_review,
+    escalation_model,
+    escalation_provider,
     parse_provider_response,
     provider_name,
+    shadow_model,
+    shadow_provider,
+    tiebreaker_model,
+    tiebreaker_provider,
 )
 from .multi_model import run_stage11b
 from .persistence import get_pending_entry_signals, save_entry_approval
@@ -401,6 +407,26 @@ def start_pending_approval_worker() -> bool:
                 and (item.get("stage11b") or {}).get("shadow", {}).get("verdict")
                     != (item.get("stage11b") or {}).get("primary", {}).get("verdict")
             )
+            shadow_ok = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "OK"
+            )
+            shadow_error = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "ERROR"
+            )
+            escalation_ok = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("gpt", {}).get("status") == "OK"
+            )
+            escalation_error = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("gpt", {}).get("status") == "ERROR"
+            )
+            tiebreaker_ok = sum(
+                1 for item in results
+                if (item.get("stage11b") or {}).get("opus", {}).get("status") == "OK"
+            )
             print(
                 "Stage 11 approvals: "
                 f"provider={provider_name()} "
@@ -414,7 +440,15 @@ def start_pending_approval_worker() -> bool:
                 f"ai_error={ai_error} "
                 f"provider_blocked={provider_blocked} "
                 f"stage11b_escalated={escalated} "
+                f"shadow={shadow_provider()}:{shadow_model()} "
+                f"shadow_ok={shadow_ok} "
+                f"shadow_error={shadow_error} "
                 f"shadow_disagree={shadow_disagree} "
+                f"escalation={escalation_provider()}:{escalation_model()} "
+                f"escalation_ok={escalation_ok} "
+                f"escalation_error={escalation_error} "
+                f"tiebreaker={tiebreaker_provider()}:{tiebreaker_model()} "
+                f"tiebreaker_ok={tiebreaker_ok} "
                 f"sample_issue={sample_issue} "
                 f"error_type={sample_error.get('error_type')} "
                 f"error={str(sample_error.get('error') or '')[:180]}",
