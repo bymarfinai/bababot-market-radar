@@ -12,6 +12,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
 )
+from .position_lifecycle import start_position_lifecycle_worker
 from .persistence import (
     database_path,
     persistence_summary,
@@ -103,6 +104,7 @@ def main() -> int:
         )
 
     start_pending_approval_worker()
+    start_position_lifecycle_worker()
 
     if args.once:
         client = BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
@@ -114,6 +116,7 @@ def main() -> int:
         )
         persistence_result = record_actionable_signals(scan)
         start_pending_approval_worker()
+        start_position_lifecycle_worker()
 
         if args.json:
             print(json.dumps(scan.to_dict(), indent=2, sort_keys=True))
