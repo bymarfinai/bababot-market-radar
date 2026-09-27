@@ -5,7 +5,7 @@ import hmac
 import os
 import threading
 import time
-from decimal import Decimal, ROUND_DOWN
+from decimal import Decimal, ROUND_CEILING, ROUND_DOWN
 from typing import Any
 from urllib.parse import urlencode
 
@@ -135,7 +135,10 @@ class BinanceTradingClient(BinancePublicClient):
             hashlib.sha256,
         ).hexdigest()
         url = f"{BINANCE_FUTURES_BASE}{path}"
-        headers = {"X-MBX-APIKEY": self.api_key}
+        headers = {
+            "X-MBX-APIKEY": self.api_key,
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
         data = f"{query}&signature={signature}"
 
         response = self._session().request(
@@ -277,7 +280,7 @@ class BinanceTradingClient(BinancePublicClient):
         if tick > 0:
             units = value / tick
             if round_up:
-                rounded = units.to_integral_value(rounding="ROUND_CEILING")
+                rounded = units.to_integral_value(rounding=ROUND_CEILING)
             else:
                 rounded = units.to_integral_value(rounding=ROUND_DOWN)
             value = rounded * tick
