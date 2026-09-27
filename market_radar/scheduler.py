@@ -11,6 +11,7 @@ from .execution_handoff import (
     write_execution_handoff_atomic,
 )
 from .persistence import persistence_backend, record_actionable_signals
+from .position_lifecycle import start_position_lifecycle_worker
 from .stage1_scanner import Stage1Config, scan_all_usdt_perpetuals, write_scan_atomic
 
 
@@ -71,6 +72,7 @@ def run_forever(
             )
 
         start_pending_approval_worker()
+        start_position_lifecycle_worker()
         if close_time is not None:
             last_processed_close = close_time
 
