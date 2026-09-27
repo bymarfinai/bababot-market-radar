@@ -403,29 +403,29 @@ def start_pending_approval_worker() -> bool:
             )
             shadow_disagree = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "OK"
-                and (item.get("stage11b") or {}).get("shadow", {}).get("verdict")
-                    != (item.get("stage11b") or {}).get("primary", {}).get("verdict")
+                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "OK"
+                and ((item.get("stage11b") or {}).get("shadow") or {}).get("verdict")
+                    != ((item.get("stage11b") or {}).get("primary") or {}).get("verdict")
             )
             shadow_ok = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "OK"
+                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "OK"
             )
             shadow_error = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("shadow", {}).get("status") == "ERROR"
+                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "ERROR"
             )
             escalation_ok = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("gpt", {}).get("status") == "OK"
+                if ((item.get("stage11b") or {}).get("gpt") or {}).get("status") == "OK"
             )
             escalation_error = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("gpt", {}).get("status") == "ERROR"
+                if ((item.get("stage11b") or {}).get("gpt") or {}).get("status") == "ERROR"
             )
             tiebreaker_ok = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("opus", {}).get("status") == "OK"
+                if ((item.get("stage11b") or {}).get("opus") or {}).get("status") == "OK"
             )
             print(
                 "Stage 11 approvals: "
