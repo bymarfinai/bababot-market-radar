@@ -13,12 +13,15 @@ from .control_state import (
     control_token_configured,
     get_control_state,
     set_control_mode,
+    set_live_armed,
     valid_control_token,
 )
 from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
 )
+from .live_store import list_live_orders, list_open_live_positions, live_summary
+from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
 from .persistence import (
     entry_approval_summary,
@@ -504,6 +507,126 @@ class RadarReadHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler method
         parsed = urlparse(self.path)
 
+        if parsed.path == "/control/live-arm":
+            if not control_token_configured():
+                self._json(
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                    {"error": "control_token_not_configured"},
+                )
+                return
+            token = self.headers.get("X-Baba-Control-Token")
+            if not valid_control_token(token):
+                self._json(
+                    HTTPStatus.UNAUTHORIZED,
+                    {"error": "invalid_control_token"},
+                )
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+            except ValueError:
+                length = 0
+            if length <= 0 or length > 16_384:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_request_body"},
+                )
+                return
+            try:
+                request = json.loads(self.rfile.read(length))
+                if not isinstance(request, dict):
+                    raise ValueError("body must be an object")
+                armed = request.get("armed")
+                if not isinstance(armed, bool):
+                    raise ValueError("armed must be boolean")
+                note = request.get("note")
+                if armed:
+                    guard = live_preflight(
+                        client=None,
+                        require_arm=False,
+                        require_entry_mode=True,
+                    )
+                    if not guard["ok"]:
+                        self._json(
+                            HTTPStatus.CONFLICT,
+                            {
+                                "error": "live_preflight_failed",
+                                "preflight": guard,
+                            },
+                        )
+                        return
+                state = set_live_armed(armed, note=note)
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_live_arm_request", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_arm_update_failed", "detail": str(exc)},
+                )
+                return
+            self._json(HTTPStatus.OK, state)
+            return
+
+        if parsed.path == "/live/preflight":
+            try:
+                self._json(
+                    HTTPStatus.OK,
+                    live_preflight(
+                        client=None,
+                        require_arm=True,
+                        require_entry_mode=True,
+                    ),
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_preflight_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/summary":
+            try:
+                self._json(HTTPStatus.OK, live_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_summary_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/orders":
+            query = parse_qs(parsed.query)
+            try:
+                limit = int(query.get("limit", ["100"])[0])
+                rows = list_live_orders(limit=limit)
+                self._json(
+                    HTTPStatus.OK,
+                    {"count": len(rows), "orders": rows},
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_orders_read_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/positions":
+            try:
+                rows = list_open_live_positions()
+                self._json(
+                    HTTPStatus.OK,
+                    {"count": len(rows), "positions": rows},
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_positions_read_failed", "detail": str(exc)},
+                )
+            return
+
         if parsed.path == "/control/state":
             if not control_token_configured():
                 self._json(
@@ -615,6 +738,11 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "paper_orders": "/paper/orders",
                     "candles": "/market/klines",
                     "control_state": "/control/state",
+                    "live_preflight": "/live/preflight",
+                    "live_summary": "/live/summary",
+                    "live_orders": "/live/orders",
+                    "live_positions": "/live/positions",
+                    "live_arm": "/control/live-arm",
                     "control_token_configured": control_token_configured(),
                 },
             )
