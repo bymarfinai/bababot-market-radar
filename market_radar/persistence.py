@@ -153,6 +153,34 @@ create table if not exists positions (
 create index if not exists idx_positions_status_time
 on positions(status, opened_at_ms desc);
 
+create table if not exists position_evaluations (
+    evaluation_id text primary key,
+    position_id text not null references positions(position_id) on delete cascade,
+    evaluated_at_ms integer not null,
+    candle_close_time_ms integer not null,
+    current_price real not null,
+    unrealized_pnl_pct real,
+    mfe_pct real,
+    mae_pct real,
+    health_score real not null,
+    deterministic_action text not null,
+    ai_action text,
+    ai_confidence real,
+    final_action text not null,
+    hard_risk_triggered integer not null default 0,
+    reasons_json text not null default '[]',
+    contradictions_json text not null default '[]',
+    snapshot_json text not null,
+    ai_json text,
+    lifecycle_version text not null
+);
+
+create index if not exists idx_position_eval_position_time
+on position_evaluations(position_id, candle_close_time_ms desc);
+
+create index if not exists idx_position_eval_action_time
+on position_evaluations(final_action, candle_close_time_ms desc);
+
 create table if not exists trade_events (
     event_id integer primary key autoincrement,
     signal_id text references signals(signal_id),
@@ -301,6 +329,34 @@ create table if not exists positions (
 
 create index if not exists idx_positions_status_time
 on positions(status, opened_at_ms desc);
+
+create table if not exists position_evaluations (
+    evaluation_id text primary key,
+    position_id text not null references positions(position_id) on delete cascade,
+    evaluated_at_ms bigint not null,
+    candle_close_time_ms bigint not null,
+    current_price double precision not null,
+    unrealized_pnl_pct double precision,
+    mfe_pct double precision,
+    mae_pct double precision,
+    health_score double precision not null,
+    deterministic_action text not null,
+    ai_action text,
+    ai_confidence double precision,
+    final_action text not null,
+    hard_risk_triggered boolean not null default false,
+    reasons_json text not null default '[]',
+    contradictions_json text not null default '[]',
+    snapshot_json text not null,
+    ai_json text,
+    lifecycle_version text not null
+);
+
+create index if not exists idx_position_eval_position_time
+on position_evaluations(position_id, candle_close_time_ms desc);
+
+create index if not exists idx_position_eval_action_time
+on position_evaluations(final_action, candle_close_time_ms desc);
 
 create table if not exists trade_events (
     event_id bigserial primary key,
@@ -1372,3 +1428,178 @@ def model_review_summary(
         "backend": backend,
         "rows": data,
     }
+
+
+
+def list_open_positions(
+    *,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Return positions eligible for Stage 12 monitoring."""
+    statuses = ("OPEN", "REDUCED")
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            rows = conn.execute(
+                """
+                select *
+                from positions
+                where status in (?, ?)
+                order by opened_at_ms asc, position_id
+                """,
+                statuses,
+            ).fetchall()
+            return [dict(row) for row in rows]
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                select *
+                from positions
+                where status in (%s, %s)
+                order by opened_at_ms asc, position_id
+                """,
+                statuses,
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def latest_position_evaluation(
+    position_id: str,
+    *,
+    path: str | os.PathLike[str] | None = None,
+) -> dict[str, Any] | None:
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            row = conn.execute(
+                """
+                select *
+                from position_evaluations
+                where position_id = ?
+                order by candle_close_time_ms desc
+                limit 1
+                """,
+                (position_id,),
+            ).fetchone()
+            return dict(row) if row else None
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                select *
+                from position_evaluations
+                where position_id = %s
+                order by candle_close_time_ms desc
+                limit 1
+                """,
+                (position_id,),
+            )
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+
+def save_position_evaluation(
+    evaluation: dict[str, Any],
+    *,
+    path: str | os.PathLike[str] | None = None,
+) -> None:
+    """Persist one idempotent Stage 12 evaluation per position/candle."""
+    fields = (
+        "evaluation_id", "position_id", "evaluated_at_ms",
+        "candle_close_time_ms", "current_price", "unrealized_pnl_pct",
+        "mfe_pct", "mae_pct", "health_score", "deterministic_action",
+        "ai_action", "ai_confidence", "final_action",
+        "hard_risk_triggered", "reasons_json", "contradictions_json",
+        "snapshot_json", "ai_json", "lifecycle_version",
+    )
+    values = tuple(evaluation.get(name) for name in fields)
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            placeholders = ",".join("?" for _ in fields)
+            updates = ",".join(
+                f"{field}=excluded.{field}"
+                for field in fields
+                if field != "evaluation_id"
+            )
+            conn.execute(
+                f"""
+                insert into position_evaluations ({",".join(fields)})
+                values ({placeholders})
+                on conflict(evaluation_id) do update set {updates}
+                """,
+                values,
+            )
+        return
+
+    initialize_postgres()
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            placeholders = ",".join("%s" for _ in fields)
+            updates = ",".join(
+                f"{field}=excluded.{field}"
+                for field in fields
+                if field != "evaluation_id"
+            )
+            cur.execute(
+                f"""
+                insert into position_evaluations ({",".join(fields)})
+                values ({placeholders})
+                on conflict(evaluation_id) do update set {updates}
+                """,
+                values,
+            )
+
+    try:
+        save_position_evaluation(evaluation, path=database_path())
+    except Exception:
+        pass
+
+
+def list_position_evaluations(
+    *,
+    position_id: str | None = None,
+    limit: int = 100,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(int(limit), 500))
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        query = "select * from position_evaluations"
+        params: list[Any] = []
+        if position_id:
+            query += " where position_id = ?"
+            params.append(position_id)
+        query += " order by candle_close_time_ms desc limit ?"
+        params.append(safe_limit)
+        with _sqlite_connect(db_path) as conn:
+            rows = [dict(row) for row in conn.execute(query, tuple(params)).fetchall()]
+    else:
+        initialize_postgres()
+        query = "select * from position_evaluations"
+        params = []
+        if position_id:
+            query += " where position_id = %s"
+            params.append(position_id)
+        query += " order by candle_close_time_ms desc limit %s"
+        params.append(safe_limit)
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(query, tuple(params))
+                rows = [dict(row) for row in cur.fetchall()]
+
+    for row in rows:
+        for key in ("reasons_json", "contradictions_json", "snapshot_json", "ai_json"):
+            if row.get(key):
+                try:
+                    row[key[:-5] if key.endswith("_json") else key] = json.loads(row[key])
+                except Exception:
+                    row[key[:-5] if key.endswith("_json") else key] = row[key]
+    return rows
