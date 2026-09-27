@@ -258,6 +258,78 @@ class BinanceTradingClient(BinancePublicClient):
                 return item
         raise RuntimeError(f"symbol not found in exchangeInfo: {wanted}")
 
+    def price_to_tick(
+        self,
+        *,
+        symbol: str,
+        price: float,
+        round_up: bool = False,
+    ) -> str:
+        info = self.exchange_symbol(symbol)
+        filters = {
+            item.get("filterType"): item
+            for item in info.get("filters", [])
+            if isinstance(item, dict)
+        }
+        price_filter = filters.get("PRICE_FILTER") or {}
+        tick = Decimal(str(price_filter.get("tickSize") or "0"))
+        value = Decimal(str(price))
+        if tick > 0:
+            units = value / tick
+            if round_up:
+                rounded = units.to_integral_value(rounding="ROUND_CEILING")
+            else:
+                rounded = units.to_integral_value(rounding=ROUND_DOWN)
+            value = rounded * tick
+        return format(value.normalize(), "f")
+
+    def new_stop_close_algo(
+        self,
+        *,
+        symbol: str,
+        side: str,
+        trigger_price: str,
+        client_algo_id: str,
+    ) -> dict[str, Any]:
+        return self._signed_request(
+            "POST",
+            "/fapi/v1/algoOrder",
+            {
+                "algoType": "CONDITIONAL",
+                "symbol": symbol.upper(),
+                "side": side.upper(),
+                "positionSide": "BOTH",
+                "type": "STOP_MARKET",
+                "triggerPrice": trigger_price,
+                "closePosition": "true",
+                "workingType": "MARK_PRICE",
+                "priceProtect": "true",
+                "clientAlgoId": client_algo_id,
+            },
+        )
+
+    def query_algo_order(
+        self,
+        *,
+        client_algo_id: str,
+    ) -> dict[str, Any]:
+        return self._signed_request(
+            "GET",
+            "/fapi/v1/algoOrder",
+            {"clientAlgoId": client_algo_id},
+        )
+
+    def cancel_algo_order(
+        self,
+        *,
+        client_algo_id: str,
+    ) -> dict[str, Any]:
+        return self._signed_request(
+            "DELETE",
+            "/fapi/v1/algoOrder",
+            {"clientAlgoId": client_algo_id},
+        )
+
     def market_quantity(
         self,
         *,
