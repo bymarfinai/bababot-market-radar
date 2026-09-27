@@ -237,6 +237,21 @@ def _execute_open(
     client: BinancePublicClient,
     order: dict[str, Any],
 ) -> dict[str, Any]:
+    payload: dict[str, Any] = {}
+    try:
+        payload = json.loads(order.get("payload_json") or "{}")
+    except Exception:
+        payload = {}
+
+    approval_ms = int(payload.get("approval_reviewed_at_ms") or 0)
+    if approval_ms > 0 and int(time.time() * 1000) - approval_ms > _entry_max_age_ms():
+        mark_order(
+            str(order["order_id"]),
+            status="SKIPPED",
+            reason="approval_stale_before_fill",
+        )
+        return {"status": "SKIPPED", "reason": "approval_stale_before_fill"}
+
     if count_open_paper_positions() >= _max_open_positions():
         return {"status": "DEFERRED", "reason": "max_open_positions"}
 
@@ -457,7 +472,10 @@ def _execute_exit(
     }
 
 
-def execute_pending_orders() -> dict[str, Any]:
+def execute_pending_orders(
+    *,
+    actions: set[str] | None = None,
+) -> dict[str, Any]:
     if not paper_trading_enabled():
         return {"processed": 0, "filled": 0, "skipped": 0, "deferred": 0}
 
@@ -468,6 +486,13 @@ def execute_pending_orders() -> dict[str, Any]:
     errors: list[str] = []
 
     orders = list_pending_orders(limit=100)
+    if actions is not None:
+        wanted = {item.upper() for item in actions}
+        orders = [
+            order for order in orders
+            if str(order.get("action") or "").upper() in wanted
+        ]
+
     for order in orders:
         try:
             if str(order["action"]).upper() == "OPEN":
@@ -501,9 +526,9 @@ def paper_cycle() -> dict[str, Any]:
         return {"status": "DISABLED"}
 
     lifecycle = sync_lifecycle_orders()
-    exits = execute_pending_orders()
+    exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
     entries = sync_entry_orders()
-    entry_exec = execute_pending_orders()
+    entry_exec = execute_pending_orders(actions={"OPEN"})
     return {
         "status": "COMPLETE",
         "lifecycle_queued": lifecycle["queued"],
