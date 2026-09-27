@@ -12,7 +12,7 @@ import requests
 _VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
 _provider_rate_lock = threading.Lock()
 _last_provider_call_monotonic = 0.0
-_blocked_until_by_model: dict[str, float] = {}
+_blocked_until_by_target: dict[str, float] = {}
 
 
 class AIProviderQuotaError(RuntimeError):
@@ -23,28 +23,47 @@ def provider_name() -> str:
     return os.environ.get("AI_PROVIDER", "clario").strip().lower()
 
 
+def primary_provider() -> str:
+    return os.environ.get("AI_PRIMARY_PROVIDER", provider_name()).strip().lower()
+
+
+def shadow_provider() -> str:
+    return os.environ.get("AI_SHADOW_PROVIDER", "thirty").strip().lower()
+
+
+def escalation_provider() -> str:
+    return os.environ.get("AI_ESCALATION_PROVIDER", "thirty").strip().lower()
+
+
+def tiebreaker_provider() -> str:
+    return os.environ.get("AI_TIEBREAKER_PROVIDER", "thirty").strip().lower()
+
+
 def active_model() -> str:
-    return os.environ.get("CLARIO_MODEL", "gemini-3.7-flash").strip()
+    return os.environ.get(
+        "AI_PRIMARY_MODEL",
+        os.environ.get("CLARIO_MODEL", "gemini-3.7-flash"),
+    ).strip()
 
 
 def shadow_model() -> str:
     return os.environ.get(
-        "CLARIO_SHADOW_MODEL",
-        "deepseek-v4.1-flash",
+        "AI_SHADOW_MODEL",
+        os.environ.get("CLARIO_SHADOW_MODEL", "deepseek-v4.1-flash"),
     ).strip()
 
 
 def escalation_model() -> str:
     return os.environ.get(
-        "CLARIO_ESCALATION_MODEL",
-        "gpt-5.6-sol",
+        "AI_ESCALATION_MODEL",
+        os.environ.get("CLARIO_ESCALATION_MODEL", "gpt-5.6-sol"),
     ).strip()
 
 
 def tiebreaker_model() -> str:
     return os.environ.get(
-        "CLARIO_TIEBREAKER_MODEL",
-        "opus-5",
+        "AI_TIEBREAKER_MODEL",
+        os.environ.get("CLARIO_TIEBREAKER_MODEL", "claude-opus-5"),
     ).strip()
 
 
@@ -161,6 +180,7 @@ def _is_quota_exhausted(response: requests.Response) -> bool:
             "quota exceeded",
             "insufficient credits",
             "insufficient_credit",
+            "credit balance",
         )
     )
 
@@ -168,17 +188,19 @@ def _is_quota_exhausted(response: requests.Response) -> bool:
 def _raise_for_quota(
     response: requests.Response,
     *,
+    provider: str,
     model: str,
 ) -> None:
     if _is_quota_exhausted(response):
-        _blocked_until_by_model[model] = time.monotonic() + 900.0
+        key = f"{provider}:{model}"
+        _blocked_until_by_target[key] = time.monotonic() + 900.0
         raise AIProviderQuotaError(
-            f"ClarioHub quota/credits exhausted for model={model} (HTTP 429)"
+            f"{provider} quota/credits exhausted for model={model} (HTTP 429)"
         )
 
 
-def _reasoning_effort_for(model: str) -> str | None:
-    if not model.startswith("gemini-"):
+def _reasoning_effort_for(provider: str, model: str) -> str | None:
+    if provider != "clario" or not model.startswith("gemini-"):
         return None
     value = os.environ.get(
         "CLARIO_REASONING_EFFORT",
@@ -187,34 +209,52 @@ def _reasoning_effort_for(model: str) -> str | None:
     return value if value in {"low", "medium", "high"} else "medium"
 
 
+def _provider_config(provider: str) -> tuple[str, str, list[str]]:
+    if provider == "clario":
+        api_key = os.environ.get("CLARIO_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("CLARIO_API_KEY is not configured")
+        base_urls = [
+            os.environ.get(
+                "CLARIO_BASE_URL",
+                "https://clariohub.id/v1",
+            ).rstrip("/"),
+            os.environ.get(
+                "CLARIO_FALLBACK_BASE_URL",
+                "https://api-direct.clariohub.id/v1",
+            ).rstrip("/"),
+        ]
+        return api_key, "ClarioHub", base_urls
+
+    if provider == "thirty":
+        api_key = os.environ.get("THIRTY_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("THIRTY_API_KEY is not configured")
+        base_url = os.environ.get(
+            "THIRTY_BASE_URL",
+            "https://api.thirtystore.com/v1",
+        ).rstrip("/")
+        return api_key, "ThirtyStore", [base_url]
+
+    raise RuntimeError(f"Unsupported AI provider: {provider}")
+
+
 def call_model_review(
     payload: dict[str, Any],
     *,
     system_prompt: str,
     model: str,
+    provider: str | None = None,
 ) -> dict[str, Any]:
-    if provider_name() != "clario":
-        raise RuntimeError(
-            f"Unsupported AI_PROVIDER: {provider_name()}; Stage 11B requires clario"
-        )
-
-    blocked_until = _blocked_until_by_model.get(model, 0.0)
+    provider = (provider or primary_provider()).strip().lower()
+    target_key = f"{provider}:{model}"
+    blocked_until = _blocked_until_by_target.get(target_key, 0.0)
     if time.monotonic() < blocked_until:
         raise AIProviderQuotaError(
-            f"AI provider quota circuit is open for model={model}"
+            f"AI provider quota circuit is open for {target_key}"
         )
 
-    api_key = os.environ.get("CLARIO_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("CLARIO_API_KEY is not configured")
-
-    base_urls = [
-        os.environ.get("CLARIO_BASE_URL", "https://clariohub.id/v1").rstrip("/"),
-        os.environ.get(
-            "CLARIO_FALLBACK_BASE_URL",
-            "https://api-direct.clariohub.id/v1",
-        ).rstrip("/"),
-    ]
+    api_key, provider_label, base_urls = _provider_config(provider)
 
     body: dict[str, Any] = {
         "model": model,
@@ -233,7 +273,7 @@ def call_model_review(
         ],
     }
 
-    reasoning_effort = _reasoning_effort_for(model)
+    reasoning_effort = _reasoning_effort_for(provider, model)
     if reasoning_effort:
         body["reasoning_effort"] = reasoning_effort
 
@@ -249,30 +289,34 @@ def call_model_review(
             headers=headers,
             body=body,
         )
-        _raise_for_quota(response, model=model)
+        _raise_for_quota(
+            response,
+            provider=provider,
+            model=model,
+        )
 
-        if response.status_code == 403 and index == 0:
+        if response.status_code == 403 and index < len(base_urls) - 1:
             last_error = RuntimeError(
-                "ClarioHub primary endpoint returned HTTP 403; trying fallback"
+                f"{provider_label} endpoint returned HTTP 403; trying fallback"
             )
             continue
 
         if response.status_code == 429:
             last_error = RuntimeError(
-                f"ClarioHub rate limited model={model} (HTTP 429): "
+                f"{provider_label} rate limited model={model} (HTTP 429): "
                 + response.text[:180].replace("\n", " ")
             )
-            if index == 0:
-                time.sleep(4.0)
-                continue
+            time.sleep(4.0)
+            continue
 
         response.raise_for_status()
         result = parse_provider_response(response.json())
         result["model"] = model
+        result["provider"] = provider
         return result
 
     raise last_error or RuntimeError(
-        f"ClarioHub review failed for model={model}"
+        f"{provider_label} review failed for model={model}"
     )
 
 
@@ -285,4 +329,5 @@ def call_entry_review(
         payload,
         system_prompt=system_prompt,
         model=active_model(),
+        provider=primary_provider(),
     )
