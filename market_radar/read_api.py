@@ -12,6 +12,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
 )
+from .paper_store import list_paper_orders, paper_summary
 from .persistence import (
     entry_approval_summary,
     list_entry_approvals,
@@ -549,6 +550,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "model_review_summary": "/approval/models/summary",
                     "open_positions": "/positions/open",
                     "position_evaluations": "/positions/evaluations",
+                    "paper_summary": "/paper/summary",
+                    "paper_orders": "/paper/orders",
                 },
             )
             return
@@ -786,6 +789,43 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 {
                     "count": len(rows),
                     "evaluations": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/paper/summary":
+            try:
+                self._json(HTTPStatus.OK, paper_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "paper_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/paper/orders":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                rows = list_paper_orders(limit=limit)
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "paper_orders_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "orders": rows,
                 },
             )
             return
