@@ -7,6 +7,7 @@ import time
 from typing import Any
 
 from .binance import BinancePublicClient
+from .control_state import get_control_state
 from .paper_store import (
     close_position,
     count_open_paper_positions,
@@ -126,7 +127,21 @@ def _metadata(position: dict[str, Any]) -> dict[str, Any]:
 
 def sync_entry_orders() -> dict[str, int]:
     if not paper_trading_enabled():
-        return {"queued": 0, "capacity_blocked": 0, "symbol_blocked": 0}
+        return {
+            "queued": 0,
+            "capacity_blocked": 0,
+            "symbol_blocked": 0,
+            "control_blocked": 0,
+        }
+
+    control = get_control_state()
+    if not control.get("entries_enabled"):
+        return {
+            "queued": 0,
+            "capacity_blocked": 0,
+            "symbol_blocked": 0,
+            "control_blocked": 1,
+        }
 
     queued = 0
     capacity_blocked = 0
@@ -172,6 +187,7 @@ def sync_entry_orders() -> dict[str, int]:
         "queued": queued,
         "capacity_blocked": capacity_blocked,
         "symbol_blocked": symbol_blocked,
+        "control_blocked": 0,
     }
 
 
@@ -539,6 +555,7 @@ def paper_cycle() -> dict[str, Any]:
         "entry_queued": entries["queued"],
         "entry_capacity_blocked": entries["capacity_blocked"],
         "entry_symbol_blocked": entries["symbol_blocked"],
+        "entry_control_blocked": entries.get("control_blocked", 0),
         "entry_execution": entry_exec,
     }
 
@@ -592,6 +609,7 @@ def start_paper_trading_loop() -> bool:
                         f"exit_filled={exit_exec.get('filled', 0)} "
                         f"entry_filled={entry_exec.get('filled', 0)} "
                         f"deferred={exit_exec.get('deferred', 0) + entry_exec.get('deferred', 0)} "
+                        f"control_blocked={result.get('entry_control_blocked', 0)} "
                         f"errors={len(exit_exec.get('errors') or []) + len(entry_exec.get('errors') or [])} "
                         f"exit_sample={exit_sample or '-'} "
                         f"entry_sample={entry_sample or '-'}",
