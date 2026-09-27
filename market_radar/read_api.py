@@ -570,63 +570,6 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             self._json(HTTPStatus.OK, state)
             return
 
-        if parsed.path == "/live/preflight":
-            try:
-                self._json(
-                    HTTPStatus.OK,
-                    live_preflight(
-                        client=None,
-                        require_arm=True,
-                        require_entry_mode=True,
-                    ),
-                )
-            except Exception as exc:
-                self._json(
-                    HTTPStatus.INTERNAL_SERVER_ERROR,
-                    {"error": "live_preflight_failed", "detail": str(exc)},
-                )
-            return
-
-        if parsed.path == "/live/summary":
-            try:
-                self._json(HTTPStatus.OK, live_summary())
-            except Exception as exc:
-                self._json(
-                    HTTPStatus.INTERNAL_SERVER_ERROR,
-                    {"error": "live_summary_failed", "detail": str(exc)},
-                )
-            return
-
-        if parsed.path == "/live/orders":
-            query = parse_qs(parsed.query)
-            try:
-                limit = int(query.get("limit", ["100"])[0])
-                rows = list_live_orders(limit=limit)
-                self._json(
-                    HTTPStatus.OK,
-                    {"count": len(rows), "orders": rows},
-                )
-            except Exception as exc:
-                self._json(
-                    HTTPStatus.INTERNAL_SERVER_ERROR,
-                    {"error": "live_orders_read_failed", "detail": str(exc)},
-                )
-            return
-
-        if parsed.path == "/live/positions":
-            try:
-                rows = list_open_live_positions()
-                self._json(
-                    HTTPStatus.OK,
-                    {"count": len(rows), "positions": rows},
-                )
-            except Exception as exc:
-                self._json(
-                    HTTPStatus.INTERNAL_SERVER_ERROR,
-                    {"error": "live_positions_read_failed", "detail": str(exc)},
-                )
-            return
-
         if parsed.path == "/control/state":
             if not control_token_configured():
                 self._json(
@@ -768,6 +711,63 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 HTTPStatus.INTERNAL_SERVER_ERROR,
                 {"error": "scan_read_failed", "detail": str(exc)},
             )
+            return
+
+        if parsed.path == "/live/preflight":
+            try:
+                self._json(
+                    HTTPStatus.OK,
+                    live_preflight(
+                        client=None,
+                        require_arm=True,
+                        require_entry_mode=True,
+                    ),
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_preflight_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/summary":
+            try:
+                self._json(HTTPStatus.OK, live_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_summary_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/orders":
+            query = parse_qs(parsed.query)
+            try:
+                limit = int(query.get("limit", ["100"])[0])
+                rows = list_live_orders(limit=limit)
+                self._json(
+                    HTTPStatus.OK,
+                    {"count": len(rows), "orders": rows},
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_orders_read_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/live/positions":
+            try:
+                rows = list_open_live_positions()
+                self._json(
+                    HTTPStatus.OK,
+                    {"count": len(rows), "positions": rows},
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "live_positions_read_failed", "detail": str(exc)},
+                )
             return
 
         if parsed.path == "/control/state":
