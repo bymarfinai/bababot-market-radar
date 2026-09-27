@@ -380,13 +380,14 @@ def create_live_position(
     opened_at_ms: int,
     entry_price: float,
     quantity: float,
+    stop_loss: float | None,
     metadata: dict[str, Any],
 ) -> None:
     initialize_live_store()
     raw = json.dumps(metadata, separators=(",", ":"), allow_nan=False)
     values = (
         position_id, signal_id, symbol.upper(), side.upper(), "OPEN",
-        opened_at_ms, entry_price, quantity, None, "LIVE", raw,
+        opened_at_ms, entry_price, quantity, stop_loss, "LIVE", raw,
     )
 
     if persistence_backend() == "sqlite":
