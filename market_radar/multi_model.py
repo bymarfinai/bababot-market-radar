@@ -7,11 +7,13 @@ from collections import Counter
 from typing import Any
 
 from .ai_provider import (
-    AIProviderQuotaError,
     call_model_review,
     escalation_model,
+    escalation_provider,
     shadow_model,
+    shadow_provider,
     tiebreaker_model,
+    tiebreaker_provider,
 )
 from .persistence import save_model_review
 
@@ -61,6 +63,7 @@ def _take_slot(kind: str) -> bool:
 def _review_model(
     *,
     role: str,
+    provider: str,
     model: str,
     signal_id: str,
     reviewed_at_ms: int,
@@ -73,13 +76,14 @@ def _review_model(
             payload,
             system_prompt=system_prompt,
             model=model,
+            provider=provider,
         )
         latency_ms = int((time.monotonic() - started) * 1000)
         save_model_review(
             signal_id=signal_id,
             reviewed_at_ms=reviewed_at_ms,
             role=role,
-            model=model,
+            model=f"{provider}:{model}",
             verdict=result["verdict"],
             confidence=result["confidence"],
             reasons=result.get("reasons") or [],
@@ -96,7 +100,7 @@ def _review_model(
             signal_id=signal_id,
             reviewed_at_ms=reviewed_at_ms,
             role=role,
-            model=model,
+            model=f"{provider}:{model}",
             verdict=None,
             confidence=None,
             reasons=[],
@@ -109,6 +113,7 @@ def _review_model(
         return {
             "status": "ERROR",
             "model": model,
+            "provider": provider,
             "error_type": type(exc).__name__,
             "error": str(exc)[:300],
         }
@@ -127,7 +132,10 @@ def run_stage11b(
         signal_id=signal_id,
         reviewed_at_ms=reviewed_at_ms,
         role="PRIMARY",
-        model=str(primary.get("model") or "unknown"),
+        model=(
+            f"{primary.get('provider') or 'unknown'}:"
+            f"{primary.get('model') or 'unknown'}"
+        ),
         verdict=primary.get("verdict"),
         confidence=primary.get("confidence"),
         reasons=primary.get("reasons") or [],
@@ -140,6 +148,7 @@ def run_stage11b(
 
     shadow = _review_model(
         role="SHADOW",
+        provider=shadow_provider(),
         model=shadow_model(),
         signal_id=signal_id,
         reviewed_at_ms=reviewed_at_ms,
@@ -182,6 +191,7 @@ def run_stage11b(
 
     gpt = _review_model(
         role="ESCALATION",
+        provider=escalation_provider(),
         model=escalation_model(),
         signal_id=signal_id,
         reviewed_at_ms=reviewed_at_ms,
@@ -239,6 +249,7 @@ def run_stage11b(
 
     opus = _review_model(
         role="TIEBREAKER",
+        provider=tiebreaker_provider(),
         model=tiebreaker_model(),
         signal_id=signal_id,
         reviewed_at_ms=reviewed_at_ms,
