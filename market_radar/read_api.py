@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from .binance import BinancePublicClient
+from .binance import BinancePublicClient, BinanceTradingClient
 from .control_state import (
     control_token_configured,
     get_control_state,
@@ -540,8 +540,9 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     raise ValueError("armed must be boolean")
                 note = request.get("note")
                 if armed:
+                    guard_client = BinanceTradingClient()
                     guard = live_preflight(
-                        client=None,
+                        client=guard_client,
                         require_arm=False,
                         require_entry_mode=True,
                     )
@@ -718,7 +719,12 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 self._json(
                     HTTPStatus.OK,
                     live_preflight(
-                        client=None,
+                        client=(
+                            BinanceTradingClient()
+                            if get_control_state().get("live_credentials_configured")
+                            and get_control_state().get("live_env_enabled")
+                            else None
+                        ),
                         require_arm=True,
                         require_entry_mode=True,
                     ),
