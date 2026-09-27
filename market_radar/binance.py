@@ -79,6 +79,12 @@ class BinancePublicClient:
         payload = self.get("/fapi/v1/ticker/price", {"symbol": symbol})
         return float(payload["price"])
 
+    def depth(self, symbol: str, limit: int = 5) -> dict[str, Any]:
+        return self.get(
+            "/fapi/v1/depth",
+            {"symbol": symbol.upper(), "limit": max(5, min(int(limit), 100))},
+        )
+
     def open_interest_hist(
         self,
         symbol: str,
@@ -229,6 +235,21 @@ class BinanceTradingClient(BinancePublicClient):
                 "origClientOrderId": client_order_id,
             },
         )
+
+    def user_trades(
+        self,
+        *,
+        symbol: str,
+        order_id: int | str | None = None,
+        limit: int = 100,
+    ) -> list[dict[str, Any]]:
+        params: dict[str, Any] = {
+            "symbol": symbol.upper(),
+            "limit": max(1, min(int(limit), 1000)),
+        }
+        if order_id is not None:
+            params["orderId"] = order_id
+        return self._signed_request("GET", "/fapi/v1/userTrades", params)
 
     def exchange_symbol(self, symbol: str) -> dict[str, Any]:
         wanted = symbol.upper()
