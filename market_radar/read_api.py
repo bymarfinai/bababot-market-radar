@@ -8,6 +8,13 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
+from .binance import BinancePublicClient
+from .control_state import (
+    control_token_configured,
+    get_control_state,
+    set_control_mode,
+    valid_control_token,
+)
 from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
@@ -487,12 +494,66 @@ class RadarReadHandler(BaseHTTPRequestHandler):
         self.send_response(HTTPStatus.NO_CONTENT)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type,MCP-Protocol-Version")
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type,MCP-Protocol-Version,X-Baba-Control-Token",
+        )
         self.send_header("Content-Length", "0")
         self.end_headers()
 
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler method
         parsed = urlparse(self.path)
+
+        if parsed.path == "/control/state":
+            if not control_token_configured():
+                self._json(
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                    {"error": "control_token_not_configured"},
+                )
+                return
+
+            token = self.headers.get("X-Baba-Control-Token")
+            if not valid_control_token(token):
+                self._json(
+                    HTTPStatus.UNAUTHORIZED,
+                    {"error": "invalid_control_token"},
+                )
+                return
+
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+            except ValueError:
+                length = 0
+            if length <= 0 or length > 16_384:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_request_body"},
+                )
+                return
+
+            try:
+                request = json.loads(self.rfile.read(length))
+                if not isinstance(request, dict):
+                    raise ValueError("body must be an object")
+                mode = str(request.get("mode") or "")
+                note = request.get("note")
+                state = set_control_mode(mode, note=note)
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_control_mode", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "control_update_failed", "detail": str(exc)},
+                )
+                return
+
+            self._json(HTTPStatus.OK, state)
+            return
+
         if parsed.path != "/mcp":
             self._json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
             return
@@ -552,6 +613,9 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "position_evaluations": "/positions/evaluations",
                     "paper_summary": "/paper/summary",
                     "paper_orders": "/paper/orders",
+                    "candles": "/market/klines",
+                    "control_state": "/control/state",
+                    "control_token_configured": control_token_configured(),
                 },
             )
             return
@@ -576,6 +640,79 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 HTTPStatus.INTERNAL_SERVER_ERROR,
                 {"error": "scan_read_failed", "detail": str(exc)},
             )
+            return
+
+        if parsed.path == "/control/state":
+            try:
+                state = get_control_state()
+                state["control_token_configured"] = control_token_configured()
+                self._json(HTTPStatus.OK, state)
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "control_state_read_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/market/klines":
+            query = parse_qs(parsed.query)
+            symbol = str(query.get("symbol", [""])[0] or "").strip().upper()
+            interval = str(query.get("interval", ["5m"])[0] or "5m").strip()
+            try:
+                limit = int(query.get("limit", ["120"])[0])
+            except ValueError:
+                limit = 120
+
+            allowed_intervals = {"1m", "5m", "15m", "1h", "4h"}
+            if not symbol:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "symbol_required"},
+                )
+                return
+            if interval not in allowed_intervals:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_interval"},
+                )
+                return
+            limit = max(20, min(limit, 500))
+
+            try:
+                client = BinancePublicClient(timeout=8.0, retries=2)
+                rows = client.klines(
+                    symbol=symbol,
+                    interval=interval,
+                    limit=limit,
+                )
+                candles = [
+                    {
+                        "open_time_ms": int(row[0]),
+                        "open": float(row[1]),
+                        "high": float(row[2]),
+                        "low": float(row[3]),
+                        "close": float(row[4]),
+                        "volume": float(row[5]),
+                        "close_time_ms": int(row[6]),
+                        "quote_volume": float(row[7]),
+                        "trades": int(row[8]),
+                    }
+                    for row in rows
+                ]
+                self._json(
+                    HTTPStatus.OK,
+                    {
+                        "symbol": symbol,
+                        "interval": interval,
+                        "count": len(candles),
+                        "candles": candles,
+                    },
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"error": "klines_fetch_failed", "detail": str(exc)},
+                )
             return
 
         if parsed.path == "/radar/latest":
