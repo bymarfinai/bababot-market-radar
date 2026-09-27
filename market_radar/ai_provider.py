@@ -12,7 +12,7 @@ import requests
 _VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
 _provider_rate_lock = threading.Lock()
 _last_provider_call_monotonic = 0.0
-_provider_blocked_until_monotonic = 0.0
+_blocked_until_by_model: dict[str, float] = {}
 
 
 class AIProviderQuotaError(RuntimeError):
@@ -24,15 +24,34 @@ def provider_name() -> str:
 
 
 def active_model() -> str:
-    if provider_name() == "clario":
-        return os.environ.get("CLARIO_MODEL", "gemini-3.7-flash").strip()
-    return os.environ.get("MINIMAX_MODEL", "MiniMax-M2.7").strip()
+    return os.environ.get("CLARIO_MODEL", "gemini-3.7-flash").strip()
+
+
+def shadow_model() -> str:
+    return os.environ.get(
+        "CLARIO_SHADOW_MODEL",
+        "deepseek-v4.1-flash",
+    ).strip()
+
+
+def escalation_model() -> str:
+    return os.environ.get(
+        "CLARIO_ESCALATION_MODEL",
+        "gpt-5.6-sol",
+    ).strip()
+
+
+def tiebreaker_model() -> str:
+    return os.environ.get(
+        "CLARIO_TIEBREAKER_MODEL",
+        "opus-5",
+    ).strip()
 
 
 def _timeout_seconds() -> float:
     return max(
         5.0,
-        min(float(os.environ.get("AI_APPROVAL_TIMEOUT_SECONDS", "30")), 60.0),
+        min(float(os.environ.get("AI_APPROVAL_TIMEOUT_SECONDS", "30")), 90.0),
     )
 
 
@@ -79,7 +98,6 @@ def _normalize_json_text(text: str) -> dict[str, Any]:
 
 
 def parse_provider_response(data: dict[str, Any]) -> dict[str, Any]:
-    """Accept OpenAI-compatible and Anthropic-compatible response shapes."""
     choices = data.get("choices")
     if isinstance(choices, list) and choices:
         message = choices[0].get("message") or {}
@@ -147,20 +165,45 @@ def _is_quota_exhausted(response: requests.Response) -> bool:
     )
 
 
-def _raise_for_quota(response: requests.Response, provider: str) -> None:
-    global _provider_blocked_until_monotonic
+def _raise_for_quota(
+    response: requests.Response,
+    *,
+    model: str,
+) -> None:
     if _is_quota_exhausted(response):
-        _provider_blocked_until_monotonic = time.monotonic() + 900.0
+        _blocked_until_by_model[model] = time.monotonic() + 900.0
         raise AIProviderQuotaError(
-            f"{provider} provider token plan/credits exhausted (HTTP 429)"
+            f"ClarioHub quota/credits exhausted for model={model} (HTTP 429)"
         )
 
 
-def _call_clario(
+def _reasoning_effort_for(model: str) -> str | None:
+    if not model.startswith("gemini-"):
+        return None
+    value = os.environ.get(
+        "CLARIO_REASONING_EFFORT",
+        "medium",
+    ).strip().lower()
+    return value if value in {"low", "medium", "high"} else "medium"
+
+
+def call_model_review(
     payload: dict[str, Any],
     *,
     system_prompt: str,
+    model: str,
 ) -> dict[str, Any]:
+    if provider_name() != "clario":
+        raise RuntimeError(
+            f"Unsupported AI_PROVIDER: {provider_name()}; Stage 11B requires clario"
+        )
+
+    blocked_until = _blocked_until_by_model.get(model, 0.0)
+    if time.monotonic() < blocked_until:
+        raise AIProviderQuotaError(
+            f"AI provider quota circuit is open for model={model}"
+        )
+
     api_key = os.environ.get("CLARIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("CLARIO_API_KEY is not configured")
@@ -172,7 +215,7 @@ def _call_clario(
             "https://api-direct.clariohub.id/v1",
         ).rstrip("/"),
     ]
-    model = active_model()
+
     body: dict[str, Any] = {
         "model": model,
         "temperature": 0.1,
@@ -190,11 +233,8 @@ def _call_clario(
         ],
     }
 
-    reasoning_effort = os.environ.get(
-        "CLARIO_REASONING_EFFORT",
-        "medium",
-    ).strip().lower()
-    if model.startswith("gemini-") and reasoning_effort in {"low", "medium", "high"}:
+    reasoning_effort = _reasoning_effort_for(model)
+    if reasoning_effort:
         body["reasoning_effort"] = reasoning_effort
 
     headers = {
@@ -209,7 +249,7 @@ def _call_clario(
             headers=headers,
             body=body,
         )
-        _raise_for_quota(response, "ClarioHub")
+        _raise_for_quota(response, model=model)
 
         if response.status_code == 403 and index == 0:
             last_error = RuntimeError(
@@ -219,58 +259,21 @@ def _call_clario(
 
         if response.status_code == 429:
             last_error = RuntimeError(
-                "ClarioHub rate limited (HTTP 429): "
+                f"ClarioHub rate limited model={model} (HTTP 429): "
                 + response.text[:180].replace("\n", " ")
             )
-            time.sleep(4.0)
-            continue
+            if index == 0:
+                time.sleep(4.0)
+                continue
 
         response.raise_for_status()
-        return parse_provider_response(response.json())
+        result = parse_provider_response(response.json())
+        result["model"] = model
+        return result
 
-    raise last_error or RuntimeError("ClarioHub review failed")
-
-
-def _call_minimax(
-    payload: dict[str, Any],
-    *,
-    system_prompt: str,
-) -> dict[str, Any]:
-    api_key = os.environ.get("MINIMAX_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("MINIMAX_API_KEY is not configured")
-
-    base_url = os.environ.get(
-        "MINIMAX_BASE_URL",
-        "https://api.minimax.io/anthropic",
-    ).rstrip("/")
-    body = {
-        "model": active_model(),
-        "max_tokens": 650,
-        "temperature": 0.1,
-        "system": system_prompt,
-        "messages": [
-            {
-                "role": "user",
-                "content": json.dumps(
-                    payload,
-                    separators=(",", ":"),
-                    allow_nan=False,
-                ),
-            }
-        ],
-    }
-    response = _rate_limited_post(
-        f"{base_url}/v1/messages",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-        body=body,
+    raise last_error or RuntimeError(
+        f"ClarioHub review failed for model={model}"
     )
-    _raise_for_quota(response, "MiniMax")
-    response.raise_for_status()
-    return parse_provider_response(response.json())
 
 
 def call_entry_review(
@@ -278,14 +281,8 @@ def call_entry_review(
     *,
     system_prompt: str,
 ) -> dict[str, Any]:
-    global _provider_blocked_until_monotonic
-
-    if time.monotonic() < _provider_blocked_until_monotonic:
-        raise AIProviderQuotaError("AI provider quota circuit is open")
-
-    provider = provider_name()
-    if provider == "clario":
-        return _call_clario(payload, system_prompt=system_prompt)
-    if provider == "minimax":
-        return _call_minimax(payload, system_prompt=system_prompt)
-    raise RuntimeError(f"Unsupported AI_PROVIDER: {provider}")
+    return call_model_review(
+        payload,
+        system_prompt=system_prompt,
+        model=active_model(),
+    )
