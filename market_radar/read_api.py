@@ -16,6 +16,8 @@ from .persistence import (
     entry_approval_summary,
     list_entry_approvals,
     list_model_reviews,
+    list_open_positions,
+    list_position_evaluations,
     list_signals,
     model_review_summary,
     persistence_summary,
@@ -545,6 +547,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "entry_approval_summary": "/approval/summary",
                     "model_reviews": "/approval/models",
                     "model_review_summary": "/approval/models/summary",
+                    "open_positions": "/positions/open",
+                    "position_evaluations": "/positions/evaluations",
                 },
             )
             return
@@ -733,6 +737,55 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 {
                     "count": len(rows),
                     "reviews": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/positions/open":
+            try:
+                rows = list_open_positions()
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "open_positions_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "positions": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/positions/evaluations":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                position_id = query.get("position_id", [None])[0]
+                rows = list_position_evaluations(
+                    position_id=position_id,
+                    limit=limit,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "position_evaluations_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "evaluations": rows,
                 },
             )
             return
