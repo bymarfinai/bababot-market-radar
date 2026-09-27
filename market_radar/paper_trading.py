@@ -484,6 +484,7 @@ def execute_pending_orders(
     skipped = 0
     deferred = 0
     errors: list[str] = []
+    fill_details: list[dict[str, Any]] = []
 
     orders = list_pending_orders(limit=100)
     if actions is not None:
@@ -502,6 +503,7 @@ def execute_pending_orders(
 
             if result["status"] == "FILLED":
                 filled += 1
+                fill_details.append(result)
             elif result["status"] == "SKIPPED":
                 skipped += 1
             elif result["status"] == "DEFERRED":
@@ -518,6 +520,7 @@ def execute_pending_orders(
         "skipped": skipped,
         "deferred": deferred,
         "errors": errors,
+        "fills": fill_details,
     }
 
 
@@ -568,6 +571,20 @@ def start_paper_trading_loop() -> bool:
                     or entry_exec.get("errors")
                 )
                 if meaningful:
+                    exit_sample = ";".join(
+                        (
+                            f"{item.get('action')}:{item.get('symbol')}:"
+                            f"{float(item.get('realized_net_increment') or 0.0):+.4f}"
+                        )
+                        for item in (exit_exec.get("fills") or [])[:5]
+                    )
+                    entry_sample = ";".join(
+                        (
+                            f"{item.get('action')}:{item.get('symbol')}:"
+                            f"{float(item.get('fill_price') or 0.0):.8g}"
+                        )
+                        for item in (entry_exec.get("fills") or [])[:5]
+                    )
                     print(
                         "Stage 13 paper: "
                         f"lifecycle_queued={result.get('lifecycle_queued', 0)} "
@@ -575,7 +592,9 @@ def start_paper_trading_loop() -> bool:
                         f"exit_filled={exit_exec.get('filled', 0)} "
                         f"entry_filled={entry_exec.get('filled', 0)} "
                         f"deferred={exit_exec.get('deferred', 0) + entry_exec.get('deferred', 0)} "
-                        f"errors={len(exit_exec.get('errors') or []) + len(entry_exec.get('errors') or [])}",
+                        f"errors={len(exit_exec.get('errors') or []) + len(entry_exec.get('errors') or [])} "
+                        f"exit_sample={exit_sample or '-'} "
+                        f"entry_sample={entry_sample or '-'}",
                         flush=True,
                     )
             except Exception as exc:
