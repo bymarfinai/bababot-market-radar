@@ -8,6 +8,7 @@ import threading
 
 from .ai_approval import start_pending_approval_worker
 from .binance import BinancePublicClient
+from .live_trading import start_live_trading_loop
 from .execution_handoff import (
     default_execution_handoff_path,
     write_execution_handoff_atomic,
@@ -107,6 +108,7 @@ def main() -> int:
     start_pending_approval_worker()
     start_position_lifecycle_worker()
     start_paper_trading_loop()
+    start_live_trading_loop()
 
     if args.once:
         client = BinancePublicClient(timeout=cfg.request_timeout, retries=cfg.retries)
