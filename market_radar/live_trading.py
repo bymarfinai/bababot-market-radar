@@ -914,6 +914,25 @@ def start_live_trading_loop() -> bool:
     global _loop_started
     initialize_live_store()
 
+    startup_guard = preflight(
+        client=None,
+        require_arm=True,
+        require_entry_mode=True,
+    )
+    startup_state = startup_guard.get("control") or {}
+    print(
+        "Stage 15 live guard: "
+        f"status={'READY' if startup_guard.get('ok') else 'LOCKED'} "
+        f"env={bool(startup_state.get('live_env_enabled'))} "
+        f"credentials={bool(startup_state.get('live_credentials_configured'))} "
+        f"armed={bool(startup_state.get('live_armed'))} "
+        f"entry_enabled={bool(startup_state.get('live_entry_submission_enabled'))} "
+        f"paper_closed={(startup_guard.get('paper_gate') or {}).get('closed', 0)} "
+        f"paper_net={(startup_guard.get('paper_gate') or {}).get('net_pnl', 0.0):.4f} "
+        f"reasons={','.join(startup_guard.get('reasons') or []) or '-'}",
+        flush=True,
+    )
+
     if not live_env_enabled():
         return False
 
