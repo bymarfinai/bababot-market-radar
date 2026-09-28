@@ -10,6 +10,7 @@ from market_radar.position_lifecycle import (
     _arbitrate,
     _health_from_snapshot,
     _mfe_mae,
+    _position_memory_penalties,
     _side_return,
 )
 
@@ -65,6 +66,58 @@ class Stage12LifecycleTests(unittest.TestCase):
         }
         health = _health_from_snapshot("LONG", snapshot)
         self.assertEqual(health["deterministic_action"], "REDUCE")
+
+    def test_adaptive_health_uses_giveback_when_base_health_weakens(self):
+        snapshot = {
+            "ret_5m_pct": 0.2,
+            "ret_15m_pct": 0.3,
+            "ret_1h_pct": -0.2,
+            "stage": "EXPANSION",
+            "long_score": 60.0,
+            "short_score": 45.0,
+            "structure_status": "NO_STRUCTURAL_BREAK",
+            "taker_bias": "BALANCED",
+            "oi_interpretation": "UNRESOLVED",
+            "market_regime": "SIDEWAYS",
+        }
+        base = _health_from_snapshot("LONG", snapshot)
+        adaptive = _health_from_snapshot(
+            "LONG",
+            snapshot,
+            mfe_pct=1.4,
+            mae_pct=-0.3,
+            unrealized_pnl_pct=0.6,
+        )
+        self.assertEqual(base["health_score"], 61.0)
+        self.assertEqual(base["deterministic_action"], "HOLD")
+        self.assertEqual(adaptive["health_score"], 51.0)
+        self.assertEqual(adaptive["deterministic_action"], "REDUCE")
+        self.assertEqual(adaptive["position_memory"]["giveback_penalty"], 10.0)
+
+    def test_strong_base_health_does_not_overreact_to_normal_giveback(self):
+        memory = _position_memory_penalties(
+            base_health_score=82.0,
+            mfe_pct=1.4,
+            mae_pct=-0.3,
+            unrealized_pnl_pct=0.6,
+        )
+        self.assertEqual(memory["giveback_penalty"], 0.0)
+
+    def test_deep_mae_only_penalizes_unrecovered_weak_position(self):
+        weak = _position_memory_penalties(
+            base_health_score=55.0,
+            mfe_pct=0.2,
+            mae_pct=-1.6,
+            unrealized_pnl_pct=-1.2,
+        )
+        recovered = _position_memory_penalties(
+            base_health_score=55.0,
+            mfe_pct=1.8,
+            mae_pct=-1.6,
+            unrealized_pnl_pct=1.2,
+        )
+        self.assertEqual(weak["mae_penalty"], 15.0)
+        self.assertEqual(recovered["mae_penalty"], 0.0)
 
     def test_ai_cannot_upgrade_deterministic_close(self):
         self.assertEqual(
