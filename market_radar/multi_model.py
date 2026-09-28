@@ -18,7 +18,7 @@ from .ai_provider import (
 from .persistence import save_model_review
 
 
-STAGE11B_VERSION = "stage11b-v1"
+STAGE11B_VERSION = "stage11b-v2-primary-fallback"
 
 _window_lock = threading.Lock()
 _window_key = -1
@@ -119,6 +119,79 @@ def _review_model(
         }
 
 
+def run_primary_fallback(
+    *,
+    signal_id: str,
+    reviewed_at_ms: int,
+    payload: dict[str, Any],
+    system_prompt: str,
+    primary_error: dict[str, Any],
+) -> dict[str, Any]:
+    """Fail-safe degraded consensus when the normal primary model is unavailable."""
+    if not _take_slot("escalation"):
+        return {
+            "version": STAGE11B_VERSION,
+            "mode": "DEGRADED_PRIMARY_FALLBACK",
+            "final_verdict": "VETO",
+            "fallback_reason": "quota_guard_cap",
+            "primary_error": primary_error,
+            "shadow": None,
+            "validator": None,
+        }
+
+    shadow = _review_model(
+        role="FALLBACK_PRIMARY",
+        provider=shadow_provider(),
+        model=shadow_model(),
+        signal_id=signal_id,
+        reviewed_at_ms=reviewed_at_ms,
+        payload=payload,
+        system_prompt=system_prompt,
+    )
+    validator = _review_model(
+        role="FALLBACK_VALIDATOR",
+        provider=tiebreaker_provider(),
+        model=tiebreaker_model(),
+        signal_id=signal_id,
+        reviewed_at_ms=reviewed_at_ms,
+        payload=payload,
+        system_prompt=system_prompt,
+    )
+
+    shadow_ok = shadow.get("status") == "OK"
+    validator_ok = validator.get("status") == "OK"
+    shadow_verdict = str(shadow.get("verdict") or "") if shadow_ok else ""
+    validator_verdict = str(validator.get("verdict") or "") if validator_ok else ""
+
+    if not shadow_ok and not validator_ok:
+        final = "VETO"
+        reason = "both_fallback_models_failed"
+    elif shadow_verdict == "VETO" or validator_verdict == "VETO":
+        final = "VETO"
+        reason = "fallback_veto_present"
+    elif (
+        shadow_ok
+        and validator_ok
+        and shadow_verdict == "APPROVE"
+        and validator_verdict == "APPROVE"
+    ):
+        final = "APPROVE"
+        reason = "dual_approve"
+    else:
+        final = "WATCH"
+        reason = "no_dual_approve"
+
+    return {
+        "version": STAGE11B_VERSION,
+        "mode": "DEGRADED_PRIMARY_FALLBACK",
+        "final_verdict": final,
+        "fallback_reason": reason,
+        "primary_error": primary_error,
+        "shadow": shadow,
+        "validator": validator,
+    }
+
+
 def run_stage11b(
     *,
     signal_id: str,
@@ -127,7 +200,7 @@ def run_stage11b(
     system_prompt: str,
     primary: dict[str, Any],
 ) -> dict[str, Any]:
-    """Shadow DeepSeek; escalate ambiguous cases to GPT, then Opus if needed."""
+    """Run shadow review and guarded escalation/tiebreak supervision."""
     save_model_review(
         signal_id=signal_id,
         reviewed_at_ms=reviewed_at_ms,
@@ -235,6 +308,23 @@ def run_stage11b(
             "opus": None,
         }
 
+    same_tiebreak_target = (
+        escalation_provider() == tiebreaker_provider()
+        and escalation_model() == tiebreaker_model()
+    )
+    if same_tiebreak_target:
+        tiebreaker = gpt
+        return {
+            "version": STAGE11B_VERSION,
+            "final_verdict": str(gpt["verdict"]),
+            "escalated": True,
+            "tiebreaker_reused_escalation": True,
+            "primary": primary,
+            "shadow": shadow,
+            "gpt": gpt,
+            "opus": tiebreaker,
+        }
+
     if not _take_slot("tiebreaker"):
         return {
             "version": STAGE11B_VERSION,
@@ -262,7 +352,6 @@ def run_stage11b(
     else:
         final = str(opus["verdict"])
         if primary_verdict == "VETO" and final == "APPROVE":
-            # Require explicit Opus confirmation to override a primary VETO.
             final = "APPROVE"
 
     return {
