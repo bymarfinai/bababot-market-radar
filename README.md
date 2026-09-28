@@ -1,553 +1,642 @@
 # BabaBot Market Radar
 
-Standalone live **Moving Coin Detector (MCD) product**. It has **zero runtime dependency** on `bymarfinai/bababot-discovery`.
+Standalone live **Moving Coin Detector (MCD), AI supervision, position lifecycle, paper trading, and guarded live-execution system** for Binance USD-M USDT perpetual markets.
 
-The frozen product blueprint is in [`BLUEPRINT.md`](BLUEPRINT.md).
+Market Radar has **zero runtime dependency** on bymarfinai/bababot-discovery. Discovery remains the research/backtest lab; validated logic is ported into this repository for production use.
 
-## Development status
+The frozen product contract and production-extension rules are documented in BLUEPRINT.md.
 
-### Stage 1 — COMPLETE
+## Current development state
 
-Frozen requirement:
+**Stages 1–15 are implemented.**
 
-> Scan all Binance USDT perpetual markets every ±5 minutes.
+The original frozen product plan covered Stages 1–9. Stages 10–15 are production extensions added after the core radar was completed.
 
-Implemented:
+| Stage | Status | Responsibility |
+|---|---|---|
+| 1 | COMPLETE | Full Binance USDT perpetual scan |
+| 2 | COMPLETE | Moving Coin Detector |
+| 3 | COMPLETE | IGNITION / EXPANSION / EXHAUSTION |
+| 4 | COMPLETE | Independent LONG_SCORE / SHORT_SCORE |
+| 5 | COMPLETE | Market context |
+| 6 | COMPLETE | LONG / SHORT / NO TRADE |
+| 7 | COMPLETE | Read-only MCP + radar API |
+| 8 | COMPLETE | Dashboard + actionable alerts |
+| 9 | COMPLETE | Safe execution handoff contract |
+| 10 | COMPLETE | PostgreSQL/SQLite persistence |
+| 11 | COMPLETE | Deterministic entry risk gate + AI approval |
+| 11B | COMPLETE | Multi-model shadow/escalation/tiebreak |
+| 12 | COMPLETE | Adaptive position lifecycle |
+| 13 | COMPLETE | Automatic paper trading |
+| 14 | COMPLETE | Trading Control Center |
+| 15 | COMPLETE | Guarded Binance Futures live execution |
 
-- discovers **all** `TRADING + USDT + PERPETUAL` USD-M Futures symbols from Binance `exchangeInfo`
-- no top-gainer, momentum, volume, or liquidity pre-filter
-- fetches closed 5m history for every symbol
-- captures 5m OHLC, volume, quote volume, trade count, and taker-buy volume
-- attaches 24h quote volume and 24h price change as raw market context
-- runs on the next UTC 5-minute candle boundary + configurable close-confirmation offset
-- isolates per-symbol failures so one bad market does not abort the full scan
-- writes `data/latest_scan.json` atomically
-- public Binance endpoints only; no API key required
+## Current production flow
 
-### Stage 2 — COMPLETE
+~~~text
+Binance USDT Perpetual
+        ↓
+Stage 1 — full-universe closed-5m scan
+        ↓
+Stage 2 — Moving Coin Detector
+        ↓
+Stage 3 — IGNITION / EXPANSION / EXHAUSTION
+        ↓
+Stage 4 — LONG_SCORE / SHORT_SCORE
+        ↓
+Stage 5 — market context
+        ↓
+Stage 6 — LONG / SHORT / NO TRADE
+        ↓
+Stage 10 — persistent actionable signal ledger
+        ↓
+Stage 11 / 11B — deterministic risk gate + AI supervision
+        ↓
+APPROVE / WATCH / VETO
+        ↓
+Stage 12 — position health + HOLD / REDUCE / CLOSE
+        ↓
+Stage 13 — paper execution
+        ↓
+Stage 14 — RUN / PAUSE_ENTRIES / EXIT_ONLY control plane
+        ↓
+Stage 15 — guarded live Binance Futures execution
+~~~
 
-Frozen requirement:
+MCP and dashboard inspection run alongside this pipeline. They do not replace the deterministic detector.
 
-> Detect coin yang mulai bergerak.
+## Stage 1 — Full-universe scanner
 
-Implemented:
+Market Radar discovers every currently trading Binance USD-M contract matching:
 
-- evaluates movement from **closed 5m candles only**
-- compares each symbol against its **own previous 20-bar baseline**
-- measures:
-  - 5m return expansion
-  - 5m quote-volume expansion
-  - true-range expansion
-  - trade-count expansion
-  - recent directional persistence
-- applies an absolute 5m-return floor to avoid false positives from nearly-flat baselines
-- preserves newly listed markets in the full Stage 1 scan even when they do not yet have enough history
-- emits Stage 2 movement states:
-  - `NOISE`
-  - `NORMAL`
-  - `EARLY_MOVEMENT`
-  - `STRONG_CONTINUATION`
-  - `LATE_MOVEMENT`
-- emits only raw `UP / DOWN / FLAT` direction hints
-- **does not** emit LONG/SHORT trade decisions or Stage 3 labels
+~~~text
+quoteAsset   = USDT
+contractType = PERPETUAL
+status       = TRADING
+~~~
 
-Stage 2 candidate output includes:
+There is **no top-gainer, momentum, volume, or liquidity pre-filter**.
 
-```text
-symbol
-movement_state
-direction_hint
-ret_5m / ret_15m / ret_1h / ret_24h
-return expansion ratio
-volume ratio
-range ratio
-trade-count ratio
-directional persistence
-evidence count
-reasons
-```
+The scheduler runs on each UTC 5-minute candle boundary plus a small close-confirmation offset. Only fully closed candles are admitted.
 
-### Stage 3 — COMPLETE
+## Stage 2 — Moving Coin Detector
 
-Frozen requirement:
+The MCD compares each symbol with its own previous 20 closed 5m bars.
 
-> Classify `IGNITION / EXPANSION / EXHAUSTION`.
+Default production thresholds:
 
-Stage 3 is a deterministic downstream classification of Stage 2 movement:
+~~~text
+minimum absolute 5m return       = 0.15%
+return expansion                 = 2.0x baseline
+volume expansion                 = 1.5x baseline
+range expansion                  = 1.4x baseline
+trade-count expansion            = 1.5x baseline
 
-```text
+strong return expansion          = 3.0x
+strong volume expansion          = 2.0x
+strong range expansion           = 1.6x
+
+late same-direction 1h move      = 6%
+late same-direction 24h move     = 30%
+~~~
+
+A symbol becomes a moving candidate only when:
+
+~~~text
+abs(5m return) >= 0.15%
+AND return expansion >= 2.0x
+AND at least one activity confirmation:
+    volume expansion
+    OR range expansion
+    OR trade-count expansion
+~~~
+
+Movement states:
+
+~~~text
+NOISE
+NORMAL
 EARLY_MOVEMENT
-→ IGNITION
-
 STRONG_CONTINUATION
-→ EXPANSION
-
 LATE_MOVEMENT
-→ EXHAUSTION
-```
+~~~
 
-`NOISE` and `NORMAL` remain outside the movement-stage pipeline and receive no Stage 3 label.
+The detector is intentionally built for **abnormal early movement detection**, not for chasing the final top-gainer list.
 
-Important scope boundary:
+## Stage 3 — Movement stage
 
-- `IGNITION / EXPANSION / EXHAUSTION` describe the **phase of detected movement**
-- `UP / DOWN / FLAT` remains only a raw price-direction hint
-- no `LONG_SCORE`
-- no `SHORT_SCORE`
-- no `LONG / SHORT / NO TRADE` decision yet
+Deterministic mapping:
 
-The scanner also reports per-cycle counts for:
+~~~text
+EARLY_MOVEMENT      → IGNITION
+STRONG_CONTINUATION → EXPANSION
+LATE_MOVEMENT       → EXHAUSTION
+~~~
 
-```text
-IGNITION
-EXPANSION
-EXHAUSTION
-```
+NOISE and NORMAL remain outside the actionable movement-stage pipeline.
 
-### Stage 4 — COMPLETE
+## Stage 4 — Direction scoring
 
-Frozen requirement:
+Every moving candidate receives independent 0–100 evidence scores:
 
-> Calculate independent `LONG_SCORE / SHORT_SCORE`.
+~~~text
+LONG_SCORE
+SHORT_SCORE
+score_gap  = LONG_SCORE - SHORT_SCORE
+score_edge = abs(score_gap)
+~~~
 
-Implemented:
+The scores are not complements and are not required to sum to 100.
 
-- every moving candidate receives two independent scores on a `0–100` scale
-- scores are **not complements** and are not forced to sum to 100
-- positive `score_gap = LONG_SCORE - SHORT_SCORE`
-- `score_edge = abs(score_gap)`
-- scoring uses only evidence already available from Stage 2/3:
-  - signed 5m momentum
-  - signed 15m momentum
-  - signed 1h momentum
-  - short-term acceleration
-  - movement/return expansion
-  - existing volume expansion ratio
-  - existing range expansion ratio
-  - existing trade-count expansion ratio
-  - directional persistence
-  - multi-timeframe directional consistency
-- component breakdown is retained separately for LONG and SHORT for auditability
+Stage 4 uses signed 5m/15m/1h momentum, short-term acceleration, activity expansion, directional persistence, and timeframe consistency.
 
-Important scope boundary:
+Stage 4 does **not** use Stage 5 market context and does **not** issue the final trade decision.
 
-```text
-Stage 4 DOES NOT read:
-breakout / breakdown
-taker flow
-open interest
-funding
-market regime
-```
+## Stage 5 — Market context
 
-Those remain frozen for Stage 5.
+Context is attached only after Stage 2 confirms a moving candidate.
 
-Stage 4 also **does not** output `LONG / SHORT / NO TRADE`. A higher score is evidence, not yet an execution decision.
+Current context:
 
-### Stage 5 — COMPLETE
+- relative volume confirmation
+- previous 20 closed-5m high/low
+- BREAKOUT / BREAKDOWN
+- FAILED_BREAKOUT / FAILED_BREAKDOWN / FAILED_BOTH_SIDES
+- taker BUY / SELL / BALANCED bias from the same closed Binance kline
+- raw Binance Open Interest using sumOpenInterest only
+- funding rate
+- causal completed-4H market regime
 
-Frozen requirement:
+Raw OI interpretation:
 
-> Read volume, breakout/breakdown, taker flow, raw OI, funding, and existing market regime.
+~~~text
+Price ↑ + OI ↑ → FRESH_LONG_PARTICIPATION
+Price ↑ + OI ↓ → SHORT_COVERING
+Price ↓ + OI ↑ → FRESH_SHORT_PARTICIPATION
+Price ↓ + OI ↓ → LONG_LIQUIDATION
+~~~
 
-Implemented candidate context:
+The regime implementation is the existing BabaBot B27AG swing-regime logic ported into this repo:
 
-- **Volume**
-  - current closed 5m quote volume
-  - 24h quote volume
-  - relative 5m volume ratio vs the symbol's own baseline
-  - volume-confirmation flag
-- **Breakout / breakdown**
-  - previous 20 closed 5m high / low
-  - confirmed `BREAKOUT`
-  - confirmed `BREAKDOWN`
-  - `FAILED_BREAKOUT`
-  - `FAILED_BREAKDOWN`
-  - `FAILED_BOTH_SIDES`
-  - `NO_STRUCTURAL_BREAK`
-- **Taker flow**
-  - read directly from the exact closed 5m Binance kline used by the detector
-  - taker-buy quote volume
-  - derived taker-sell quote volume
-  - buy/sell ratio
-  - buy share
-  - `BUY / SELL / BALANCED` bias
-- **Raw Open Interest**
-  - Binance `sumOpenInterest` only
-  - `sumOpenInterestValue` is intentionally ignored
-  - causal OI timestamp filtering
-  - raw OI change %
-  - context interpretation:
-    - price up + OI up → fresh long participation
-    - price up + OI down → short covering
-    - price down + OI up → fresh short participation
-    - price down + OI down → long liquidation
-- **Funding**
-  - current Binance `lastFundingRate`
-- **Existing market regime**
-  - existing causal BabaBot Discovery B27AG 4H `SwingRegime(lookback=5, swing_atr=0.5)` semantics ported into this repo
-  - `BULL`: HH>=2 + HL>=2 + EMA7>EMA20 + completed close>EMA20
-  - `BEAR`: LH>=2 + LL>=2 + EMA7<EMA20 + completed close<EMA20
-  - otherwise `SIDEWAYS`
-  - only completed 4H bars are admitted
-  - Market Radar never calls Discovery at runtime
+~~~text
+BULL:
+HH >= 2
+HL >= 2
+EMA7 > EMA20
+completed close > EMA20
 
-Additional OI/funding/regime API calls are made **only for moving candidates**, while Stage 1 continues scanning the full Binance USDT-perpetual universe.
+BEAR:
+LH >= 2
+LL >= 2
+EMA7 < EMA20
+completed close < EMA20
 
-Stage 5 is context only. It does **not** change Stage 4 scores and does **not** output a final trade decision.
+otherwise SIDEWAYS
+~~~
 
-### Stage 6 — COMPLETE
+Only completed 4H candles are used.
 
-Frozen requirement:
+## Stage 6 — Final deterministic decision
 
-> Output final `LONG / SHORT / NO TRADE`.
+Output:
 
-Stage 6 is deterministic and runs only after Stage 5 context has been attached.
+~~~text
+LONG
+SHORT
+NO TRADE
+~~~
 
-Base score gates preserve the existing MCD prototype defaults:
+Default score gates:
 
-```text
-winning directional score >= 68
-score edge vs opposite side >= 10
-```
+~~~text
+winning score >= 68
+score edge    >= 10
+~~~
 
-Decision flow:
+Additional rules:
 
-```text
-moving candidate
-→ valid IGNITION / EXPANSION / EXHAUSTION
-→ EXHAUSTION = NO TRADE
-→ choose higher LONG_SCORE or SHORT_SCORE as candidate side
-→ require score >=68
-→ require edge >=10
-→ require complete OI + funding + regime context
-→ evaluate context confirmations and conflicts
-→ reject confirmed structural break against the candidate side
-→ require positive context balance
-→ LONG / SHORT / NO TRADE
-```
+- EXHAUSTION is always NO TRADE
+- required OI, funding, and regime context must be available
+- a confirmed structural break directly against the proposed side is a hard conflict
+- IGNITION requires at least 2 context confirmations
+- EXPANSION requires at least 1 context confirmation
+- context confirmation-minus-conflict balance must be at least +1
+- funding is observational context and is not a standalone trigger or veto
 
-Context voting:
+Every rejected setup receives explicit decision reasons.
 
-- volume expansion can confirm either directional candidate
-- aligned confirmed breakout/breakdown confirms
-- failed opposite-side break can confirm a reclaim/rejection
-- aligned taker bias confirms; opposite taker bias conflicts
-- fresh raw-OI participation aligned with the proposed direction confirms
-- fresh raw-OI participation against the proposed direction conflicts
-- aligned 4H regime confirms; opposite regime conflicts; SIDEWAYS is neutral
-- funding is retained and exposed as positioning context but does **not** independently trigger or veto a trade
+## Stage 7 — MCP and read API
 
-Stage-specific confirmation gate:
+MCP remains **read-only** and exposes exactly three tools:
 
-```text
-IGNITION  : minimum 2 context confirmations
-EXPANSION : minimum 1 context confirmation
-EXHAUSTION: always NO TRADE
-```
-
-A moving candidate that fails any gate receives `NO TRADE` with explicit `decision_reasons`.
-
-Final candidate output now includes:
-
-```text
-decision
-decision_side_candidate
-decision_context_confirmations
-decision_context_conflicts
-decision_context_balance
-decision_reasons
-decision_version
-```
-
-Per scan, Market Radar also reports:
-
-```text
-LONG count
-SHORT count
-NO TRADE count
-```
-
-### Stage 7 — COMPLETE
-
-Frozen requirement:
-
-> Expose deterministic Market Radar data through MCP for AI inspection.
-
-Final implementation is deliberately minimal and read-only:
-
-- MCP is exposed directly by the standalone `market-radar` Railway service
-- no second calculation engine
-- no dependency on BabaBot Discovery
-- no dependency on the legacy BabaBot MCP Worker
-- no FastAPI/Starlette/MCP framework dependency
-- existing Stage 1–6 logic is untouched
-- scanner cadence remains the same 5-minute closed-candle boundary scheduler
-- MCP reads the latest deterministic `latest_scan.json` snapshot only
-
-Production MCP endpoint:
-
-```text
-https://market-radar-production-d307.up.railway.app/mcp
-```
-
-MCP protocol:
-
-```text
-2025-11-25 handshake-era Streamable HTTP
-```
-
-Exactly three read-only MCP tools are exposed:
-
-```text
+~~~text
 get_market_radar
 get_moving_coins
 inspect_symbol
-```
+~~~
 
-Tool responsibilities:
+Endpoint:
 
-- `get_market_radar` — latest compact radar scan and candidate list
-- `get_moving_coins` — current candidates with optional `decision` / `stage` filters
-- `inspect_symbol` — inspect one symbol's stage, scores, context, final decision, and reasons; non-moving symbols return their latest Stage 1 snapshot
+~~~text
+POST /mcp
+~~~
 
-The MCP layer does **not**:
+Protocol revision:
 
-- rescan Binance
-- calculate movement
-- recalculate scores
-- reinterpret OI
-- calculate regime
-- alter `LONG / SHORT / NO TRADE`
-- execute trades
+~~~text
+2025-11-25
+~~~
 
-Non-MCP read endpoints remain available for dashboard/operations:
+Production radar/API service:
 
-```text
-GET /health
-GET /radar/latest
-GET /radar/candidates
-GET /radar/symbol/{symbol}
-```
-
-Stage 7 contract and scope are documented in `MCP_ADAPTER.md`.
-
-### Stage 8 — COMPLETE
-
-Frozen requirement:
-
-> Dashboard live + alert.
-
-Implemented:
-
-- standalone live dashboard deployment
-- dashboard reads only the read-only Market Radar API
-- 15-second auto refresh
-- market universe / moving / LONG / SHORT / NO TRADE summary
-- candidate table with:
-  - symbol
-  - current closed-candle price
-  - IGNITION / EXPANSION / EXHAUSTION
-  - LONG_SCORE / SHORT_SCORE
-  - final LONG / SHORT / NO TRADE
-  - structure
-  - taker bias
-  - raw OI change
-  - market regime
-- candidate detail panel with:
-  - funding
-  - context balance
-  - decision reasons
-- system status and latest candle timestamp
-- browser-local actionable signal history
-- browser notifications for **new LONG / SHORT decisions only**
-- no alert for NO TRADE or ordinary market scans
-- AI inspection panel points to the existing Stage 7 MCP tool for the selected symbol; no second AI engine was added
-
-Production dashboard:
-
-```text
-https://market-radar-dashboard-production.up.railway.app
-```
-
-Production radar/API/MCP:
-
-```text
+~~~text
 https://market-radar-production-d307.up.railway.app
-```
+~~~
 
-Operational deployment note:
+See MCP_ADAPTER.md for the current interface contract.
 
-- the first Market Radar Railway deployment in `us-west2` received Binance HTTP 451
-- only the deployment region was changed to Railway Singapore `asia-southeast1-eqsg3a`
-- scanner/source/start command/decision logic were not changed
-- after the Singapore deployment, `data/latest_scan.json` was created successfully
-- verified live scan contained `completed_count = 527`
-- no new Binance HTTP 451 was observed after the Singapore deployment
+## Stage 8 — Dashboard
 
-Stage 8 remains read-only. It does not alter Stage 1–7 calculations or execute orders.
+The dashboard is now the **BabaBot Trading Control Center**, not only a read-only radar page.
 
-### Stage 9 — COMPLETE
+It includes:
 
-Frozen requirement:
+- current radar and candidate filters
+- selected-symbol candlestick chart
+- scores, stage, structure, taker, OI, funding, and regime
+- AI approval status and per-model reviews
+- open-position health and lifecycle actions
+- paper-order and signal history
+- control modes
+- Stage 15 live preflight state
+- ARM LIVE / DISARM LIVE controls
 
-> Future execution integration possible.
+The current browser refresh interval is **10 seconds**.
 
-Stage 9 implements a **safe execution handoff**, not live auto-trading.
+The static dashboard lives in dashboard/ and is configured for **Vercel static deployment** through dashboard/vercel.json. The calculation engine and authenticated trading runtime remain on Railway.
 
-After every completed scan, Market Radar atomically writes:
+The dashboard stores the control token only in browser sessionStorage for the active tab.
 
-```text
+## Stage 9 — Historical execution handoff contract
+
+Stage 9 still writes the safe historical handoff:
+
+~~~text
 data/execution_intents.json
-```
+GET /execution/intents
+~~~
 
-Only final Stage 6 decisions:
+Only Stage 6 LONG / SHORT decisions become intents. NO TRADE never becomes an intent.
 
-```text
-LONG
-SHORT
-```
+Each Stage 9 intent remains:
 
-become execution intents. `NO TRADE` is never forwarded.
-
-Each intent is deterministic and candle-scoped:
-
-```text
-symbol + candle_close_time_ms + side
-```
-
-Example:
-
-```text
-SOLUSDT:1790398799999:LONG
-```
-
-Every intent is created in the following frozen safety state:
-
-```text
+~~~text
 execution_mode     = HANDOFF_ONLY
 risk_confirmation  = PENDING
 execution_status   = BLOCKED
 executable         = false
-
 entry_price        = null
 quantity           = null
 stop_loss          = null
 take_profit        = null
-```
+~~~
 
-The top-level handoff explicitly reports:
+Important: the Stage 9 field live_order_submission_enabled=false describes **the Stage 9 handoff artifact only**. It does not describe the current Stage 15 guarded live engine.
 
-```text
-live_order_submission_enabled = false
-```
+See EXECUTION_HANDOFF.md.
 
-A read-only integration endpoint is available:
+## Stage 10 — Persistence
 
-```text
-GET /execution/intents
-```
+Primary production persistence uses PostgreSQL when DATABASE_URL is configured.
 
-This allows a future AI/risk/execution consumer to inspect the current actionable
-handoff without modifying Market Radar or accessing its container directly.
+SQLite at BABABOT_DB_PATH remains a local/fallback safety ledger.
 
-Stage 9 deliberately does **not** invent entry timing, position sizing, stop-loss,
-take-profit, leverage, or Binance order rules because those rules have not been
-frozen or live-validated yet.
+Current persistent data includes:
 
-Production verification:
-
-- `latest_scan.json` and `execution_intents.json` were written together by the live Singapore deployment
-- verified handoff version: `stage9-v1`
-- verified execution mode: `HANDOFF_ONLY`
-- verified `live_order_submission_enabled = false`
-- one verified production scan produced 8 actionable intents
-- all 8 were `BLOCKED`, `PENDING`, and `executable=false`
-- all entry/quantity/SL/TP fields remained null
-
-The Stage 9 contract is documented in `EXECUTION_HANDOFF.md`.
-
-The frozen 9-stage Market Radar product plan is now fully implemented.
-
-> Important: **Stage 9 complete means execution integration is ready. It does not mean live order submission is enabled.**
-
-## Run once
-
-```bash
-python -m pip install -r requirements.txt
-python -m market_radar --once
-```
-
-Machine-readable output:
-
-```bash
-python -m market_radar --once --json
-```
-
-Continuous 5-minute boundary scanner:
-
-```bash
-python -m market_radar
-```
-
-## Tests
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-
-### Stage 10 — COMPLETE
-
-Persistent Signal & Trade Database.
-
-Primary persistence is now a dedicated Railway PostgreSQL service in the same
-production project and Singapore region.
-
-Runtime behavior:
-
-```text
-Market Radar
-  ↓
-PostgreSQL primary persistence
-  ↓
-SQLite persistent-volume safety copy
-```
-
-PostgreSQL is selected automatically when `DATABASE_URL` is configured.
-The existing SQLite database at `BABABOT_DB_PATH` remains as a fallback and
-safety copy, so a temporary PostgreSQL outage does not drop actionable signals.
-
-Tables:
-
-```text
+~~~text
 signals
 signal_outcomes
 ai_reviews
+entry_approvals
+ai_model_reviews
 positions
+position_evaluations
 trade_events
 persistence_meta
-```
+paper_orders
+live_orders
+control_state
+live_activation_state
+~~~
 
-Every Stage 6 `LONG / SHORT` is persisted with its original signal price,
-scores, stage, context, decision reasons, and full deterministic snapshot.
-`NO TRADE` is not inserted into the actionable signal ledger.
+Actionable signal identity is deterministic:
 
-Signal identity is deterministic:
-
-```text
+~~~text
 symbol + candle_close_time_ms + side
-```
+~~~
 
-Historical SQLite Stage 10 rows are migrated once into PostgreSQL using an
-idempotent migration marker.
+## Stage 11 — Entry risk gate and AI approval
 
-Read-only history API:
+Only deterministic Stage 6 LONG / SHORT signals reach Stage 11.
 
-```text
+Before an AI model is called, a fail-closed deterministic risk gate verifies:
+
+- side is LONG or SHORT
+- stage is IGNITION or EXPANSION
+- winning score >= 68
+- score edge >= 10
+- context balance >= 1
+- signal price exists
+- required market context exists
+- no hard structural conflict
+- signal is not stale
+
+The AI supervisor may return:
+
+~~~text
+APPROVE
+WATCH
+VETO
+~~~
+
+It may **not reverse direction**. A LONG signal cannot become SHORT and a SHORT signal cannot become LONG.
+
+Provider failures and quota failures fail closed.
+
+## Stage 11B — Multi-model supervision
+
+Default model roles are environment-configurable.
+
+Repository defaults currently resolve to:
+
+~~~text
+PRIMARY     → gemini-3.7-flash
+SHADOW      → deepseek-v4.1-flash
+ESCALATION  → gpt-5.6-sol
+TIEBREAKER  → claude-opus-5
+~~~
+
+Escalation is triggered by uncertainty, low confidence, or model disagreement and is rate-capped per 5-minute window.
+
+## Stage 12 — Position lifecycle
+
+Every open/reduced position is evaluated against fresh closed-candle market context.
+
+The deterministic Position Health Engine is the primary controller and emits:
+
+~~~text
+HOLD
+REDUCE
+CLOSE
+~~~
+
+Health uses:
+
+- 5m / 15m / 1h directional momentum
+- structure
+- taker flow
+- OI interpretation
+- market regime
+- movement stage
+- opposing direction score
+- MFE / MAE
+- hard stop state
+
+AI position review maps:
+
+~~~text
+APPROVE → HOLD
+WATCH   → REDUCE
+VETO    → CLOSE
+~~~
+
+AI cannot override a deterministic CLOSE or hard-risk CLOSE.
+
+## Stage 13 — Automatic paper trading
+
+Paper execution uses Stage 11 final APPROVE entries and Stage 12 REDUCE/CLOSE actions.
+
+Defaults:
+
+~~~text
+notional              = 500 USDT
+max open positions    = 5
+entry max age         = 15 minutes
+reduce fraction       = 50%
+fee rate              = 0.075%
+slippage              = 2 bps
+hard stop             = disabled by default
+poll interval          = 10 seconds
+~~~
+
+Paper trading is controlled by PAPER_TRADING_ENABLED.
+
+## Stage 14 — Trading Control Center
+
+Persistent control modes:
+
+~~~text
+RUN
+PAUSE_ENTRIES
+EXIT_ONLY
+~~~
+
+Semantics:
+
+- RUN permits new eligible paper entries and, when Stage 15 is fully armed, live entries
+- PAUSE_ENTRIES blocks new entries while lifecycle exits remain enabled
+- EXIT_ONLY blocks new entries while REDUCE/CLOSE remain enabled
+
+Authenticated state changes require CONTROL_API_TOKEN through X-Baba-Control-Token.
+
+Control endpoints:
+
+~~~text
+GET  /control/state
+POST /control/state
+POST /control/live-arm
+~~~
+
+## Stage 15 — Guarded live Binance Futures execution
+
+Live execution is **fail-closed** and requires multiple independent guards.
+
+Current bounded defaults:
+
+~~~text
+live notional                  = 25 USDT
+hard notional cap              = 50 USDT
+max open live positions        = 1
+leverage                       = 1x
+maximum Stage 15 leverage      = 3x
+hard protective stop           = 1.5%
+daily loss limit               = 10 USDT
+maximum recent loss streak     = 3
+minimum closed paper trades    = 20
+paper net PnL requirement      = >= 0
+entry max age                  = 10 minutes
+reduce fraction                = 50%
+maximum spread                 = 20 bps
+balance buffer                 = 1.25x
+live poll interval             = 10 seconds
+~~~
+
+A new live entry requires all of the following:
+
+- LIVE_TRADING_ENABLED=true
+- Binance API credentials configured
+- persistent live ARM state = true
+- control mode = RUN
+- configured notional within the hard cap
+- paper gate passed
+- daily loss limit not reached
+- loss-streak limit not reached
+- live-position capacity available
+- Binance account can trade
+- one-way position mode; hedge mode is rejected
+- sufficient available USDT
+- no unmanaged Binance position
+- no existing live position for the same symbol
+- spread within the configured cap
+- fresh Stage 11 APPROVE
+
+Live entries use isolated margin and bounded leverage.
+
+Immediately after a live market entry, Stage 15 submits an exchange-side protective stop. If the protective stop cannot be created, the engine attempts an emergency reduce-only market close. A failure of both protection and emergency close is marked CRITICAL_UNPROTECTED.
+
+Lifecycle exits are deliberately safer than entries:
+
+- exit orders are processed before new entries
+- live ARM is not required for exits
+- RUN mode is not required for exits
+- live exits remain available when live environment and credentials are configured
+
+Read endpoints:
+
+~~~text
+GET /live/preflight
+GET /live/summary
+GET /live/orders
+GET /live/positions
+~~~
+
+## API overview
+
+Read/inspection:
+
+~~~text
+GET /health
+GET /radar/latest
+GET /radar/candidates
+GET /radar/symbol/{symbol}
+GET /market/klines
+GET /execution/intents
 GET /history/summary
 GET /history/signals
-GET /history/signals?symbol=SOLUSDT
-GET /history/signals?side=LONG
-GET /history/signals?limit=100
-```
+GET /approval/summary
+GET /approval/reviews
+GET /approval/models
+GET /approval/models/summary
+GET /positions/open
+GET /positions/evaluations
+GET /paper/summary
+GET /paper/orders
+GET /live/preflight
+GET /live/summary
+GET /live/orders
+GET /live/positions
+GET /control/state
+~~~
+
+Authenticated control:
+
+~~~text
+POST /control/state
+POST /control/live-arm
+~~~
+
+MCP:
+
+~~~text
+POST /mcp
+~~~
+
+## Runtime
+
+Install:
+
+~~~bash
+python -m pip install -r requirements.txt
+~~~
+
+Run one scan:
+
+~~~bash
+python -m market_radar --once
+~~~
+
+Machine-readable one-shot scan:
+
+~~~bash
+python -m market_radar --once --json
+~~~
+
+Continuous scanner:
+
+~~~bash
+python -m market_radar
+~~~
+
+Continuous scanner + HTTP/MCP/control API:
+
+~~~bash
+python -m market_radar --serve
+~~~
+
+## Tests
+
+~~~bash
+python -m unittest discover -s tests -v
+~~~
+
+## Repository boundary
+
+bymarfinai/bababot-discovery remains responsible for:
+
+~~~text
+backtest
+historical research
+strategy discovery
+parameter exploration
+validation
+experimentation
+~~~
+
+bymarfinai/bababot-market-radar remains responsible for:
+
+~~~text
+live detection
+production scoring
+market context
+deterministic decisions
+AI supervision
+position lifecycle
+paper execution
+guarded live execution
+control plane
+dashboard/API/MCP
+persistent audit trail
+~~~
+
+Do not add historical strategy discovery or parameter optimization into this runtime.
+
+## Documentation authority
+
+For current behavior, use this order of authority:
+
+1. production source code
+2. automated tests
+3. current README / supporting MD contracts
+4. historical commit messages
+
+BLUEPRINT.md remains the architectural contract; source code is the final authority for exact implemented defaults.
