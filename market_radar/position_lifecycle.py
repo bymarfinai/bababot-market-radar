@@ -21,7 +21,7 @@ from .stage1_scanner import latest_closed_kline
 from .stage_classifier import classify_movement_stage
 
 
-POSITION_LIFECYCLE_VERSION = "stage12-v1"
+POSITION_LIFECYCLE_VERSION = "stage12-v2-adaptive-health"
 _processing_lock = threading.Lock()
 
 POSITION_SYSTEM_PROMPT = """You are BabaBot's AI Position Supervisor.
@@ -73,7 +73,61 @@ def _mfe_mae(
     return round(mfe, 6), round(mae, 6)
 
 
-def _health_from_snapshot(side: str, snapshot: dict[str, Any]) -> dict[str, Any]:
+def _position_memory_penalties(
+    *,
+    base_health_score: float,
+    mfe_pct: float | None,
+    mae_pct: float | None,
+    unrealized_pnl_pct: float | None,
+) -> dict[str, float]:
+    """Add trade-path memory without replacing current market health.
+
+    MAE matters only while the position is still below entry and market health
+    is already weakening. Profit protection activates only after MFE >= 1%
+    and a substantial giveback while base market health is below 70.
+    """
+    base_health = float(base_health_score)
+    mfe = max(0.0, float(mfe_pct or 0.0))
+    mae = min(0.0, float(mae_pct or 0.0))
+    current = float(unrealized_pnl_pct or 0.0)
+
+    mae_penalty = 0.0
+    if current <= 0.0 and base_health < 60.0:
+        if mae <= -1.5:
+            mae_penalty = 15.0
+        elif mae <= -1.0:
+            mae_penalty = 8.0
+
+    giveback_abs = max(0.0, mfe - current)
+    giveback_ratio = giveback_abs / mfe if mfe > 0 else 0.0
+
+    giveback_penalty = 0.0
+    if mfe >= 1.0 and base_health < 70.0:
+        if giveback_ratio >= 0.75:
+            giveback_penalty = 20.0
+        elif giveback_ratio >= 0.50:
+            giveback_penalty = 10.0
+
+    return {
+        "mfe_pct": round(mfe, 6),
+        "mae_pct": round(mae, 6),
+        "unrealized_pnl_pct": round(current, 6),
+        "giveback_abs_pct": round(giveback_abs, 6),
+        "giveback_ratio": round(giveback_ratio, 6),
+        "mae_penalty": mae_penalty,
+        "giveback_penalty": giveback_penalty,
+        "total_penalty": mae_penalty + giveback_penalty,
+    }
+
+
+def _health_from_snapshot(
+    side: str,
+    snapshot: dict[str, Any],
+    *,
+    mfe_pct: float | None = None,
+    mae_pct: float | None = None,
+    unrealized_pnl_pct: float | None = None,
+) -> dict[str, Any]:
     sign = 1.0 if side == "LONG" else -1.0
     r5 = sign * float(snapshot.get("ret_5m_pct") or 0.0)
     r15 = sign * float(snapshot.get("ret_15m_pct") or 0.0)
@@ -130,7 +184,21 @@ def _health_from_snapshot(side: str, snapshot: dict[str, Any]) -> dict[str, Any]
     stage = str(snapshot.get("stage") or "")
     stage_points = {"EXPANSION": 10, "IGNITION": 8, "EXHAUSTION": 3}.get(stage, 5)
 
-    health = float(momentum + structure_points + taker_points + oi_points + regime_points + stage_points)
+    base_health = float(
+        momentum
+        + structure_points
+        + taker_points
+        + oi_points
+        + regime_points
+        + stage_points
+    )
+    position_memory = _position_memory_penalties(
+        base_health_score=base_health,
+        mfe_pct=mfe_pct,
+        mae_pct=mae_pct,
+        unrealized_pnl_pct=unrealized_pnl_pct,
+    )
+    health = max(0.0, base_health - position_memory["total_penalty"])
 
     contradictions: list[str] = []
     if structure_conflict:
@@ -166,8 +234,10 @@ def _health_from_snapshot(side: str, snapshot: dict[str, Any]) -> dict[str, Any]
 
     return {
         "health_score": round(health, 2),
+        "base_health_score": round(base_health, 2),
         "deterministic_action": action,
         "contradictions": contradictions,
+        "position_memory": position_memory,
         "components": {
             "momentum": momentum,
             "structure": structure_points,
@@ -175,6 +245,8 @@ def _health_from_snapshot(side: str, snapshot: dict[str, Any]) -> dict[str, Any]
             "oi": oi_points,
             "regime": regime_points,
             "stage": stage_points,
+            "mae_penalty": -position_memory["mae_penalty"],
+            "giveback_penalty": -position_memory["giveback_penalty"],
         },
     }
 
@@ -333,7 +405,13 @@ def evaluate_position(
             hard_risk = True
             hard_reasons.append("hard_stop_crossed")
 
-    health = _health_from_snapshot(side, snapshot)
+    health = _health_from_snapshot(
+        side,
+        snapshot,
+        mfe_pct=mfe,
+        mae_pct=mae,
+        unrealized_pnl_pct=pnl,
+    )
     ai_view: dict[str, Any] | None = None
     if not hard_risk:
         try:
