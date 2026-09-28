@@ -20,7 +20,7 @@ Persistent host paths:
 Docker Compose runs three services:
 
 - `app`: BabaBot scanner/API/workers
-- `db`: PostgreSQL 16
+- `db`: PostgreSQL 18
 - `caddy`: reverse proxy and automatic HTTPS once `API_DOMAIN` is a real DNS name
 
 PostgreSQL is intentionally not published to the host.
