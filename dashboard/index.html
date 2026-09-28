@@ -61,7 +61,11 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .ai-provider-strip{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));border-bottom:1px solid var(--line2)}.provider-card{padding:9px 10px;border-right:1px solid var(--line2);background:#0d1014}.provider-card:last-child{border-right:0}.provider-card .line{display:flex;justify-content:space-between;gap:8px;font-size:8px;margin-top:5px}.provider-card .model-role{font-size:7px;color:var(--muted);margin-top:3px}
 .ai-grid{display:grid;grid-template-columns:1fr 1fr}.ai-grid>div:first-child{border-right:1px solid var(--line2)}.ai-summary{padding:8px 10px;border-bottom:1px solid var(--line2)}
 .bar{height:4px;min-width:65px;background:#242a31;overflow:hidden;border-radius:999px}.bar>i{display:block;height:100%;background:var(--yellow)}
-.control-wrap{display:grid;grid-template-columns:1.05fr .95fr}.control-card{padding:14px;border-right:1px solid var(--line2)}.control-card:last-child{border-right:0}.control-title{display:flex;justify-content:space-between;align-items:flex-start}.control-title h3{margin:3px 0 0;font-size:13px}.control-mode{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.notice{margin-top:8px;padding:9px;border:1px solid var(--line);background:#0f1318;color:var(--muted);font-size:9px;line-height:1.5}.live-block{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.token-row{display:flex;gap:5px;margin-top:8px}.token-row input{flex:1;min-width:0;background:#0b0e11;border:1px solid var(--line);color:var(--text);padding:7px;font:9px ui-monospace,SFMono-Regular,Menlo,monospace}.system-list{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:9px}.system-line{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.system-line span{display:block;color:var(--muted);font-size:7px;margin-bottom:3px}.system-line strong{font-size:9px}
+.control-wrap{display:grid;grid-template-columns:1.15fr .85fr}.control-card{padding:15px;border-right:1px solid var(--line2);background:#0b0e11}.control-card:last-child{border-right:0}.control-primary{background:linear-gradient(180deg,#0e1217 0%,#0b0e11 100%)}.control-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.control-title h3{margin:3px 0 0;font-size:14px}.control-mode{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.control-current{display:grid;grid-template-columns:repeat(4,1fr);margin-top:12px;border:1px solid var(--line2);background:#101419}.control-current>div{padding:10px;border-right:1px solid var(--line2)}.control-current>div:last-child{border-right:0}.control-current span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase}.control-current strong{font-size:10px}
+.mode-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.mode-card{appearance:none;text-align:left;padding:10px;border:1px solid var(--line);border-radius:4px;background:#11151a;color:var(--text);cursor:pointer;min-height:62px;transition:border-color .15s ease,background .15s ease,transform .15s ease}.mode-card:hover{border-color:#3b434d;background:#151a20}.mode-card:active{transform:translateY(1px)}.mode-card strong{display:block;font-size:10px;margin-bottom:5px}.mode-card span{display:block;font-size:7px;color:var(--muted);line-height:1.35}.mode-card.active[data-mode="RUN"]{border-color:rgba(14,203,129,.55);background:var(--greenSoft)}.mode-card.active[data-mode="PAUSE_ENTRIES"]{border-color:rgba(240,185,11,.55);background:var(--yellowSoft)}.mode-card.active[data-mode="EXIT_ONLY"]{border-color:rgba(246,70,93,.55);background:var(--redSoft)}.mode-card:disabled{opacity:.45;cursor:not-allowed}
+.control-token-box{margin-top:12px;padding:11px;border:1px solid var(--line2);border-radius:4px;background:#0e1217}.control-token-head,.live-block-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.control-token-head strong,.live-block-head strong{font-size:9px}.token-row{display:flex;gap:6px;margin-top:9px}.token-row input{flex:1;min-width:0;background:#090c10;border:1px solid var(--line);border-radius:3px;color:var(--text);padding:8px;font:9px ui-monospace,SFMono-Regular,Menlo,monospace}.token-row input:focus{outline:0;border-color:rgba(240,185,11,.55)}.control-helper{margin-top:7px;color:var(--muted);font-size:8px;line-height:1.45}.control-helper strong{color:#c7cdd4}.control-message{font-size:8px;margin-top:7px;min-height:12px}
+.notice{margin-top:8px;padding:9px;border:1px solid var(--line);background:#0f1318;color:var(--muted);font-size:9px;line-height:1.5}.live-block{margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}.system-list{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:12px}.system-line{padding:9px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.system-line span{display:block;color:var(--muted);font-size:7px;margin-bottom:4px}.system-line strong{font-size:9px}.control-legend{margin-top:12px;border:1px solid var(--line2);background:#0f1318}.control-legend>div{display:grid;grid-template-columns:12px 72px 1fr;align-items:center;gap:6px;padding:8px 9px;border-bottom:1px solid var(--line2)}.control-legend>div:last-child{border-bottom:0}.control-legend strong{font-size:8px}.control-legend small{font-size:7px;color:var(--muted)}
 .market-panel,.terminal-pane,.reason-list{scroll-behavior:smooth}
 .table-wrap:focus-visible,.reason-list:focus-visible{outline:1px solid rgba(240,185,11,.35);outline-offset:-1px}
 @supports (scrollbar-color:auto){
@@ -71,7 +75,7 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;background:#0d1014;color:var(--muted2);font-size:8px;border-top:1px solid var(--line2)}
 @media(max-width:1450px){:root{--marketW:225px;--bookW:245px;--tradeW:285px}}
 @media(max-width:1180px){.workspace{grid-template-columns:220px minmax(480px,1fr) 250px}.trade-panel{grid-column:1/-1;border-top:1px solid var(--line2)}.trade-inner{display:grid;grid-template-columns:1fr 1fr;gap:12px}.symbolbar .metric:nth-last-child(-n+2){display:none}.health-metrics{grid-template-columns:repeat(4,minmax(90px,1fr))}.ai-provider-strip{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap,.ai-overview{display:block}.ai-grid>div:first-child,.control-card,.ai-decision-card{border-right:0;border-bottom:1px solid var(--line2)}.health-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}.ai-provider-strip{grid-template-columns:1fr 1fr}.ai-reason-grid{grid-template-columns:1fr}}
+@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap,.ai-overview{display:block}.ai-grid>div:first-child,.control-card,.ai-decision-card{border-right:0;border-bottom:1px solid var(--line2)}.health-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}.ai-provider-strip{grid-template-columns:1fr 1fr}.ai-reason-grid{grid-template-columns:1fr}.control-current{grid-template-columns:1fr 1fr}.control-current>div:nth-child(2){border-right:0}.control-current>div:nth-child(-n+2){border-bottom:1px solid var(--line2)}.mode-selector{grid-template-columns:1fr}.token-row{flex-wrap:wrap}.token-row input{flex-basis:100%}}
 </style>
 </head>
 <body>
@@ -201,14 +205,45 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 
   <div class="terminal-pane" data-pane="control">
     <div class="control-wrap">
-      <div class="control-card">
-        <div class="control-title"><div><div class="panel-sub">Operational Mode</div><h3>Execution State</h3></div><span class="badge neutral">Authenticated</span></div>
-        <div class="control-mode"><button class="btn primary control-btn" data-mode="RUN">RUN</button><button class="btn secondary control-btn" data-mode="PAUSE_ENTRIES">PAUSE ENTRIES</button><button class="btn secondary control-btn" data-mode="EXIT_ONLY">EXIT ONLY</button></div>
-        <div class="notice">RUN allows eligible entries. PAUSE and EXIT ONLY keep lifecycle exits available.</div>
-        <div class="live-block"><div class="panel-sub">Stage 15 Live</div><div class="control-mode"><button id="armLive" class="btn danger">ARM LIVE</button><button id="disarmLive" class="btn secondary">DISARM LIVE</button></div><div id="livePreflight" class="notice">Loading live preflight…</div><div class="token-row"><input id="controlToken" type="password" autocomplete="off" placeholder="CONTROL_API_TOKEN"><button id="saveToken" class="btn secondary">Use token</button></div><div id="controlMessage" class="muted" style="font-size:9px;margin-top:7px">Token remains in this browser tab only.</div></div>
+      <div class="control-card control-primary">
+        <div class="control-title">
+          <div><div class="panel-sub">Operational Mode</div><h3>Trading Control</h3></div>
+          <span id="controlAuthBadge" class="badge neutral">TOKEN REQUIRED</span>
+        </div>
+
+        <div class="control-current">
+          <div><span>Current mode</span><strong id="controlModeHero">—</strong></div>
+          <div><span>New entries</span><strong id="controlEntriesHero">—</strong></div>
+          <div><span>Lifecycle exits</span><strong id="controlExitsHero">—</strong></div>
+          <div><span>Last changed</span><strong id="controlUpdatedHero">—</strong></div>
+        </div>
+
+        <div class="mode-selector">
+          <button class="mode-card control-btn" data-mode="RUN"><strong>RUN</strong><span>Allow approved new entries</span></button>
+          <button class="mode-card control-btn" data-mode="PAUSE_ENTRIES"><strong>PAUSE</strong><span>Block new entries, keep exits active</span></button>
+          <button class="mode-card control-btn" data-mode="EXIT_ONLY"><strong>EXIT ONLY</strong><span>No new entries; manage existing positions out</span></button>
+        </div>
+
+        <div class="control-token-box">
+          <div class="control-token-head"><div><div class="panel-sub">Admin Control Token</div><strong>Authorize dashboard controls</strong></div><span id="tokenStateText" class="muted">Not verified</span></div>
+          <div class="token-row">
+            <input id="controlToken" type="password" autocomplete="off" placeholder="Paste admin control token">
+            <button id="verifyToken" class="btn secondary">VERIFY</button>
+            <button id="clearToken" class="btn secondary">CLEAR</button>
+          </div>
+          <div class="control-helper">Used only to authorize RUN / PAUSE / EXIT ONLY and live-arm controls. This is <strong>not</strong> a Binance API key. Stored only in this browser tab.</div>
+          <div id="controlMessage" class="muted control-message">Enter the admin token, then verify it.</div>
+        </div>
+
+        <div class="live-block">
+          <div class="live-block-head"><div><div class="panel-sub">Stage 15 Live</div><strong>Real-order guard</strong></div><span id="liveGuardBadge" class="badge neutral">LOCKED</span></div>
+          <div class="control-mode"><button id="armLive" class="btn danger">ARM LIVE</button><button id="disarmLive" class="btn secondary">DISARM LIVE</button></div>
+          <div id="livePreflight" class="notice">Loading live preflight…</div>
+        </div>
       </div>
+
       <div class="control-card">
-        <div class="panel-title">System State</div>
+        <div class="control-title"><div><div class="panel-sub">Runtime</div><h3>System State</h3></div><span class="badge neutral">READ ONLY</span></div>
         <div class="system-list">
           <div class="system-line"><span>Control mode</span><strong id="sysMode">—</strong></div><div class="system-line"><span>Paper env</span><strong id="sysPaper">—</strong></div>
           <div class="system-line"><span>New entries</span><strong id="sysEntries">—</strong></div><div class="system-line"><span>Lifecycle exits</span><strong id="sysExits">—</strong></div>
@@ -216,6 +251,11 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
           <div class="system-line"><span>Live armed</span><strong id="sysLiveArmed">—</strong></div><div class="system-line"><span>Live entries</span><strong id="sysLive">DISABLED</strong></div>
           <div class="system-line"><span>DB backend</span><strong id="sysDb">—</strong></div><div class="system-line"><span>Signals</span><strong id="sysSignals">—</strong></div>
           <div class="system-line"><span>Trade events</span><strong id="sysEvents">—</strong></div>
+        </div>
+        <div class="control-legend">
+          <div><span class="dot ok"></span><strong>RUN</strong><small>Entries + lifecycle active</small></div>
+          <div><span class="dot"></span><strong>PAUSE</strong><small>Entries blocked; lifecycle active</small></div>
+          <div><span class="dot bad"></span><strong>EXIT ONLY</strong><small>Explicit no-entry unwind mode</small></div>
         </div>
       </div>
     </div>
@@ -233,7 +273,8 @@ var state={
   models:[],modelSummary:null,orders:[],history:[],historySummary:null,control:null,
   livePreflight:null,liveSummary:null,liveOrders:[],livePositions:[],
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
-  ticker:null,depth:null,marketSearch:'',terminalTab:'positions'
+  ticker:null,depth:null,marketSearch:'',terminalTab:'positions',
+  controlAuthVerified:false,controlBusy:false
 };
 function el(id){return document.getElementById(id)}
 function num(v,d){if(v===null||v===undefined||v==='')return '—';return Number(v).toFixed(d===undefined?2:d)}
@@ -341,8 +382,29 @@ function renderTop(){
 }
 function renderControl(){
   var c=state.control||{},pf=state.livePreflight||{};
-  var mode=c.mode||'—';
+  var mode=c.mode||'—',configured=c.control_token_configured!==false;
   el('controlChip').textContent='CONTROL '+mode;
+
+  el('controlModeHero').textContent=mode;
+  el('controlModeHero').className=mode==='RUN'?'green':(mode==='EXIT_ONLY'?'red':'amber');
+  el('controlEntriesHero').textContent=c.entries_enabled?'ENABLED':'BLOCKED';
+  el('controlEntriesHero').className=c.entries_enabled?'green':'amber';
+  el('controlExitsHero').textContent=c.lifecycle_exits_enabled?'ENABLED':'BLOCKED';
+  el('controlExitsHero').className=c.lifecycle_exits_enabled?'green':'red';
+  el('controlUpdatedHero').textContent=c.updated_at_ms?dt(c.updated_at_ms):'—';
+
+  var auth=el('controlAuthBadge'),tokenText=el('tokenStateText');
+  if(!configured){
+    auth.textContent='SERVER TOKEN MISSING';auth.className='badge short';
+    tokenText.textContent='Server not configured';tokenText.className='red';
+  }else if(state.controlAuthVerified){
+    auth.textContent='AUTH VERIFIED';auth.className='badge long';
+    tokenText.textContent='Verified for this tab';tokenText.className='green';
+  }else{
+    auth.textContent='TOKEN REQUIRED';auth.className='badge neutral';
+    tokenText.textContent='Not verified';tokenText.className='muted';
+  }
+
   el('sysMode').textContent=mode;
   el('sysPaper').textContent=c.paper_trading_env_enabled?'ENABLED':'DISABLED';
   el('sysPaper').className=c.paper_trading_env_enabled?'green':'red';
@@ -360,6 +422,11 @@ function renderControl(){
   el('sysLive').className=c.live_entry_submission_enabled?'red':'green';
   el('liveDot').className='dot '+(c.live_entry_submission_enabled?'bad':(c.live_armed?'bad':'ok'));
   el('liveChipText').textContent=c.live_entry_submission_enabled?'LIVE ACTIVE':(c.live_armed?'LIVE ARMED':'LIVE LOCKED');
+
+  var guard=el('liveGuardBadge');
+  guard.textContent=c.live_entry_submission_enabled?'LIVE ACTIVE':(c.live_armed?'ARMED':'LOCKED');
+  guard.className='badge '+(c.live_entry_submission_enabled||c.live_armed?'short':'neutral');
+
   var reasons=pf.reasons||[];
   var pg=pf.paper_gate||{};
   el('livePreflight').innerHTML=
@@ -367,7 +434,13 @@ function renderControl(){
     'Notional '+num(pf.notional_usdt,2)+' / cap '+num(pf.max_notional_usdt,2)+' · leverage '+(pf.leverage||'—')+'x · hard stop '+num(pf.hard_stop_pct,2)+'%<br>'+
     'Paper closed '+(pg.closed===undefined?'—':pg.closed)+' · paper net '+money(pg.net_pnl||0)+' · daily live '+money(pf.daily_pnl||0)+' · loss streak '+(pf.loss_streak===undefined?'—':pf.loss_streak)+
     (reasons.length?'<br><span class="amber">'+reasons.map(esc).join(' · ')+'</span>':'<br><span class="green">All guards passed.</span>');
-  document.querySelectorAll('.control-btn').forEach(function(b){b.classList.toggle('active',b.dataset.mode===mode)});
+
+  document.querySelectorAll('.control-btn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.mode===mode);
+    b.disabled=!configured||!state.controlAuthVerified||state.controlBusy;
+  });
+  el('armLive').disabled=!configured||!state.controlAuthVerified||state.controlBusy;
+  el('disarmLive').disabled=!configured||!state.controlAuthVerified||state.controlBusy;
 }
 function filteredRadar(){
   var rows=(state.radar&&state.radar.candidates||[]).slice();
@@ -674,32 +747,90 @@ async function refresh(){
     state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();await loadChart();
   }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
 }
-async function setMode(mode){
-  var token=el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
-  if(!token){el('controlMessage').textContent='Paste CONTROL_API_TOKEN first.';el('controlMessage').className='red';return}
+function controlToken(){
+  return el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
+}
+async function verifyControlToken(silent){
+  var token=controlToken();
+  if(!token){
+    state.controlAuthVerified=false;
+    sessionStorage.removeItem('baba_control_token_v1');
+    renderControl();
+    if(!silent){el('controlMessage').textContent='Paste the Admin Control Token first.';el('controlMessage').className='red control-message'}
+    return false;
+  }
+  state.controlBusy=true;renderControl();
   try{
-    var r=await fetch(API+'/control/state',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({mode:mode,note:'stage14_dashboard'})});
+    var r=await fetch(API+'/control/verify',{method:'POST',headers:{'X-Baba-Control-Token':token}});
+    var body=await r.json();
+    if(!r.ok)throw new Error(body.error||('HTTP '+r.status));
+    state.controlAuthVerified=true;
+    if(body.control)state.control=body.control;
+    sessionStorage.setItem('baba_control_token_v1',token);
+    if(!silent){el('controlMessage').textContent='Control token verified. Mode controls are unlocked for this tab.';el('controlMessage').className='green control-message'}
+    return true;
+  }catch(e){
+    state.controlAuthVerified=false;
+    sessionStorage.removeItem('baba_control_token_v1');
+    el('controlMessage').textContent='Token verification failed: '+e.message;
+    el('controlMessage').className='red control-message';
+    return false;
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
+}
+async function setMode(mode){
+  if(!state.controlAuthVerified){
+    el('controlMessage').textContent='Verify the Admin Control Token before changing mode.';
+    el('controlMessage').className='red control-message';return;
+  }
+  if(state.control&&state.control.mode===mode){
+    el('controlMessage').textContent='Already in '+mode+'. No change sent.';
+    el('controlMessage').className='muted control-message';return;
+  }
+  if(mode==='RUN'&&!confirm('Switch to RUN and allow eligible new entries? Live orders still require the separate live environment, credentials, and ARM guard.'))return;
+  var token=controlToken();
+  state.controlBusy=true;renderControl();
+  try{
+    var r=await fetch(API+'/control/state',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({mode:mode,note:'dashboard_ui4'})});
     var body=await r.json();if(!r.ok)throw new Error(body.error||('HTTP '+r.status));
-    state.control=body;renderControl();el('controlMessage').textContent='Mode changed to '+body.mode+' · '+dt(body.updated_at_ms);el('controlMessage').className='green';
-  }catch(e){el('controlMessage').textContent='Control failed: '+e.message;el('controlMessage').className='red'}
+    state.control=body;
+    el('controlMessage').textContent='Mode changed to '+body.mode+' · '+dt(body.updated_at_ms);
+    el('controlMessage').className='green control-message';
+  }catch(e){
+    if(String(e.message).indexOf('invalid_control_token')>=0){state.controlAuthVerified=false;sessionStorage.removeItem('baba_control_token_v1')}
+    el('controlMessage').textContent='Control failed: '+e.message;
+    el('controlMessage').className='red control-message';
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
 }
 async function setLiveArm(armed){
-  var token=el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
-  if(!token){el('controlMessage').textContent='Paste CONTROL_API_TOKEN first.';el('controlMessage').className='red';return}
-  if(armed && !confirm('ARM guarded LIVE trading? This can submit real Binance futures orders when every preflight guard passes.'))return;
+  if(!state.controlAuthVerified){
+    el('controlMessage').textContent='Verify the Admin Control Token before changing live guard state.';
+    el('controlMessage').className='red control-message';return;
+  }
+  var token=controlToken();
+  if(armed && !confirm('ARM guarded LIVE trading? This can submit real Binance futures orders only when every separate live preflight guard passes.'))return;
+  state.controlBusy=true;renderControl();
   try{
-    var r=await fetch(API+'/control/live-arm',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({armed:armed,note:'stage15_dashboard'})});
+    var r=await fetch(API+'/control/live-arm',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({armed:armed,note:'dashboard_ui4'})});
     var body=await r.json();
     if(!r.ok){
       if(body.preflight)state.livePreflight=body.preflight;
-      renderControl();
       throw new Error(body.error||('HTTP '+r.status));
     }
     state.control=body;
     await refresh();
-    el('controlMessage').textContent='Live state: '+(body.live_armed?'ARMED':'DISARMED');
-    el('controlMessage').className=body.live_armed?'red':'green';
-  }catch(e){el('controlMessage').textContent='Live control failed: '+e.message;el('controlMessage').className='red'}
+    el('controlMessage').textContent='Live guard: '+(body.live_armed?'ARMED':'DISARMED');
+    el('controlMessage').className=(body.live_armed?'red':'green')+' control-message';
+  }catch(e){
+    if(String(e.message).indexOf('invalid_control_token')>=0){state.controlAuthVerified=false;sessionStorage.removeItem('baba_control_token_v1')}
+    el('controlMessage').textContent='Live control failed: '+e.message;
+    el('controlMessage').className='red control-message';
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
 }
 document.querySelectorAll('.radar-filter').forEach(function(b){b.onclick=function(){document.querySelectorAll('.radar-filter').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.radarFilter=b.dataset.filter;renderRadar()}});
 if(el('marketSearch'))el('marketSearch').addEventListener('input',function(){state.marketSearch=this.value.trim();renderRadar()});
@@ -709,10 +840,20 @@ document.querySelectorAll('.interval-btn').forEach(function(b){b.onclick=functio
 document.querySelectorAll('.control-btn').forEach(function(b){b.onclick=function(){setMode(b.dataset.mode)}});
 el('armLive').onclick=function(){setLiveArm(true)};
 el('disarmLive').onclick=function(){setLiveArm(false)};
-el('saveToken').onclick=function(){var t=el('controlToken').value.trim();if(!t){sessionStorage.removeItem('baba_control_token_v1');el('controlMessage').textContent='Token cleared for this tab.';return}sessionStorage.setItem('baba_control_token_v1',t);el('controlMessage').textContent='Token loaded for this browser tab.';el('controlMessage').className='green'};
+el('verifyToken').onclick=function(){verifyControlToken(false)};
+el('clearToken').onclick=function(){
+  sessionStorage.removeItem('baba_control_token_v1');el('controlToken').value='';state.controlAuthVerified=false;
+  el('controlMessage').textContent='Control token cleared from this browser tab.';el('controlMessage').className='muted control-message';renderControl();
+};
+el('controlToken').addEventListener('input',function(){
+  state.controlAuthVerified=false;
+  el('controlMessage').textContent='Token changed. Verify it to unlock controls.';
+  el('controlMessage').className='muted control-message';renderControl();
+});
 var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)el('controlToken').value=saved;
 window.addEventListener('resize',function(){drawChart()});
-refresh();setInterval(refresh,10000);setInterval(function(){if(state.radar){el('stAge').textContent=age(state.radar.scan_finished_at_ms)}},1000);
+refresh().then(function(){if(saved)verifyControlToken(true)});
+setInterval(refresh,10000);setInterval(function(){if(state.radar){el('stAge').textContent=age(state.radar.scan_finished_at_ms)}},1000);
 })();
 </script>
 </body>
