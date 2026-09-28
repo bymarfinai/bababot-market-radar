@@ -681,6 +681,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "paper_summary": "/paper/summary",
                     "paper_orders": "/paper/orders",
                     "candles": "/market/klines",
+                    "ticker_24h": "/market/ticker",
+                    "order_book": "/market/depth",
                     "control_state": "/control/state",
                     "live_preflight": "/live/preflight",
                     "live_summary": "/live/summary",
@@ -792,6 +794,98 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 self._json(
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     {"error": "control_state_read_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/market/ticker":
+            query = parse_qs(parsed.query)
+            symbol = str(query.get("symbol", [""])[0] or "").strip().upper()
+            if not symbol:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "symbol_required"},
+                )
+                return
+            try:
+                client = BinancePublicClient(timeout=8.0, retries=2)
+                row = client.get(
+                    "/fapi/v1/ticker/24hr",
+                    {"symbol": symbol},
+                )
+                self._json(
+                    HTTPStatus.OK,
+                    {
+                        "symbol": symbol,
+                        "last_price": float(row.get("lastPrice") or 0.0),
+                        "price_change_pct": float(row.get("priceChangePercent") or 0.0),
+                        "high_price": float(row.get("highPrice") or 0.0),
+                        "low_price": float(row.get("lowPrice") or 0.0),
+                        "quote_volume": float(row.get("quoteVolume") or 0.0),
+                        "volume": float(row.get("volume") or 0.0),
+                        "open_price": float(row.get("openPrice") or 0.0),
+                    },
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"error": "ticker_fetch_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/market/depth":
+            query = parse_qs(parsed.query)
+            symbol = str(query.get("symbol", [""])[0] or "").strip().upper()
+            try:
+                limit = int(query.get("limit", ["20"])[0])
+            except ValueError:
+                limit = 20
+            if not symbol:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "symbol_required"},
+                )
+                return
+            limit = max(5, min(limit, 100))
+            try:
+                client = BinancePublicClient(timeout=8.0, retries=2)
+                raw = client.depth(symbol, limit=limit)
+                bids = [
+                    {"price": float(row[0]), "quantity": float(row[1])}
+                    for row in (raw.get("bids") or [])
+                ]
+                asks = [
+                    {"price": float(row[0]), "quantity": float(row[1])}
+                    for row in (raw.get("asks") or [])
+                ]
+                best_bid = bids[0]["price"] if bids else None
+                best_ask = asks[0]["price"] if asks else None
+                mid = (
+                    (best_bid + best_ask) / 2.0
+                    if best_bid is not None and best_ask is not None
+                    else None
+                )
+                spread_bps = (
+                    ((best_ask - best_bid) / mid) * 10_000.0
+                    if mid
+                    else None
+                )
+                self._json(
+                    HTTPStatus.OK,
+                    {
+                        "symbol": symbol,
+                        "last_update_id": raw.get("lastUpdateId"),
+                        "bids": bids,
+                        "asks": asks,
+                        "best_bid": best_bid,
+                        "best_ask": best_ask,
+                        "mid_price": mid,
+                        "spread_bps": spread_bps,
+                    },
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"error": "depth_fetch_failed", "detail": str(exc)},
                 )
             return
 
