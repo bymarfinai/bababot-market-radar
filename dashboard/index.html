@@ -367,7 +367,12 @@ function renderControl(){
   var pg=pf.paper_gate||{};
   el('livePreflight').innerHTML=
     '<strong>Preflight: '+(pf.ok?'PASS':'LOCKED')+'</strong><br>'+
-    'Notional function filteredRadar(){
+    'Notional '+num(pf.notional_usdt,2)+' / cap '+num(pf.max_notional_usdt,2)+' · leverage '+(pf.leverage||'—')+'x · hard stop '+num(pf.hard_stop_pct,2)+'%<br>'+
+    'Paper closed '+(pg.closed===undefined?'—':pg.closed)+' · paper net '+money(pg.net_pnl||0)+' · daily live '+money(pf.daily_pnl||0)+' · loss streak '+(pf.loss_streak===undefined?'—':pf.loss_streak)+
+    (reasons.length?'<br><span class="amber">'+reasons.map(esc).join(' · ')+'</span>':'<br><span class="green">All guards passed.</span>');
+  document.querySelectorAll('.control-btn').forEach(function(b){b.classList.toggle('active',b.dataset.mode===mode)});
+}
+function filteredRadar(){
   var rows=(state.radar&&state.radar.candidates||[]).slice();
   if(state.radarFilter==='ACTIONABLE')return rows.filter(function(x){return x.decision==='LONG'||x.decision==='SHORT'});
   if(state.radarFilter==='IGNITION'||state.radarFilter==='EXPANSION')return rows.filter(function(x){return x.stage===state.radarFilter});
