@@ -45,8 +45,14 @@ class Stage14ControlTests(unittest.TestCase):
                 again = get_control_state()
                 self.assertEqual(again["mode"], "PAUSE_ENTRIES")
 
+                exit_only = set_control_mode("EXIT_ONLY")
+                self.assertEqual(exit_only["mode"], "EXIT_ONLY")
+                self.assertFalse(exit_only["entries_enabled"])
+                self.assertTrue(exit_only["lifecycle_exits_enabled"])
+
                 running = set_control_mode("RUN")
                 self.assertTrue(running["entries_enabled"])
+                self.assertTrue(running["lifecycle_exits_enabled"])
 
     def test_invalid_control_mode_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
