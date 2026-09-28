@@ -998,3 +998,280 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             self._json(HTTPStatus.OK, handoff)
             return
 
+        if parsed.path == "/history/summary":
+            try:
+                self._json(HTTPStatus.OK, persistence_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "persistence_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/history/signals":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                symbol = query.get("symbol", [None])[0]
+                side = query.get("side", [None])[0]
+                rows = list_signals(
+                    limit=limit,
+                    symbol=symbol,
+                    side=side,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_history_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "signal_history_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "signals": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/approval/summary":
+            try:
+                self._json(HTTPStatus.OK, entry_approval_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_approval_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/approval/reviews":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                verdict = query.get("verdict", [None])[0]
+                rows = list_entry_approvals(
+                    limit=limit,
+                    verdict=verdict,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_approval_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_approval_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "reviews": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/approval/models/summary":
+            try:
+                self._json(HTTPStatus.OK, model_review_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "model_review_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/approval/models":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                model = query.get("model", [None])[0]
+                role = query.get("role", [None])[0]
+                rows = list_model_reviews(
+                    limit=limit,
+                    model=model,
+                    role=role,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "model_review_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "reviews": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/positions/open":
+            try:
+                rows = list_open_positions()
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "open_positions_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "positions": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/positions/evaluations":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                position_id = query.get("position_id", [None])[0]
+                rows = list_position_evaluations(
+                    position_id=position_id,
+                    limit=limit,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "position_evaluations_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "evaluations": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/paper/summary":
+            try:
+                self._json(HTTPStatus.OK, paper_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "paper_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/paper/orders":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                rows = list_paper_orders(limit=limit)
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "paper_orders_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "orders": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/radar/candidates":
+            query = parse_qs(parsed.query)
+            decision = query.get("decision", [None])[0]
+            stage = query.get("stage", [None])[0]
+            self._json(
+                HTTPStatus.OK,
+                candidates_view(
+                    scan,
+                    decision=decision,
+                    stage=stage,
+                ),
+            )
+            return
+
+        prefix = "/radar/symbol/"
+        if parsed.path.startswith(prefix):
+            symbol = parsed.path[len(prefix) :].strip()
+            if not symbol:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "symbol_required"},
+                )
+                return
+            view = symbol_view(scan, symbol)
+            if view is None:
+                self._json(
+                    HTTPStatus.NOT_FOUND,
+                    {
+                        "error": "symbol_not_found",
+                        "symbol": symbol.upper(),
+                    },
+                )
+                return
+            self._json(HTTPStatus.OK, view)
+            return
+
+        self._json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
+
+
+def serve_read_api(
+    *,
+    host: str = "0.0.0.0",
+    port: int = 8080,
+    scan_path: str = "data/latest_scan.json",
+) -> None:
+    handler = type(
+        "ConfiguredRadarReadHandler",
+        (RadarReadHandler,),
+        {"scan_path": scan_path},
+    )
+    server = ThreadingHTTPServer((host, port), handler)
+    server.serve_forever()
