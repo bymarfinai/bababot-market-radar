@@ -39,7 +39,13 @@ def _notional_usdt() -> float:
 
 
 def _max_open_positions() -> int:
-    return max(1, min(int(os.environ.get("PAPER_MAX_OPEN_POSITIONS", "5")), 50))
+    # 0 means unlimited paper positions. Positive values keep the old cap behavior.
+    return max(0, min(int(os.environ.get("PAPER_MAX_OPEN_POSITIONS", "5")), 50))
+
+
+def _at_open_capacity() -> bool:
+    limit = _max_open_positions()
+    return limit > 0 and count_open_paper_positions() >= limit
 
 
 def _entry_max_age_ms() -> int:
@@ -152,7 +158,7 @@ def sync_entry_orders() -> dict[str, int]:
     )
 
     for candidate in candidates:
-        if count_open_paper_positions() >= _max_open_positions():
+        if _at_open_capacity():
             capacity_blocked += 1
             break
 
@@ -268,7 +274,7 @@ def _execute_open(
         )
         return {"status": "SKIPPED", "reason": "approval_stale_before_fill"}
 
-    if count_open_paper_positions() >= _max_open_positions():
+    if _at_open_capacity():
         return {"status": "DEFERRED", "reason": "max_open_positions"}
 
     symbol = str(order["symbol"]).upper()
@@ -546,8 +552,19 @@ def paper_cycle() -> dict[str, Any]:
 
     lifecycle = sync_lifecycle_orders()
     exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
+    control = get_control_state()
     entries = sync_entry_orders()
-    entry_exec = execute_pending_orders(actions={"OPEN"})
+    if control.get("entries_enabled"):
+        entry_exec = execute_pending_orders(actions={"OPEN"})
+    else:
+        entry_exec = {
+            "processed": 0,
+            "filled": 0,
+            "skipped": 0,
+            "deferred": 0,
+            "errors": [],
+            "fills": [],
+        }
     return {
         "status": "COMPLETE",
         "lifecycle_queued": lifecycle["queued"],
