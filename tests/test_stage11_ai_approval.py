@@ -100,29 +100,64 @@ class Stage11ApprovalTests(unittest.TestCase):
         ai_call.assert_not_called()
         save.assert_called_once()
 
+    @patch("market_radar.ai_approval.save_model_review")
+    @patch("market_radar.ai_approval.run_primary_fallback")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_ai_error_fails_closed(self, ai_call, save):
+    def test_ai_error_uses_degraded_consensus(
+        self, ai_call, save, fallback, save_model
+    ):
         ai_call.side_effect = TimeoutError("provider timeout")
+        fallback.return_value = {
+            "final_verdict": "WATCH",
+            "fallback_reason": "no_dual_approve",
+        }
         result = review_signal(good_signal(), now_ms=1_300_000)
         self.assertEqual(result["risk_verdict"], "PASS")
-        self.assertEqual(result["ai_verdict"], "ERROR")
-        self.assertEqual(result["final_verdict"], "VETO")
+        self.assertEqual(result["ai_verdict"], "PRIMARY_FALLBACK")
+        self.assertEqual(result["final_verdict"], "WATCH")
+        fallback.assert_called_once()
+        save_model.assert_called_once()
         save.assert_called_once()
 
+    @patch("market_radar.ai_approval.save_model_review")
+    @patch("market_radar.ai_approval.run_primary_fallback")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_only_ai_approve_after_risk_pass_approves(self, ai_call, save):
+    def test_ai_error_can_approve_only_via_fallback_consensus(
+        self, ai_call, save, fallback, save_model
+    ):
+        ai_call.side_effect = TimeoutError("provider timeout")
+        fallback.return_value = {
+            "final_verdict": "APPROVE",
+            "fallback_reason": "dual_approve",
+        }
+        result = review_signal(good_signal(), now_ms=1_300_000)
+        self.assertEqual(result["ai_verdict"], "PRIMARY_FALLBACK")
+        self.assertEqual(result["final_verdict"], "APPROVE")
+        fallback.assert_called_once()
+
+    @patch("market_radar.ai_approval.run_stage11b")
+    @patch("market_radar.ai_approval.save_entry_approval")
+    @patch("market_radar.ai_approval.call_ai_entry_review")
+    def test_only_ai_approve_after_risk_pass_approves(
+        self, ai_call, save, stage11b
+    ):
         ai_call.return_value = {
             "verdict": "APPROVE",
             "confidence": 0.9,
             "reasons": ["context aligned"],
             "risk_flags": [],
         }
+        stage11b.return_value = {
+            "final_verdict": "APPROVE",
+            "escalated": False,
+        }
         result = review_signal(good_signal(), now_ms=1_300_000)
         self.assertEqual(result["risk_verdict"], "PASS")
         self.assertEqual(result["ai_verdict"], "APPROVE")
         self.assertEqual(result["final_verdict"], "APPROVE")
+        stage11b.assert_called_once()
         save.assert_called_once()
 
 
