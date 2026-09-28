@@ -1,16 +1,35 @@
 {$API_DOMAIN} {
-    encode zstd gzip
+	encode zstd gzip
 
-    reverse_proxy app:8080
+	reverse_proxy app:8080
 
-    header {
-        -Server
-        X-Content-Type-Options "nosniff"
-        Referrer-Policy "no-referrer"
-    }
+	header {
+		-Server
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+	}
 
-    log {
-        output stdout
-        format console
-    }
+	log {
+		output stdout
+		format console
+	}
+}
+
+{$DASHBOARD_DOMAIN} {
+	encode zstd gzip
+
+	root * /srv/dashboard
+	try_files {path} /index.html
+	file_server
+
+	header {
+		-Server
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+	}
+
+	log {
+		output stdout
+		format console
+	}
 }

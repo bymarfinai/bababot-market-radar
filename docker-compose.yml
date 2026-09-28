@@ -57,12 +57,14 @@ services:
     restart: unless-stopped
     environment:
       API_DOMAIN: ${API_DOMAIN:-:80}
+      DASHBOARD_DOMAIN: ${DASHBOARD_DOMAIN:-radar.43-153-193-103.sslip.io}
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./dashboard:/srv/dashboard:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

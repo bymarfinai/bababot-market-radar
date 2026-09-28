@@ -1,9 +1,13 @@
 .git
 .gitignore
 .env
+.env.*
+!.env.example
 .venv
 __pycache__
 *.pyc
 .pytest_cache
+*.pre-dashboard
+*.dump
 data/*.json
 data/*.tmp

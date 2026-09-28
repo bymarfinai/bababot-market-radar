@@ -3,6 +3,10 @@ __pycache__/
 .pytest_cache/
 .venv/
 .env
+.env.*
+!.env.example
+*.pre-dashboard
+*.dump
 .DS_Store
 data/*.json
 data/*.tmp
