@@ -460,6 +460,8 @@ def evaluate_position(
         "snapshot_json": json.dumps(
             {
                 **snapshot,
+                "base_health_score": health["base_health_score"],
+                "position_memory": health["position_memory"],
                 "health_components": health["components"],
             },
             separators=(",", ":"),
