@@ -52,7 +52,14 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .trade-inner{padding:12px}.trade-symbol{display:flex;justify-content:space-between;align-items:flex-start}.trade-symbol h3{margin:0;font-size:17px}.big-price{font-size:24px;font-weight:650;margin-top:5px}.score-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:12px}.score-box{padding:10px;background:#11151a}.score-box:first-child{border-right:1px solid var(--line)}.score-box span{display:block;font-size:8px;color:var(--muted);margin-bottom:5px}.score-box strong{font-size:20px}.kv{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:10px}.kv div{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.kv span{display:block;font-size:7px;color:var(--muted);margin-bottom:4px}.kv strong{display:block;font-size:9px;overflow:hidden;text-overflow:ellipsis}.reason-list{margin-top:12px;border-top:1px solid var(--line);padding:9px 3px 0 0;max-height:210px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}.reason-title{font-size:9px;color:var(--muted);margin-bottom:5px}.reason{padding:6px 0;border-bottom:1px solid var(--line2);font-size:9px;line-height:1.4}
 .bottom-terminal{background:var(--bg)}.terminal-tabs{height:42px;display:flex;align-items:center;gap:18px;padding:0 12px;border-bottom:1px solid var(--line2);background:#0d1014;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}.terminal-tabs::-webkit-scrollbar{display:none}.terminal-tab{height:42px;border:0;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;position:relative;white-space:nowrap}.terminal-tab.active{color:var(--text)}.terminal-tab.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--yellow)}
 .terminal-pane{display:none}.terminal-pane.active{display:block}.terminal-pane .table-wrap{max-height:280px;overflow-y:auto;overflow-x:auto}.pane-meta{padding:7px 10px;color:var(--muted);font-size:9px;border-bottom:1px solid var(--line2)}.cell-main{font-size:9px;color:#d6dbe2}.cell-sub{margin-top:2px;font-size:7px;color:var(--muted);line-height:1.25}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.reason-cell{max-width:220px;overflow:hidden;text-overflow:ellipsis}.score-pair{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px}.ctx-pill{display:inline-flex;min-width:22px;justify-content:center;padding:2px 5px;border-radius:999px;background:#151a20;border:1px solid var(--line);font-size:8px;color:#c7cdd5}.exec-note{font-size:7px;color:var(--muted);margin-top:2px}
-.ai-grid{display:grid;grid-template-columns:1fr 1fr}.ai-grid>div:first-child{border-right:1px solid var(--line2)}.ai-summary{padding:8px 10px;border-bottom:1px solid var(--line2)}.provider-card{padding:7px 9px;border-bottom:1px solid var(--line2);background:#0d1014}.provider-card .line{display:flex;justify-content:space-between;font-size:8px;margin-top:3px}
+.health-inspector{padding:12px;border-bottom:1px solid var(--line2);background:linear-gradient(180deg,#0f1318 0%,#0b0e11 100%)}
+.health-inspector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.health-inspector-head h3{font-size:12px;margin:2px 0 0}.health-version{font:8px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);padding:4px 6px;border:1px solid var(--line);border-radius:3px}
+.health-metrics{display:grid;grid-template-columns:repeat(7,minmax(88px,1fr));gap:6px}.health-card{padding:8px 9px;background:#12161b;border:1px solid var(--line2);border-radius:4px;min-width:0}.health-card span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}.health-card strong{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.health-card small{display:block;margin-top:3px;color:var(--muted2);font-size:7px}
+.health-flow{margin-top:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:8px;color:var(--muted)}.health-flow .arrow{color:var(--muted2)}.health-empty{padding:8px 0;color:var(--muted);font-size:9px}
+.ai-risk-shell{background:#0b0e11}.ai-overview{display:grid;grid-template-columns:minmax(360px,1.3fr) minmax(320px,.7fr);border-bottom:1px solid var(--line2)}.ai-decision-card{padding:14px 16px;border-right:1px solid var(--line2);min-height:160px;background:linear-gradient(135deg,#11161b,#0b0e11 66%)}.ai-decision-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.ai-decision-symbol{font-size:15px;font-weight:800}.ai-decision-meta{font-size:8px;color:var(--muted);margin-top:4px}.ai-verdict-big{font-size:22px;font-weight:850;letter-spacing:.01em}.ai-verdict-big.long,.ai-verdict-big.short,.ai-verdict-big.watch{background:transparent}.ai-confidence{margin-top:3px;font-size:8px;color:var(--muted);text-align:right}.ai-reason-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.ai-reason-box{padding:8px;border:1px solid var(--line2);background:rgba(24,26,32,.55);border-radius:4px;min-height:58px}.ai-reason-box span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase}.ai-reason-box div{font-size:8px;line-height:1.45;color:#c9ced6}.ai-risk-flag{display:inline-flex;margin:0 4px 4px 0;padding:3px 5px;border-radius:3px;color:var(--yellow2);background:var(--yellowSoft);font-size:7px}
+.ai-stat-grid{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-content:start}.ai-stat-card{padding:10px;border:1px solid var(--line2);background:#101419;border-radius:4px}.ai-stat-card span{font-size:7px;color:var(--muted);display:block;margin-bottom:5px}.ai-stat-card strong{font-size:15px}.ai-stat-card small{font-size:7px;color:var(--muted2);margin-left:4px}
+.ai-provider-strip{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));border-bottom:1px solid var(--line2)}.provider-card{padding:9px 10px;border-right:1px solid var(--line2);background:#0d1014}.provider-card:last-child{border-right:0}.provider-card .line{display:flex;justify-content:space-between;gap:8px;font-size:8px;margin-top:5px}.provider-card .model-role{font-size:7px;color:var(--muted);margin-top:3px}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr}.ai-grid>div:first-child{border-right:1px solid var(--line2)}.ai-summary{padding:8px 10px;border-bottom:1px solid var(--line2)}
 .bar{height:4px;min-width:65px;background:#242a31;overflow:hidden;border-radius:999px}.bar>i{display:block;height:100%;background:var(--yellow)}
 .control-wrap{display:grid;grid-template-columns:1.05fr .95fr}.control-card{padding:14px;border-right:1px solid var(--line2)}.control-card:last-child{border-right:0}.control-title{display:flex;justify-content:space-between;align-items:flex-start}.control-title h3{margin:3px 0 0;font-size:13px}.control-mode{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.notice{margin-top:8px;padding:9px;border:1px solid var(--line);background:#0f1318;color:var(--muted);font-size:9px;line-height:1.5}.live-block{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.token-row{display:flex;gap:5px;margin-top:8px}.token-row input{flex:1;min-width:0;background:#0b0e11;border:1px solid var(--line);color:var(--text);padding:7px;font:9px ui-monospace,SFMono-Regular,Menlo,monospace}.system-list{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:9px}.system-line{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.system-line span{display:block;color:var(--muted);font-size:7px;margin-bottom:3px}.system-line strong{font-size:9px}
 .market-panel,.terminal-pane,.reason-list{scroll-behavior:smooth}
@@ -63,8 +70,8 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .empty{padding:25px 14px!important;text-align:center!important;color:var(--muted)!important;white-space:normal!important}.empty strong{display:block;color:#c7ccd4;font-size:10px;margin-bottom:4px}.empty span{font-size:8px;color:var(--muted2)}
 footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;background:#0d1014;color:var(--muted2);font-size:8px;border-top:1px solid var(--line2)}
 @media(max-width:1450px){:root{--marketW:225px;--bookW:245px;--tradeW:285px}}
-@media(max-width:1180px){.workspace{grid-template-columns:220px minmax(480px,1fr) 250px}.trade-panel{grid-column:1/-1;border-top:1px solid var(--line2)}.trade-inner{display:grid;grid-template-columns:1fr 1fr;gap:12px}.symbolbar .metric:nth-last-child(-n+2){display:none}}
-@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap{display:block}.ai-grid>div:first-child,.control-card{border-right:0;border-bottom:1px solid var(--line2)}}
+@media(max-width:1180px){.workspace{grid-template-columns:220px minmax(480px,1fr) 250px}.trade-panel{grid-column:1/-1;border-top:1px solid var(--line2)}.trade-inner{display:grid;grid-template-columns:1fr 1fr;gap:12px}.symbolbar .metric:nth-last-child(-n+2){display:none}.health-metrics{grid-template-columns:repeat(4,minmax(90px,1fr))}.ai-provider-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap,.ai-overview{display:block}.ai-grid>div:first-child,.control-card,.ai-decision-card{border-right:0;border-bottom:1px solid var(--line2)}.health-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}.ai-provider-strip{grid-template-columns:1fr 1fr}.ai-reason-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -159,7 +166,8 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   </div>
 
   <div class="terminal-pane active" data-pane="positions">
-    <div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark Price</th><th>PnL %</th><th>Health</th><th>MFE</th><th>MAE</th><th>Action</th><th>AI</th></tr></thead><tbody id="positionRows"><tr><td colspan="11" class="empty"><strong>Loading positions</strong><span>Lifecycle state appears here.</span></td></tr></tbody></table></div>
+    <div id="healthInspector" class="health-inspector"><div class="health-empty">Health V2 inspector waits for an open paper position.</div></div>
+    <div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark</th><th>PnL</th><th>Base</th><th>Adaptive</th><th>MFE</th><th>MAE</th><th>Giveback</th><th>Penalty</th><th>Deterministic</th><th>AI</th><th>Final</th></tr></thead><tbody id="positionRows"><tr><td colspan="15" class="empty"><strong>Loading positions</strong><span>Health V2 lifecycle state appears here.</span></td></tr></tbody></table></div>
   </div>
 
   <div class="terminal-pane" data-pane="openorders">
@@ -178,10 +186,16 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   </div>
 
   <div class="terminal-pane" data-pane="ai">
-    <div class="pane-meta"><span id="approvalCounts">—</span></div>
-    <div class="ai-grid">
-      <div><div class="panel-head"><div class="panel-title">Entry Approvals</div></div><div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Risk</th><th>Final</th><th>Confidence</th><th>Model</th></tr></thead><tbody id="approvalRows"></tbody></table></div></div>
-      <div><div class="panel-head"><div class="panel-title">Multi-model Audit</div></div><div id="providerSummary" class="ai-summary"></div><div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Role</th><th>Model</th><th>Verdict</th><th>Conf.</th><th>Latency</th></tr></thead><tbody id="modelRows"></tbody></table></div></div>
+    <div class="ai-risk-shell">
+      <div class="ai-overview">
+        <div id="aiDecisionCard" class="ai-decision-card"><div class="health-empty">Waiting for AI entry review.</div></div>
+        <div id="aiStatGrid" class="ai-stat-grid"></div>
+      </div>
+      <div id="providerSummary" class="ai-provider-strip"></div>
+      <div class="ai-grid">
+        <div><div class="panel-head"><div><div class="panel-title">Recent Entry Decisions</div><div class="panel-sub">Stage 11 final gate</div></div></div><div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Gate</th><th>Decision</th><th>Confidence</th><th>Model</th></tr></thead><tbody id="approvalRows"></tbody></table></div></div>
+        <div><div class="panel-head"><div><div class="panel-title">Model Audit</div><div class="panel-sub">Recent primary / shadow / escalation calls</div></div></div><div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Role</th><th>Model</th><th>Verdict</th><th>Conf.</th><th>Latency</th></tr></thead><tbody id="modelRows"></tbody></table></div></div>
+      </div>
     </div>
   </div>
 
@@ -246,6 +260,19 @@ function latestEvalMap(){
     if(!m[id]||Number(x.candle_close_time_ms)>Number(m[id].candle_close_time_ms))m[id]=x;
   });
   return m;
+}
+function healthView(e){
+  e=e||{};
+  var snap=e.snapshot||{},comp=snap.health_components||{},mem=snap.position_memory||{};
+  var adaptive=e.health_score===null||e.health_score===undefined?null:Number(e.health_score);
+  var maePenalty=mem.mae_penalty!==undefined?Number(mem.mae_penalty):Math.max(0,-Number(comp.mae_penalty||0));
+  var givebackPenalty=mem.giveback_penalty!==undefined?Number(mem.giveback_penalty):Math.max(0,-Number(comp.giveback_penalty||0));
+  var totalPenalty=mem.total_penalty!==undefined?Number(mem.total_penalty):maePenalty+givebackPenalty;
+  var base=snap.base_health_score!==undefined?Number(snap.base_health_score):(adaptive===null?null:adaptive+totalPenalty);
+  var mfe=Number(e.mfe_pct||0),current=Number(e.unrealized_pnl_pct||0);
+  var givebackAbs=mem.giveback_abs_pct!==undefined?Number(mem.giveback_abs_pct):Math.max(0,mfe-current);
+  var givebackRatio=mem.giveback_ratio!==undefined?Number(mem.giveback_ratio):(mfe>0?givebackAbs/mfe:0);
+  return {base:base,adaptive:adaptive,maePenalty:maePenalty,givebackPenalty:givebackPenalty,totalPenalty:totalPenalty,givebackAbs:givebackAbs,givebackRatio:givebackRatio};
 }
 function radarMap(){
   var m={};(state.radar&&state.radar.candidates||[]).forEach(function(x){m[x.symbol]=x});return m;
@@ -438,35 +465,91 @@ function showTerminalTab(name){
   document.querySelectorAll('.terminal-tab').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name)});
   document.querySelectorAll('.terminal-pane').forEach(function(p){p.classList.toggle('active',p.dataset.pane===name)});
 }
+function renderHealthInspector(){
+  var map=latestEvalMap();
+  var p=state.positions.find(function(x){return x.symbol===state.selectedSymbol})||state.positions[0]||null;
+  var box=el('healthInspector');
+  if(!box)return;
+  if(!p){
+    box.innerHTML='<div class="health-empty"><strong>No open positions.</strong> Health V2 inspector will populate after the next approved paper entry.</div>';
+    return;
+  }
+  var e=map[p.position_id]||{},h=healthView(e);
+  var penaltyDetail='MAE -'+num(h.maePenalty,0)+' · GB -'+num(h.givebackPenalty,0);
+  box.innerHTML=
+    '<div class="health-inspector-head"><div><div class="panel-sub">Adaptive Position Health</div><h3>'+esc(p.symbol)+' '+badge(p.side)+'</h3></div><div class="health-version">'+esc(e.lifecycle_version||'—')+'</div></div>'+
+    '<div class="health-metrics">'+
+      '<div class="health-card"><span>Base Health</span><strong>'+num(h.base,0)+'</strong><small>market context now</small></div>'+
+      '<div class="health-card"><span>Adaptive Health</span><strong class="'+(Number(h.adaptive||0)>=55?'green':Number(h.adaptive||0)>=35?'amber':'red')+'">'+num(h.adaptive,0)+'</strong><small>after position memory</small></div>'+
+      '<div class="health-card"><span>Current PnL</span><strong class="'+(Number(e.unrealized_pnl_pct||0)>=0?'green':'red')+'">'+pct(e.unrealized_pnl_pct)+'</strong><small>mark vs entry</small></div>'+
+      '<div class="health-card"><span>MFE / MAE</span><strong><span class="green">'+pct(e.mfe_pct)+'</span> / <span class="red">'+pct(e.mae_pct)+'</span></strong><small>trade path</small></div>'+
+      '<div class="health-card"><span>Giveback</span><strong>'+pct(h.givebackAbs)+'</strong><small>'+num(h.givebackRatio*100,0)+'% of MFE</small></div>'+
+      '<div class="health-card"><span>Penalty</span><strong class="'+(h.totalPenalty>0?'amber':'muted')+'">-'+num(h.totalPenalty,0)+'</strong><small>'+penaltyDetail+'</small></div>'+
+      '<div class="health-card"><span>Final Action</span><strong>'+badge(e.final_action)+'</strong><small>after AI arbitration</small></div>'+
+    '</div>'+
+    '<div class="health-flow"><span>Base '+num(h.base,0)+'</span><span class="arrow">→</span><span>'+penaltyDetail+'</span><span class="arrow">→</span><span>Adaptive '+num(h.adaptive,0)+'</span><span class="arrow">→</span><span>Det '+(e.deterministic_action||'—')+'</span><span class="arrow">→</span><span>AI '+(e.ai_action||'—')+'</span><span class="arrow">→</span><strong>Final '+(e.final_action||'—')+'</strong></div>';
+}
 function renderPositions(){
   var map=latestEvalMap();
   el('positionsMeta').textContent=state.positions.length+' monitored';
   el('positionRows').innerHTML=state.positions.length?state.positions.map(function(p){
-    var e=map[p.position_id]||{};
-    var health=e.health_score;
-    var hp=health===undefined?0:Math.max(0,Math.min(100,Number(health)));
+    var e=map[p.position_id]||{},h=healthView(e);
+    var hp=h.adaptive===null?0:Math.max(0,Math.min(100,Number(h.adaptive)));
     return '<tr class="click pos-row" data-symbol="'+esc(p.symbol)+'">'+
-      '<td><strong>'+esc(p.symbol)+'</strong></td><td>'+badge(p.side)+'</td><td>'+esc(p.status||'—')+'</td>'+
+      '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">'+esc(e.lifecycle_version||'—')+'</div></td><td>'+badge(p.side)+'</td><td>'+esc(p.status||'—')+'</td>'+
       '<td>'+px(p.entry_price)+'</td><td>'+px(e.current_price)+'</td><td class="'+(Number(e.unrealized_pnl_pct||0)>=0?'green':'red')+'">'+pct(e.unrealized_pnl_pct)+'</td>'+
-      '<td><div style="display:flex;align-items:center;gap:6px"><span>'+num(health,0)+'</span><div class="bar"><i style="width:'+hp+'%"></i></div></div></td>'+
-      '<td class="green">'+pct(e.mfe_pct)+'</td><td class="red">'+pct(e.mae_pct)+'</td><td>'+badge(e.final_action)+'</td><td>'+badge(e.ai_action)+'</td></tr>';
-  }).join(''):'<tr><td colspan="11" class="empty"><strong>No open positions</strong><span>New positions appear here after an approved paper or live entry.</span></td></tr>';
+      '<td>'+num(h.base,0)+'</td>'+
+      '<td><div style="display:flex;align-items:center;gap:6px"><span>'+num(h.adaptive,0)+'</span><div class="bar"><i style="width:'+hp+'%"></i></div></div></td>'+
+      '<td class="green">'+pct(e.mfe_pct)+'</td><td class="red">'+pct(e.mae_pct)+'</td>'+
+      '<td>'+pct(h.givebackAbs)+'<div class="cell-sub">'+num(h.givebackRatio*100,0)+'% MFE</div></td>'+
+      '<td class="'+(h.totalPenalty>0?'amber':'muted')+'">-'+num(h.totalPenalty,0)+'<div class="cell-sub">MAE '+num(h.maePenalty,0)+' / GB '+num(h.givebackPenalty,0)+'</div></td>'+
+      '<td>'+badge(e.deterministic_action)+'</td><td>'+badge(e.ai_action)+'</td><td>'+badge(e.final_action)+'</td></tr>';
+  }).join(''):'<tr><td colspan="15" class="empty"><strong>No open positions</strong><span>New positions appear here after an approved paper or live entry.</span></td></tr>';
   document.querySelectorAll('.pos-row').forEach(function(tr){tr.onclick=function(){selectSymbol(tr.dataset.symbol)}});
+  renderHealthInspector();
 }
 function renderApprovals(){
-  var a=state.approvalSummary||{};
-  el('approvalCounts').textContent='A '+(a.approve_count||0)+' · W '+(a.watch_count||0)+' · V '+(a.veto_count||0);
-  el('aiMeta').textContent=(a.total_reviews||0)+' reviews';
+  var a=state.approvalSummary||{},total=Number(a.total_reviews||0);
+  var approve=Number(a.approve_count||0),watch=Number(a.watch_count||0),veto=Number(a.veto_count||0);
+  el('aiMeta').textContent=total+' reviews';
+  var latest=state.approvals[0]||null;
+  if(latest){
+    var raw=latest.raw||{},ai=raw.ai||{},reasons=latest.ai_reasons||ai.reasons||[],flags=ai.risk_flags||[];
+    var verdict=latest.final_verdict||latest.ai_verdict||latest.risk_verdict||'—';
+    el('aiDecisionCard').innerHTML=
+      '<div class="ai-decision-top"><div><div class="panel-sub">Latest AI Entry Decision</div><div class="ai-decision-symbol">'+esc(latest.symbol)+' '+badge(latest.side)+'</div><div class="ai-decision-meta">'+esc(latest.stage||'—')+' · '+tm(latest.reviewed_at_ms)+' · '+esc(latest.model||'—')+'</div></div>'+
+      '<div><div class="ai-verdict-big '+clsVerdict(verdict)+'">'+esc(verdict)+'</div><div class="ai-confidence">'+num(Number(latest.confidence||0)*100,0)+'% confidence</div></div></div>'+
+      '<div class="ai-reason-grid"><div class="ai-reason-box"><span>Decision Drivers</span><div>'+(reasons.length?reasons.slice(0,3).map(function(r){return '• '+esc(r)}).join('<br>'):'No model reasons recorded.')+'</div></div>'+
+      '<div class="ai-reason-box"><span>Risk Flags</span><div>'+(flags.length?flags.slice(0,5).map(function(r){return '<span class="ai-risk-flag">'+esc(r)+'</span>'}).join(''):'<span class="green">No explicit AI risk flags</span>')+'</div></div></div>';
+  }else{
+    el('aiDecisionCard').innerHTML='<div class="health-empty">Waiting for AI entry review.</div>';
+  }
+  var approvePct=total?approve/total*100:0,watchPct=total?watch/total*100:0,vetoPct=total?veto/total*100:0;
+  el('aiStatGrid').innerHTML=
+    '<div class="ai-stat-card"><span>APPROVE</span><strong class="green">'+approve+'</strong><small>'+num(approvePct,1)+'%</small></div>'+
+    '<div class="ai-stat-card"><span>WATCH</span><strong class="amber">'+watch+'</strong><small>'+num(watchPct,1)+'%</small></div>'+
+    '<div class="ai-stat-card"><span>VETO</span><strong class="red">'+veto+'</strong><small>'+num(vetoPct,1)+'%</small></div>'+
+    '<div class="ai-stat-card"><span>TOTAL REVIEWS</span><strong>'+total+'</strong><small>Stage 11</small></div>';
+
   el('approvalRows').innerHTML=state.approvals.length?state.approvals.slice(0,60).map(function(x){
     return '<tr><td>'+tm(x.reviewed_at_ms)+'</td><td><strong>'+esc(x.symbol)+'</strong></td><td>'+badge(x.side)+'</td><td>'+badge(x.risk_verdict)+'</td>'+
       '<td>'+badge(x.final_verdict)+'</td><td>'+num(Number(x.confidence||0)*100,0)+'%</td><td>'+esc(x.model||'—')+'</td></tr>';
   }).join(''):'<tr><td colspan="7" class="empty"><strong>No AI reviews yet</strong><span>Reviews appear after a deterministic LONG/SHORT signal reaches Stage 11.</span></td></tr>';
 
   var grouped={};
-  state.models.forEach(function(x){var key=x.model||'unknown';if(!grouped[key])grouped[key]={ok:0,err:0,roles:{}};if(x.status==='OK')grouped[key].ok++;else grouped[key].err++;grouped[key].roles[x.role]=true});
-  var keys=Object.keys(grouped).slice(0,4);
-  el('providerSummary').innerHTML=keys.length?keys.map(function(k){var g=grouped[k];return '<div class="provider-card"><strong style="font-size:10px">'+esc(k)+'</strong>'+
-    '<div class="line"><span class="muted">'+esc(Object.keys(g.roles).join(', '))+'</span><span><span class="green">'+g.ok+' OK</span> · <span class="'+(g.err?'red':'muted')+'">'+g.err+' ERR</span></span></div></div>'}).join(''):'<div class="muted" style="font-size:10px;margin-bottom:8px">No model data.</div>';
+  state.models.forEach(function(x){
+    var key=x.model||'unknown';
+    if(!grouped[key])grouped[key]={ok:0,err:0,roles:{}};
+    if(x.status==='OK')grouped[key].ok++;else grouped[key].err++;
+    grouped[key].roles[x.role]=true;
+  });
+  var keys=Object.keys(grouped).sort(function(a,b){return (grouped[b].ok+grouped[b].err)-(grouped[a].ok+grouped[a].err)}).slice(0,4);
+  el('providerSummary').innerHTML=keys.length?keys.map(function(k){
+    var g=grouped[k],calls=g.ok+g.err,okPct=calls?g.ok/calls*100:0;
+    return '<div class="provider-card"><strong style="font-size:10px">'+esc(k)+'</strong><div class="model-role">'+esc(Object.keys(g.roles).join(' · '))+'</div>'+
+      '<div class="line"><span>'+calls+' recent calls</span><span class="'+(g.err?'amber':'green')+'">'+num(okPct,0)+'% OK</span></div></div>';
+  }).join(''):'<div class="muted" style="padding:10px">No model audit data.</div>';
+
   el('modelRows').innerHTML=state.models.length?state.models.slice(0,80).map(function(x){
     return '<tr><td>'+tm(x.reviewed_at_ms)+'</td><td>'+esc(x.symbol)+'</td><td>'+esc(x.role)+'</td><td>'+esc(x.model)+'</td><td>'+badge(x.verdict||x.status)+'</td>'+
       '<td>'+(x.confidence===null||x.confidence===undefined?'—':num(Number(x.confidence)*100,0)+'%')+'</td><td>'+((x.latency_ms||0)/1000).toFixed(1)+'s</td></tr>';
@@ -553,7 +636,7 @@ async function loadChart(){
   if(d)state.depth=d;
   drawChart();renderTicker();renderOrderBook();
 }
-async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;renderSelected();renderTicker();renderOrderBook();await loadChart()}
+async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();await loadChart()}
 async function refresh(){
   try{
     var res=await Promise.allSettled([
