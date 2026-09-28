@@ -9,23 +9,23 @@ from typing import Any
 
 
 from .ai_provider import (
-    AIProviderQuotaError,
     active_model,
     call_entry_review,
     escalation_model,
     escalation_provider,
     parse_provider_response,
+    primary_provider,
     provider_name,
     shadow_model,
     shadow_provider,
     tiebreaker_model,
     tiebreaker_provider,
 )
-from .multi_model import run_stage11b
-from .persistence import get_pending_entry_signals, save_entry_approval
+from .multi_model import run_primary_fallback, run_stage11b
+from .persistence import get_pending_entry_signals, save_entry_approval, save_model_review
 
 
-AI_APPROVAL_VERSION = "stage11-v1"
+AI_APPROVAL_VERSION = "stage11-v2-primary-fallback"
 RISK_GATE_VERSION = "stage11-risk-v1"
 PROMPT_VERSION = "stage11-entry-review-v1"
 
@@ -240,60 +240,95 @@ def review_signal(
                 "model": active_model(),
                 "latency_ms": primary_latency_ms,
             }
-            stage11b = run_stage11b(
+            try:
+                stage11b = run_stage11b(
+                    signal_id=signal["signal_id"],
+                    reviewed_at_ms=reviewed_at_ms,
+                    payload=_signal_for_ai(signal),
+                    system_prompt=SYSTEM_PROMPT,
+                    primary=primary,
+                )
+            except Exception as stage11b_exc:
+                result = {
+                    "signal_id": signal["signal_id"],
+                    "risk_verdict": "PASS",
+                    "ai_verdict": ai["verdict"],
+                    "final_verdict": "VETO",
+                    "confidence": ai["confidence"],
+                    "model": active_model(),
+                    "risk_reasons": [],
+                    "ai_reasons": ["multi_model_supervision_failed"],
+                    "risk": risk,
+                    "ai": ai,
+                    "stage11b": {
+                        "status": "ERROR",
+                        "error_type": type(stage11b_exc).__name__,
+                        "error": str(stage11b_exc)[:500],
+                    },
+                    "ai_latency_ms": primary_latency_ms,
+                }
+            else:
+                result = {
+                    "signal_id": signal["signal_id"],
+                    "risk_verdict": "PASS",
+                    "ai_verdict": ai["verdict"],
+                    "final_verdict": stage11b["final_verdict"],
+                    "confidence": ai["confidence"],
+                    "model": active_model(),
+                    "risk_reasons": [],
+                    "ai_reasons": ai["reasons"],
+                    "risk": risk,
+                    "ai": ai,
+                    "stage11b": stage11b,
+                    "ai_latency_ms": primary_latency_ms,
+                }
+        except Exception as exc:
+            primary_latency_ms = int((time.monotonic() - started) * 1000)
+            primary_error = {
+                "status": "ERROR",
+                "provider": primary_provider(),
+                "model": active_model(),
+                "error_type": type(exc).__name__,
+                "error": str(exc)[:500],
+                "latency_ms": primary_latency_ms,
+            }
+            save_model_review(
+                signal_id=signal["signal_id"],
+                reviewed_at_ms=reviewed_at_ms,
+                role="PRIMARY",
+                model=f"{primary_provider()}:{active_model()}",
+                verdict=None,
+                confidence=None,
+                reasons=[],
+                risk_flags=[],
+                latency_ms=primary_latency_ms,
+                status="ERROR",
+                error_text=f"{type(exc).__name__}: {str(exc)[:300]}",
+                raw=None,
+            )
+            stage11b = run_primary_fallback(
                 signal_id=signal["signal_id"],
                 reviewed_at_ms=reviewed_at_ms,
                 payload=_signal_for_ai(signal),
                 system_prompt=SYSTEM_PROMPT,
-                primary=primary,
+                primary_error=primary_error,
             )
             result = {
                 "signal_id": signal["signal_id"],
                 "risk_verdict": "PASS",
-                "ai_verdict": ai["verdict"],
+                "ai_verdict": "PRIMARY_FALLBACK",
                 "final_verdict": stage11b["final_verdict"],
-                "confidence": ai["confidence"],
+                "confidence": None,
                 "model": active_model(),
                 "risk_reasons": [],
-                "ai_reasons": ai["reasons"],
+                "ai_reasons": [
+                    "primary_failed_degraded_consensus",
+                    stage11b.get("fallback_reason") or "fallback_applied",
+                ],
                 "risk": risk,
-                "ai": ai,
+                "ai": primary_error,
                 "stage11b": stage11b,
                 "ai_latency_ms": primary_latency_ms,
-            }
-        except AIProviderQuotaError as exc:
-            result = {
-                "signal_id": signal["signal_id"],
-                "risk_verdict": "PASS",
-                "ai_verdict": "PROVIDER_BLOCKED",
-                "final_verdict": "VETO",
-                "confidence": None,
-                "model": active_model(),
-                "risk_reasons": [],
-                "ai_reasons": ["provider_quota_exhausted"],
-                "risk": risk,
-                "ai": {
-                    "error_type": type(exc).__name__,
-                    "error": str(exc)[:500],
-                },
-                "ai_latency_ms": int((time.monotonic() - started) * 1000),
-            }
-        except Exception as exc:
-            result = {
-                "signal_id": signal["signal_id"],
-                "risk_verdict": "PASS",
-                "ai_verdict": "ERROR",
-                "final_verdict": "VETO",
-                "confidence": None,
-                "model": active_model(),
-                "risk_reasons": [],
-                "ai_reasons": ["ai_review_failed"],
-                "risk": risk,
-                "ai": {
-                    "error_type": type(exc).__name__,
-                    "error": str(exc)[:500],
-                },
-                "ai_latency_ms": int((time.monotonic() - started) * 1000),
             }
 
     save_entry_approval(
