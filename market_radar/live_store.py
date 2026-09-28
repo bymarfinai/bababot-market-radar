@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import threading
 import time
 from datetime import datetime, timezone
 from typing import Any
@@ -18,6 +19,9 @@ from .persistence import (
 
 
 LIVE_STORE_VERSION = "stage15-store-v1"
+
+_LIVE_INIT_LOCK = threading.Lock()
+_LIVE_INITIALIZED: set[tuple[str, str]] = set()
 
 SQLITE_SCHEMA = """
 create table if not exists live_orders (
@@ -90,13 +94,23 @@ on live_orders(position_id, created_at_ms);
 
 def initialize_live_store() -> None:
     initialize_database()
-    if persistence_backend() == "sqlite":
-        with _sqlite_connect(database_path()) as conn:
-            conn.executescript(SQLITE_SCHEMA)
-        return
-    with _postgres_connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(POSTGRES_SCHEMA)
+    backend = persistence_backend()
+    key = (
+        ("sqlite", str(database_path().resolve()))
+        if backend == "sqlite"
+        else ("postgres", "primary")
+    )
+    with _LIVE_INIT_LOCK:
+        if key in _LIVE_INITIALIZED:
+            return
+        if backend == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                conn.executescript(SQLITE_SCHEMA)
+        else:
+            with _postgres_connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(POSTGRES_SCHEMA)
+        _LIVE_INITIALIZED.add(key)
 
 
 def _client_order_id(source_type: str, source_id: str, action: str) -> str:

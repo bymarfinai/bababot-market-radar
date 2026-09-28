@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import threading
 import time
 from typing import Any
 
@@ -16,6 +17,9 @@ from .persistence import (
 
 
 PAPER_STORE_VERSION = "stage13-store-v1"
+
+_PAPER_INIT_LOCK = threading.Lock()
+_PAPER_INITIALIZED: set[tuple[str, str]] = set()
 
 SQLITE_SCHEMA = """
 create table if not exists paper_orders (
@@ -76,13 +80,23 @@ on paper_orders(position_id, created_at_ms);
 
 def initialize_paper_store() -> None:
     initialize_database()
-    if persistence_backend() == "sqlite":
-        with _sqlite_connect(database_path()) as conn:
-            conn.executescript(SQLITE_SCHEMA)
-        return
-    with _postgres_connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(POSTGRES_SCHEMA)
+    backend = persistence_backend()
+    key = (
+        ("sqlite", str(database_path().resolve()))
+        if backend == "sqlite"
+        else ("postgres", "primary")
+    )
+    with _PAPER_INIT_LOCK:
+        if key in _PAPER_INITIALIZED:
+            return
+        if backend == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                conn.executescript(SQLITE_SCHEMA)
+        else:
+            with _postgres_connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(POSTGRES_SCHEMA)
+        _PAPER_INITIALIZED.add(key)
 
 
 def list_entry_candidates(

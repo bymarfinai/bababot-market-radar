@@ -699,20 +699,27 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        try:
-            scan = load_latest_scan(self.scan_path)
-        except FileNotFoundError:
-            self._json(
-                HTTPStatus.SERVICE_UNAVAILABLE,
-                {"error": "scan_not_ready"},
-            )
-            return
-        except Exception as exc:
-            self._json(
-                HTTPStatus.INTERNAL_SERVER_ERROR,
-                {"error": "scan_read_failed", "detail": str(exc)},
-            )
-            return
+        scan = None
+        scan_required = (
+            parsed.path == "/radar/latest"
+            or parsed.path == "/radar/candidates"
+            or parsed.path.startswith("/radar/symbol/")
+        )
+        if scan_required:
+            try:
+                scan = load_latest_scan(self.scan_path)
+            except FileNotFoundError:
+                self._json(
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                    {"error": "scan_not_ready"},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {"error": "scan_read_failed", "detail": str(exc)},
+                )
+                return
 
         if parsed.path == "/live/preflight":
             try:

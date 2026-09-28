@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+import threading
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -16,6 +17,9 @@ from .models import MarketScan
 
 PERSISTENCE_VERSION = "stage10-v2-postgres"
 DEFAULT_DB_PATH = "data/market_radar.sqlite3"
+
+_SCHEMA_INIT_LOCK = threading.Lock()
+_SCHEMA_INITIALIZED: set[tuple[str, str]] = set()
 
 
 SQLITE_SCHEMA_SQL = """
@@ -416,15 +420,28 @@ def initialize_sqlite(
     path: str | os.PathLike[str] | None = None,
 ) -> Path:
     db_path = Path(path) if path is not None else database_path()
-    with _sqlite_connect(db_path) as conn:
-        conn.executescript(SQLITE_SCHEMA_SQL)
+    key = ("sqlite", str(db_path.resolve()))
+    with _SCHEMA_INIT_LOCK:
+        if key in _SCHEMA_INITIALIZED:
+            return db_path
+        with _sqlite_connect(db_path) as conn:
+            conn.executescript(SQLITE_SCHEMA_SQL)
+        _SCHEMA_INITIALIZED.add(key)
     return db_path
 
 
 def initialize_postgres() -> None:
-    with _postgres_connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(POSTGRES_SCHEMA_SQL)
+    url = database_url()
+    if not url:
+        raise RuntimeError("DATABASE_URL is not configured")
+    key = ("postgres", url)
+    with _SCHEMA_INIT_LOCK:
+        if key in _SCHEMA_INITIALIZED:
+            return
+        with _postgres_connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(POSTGRES_SCHEMA_SQL)
+        _SCHEMA_INITIALIZED.add(key)
 
 
 def initialize_database(

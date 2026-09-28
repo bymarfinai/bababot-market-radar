@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import threading
 import time
 from typing import Any
 
@@ -16,6 +17,8 @@ from .persistence import (
 
 
 CONTROL_VERSION = "stage15-control-v2"
+_CONTROL_INIT_LOCK = threading.Lock()
+_CONTROL_INITIALIZED: set[tuple[str, str]] = set()
 _VALID_MODES = {"RUN", "PAUSE_ENTRIES", "EXIT_ONLY"}
 
 SQLITE_SCHEMA = """
@@ -71,13 +74,23 @@ on conflict(control_id) do nothing;
 
 def initialize_control_state() -> None:
     initialize_database()
-    if persistence_backend() == "sqlite":
-        with _sqlite_connect(database_path()) as conn:
-            conn.executescript(SQLITE_SCHEMA)
-        return
-    with _postgres_connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(POSTGRES_SCHEMA)
+    backend = persistence_backend()
+    key = (
+        ("sqlite", str(database_path().resolve()))
+        if backend == "sqlite"
+        else ("postgres", "primary")
+    )
+    with _CONTROL_INIT_LOCK:
+        if key in _CONTROL_INITIALIZED:
+            return
+        if backend == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                conn.executescript(SQLITE_SCHEMA)
+        else:
+            with _postgres_connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(POSTGRES_SCHEMA)
+        _CONTROL_INITIALIZED.add(key)
 
 
 def get_control_state() -> dict[str, Any]:
