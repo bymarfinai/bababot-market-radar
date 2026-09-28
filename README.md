@@ -361,22 +361,48 @@ VETO
 
 It may **not reverse direction**. A LONG signal cannot become SHORT and a SHORT signal cannot become LONG.
 
-Provider failures and quota failures fail closed.
+Primary-provider failures use a guarded degraded fallback; if fallback consensus is unavailable or conflicting, the system still fails closed.
 
 ## Stage 11B — Multi-model supervision
 
 Default model roles are environment-configurable.
 
-Repository defaults currently resolve to:
+Current production profile:
 
 ~~~text
 PRIMARY     → gemini-3.7-flash
-SHADOW      → deepseek-v4.1-flash
-ESCALATION  → gpt-5.6-sol
-TIEBREAKER  → claude-opus-5
+SHADOW      → gpt-5.6-sol
+ESCALATION  → claude-sonnet-4.6
+TIEBREAKER  → claude-sonnet-4.6
 ~~~
 
-Escalation is triggered by uncertainty, low confidence, or model disagreement and is rate-capped per 5-minute window.
+Normal path:
+
+~~~text
+Gemini primary
+→ Sol shadow
+→ Sonnet escalation when confidence/disagreement requires it
+→ if escalation and tiebreak targets are identical, reuse the same Sonnet result
+  instead of paying for a duplicate call
+~~~
+
+Primary failure path:
+
+~~~text
+Gemini transport/endpoint failure
+→ try the alternate Clario endpoint for the same Gemini model
+→ if Gemini still fails, enter DEGRADED_PRIMARY_FALLBACK
+→ Sol + Sonnet review the same payload independently
+
+Sol APPROVE + Sonnet APPROVE → APPROVE
+any VETO                    → VETO
+all other mixed cases       → WATCH
+both fallback models fail   → VETO
+~~~
+
+A single fallback model can therefore never approve a new entry by itself.
+
+Escalation/fallback use remains rate-capped per 5-minute window.
 
 ## Stage 12 — Position lifecycle
 
