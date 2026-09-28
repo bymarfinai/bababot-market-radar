@@ -1,602 +1,598 @@
-# BabaBot Market Radar — Frozen Blueprint
+# BabaBot Market Radar — Frozen Blueprint + Production Extensions
 
-**Status:** FROZEN PLAN  
-**Purpose:** Dokumen acuan utama untuk development BabaBot Market Radar.  
-**Rule:** Development tidak boleh menambah, mengubah, atau menggeser scope inti tanpa keputusan eksplisit baru.
+**Status:** FROZEN CORE + IMPLEMENTED PRODUCTION EXTENSIONS  
+**Purpose:** Acuan arsitektur utama BabaBot Market Radar.  
+**Rule:** Core detector Stages 1–9 tidak boleh digeser tanpa keputusan eksplisit. Production extensions Stages 10–15 boleh berkembang, tetapi tidak boleh merusak causal detector, runtime independence, auditability, atau fail-closed safety.
 
 ---
 
 ## 1. Tujuan Utama
 
-BabaBot Market Radar adalah sistem live untuk memantau seluruh Binance USDT Perpetual, mendeteksi coin yang mulai bergerak, menilai arah LONG/SHORT, dan menghasilkan keputusan akhir yang dapat diinspeksi oleh AI melalui MCP.
+BabaBot Market Radar adalah sistem live standalone untuk:
 
-BabaBot Market Radar **bukan** engine backtest dan **bukan** tempat discovery strategy.
+- memantau seluruh Binance USD-M USDT perpetual
+- mendeteksi coin yang mulai bergerak
+- mengklasifikasikan phase movement
+- menilai bukti LONG dan SHORT
+- membaca market context
+- menghasilkan keputusan deterministic LONG / SHORT / NO TRADE
+- menyediakan inspection melalui API/MCP/dashboard
+- menyimpan audit trail
+- melakukan AI supervision setelah deterministic signal
+- mengelola lifecycle posisi
+- menjalankan paper trading
+- menjalankan guarded live execution hanya ketika seluruh safety gate terpenuhi
 
-Backtest, discovery, eksperimen, optimisasi parameter, dan riset historis tetap berada di:
+Market Radar **bukan** tempat strategy discovery atau backtest.
 
-`bymarfinai/bababot-discovery`
+Research tetap berada di:
 
-Production/live system berada di:
+~~~text
+bymarfinai/bababot-discovery
+~~~
 
-`bymarfinai/bababot-market-radar`
+Production runtime berada di:
+
+~~~text
+bymarfinai/bababot-market-radar
+~~~
+
+Runtime dependency Market Radar terhadap Discovery wajib:
+
+~~~text
+ZERO
+~~~
 
 ---
 
-# 2. Frozen Core Plan
+## 2. Frozen Core Plan — Stages 1–9
 
-Urutan/fungsi inti BabaBot Market Radar adalah:
+Core product contract tetap:
 
-1. **Scan semua Binance USDT Perpetual tiap ±5 menit**
-2. **Deteksi coin yang mulai bergerak**
-3. **Klasifikasi `IGNITION / EXPANSION / EXHAUSTION`**
-4. **Hitung `LONG_SCORE / SHORT_SCORE`**
-5. **Baca volume, breakout/breakdown, taker flow, OI, funding, market regime**
-6. **Hasil akhirnya `LONG / SHORT / NO TRADE`**
-7. **Expose data lewat MCP supaya AI bisa inspeksi**
-8. **Dashboard live + alert**
-9. **Nantinya bisa diteruskan ke execution**
+1. Scan semua Binance USDT Perpetual tiap ±5 menit
+2. Detect coin yang mulai bergerak
+3. Classify IGNITION / EXPANSION / EXHAUSTION
+4. Calculate LONG_SCORE / SHORT_SCORE
+5. Read volume, breakout/breakdown, taker flow, raw OI, funding, market regime
+6. Output LONG / SHORT / NO TRADE
+7. Expose deterministic radar data through MCP
+8. Dashboard live + alert
+9. Produce a safe execution handoff
 
-Urutan ini adalah blueprint utama dan tidak boleh diganti dengan flow lain tanpa keputusan eksplisit.
+Stage 9 awalnya mendefinisikan **execution integration capability**, bukan live order submission.
+
+Core ini tetap frozen.
 
 ---
 
-# 3. Flow Sistem
+## 3. Production Extensions — Stages 10–15
 
-```text
+Setelah Stages 1–9 selesai, production system diperluas secara eksplisit:
+
+10. Persistent signal/trade database
+11. Deterministic risk gate + AI entry approval
+11B. Multi-model shadow/escalation/tiebreaker
+12. Adaptive position lifecycle
+13. Automatic paper trading
+14. Persistent trading control plane
+15. Guarded Binance Futures live execution
+
+Extensions ini **downstream** dari deterministic Stage 6 decision.
+
+Tidak ada Stage 10–15 yang boleh mengubah candle history, Stage 2 movement facts, Stage 3 labels, Stage 4 scores, atau Stage 5 context secara retroaktif.
+
+---
+
+## 4. Current System Flow
+
+~~~text
 Binance USDT Perpetual
         │
         ▼
-Scan seluruh market ±5 menit
+Stage 1 — closed 5m full-universe scan
         │
         ▼
-Moving Coin Detector
+Stage 2 — Moving Coin Detector
         │
         ▼
-Deteksi coin yang mulai bergerak
+Stage 3 — IGNITION / EXPANSION / EXHAUSTION
         │
         ▼
-IGNITION / EXPANSION / EXHAUSTION
+Stage 4 — LONG_SCORE / SHORT_SCORE
         │
         ▼
-LONG_SCORE / SHORT_SCORE
+Stage 5 — market context
         │
         ▼
-Market Context
-├── Volume
-├── Breakout / Breakdown
-├── Taker Flow
-├── Open Interest
-├── Funding
-└── Existing Market Regime
+Stage 6 — LONG / SHORT / NO TRADE
+        │
+        ├──────────────► Stage 7 MCP/API inspection
+        │
+        ├──────────────► Stage 8 dashboard/alert
+        │
+        └──────────────► Stage 9 handoff artifact
         │
         ▼
-LONG / SHORT / NO TRADE
+Stage 10 — persistent actionable signal
         │
         ▼
-MCP
+Stage 11 / 11B — deterministic risk + AI supervision
         │
         ▼
-AI Inspection
+APPROVE / WATCH / VETO
+        │
+        ├──────────────► VETO/WATCH: no new entry
         │
         ▼
-Dashboard Live + Alert
+Stage 13/15 entry executor
         │
         ▼
-Future Execution Layer
-```
+OPEN POSITION
+        │
+        ▼
+Stage 12 — HOLD / REDUCE / CLOSE
+        │
+        ▼
+Stage 13 paper or Stage 15 live exit
+~~~
+
+Stage 14 control plane sits across entry/exit execution and can block new entries without disabling lifecycle exits.
 
 ---
 
-# 4. Moving Coin Detector
+## 5. Moving Coin Detector — Frozen Intent
 
-Moving Coin Detector atau **MCD** adalah detector baru yang menjadi core dari BabaBot Market Radar.
+MCD menjawab:
 
-MCD bertugas menjawab pertanyaan utama:
+> Coin mana yang sedang mulai bergerak, ke arah mana tekanan dominannya, dan apakah pergerakan tersebut cukup valid untuk diteruskan ke decision pipeline?
 
-> Coin mana yang sedang mulai bergerak, ke arah mana tekanan dominannya, dan apakah pergerakan tersebut cukup valid untuk masuk ke radar LONG atau SHORT?
+MCD bukan top-gainer scanner.
 
-MCD bukan backtesting engine.
+MCD bukan backtest engine.
 
 MCD bukan strategy discovery engine.
 
-MCD bekerja pada market data live.
+MCD bekerja dari causal live market data.
 
 ---
 
-# 5. Step 1 — Scan Semua Binance USDT Perpetual
+## 6. Stage 1 — Full-Universe Scan
 
-Market Radar melakukan scanning terhadap universe Binance USDT Perpetual.
+Universe:
 
-Target cadence:
+~~~text
+status       = TRADING
+quoteAsset   = USDT
+contractType = PERPETUAL
+~~~
 
-```text
-± setiap 5 menit
-```
+Wajib:
 
-Scan harus berorientasi pada closed market data yang tersedia pada saat proses berjalan.
+- scan semua symbol yang eligible
+- no top-gainer filter
+- no pre-ranking berdasarkan hasil akhir
+- use closed candles only
+- isolate per-symbol errors
+- schedule around closed 5m boundaries
 
-Tujuannya bukan memilih top gainer/top loser berdasarkan hasil akhir, tetapi mengidentifikasi secara live coin yang menunjukkan tanda awal pergerakan.
-
-Output awal scanner minimal:
-
-```text
-symbol
-timestamp
-price
-market_activity_snapshot
-```
+Tujuan Stage 1 adalah observation, bukan decision.
 
 ---
 
-# 6. Step 2 — Deteksi Coin yang Mulai Bergerak
+## 7. Stage 2 — Early Movement Detection
 
-Setelah market scan, MCD mencari perubahan kondisi yang menunjukkan coin mulai keluar dari kondisi normal.
+Fokus utama:
 
-Fokus utama adalah **early movement detection**, bukan mengejar coin yang sudah terlalu jauh bergerak.
-
-Detector harus membedakan antara:
-
-```text
+~~~text
 noise
 normal movement
 early movement
 strong continuation
 late / exhausted movement
-```
+~~~
 
-Coin yang tidak menunjukkan movement yang relevan tidak perlu diteruskan ke tahap berikutnya.
+Production baseline menggunakan per-symbol recent history sehingga low-volatility dan high-volatility markets dibandingkan dengan baseline mereka sendiri.
 
----
+Stage 2 hanya mendeteksi movement facts dan raw direction hint.
 
-# 7. Step 3 — Movement Stage
-
-Setiap candidate diklasifikasikan ke salah satu stage utama:
-
-## IGNITION
-
-Pergerakan baru mulai terbentuk.
-
-Karakter umum:
-
-```text
-momentum mulai muncul
-activity meningkat
-volume mulai meningkat
-direction mulai terbentuk
-belum terlalu extended
-```
-
-## EXPANSION
-
-Pergerakan sudah terkonfirmasi dan sedang berkembang.
-
-Karakter umum:
-
-```text
-momentum kuat
-direction jelas
-volume/activity mendukung
-structure mendukung
-pressure masih berlanjut
-```
-
-## EXHAUSTION
-
-Pergerakan sudah terlalu jauh, kehilangan confirmation, atau menunjukkan risiko terlambat masuk.
-
-Karakter umum:
-
-```text
-extension terlalu tinggi
-momentum melemah
-flow tidak lagi mendukung
-breakout/breakdown kehilangan tenaga
-risk/reward memburuk
-```
-
-Stage ini merupakan klasifikasi movement, bukan keputusan final trade.
+Stage 2 tidak menghasilkan LONG/SHORT decision.
 
 ---
 
-# 8. Step 4 — LONG_SCORE / SHORT_SCORE
+## 8. Stage 3 — Movement Stage
 
-Setiap candidate dihitung dengan dua score terpisah:
+~~~text
+EARLY_MOVEMENT      → IGNITION
+STRONG_CONTINUATION → EXPANSION
+LATE_MOVEMENT       → EXHAUSTION
+~~~
 
-```text
+Stage ini menggambarkan phase movement, bukan final trade signal.
+
+EXHAUSTION berarti movement sudah terlalu extended untuk entry baru pada Stage 6.
+
+---
+
+## 9. Stage 4 — Independent Direction Scores
+
+Setiap candidate memiliki:
+
+~~~text
 LONG_SCORE
 SHORT_SCORE
-```
+score_gap
+score_edge
+~~~
 
-LONG dan SHORT tidak boleh diasumsikan sebagai mirror sederhana satu sama lain.
+LONG dan SHORT bukan simple mirror.
 
-Tujuan scoring:
+Stage 4 menilai evidence dari movement/momentum/activity yang sudah tersedia.
 
-```text
-mengukur kekuatan bukti LONG
-mengukur kekuatan bukti SHORT
-mengukur gap antar arah
-mendeteksi konflik arah
-```
-
-Contoh output:
-
-```text
-SOLUSDT
-
-LONG_SCORE  : 84
-SHORT_SCORE : 21
-STAGE       : IGNITION
-```
-
-Jika dua score terlalu dekat atau bukti saling bertentangan, sistem harus mampu memilih:
-
-```text
-NO TRADE
-```
+Stage 4 tidak boleh membaca Stage 5 context untuk mengubah score setelah fakta.
 
 ---
 
-# 9. Step 5 — Market Context yang Dibaca
+## 10. Stage 5 — Market Context
 
-MCD dan Direction Scoring membaca konteks berikut:
+Context wajib mencakup:
 
-## 9.1 Volume
+### Volume
+- current closed-5m volume
+- relative expansion
+- confirmation flag
 
-Digunakan untuk melihat apakah movement didukung peningkatan activity nyata.
+### Structure
+- breakout
+- breakdown
+- failed breakout
+- failed breakdown
+- no structural break
 
-Fokus utama:
+### Taker Flow
+- aggressive taker buy/sell pressure
+- same closed candle alignment
 
-```text
-current volume
-relative volume
-volume expansion
-volume confirmation
-```
+### Raw Open Interest
+Gunakan:
 
-## 9.2 Breakout / Breakdown
+~~~text
+sumOpenInterest
+~~~
 
-Digunakan untuk melihat apakah price structure menunjukkan pelepasan dari range atau level penting.
+Jangan mengganti dasar dengan:
 
-Output harus dapat membedakan:
+~~~text
+sumOpenInterestValue
+~~~
 
-```text
-breakout
-breakdown
-failed breakout
-failed breakdown
-no structural break
-```
+Interpretasi:
 
-## 9.3 Taker Flow
+~~~text
+Price ↑ + OI ↑ → fresh long participation
+Price ↑ + OI ↓ → short covering
+Price ↓ + OI ↑ → fresh short participation
+Price ↓ + OI ↓ → long liquidation
+~~~
 
-Digunakan untuk membaca agresivitas buyer dan seller.
+### Funding
+Funding hanya context.
 
-Tujuannya adalah melihat apakah movement price didukung oleh market taker pressure.
+Funding tidak boleh berdiri sendiri sebagai trigger LONG/SHORT.
 
-## 9.4 Open Interest
+### Market Regime
+Existing validated regime logic boleh di-port ke repo ini.
 
-Open Interest harus menggunakan **raw open interest**, bukan USD-valued open interest sebagai dasar perubahan posisi.
-
-Interpretasi dasar:
-
-```text
-Price ↑ + OI ↑
-= fresh long participation / new positioning
-
-Price ↑ + OI ↓
-= short covering
-
-Price ↓ + OI ↑
-= fresh short participation / new positioning
-
-Price ↓ + OI ↓
-= long liquidation
-```
-
-OI adalah confirmation/context, bukan satu-satunya sumber keputusan.
-
-## 9.5 Funding
-
-Funding digunakan sebagai market positioning context.
-
-Funding tidak berdiri sendiri sebagai trigger LONG/SHORT.
-
-## 9.6 Market Regime
-
-Market regime **sudah existing di BabaBot**.
-
-Market Radar tidak membuat Regime Engine baru sebagai project terpisah.
-
-Market Radar hanya membaca atau menggunakan output market regime existing apabila diperlukan sebagai context.
-
-Contoh context:
-
-```text
-BULL
-BEAR
-SIDEWAYS
-```
-
-Regime bukan detector baru yang sedang dikembangkan dalam Market Radar.
+Market Radar tidak boleh memanggil Discovery at runtime untuk regime.
 
 ---
 
-# 10. Step 6 — Final Decision
+## 11. Stage 6 — Final Deterministic Decision
 
-Setelah stage, score, dan market context tersedia, sistem menghasilkan salah satu dari tiga keputusan final:
+Output final:
 
-```text
+~~~text
 LONG
 SHORT
 NO TRADE
-```
+~~~
 
-Contoh:
+NO TRADE adalah keputusan valid.
 
-```text
-symbol      : SOLUSDT
-stage       : IGNITION
-long_score  : 84
-short_score : 21
-decision    : LONG
-```
+Core invariants:
 
-Atau:
+- incomplete required context fails closed
+- EXHAUSTION cannot become a new trade
+- hard structure contradiction blocks the proposed side
+- score and score-edge gates must pass
+- context confirmation must outweigh conflict
+- reasons must be inspectable
 
-```text
-symbol      : ENAUSDT
-stage       : EXPANSION
-long_score  : 54
-short_score : 57
-decision    : NO TRADE
-```
+Stage 6 remains deterministic.
 
-`NO TRADE` adalah keputusan valid dan penting.
-
-Sistem tidak diwajibkan menghasilkan trade pada setiap scan.
+AI does not own Stage 6.
 
 ---
 
-# 11. Step 7 — MCP
+## 12. Stage 7 — MCP
 
-Data Market Radar harus diexpose melalui MCP sehingga AI dapat melakukan inspection berdasarkan data live.
+MCP adalah read-only inspection interface.
 
-Tujuan MCP:
+MCP boleh:
 
-```text
-AI dapat membaca hasil radar
-AI dapat inspect symbol tertentu
-AI dapat melihat score dan stage
-AI dapat melihat market context
-AI dapat membandingkan candidate
-AI tidak perlu menebak market data
-```
+- read current radar
+- filter moving candidates
+- inspect a symbol
 
-MCP bukan pengganti Moving Coin Detector.
+MCP tidak boleh:
 
-MCP adalah interface antara Market Radar dan AI.
+- rescan Binance
+- recalculate detector
+- rewrite scores
+- change final decision
+- execute orders
+- mutate trading control
 
----
+Current MCP tools remain exactly:
 
-# 12. AI Inspection Layer
-
-AI bekerja setelah Market Radar menghasilkan data deterministic.
-
-AI bukan sumber market data.
-
-AI melakukan inspection terhadap candidate yang sudah dihasilkan sistem.
-
-Flow:
-
-```text
-Market Radar
-     │
-     ▼
-Candidate + Feature Snapshot
-     │
-     ▼
-MCP
-     │
-     ▼
-AI Inspection
-```
-
-AI dapat memberikan analisis tambahan berdasarkan informasi yang tersedia, tetapi source market state tetap berasal dari Market Radar.
+~~~text
+get_market_radar
+get_moving_coins
+inspect_symbol
+~~~
 
 ---
 
-# 13. Step 8 — Dashboard Live + Alert
+## 13. Stage 8 — Dashboard / Trading Control Center
 
-Market Radar mempunyai dashboard live untuk melihat kondisi sistem secara real time.
+Dashboard bertugas memvisualisasikan current system state.
 
-Dashboard minimal harus mampu menampilkan:
+Current scope mencakup:
 
-```text
-market scanner
-moving coins
-symbol
-current price
-IGNITION / EXPANSION / EXHAUSTION
-LONG_SCORE
-SHORT_SCORE
-LONG / SHORT / NO TRADE
-volume context
-breakout / breakdown
-taker flow
-OI
-funding
-market regime
-AI inspection result
-signal history
-system status
-```
+- radar
+- candlestick chart
+- movement stage
+- direction scores
+- context
+- deterministic decision
+- AI approval
+- per-model reviews
+- open-position health
+- paper orders
+- signal history
+- control state
+- live preflight
+- live arm/disarm
 
-Contoh tampilan conceptual:
+Frontend boleh dipisahkan dari engine.
 
-```text
-┌────────────────────────────────────────────────────┐
-│ BABABOT MARKET RADAR                         LIVE  │
-├──────────────┬──────────────────────┬──────────────┤
-│ MARKET       │ SYMBOL / CHART       │ AI VIEW      │
-│ SCANNER      │                      │              │
-│              │ SOLUSDT              │ LONG         │
-│ SOL LONG 84  │ IGNITION             │ confirmation │
-│ SUI LONG 76  │                      │ context      │
-│ ENA SHORT 73 │ LONG 84 / SHORT 21   │ risk         │
-├──────────────┴──────────────────────┴──────────────┤
-│ Signals │ History │ Outcomes │ System Status      │
-└────────────────────────────────────────────────────┘
-```
-
-Alert digunakan untuk candidate penting, bukan untuk setiap market scan.
+Frontend tidak menjadi calculation authority.
 
 ---
 
-# 14. Step 9 — Future Execution
+## 14. Stage 9 — Safe Execution Handoff
 
-Execution bukan scope awal Market Radar.
+Stage 9 tetap dipertahankan sebagai deterministic handoff artifact:
 
-Namun arsitektur Market Radar harus memungkinkan output yang sudah matang nantinya diteruskan ke execution layer.
+~~~text
+data/execution_intents.json
+GET /execution/intents
+~~~
 
-Flow masa depan:
+Only:
 
-```text
-Market Radar
-    │
-    ▼
-LONG / SHORT / NO TRADE
-    │
-    ▼
-AI / Risk Confirmation
-    │
-    ▼
-Execution Engine
-    │
-    ▼
-Binance Order
-```
+~~~text
+LONG
+SHORT
+~~~
 
-Execution hanya ditambahkan setelah Market Radar terbukti stabil dalam live observation.
+Never:
 
----
+~~~text
+NO TRADE
+~~~
 
-# 15. Live Outcome Tracking
+Stage 9 artifact tetap HANDOFF_ONLY dan non-executable.
 
-Market Radar boleh menyimpan hasil live signal untuk audit.
+Ini adalah historical integration contract dan audit surface.
 
-Ini **bukan backtest**.
+Field live_order_submission_enabled=false di artifact Stage 9 **hanya berarti artifact tersebut sendiri tidak mengeksekusi order**.
 
-Contoh:
-
-```text
-08:10 SOLUSDT
-IGNITION
-LONG_SCORE 78
-SHORT_SCORE 24
-decision LONG
-
-08:15
-EXPANSION
-LONG_SCORE 86
-
-08:30
-MFE +1.1%
-MAE -0.2%
-```
-
-Tujuannya:
-
-```text
-audit detector
-mengukur kualitas live signal
-mendeteksi false signal
-menilai apakah stage transition bekerja
-menilai apakah LONG/SHORT scoring konsisten
-```
-
-Jika hasil live menunjukkan masalah, research dilakukan kembali di `bababot-discovery`.
+Field itu tidak lagi berarti repository tidak memiliki live execution path, karena Stage 15 sekarang ada sebagai downstream production extension.
 
 ---
 
-# 16. Pemisahan Repo
+## 15. Stage 10 — Persistence
 
-## bababot-discovery
+Actionable signals dan downstream actions wajib auditable.
 
-Fungsi:
+Production persistence:
 
-```text
-backtest
-historical research
-strategy discovery
-parameter exploration
-regime research
-validation
-experimentation
-```
+~~~text
+PostgreSQL primary
+SQLite safety/fallback ledger
+~~~
 
-## bababot-market-radar
+Persisted state dapat mencakup:
 
-Fungsi:
+- signals
+- outcomes
+- AI approvals
+- model reviews
+- positions
+- position evaluations
+- paper/live orders
+- control state
+- trade events
 
-```text
-live market scan
-Moving Coin Detector
-IGNITION / EXPANSION / EXHAUSTION
-LONG_SCORE / SHORT_SCORE
-market context
-LONG / SHORT / NO TRADE
-MCP data exposure
-dashboard live
-alerts
-live outcome tracking
-future execution integration
-```
-
-Tidak boleh memindahkan backtest/discovery ke Market Radar tanpa keputusan baru.
+Signal identity wajib deterministic dan idempotent.
 
 ---
 
-# 16A. Runtime Independence — Wajib
+## 16. Stage 11 / 11B — AI Supervision
 
-BabaBot Market Radar adalah **produk MCD live yang berdiri sendiri**.
+AI berada **setelah** deterministic Stage 6 signal.
 
-Market Radar **tidak boleh bergantung secara runtime** pada `bymarfinai/bababot-discovery`.
+Mandatory sequence:
 
-Artinya, ketika Market Radar sudah production, seluruh kebutuhan berikut harus tersedia langsung di dalam Market Radar:
-
-```text
-scan Binance USDT Perpetual
-Moving Coin Detector
-IGNITION / EXPANSION / EXHAUSTION
-LONG_SCORE / SHORT_SCORE
-volume context
-breakout / breakdown
-taker flow
-raw Open Interest
-funding
-market regime logic yang diperlukan
-LONG / SHORT / NO TRADE
-API
-MCP-facing data
-dashboard data
-alert data
-```
-
-Arsitektur yang **tidak boleh** digunakan:
-
-```text
-Market Radar
+~~~text
+Stage 6 signal
     ↓
-call BabaBot Discovery
+deterministic fail-closed risk gate
+    ↓
+AI review
+    ↓
+optional shadow/escalation/tiebreaker
+    ↓
+APPROVE / WATCH / VETO
+~~~
+
+AI rules:
+
+- cannot reverse LONG into SHORT
+- cannot reverse SHORT into LONG
+- cannot invent missing market data
+- cannot bypass deterministic safety failure
+- provider failure fails closed
+- quota failure fails closed
+- WATCH does not permit entry
+- only final APPROVE may feed an entry executor
+
+Multi-model logic may improve review robustness but does not replace deterministic gates.
+
+---
+
+## 17. Stage 12 — Position Lifecycle
+
+For already-open positions, system must distinguish entry decision from ongoing position health.
+
+Deterministic actions:
+
+~~~text
+HOLD
+REDUCE
+CLOSE
+~~~
+
+Position health may use:
+
+- current movement
+- 5m/15m/1h directional momentum
+- structure
+- taker flow
+- OI
+- regime
+- opposing score
+- MFE/MAE
+- hard stop
+
+AI position supervisor is secondary.
+
+Hard-risk or deterministic CLOSE cannot be upgraded back to HOLD by AI.
+
+---
+
+## 18. Stage 13 — Paper Trading
+
+Paper execution is the mandatory observation/testing bridge before guarded live execution.
+
+Paper trading must:
+
+- use actual live signal timing
+- model adverse slippage
+- include fees
+- prevent duplicate same-signal entries
+- limit open positions
+- consume Stage 11 APPROVE
+- consume Stage 12 REDUCE/CLOSE
+- persist fills and PnL
+
+Paper performance may be used as a live-entry gate.
+
+Paper trading is not historical backtesting.
+
+---
+
+## 19. Stage 14 — Control Plane
+
+Persistent control modes:
+
+~~~text
+RUN
+PAUSE_ENTRIES
+EXIT_ONLY
+~~~
+
+Invariant:
+
+> Blocking new entries must never unintentionally disable legitimate risk-reducing exits.
+
+RUN:
+- entries allowed if all other gates pass
+- exits allowed
+
+PAUSE_ENTRIES:
+- no new entries
+- exits allowed
+
+EXIT_ONLY:
+- no new entries
+- REDUCE/CLOSE allowed
+
+Control mutation must require authentication.
+
+---
+
+## 20. Stage 15 — Guarded Live Execution
+
+Live execution exists, but must remain explicitly gated and fail-closed.
+
+A live entry requires:
+
+- live environment enabled
+- credentials configured
+- persistent ARM state true
+- RUN mode
+- approved fresh signal
+- bounded notional
+- bounded leverage
+- paper gate
+- daily-loss gate
+- loss-streak gate
+- position-capacity gate
+- exchange account tradable
+- supported one-way position mode
+- sufficient balance
+- no unmanaged exchange position
+- acceptable spread
+- no duplicate live symbol position
+
+Risk invariants:
+
+1. Exit processing has priority over new entries.
+2. ARM controls new entry eligibility, not the ability to exit.
+3. PAUSE_ENTRIES / EXIT_ONLY must not block REDUCE/CLOSE.
+4. Every new live position must receive exchange-side protection.
+5. If protective-stop placement fails, immediate emergency close is attempted.
+6. If protection and emergency close both fail, the condition must be surfaced as critical.
+7. Live reconciliation must detect exchange positions that no longer match persisted state.
+
+---
+
+## 21. Runtime Independence — Wajib
+
+Architecture yang dilarang:
+
+~~~text
+Market Radar
+    ↓ runtime call
+BabaBot Discovery
     ↓
 ambil regime / score / signal
-```
+~~~
 
-Karena desain tersebut membuat Market Radar ikut gagal apabila Discovery mati.
+Architecture yang benar:
 
-Arsitektur yang benar:
-
-```text
+~~~text
 BabaBot Discovery
 = LAB
 = research
@@ -604,125 +600,119 @@ BabaBot Discovery
 = experimentation
 = validation
 
-        ↓
-validated / approved logic
-        ↓
-port / freeze into production
+        ↓ validated logic
 
 BabaBot Market Radar
-= MCD PRODUCT
-= LIVE PRODUCTION
+= LIVE PRODUCT
 = STANDALONE RUNTIME
-```
+= deterministic detector
+= supervision
+= execution controls
+~~~
 
-Hubungan keduanya hanya pada proses development:
+Discovery dapat menemukan improvement.
 
-```text
-Discovery menemukan improvement
-        ↓
-research + validation
-        ↓
-rule dinyatakan layak
-        ↓
-logic dipindahkan / di-port ke Market Radar
-        ↓
-Market Radar tetap berjalan sendiri
-```
+Improvement harus divalidasi dahulu.
 
-Dengan demikian:
-
-> **Market Radar = MCD product. Discovery = supporting research environment.**
-
-Runtime dependency Market Radar terhadap BabaBot Discovery harus:
-
-```text
-ZERO
-```
-
-Market Radar harus tetap dapat berjalan normal walaupun service BabaBot Discovery dimatikan sepenuhnya.
+Hanya validated/approved logic yang dipindahkan ke Market Radar.
 
 ---
 
-# 17. Deployment Direction
+## 22. Deployment Direction
 
-Target deployment:
+Current intended separation:
 
-```text
+~~~text
 GitHub
 │
 ├── bababot-discovery
-│      └── Railway
+│      └── research/backtest deployment as needed
 │
 ├── bababot-market-radar
 │      └── Railway
-│          └── live detector / API
+│          ├── scanner
+│          ├── persistence
+│          ├── MCP/API
+│          ├── AI supervision
+│          ├── position lifecycle
+│          ├── paper engine
+│          └── guarded live engine
 │
-├── Radar Dashboard
-│      └── frontend deployment
-│
-└── Existing BabaBot MCP
-       └── AI access layer
-```
+└── dashboard/
+       └── Vercel static frontend
+~~~
 
-Railway digunakan untuk engine live.
-
-Frontend/dashboard dipisahkan dari calculation engine.
-
-Existing BabaBot MCP digunakan sebagai interface AI bila sesuai dengan implementasi final.
+Calculation authority stays in Market Radar backend.
 
 ---
 
-# 18. Non-Scope
+## 23. Non-Scope / Forbidden Drift
 
-Hal berikut **bukan** bagian dari development awal BabaBot Market Radar:
+Market Radar must not become:
 
-```text
-❌ membuat backtesting engine baru
-❌ memindahkan BabaBot Discovery ke Market Radar
-❌ membuat strategy discovery engine baru
-❌ membuat Regime Engine baru dari nol
-❌ melakukan ML training di Market Radar
-❌ langsung auto-execution sebelum live validation
-❌ mengubah 9-step core plan tanpa keputusan eksplisit
-```
+~~~text
+❌ historical backtest engine
+❌ parameter optimizer
+❌ generic strategy discovery lab
+❌ runtime proxy to BabaBot Discovery
+❌ ML training environment
+❌ non-causal scanner using future candles
+❌ AI-first signal generator that bypasses deterministic stages
+❌ uncontrolled auto-trading engine
+❌ dashboard-owned calculation engine
+~~~
 
 ---
 
-# 19. Frozen Definition
+## 24. Current Definition
 
 BabaBot Market Radar adalah:
 
-> Sistem live yang melakukan scan seluruh Binance USDT Perpetual sekitar setiap 5 menit, mendeteksi coin yang mulai bergerak melalui Moving Coin Detector, mengklasifikasikan movement sebagai IGNITION / EXPANSION / EXHAUSTION, menghitung LONG_SCORE dan SHORT_SCORE menggunakan market context seperti volume, breakout/breakdown, taker flow, raw open interest, funding, dan existing market regime, lalu menghasilkan LONG / SHORT / NO TRADE. Data tersebut diexpose melalui MCP untuk AI inspection, ditampilkan pada dashboard live dan alert system, serta dirancang agar nantinya dapat diteruskan ke execution layer.
+> Standalone live production system yang melakukan causal closed-candle scan terhadap seluruh Binance USDT perpetual, mendeteksi abnormal early movement melalui Moving Coin Detector, mengklasifikasikan IGNITION / EXPANSION / EXHAUSTION, menghitung independent LONG_SCORE / SHORT_SCORE, membaca volume/structure/taker/raw OI/funding/regime, menghasilkan deterministic LONG / SHORT / NO TRADE, menyediakan MCP/API/dashboard inspection, menyimpan audit trail, menerapkan deterministic + AI supervision, mengelola position lifecycle, menjalankan paper trading, dan hanya mengizinkan guarded live execution apabila seluruh persistent control dan safety gate terpenuhi.
 
 ---
 
-# 20. Frozen Core Checklist
+## 25. Current Checklist
 
-Development dianggap tetap sesuai plan hanya apabila alurnya masih mengikuti checklist berikut:
+### Frozen core
+- [x] Full USDT perpetual scan
+- [x] Early movement detector
+- [x] IGNITION / EXPANSION / EXHAUSTION
+- [x] LONG_SCORE / SHORT_SCORE
+- [x] Volume context
+- [x] Structure context
+- [x] Taker flow
+- [x] Raw Open Interest
+- [x] Funding
+- [x] Existing market regime port
+- [x] LONG / SHORT / NO TRADE
+- [x] MCP inspection
+- [x] Dashboard
+- [x] Alert
+- [x] Execution handoff
 
-- [x] Scan semua Binance USDT Perpetual tiap ±5 menit
-- [x] Detect coin yang mulai bergerak
-- [x] Classify IGNITION / EXPANSION / EXHAUSTION
-- [x] Calculate LONG_SCORE / SHORT_SCORE
-- [x] Read volume
-- [x] Read breakout / breakdown
-- [x] Read taker flow
-- [x] Read raw Open Interest
-- [x] Read funding
-- [x] Read existing market regime
-- [x] Output LONG / SHORT / NO TRADE
-- [x] Expose data through MCP
-- [x] AI can inspect live radar data
-- [x] Dashboard live available
-- [x] Alert available
-- [x] Future execution integration possible
-- [x] No backtest engine inside Market Radar
-- [x] No strategy discovery engine inside Market Radar
-- [x] No new Regime Engine developed as separate scope
-- [x] Market Radar runs independently without BabaBot Discovery
-- [x] Runtime dependency on `bababot-discovery` = ZERO
-- [x] Market Radar remains an MCD live product, not a Discovery engine
+### Production extensions
+- [x] PostgreSQL/SQLite persistence
+- [x] Deterministic AI pre-risk gate
+- [x] AI entry approval
+- [x] Multi-model supervision
+- [x] Position health lifecycle
+- [x] Paper execution
+- [x] Persistent control plane
+- [x] Guarded Binance Futures execution
+- [x] Protective stop + emergency-close path
+- [x] Live reconciliation
+- [x] Dashboard live arm/preflight controls
+
+### Architectural invariants
+- [x] No runtime dependency on bababot-discovery
+- [x] No historical strategy discovery inside Market Radar
+- [x] Closed-candle causal detector
+- [x] AI cannot reverse deterministic trade direction
+- [x] Live entries fail closed
+- [x] Risk-reducing exits remain available independently of live ARM
+- [x] Source + tests remain final authority for exact implementation details
 
 ---
 
-**This document is the frozen baseline for BabaBot Market Radar development.**
+**This document is the frozen architectural baseline plus the approved production extensions currently implemented through Stage 15.**
