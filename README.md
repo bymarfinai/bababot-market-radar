@@ -390,17 +390,118 @@ REDUCE
 CLOSE
 ~~~
 
-Health uses:
+### Health V2 — adaptive position health
 
-- 5m / 15m / 1h directional momentum
-- structure
-- taker flow
-- OI interpretation
-- market regime
-- movement stage
-- opposing direction score
-- MFE / MAE
-- hard stop state
+Current lifecycle version:
+
+~~~text
+stage12-v2-adaptive-health
+~~~
+
+Health V2 keeps the original live market-context score as **Base Health**:
+
+~~~text
+Base Health =
+    momentum
+  + structure
+  + taker flow
+  + OI interpretation
+  + market regime
+  + movement stage
+~~~
+
+The live context is rebuilt on every lifecycle evaluation from fresh closed candles. OI, taker, structure, regime, momentum, and movement stage are therefore **not frozen at entry**.
+
+Current maximum Base Health remains 100:
+
+~~~text
+momentum   30
+structure  20
+taker      15
+OI         15
+regime     10
+stage      10
+~~~
+
+Health V2 adds trade-path memory without replacing current market context:
+
+~~~text
+Adaptive Health =
+    Base Health
+  - MAE penalty
+  - MFE giveback penalty
+~~~
+
+Current adaptive rules:
+
+~~~text
+MAE penalty activates only when:
+current unrealized PnL <= 0
+AND Base Health < 60
+
+MAE <= -1.0%  → -8
+MAE <= -1.5%  → -15
+
+No historical MAE penalty is applied after the position has recovered above entry.
+
+MFE giveback protection activates only when:
+MFE >= +1.0%
+AND Base Health < 70
+
+giveback >= 50% of MFE → -10
+giveback >= 75% of MFE → -20
+~~~
+
+Where:
+
+~~~text
+giveback       = MFE - current unrealized PnL
+giveback ratio = giveback / MFE
+~~~
+
+The purpose is **not** to turn Health into a fixed take-profit or stop-loss system. Health still answers one lifecycle question:
+
+> Given the market condition now and the path of this already-open trade since entry, should the position be HOLD, REDUCE, or CLOSE?
+
+A strong current Base Health is deliberately allowed to keep a profitable position running even after a normal retracement.
+
+### Health V2 validation before deployment
+
+Health V2 was derived from the first 105 completed paper positions.
+
+Observed baseline sample:
+
+~~~text
+closed positions              105
+final wins                     37
+final losses                   68
+average MFE — final wins      +2.743%
+average MFE — final losses    +0.740%
+average MAE — final wins      -0.370%
+average MAE — final losses    -1.163%
+
+positions reaching MFE >= 1%   49
+of those ending as loss         20
+~~~
+
+At the first +1% MFE observation, those 20 eventual losses still had average Health about 74.75 and 17/20 were still HOLD. This was the main reason to add trade-path memory.
+
+The first aggressive adaptive formula was rejected because it changed too many historical actions. The deployed V2 is the tighter **minimal-soft** variant: MAE only matters while the trade remains unrecovered and weak, while MFE protection only activates after >=1% favorable excursion plus substantial giveback and weakening Base Health.
+
+A rough historical replay of the deployed candidate improved relative simulated capture versus the old lifecycle, but that replay is **not treated as a profitability backtest** because it is counterfactual and does not fully reproduce fees, slippage, and changed execution paths.
+
+### Health V2 — deliberately NOT added yet
+
+The following moving Stage 5/context features are already collected or derivable but are **not yet additional adaptive Health factors**. They are intentionally deferred until Health V2 has a fresh paper-trading cohort, so their incremental effect can be measured cleanly:
+
+- **funding rate** — collected in the lifecycle snapshot, currently not scored in Health
+- **raw OI change magnitude** — Health currently uses categorical OI interpretation, not the numerical size of the OI move
+- **OI trajectory across lifecycle evaluations** — no OI rising/falling acceleration or change-from-previous-health memory yet
+- **taker-flow trajectory** — Health uses the current BUY / SELL / BALANCED bias, not persistence or change in taker buy share over multiple evaluations
+- **structure transition memory** — current structure is scored, but transitions such as BREAKOUT → NO_STRUCTURAL_BREAK → FAILED_BREAKOUT are not separately weighted
+- **regime transition memory** — current 4H BULL / BEAR / SIDEWAYS is scored, but regime deterioration across evaluations is not separately weighted
+
+These are **candidate refinements, not planned additions by default**. The next validation step is to run Health V2 unchanged on a fresh executable paper cohort first, then inspect the remaining bad HOLD/REDUCE/CLOSE cases to determine whether any of these dynamic context changes provide real incremental information.
 
 AI position review maps:
 
@@ -410,7 +511,7 @@ WATCH   → REDUCE
 VETO    → CLOSE
 ~~~
 
-AI cannot override a deterministic CLOSE or hard-risk CLOSE.
+AI receives the deterministic Health object, including the adaptive Health components. AI cannot override a deterministic CLOSE or hard-risk CLOSE.
 
 ## Stage 13 — Automatic paper trading
 
