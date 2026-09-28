@@ -70,7 +70,10 @@ def main() -> int:
     parser.add_argument("--once", action="store_true", help="run one full-universe scan and exit")
     parser.add_argument("--json", action="store_true", help="print the scan JSON")
     parser.add_argument("--workers", type=int, default=12)
-    parser.add_argument("--output", default="data/latest_scan.json")
+    parser.add_argument(
+        "--output",
+        default=os.environ.get("MARKET_RADAR_OUTPUT_PATH", "data/latest_scan.json"),
+    )
     parser.add_argument("--offset-seconds", type=int, default=3)
     parser.add_argument(
         "--serve",
