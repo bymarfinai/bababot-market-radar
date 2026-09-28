@@ -284,11 +284,18 @@ def call_model_review(
 
     last_error: Exception | None = None
     for index, base_url in enumerate(base_urls):
-        response = _rate_limited_post(
-            f"{base_url}/chat/completions",
-            headers=headers,
-            body=body,
-        )
+        try:
+            response = _rate_limited_post(
+                f"{base_url}/chat/completions",
+                headers=headers,
+                body=body,
+            )
+        except requests.RequestException as exc:
+            last_error = exc
+            if index < len(base_urls) - 1:
+                continue
+            raise
+
         _raise_for_quota(
             response,
             provider=provider,
@@ -298,6 +305,13 @@ def call_model_review(
         if response.status_code == 403 and index < len(base_urls) - 1:
             last_error = RuntimeError(
                 f"{provider_label} endpoint returned HTTP 403; trying fallback"
+            )
+            continue
+
+        if response.status_code >= 500 and index < len(base_urls) - 1:
+            last_error = RuntimeError(
+                f"{provider_label} endpoint returned HTTP {response.status_code}; "
+                "trying fallback"
             )
             continue
 
