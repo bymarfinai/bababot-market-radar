@@ -640,9 +640,37 @@ VETO    → CLOSE
 
 AI receives the deterministic Health object, including the adaptive Health components. AI cannot override a deterministic CLOSE or hard-risk CLOSE.
 
-## Stage 13 — Automatic paper trading
+## Stage 13 — Event-driven automatic paper trading
 
-Paper execution uses Stage 11 final APPROVE entries and Stage 12 REDUCE/CLOSE actions.
+Current version:
+
+~~~text
+stage13-v2-event-driven
+~~~
+
+New entries no longer wait for the paper polling interval after Stage 11 approval.
+
+Normal entry path:
+
+~~~text
+Stage 11 final APPROVE
+    ↓ immediately
+Stage 11C fresh-direction revalidation
+    ├── WAIT   → no order; polling loop may retry later
+    ├── CANCEL → persist skipped entry
+    └── ENTER
+          ↓ immediately
+       create paper order
+          ↓ immediately
+       synthetic market fill
+~~~
+
+The 10-second paper loop remains as a recovery path for WAIT decisions, deferred
+entries, or transient event-handoff failures. Entry handoff and the recovery
+loop share the same lock, and the database keeps one unique entry order per
+signal, so the same APPROVE cannot be opened twice.
+
+Stage 12 REDUCE/CLOSE lifecycle actions remain poll-driven.
 
 Defaults:
 
@@ -654,7 +682,7 @@ reduce fraction       = 50%
 fee rate              = 0.075%
 slippage              = 2 bps
 hard stop             = disabled by default
-poll interval          = 10 seconds
+recovery poll interval = 10 seconds
 ~~~
 
 Paper trading is controlled by PAPER_TRADING_ENABLED.
