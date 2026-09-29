@@ -9,6 +9,7 @@ from typing import Any
 
 import psycopg2.extras
 
+from .pipeline_cohort import label_signal_cohort
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -442,7 +443,8 @@ def create_live_position(
                 """,
                 values,
             )
-            if cur.fetchone() is not None:
+            inserted = cur.fetchone() is not None
+            if inserted:
                 cur.execute(
                     """
                     insert into trade_events (
@@ -452,6 +454,13 @@ def create_live_position(
                     """,
                     (signal_id, position_id, opened_at_ms, raw),
                 )
+
+    if inserted:
+        label_signal_cohort(
+            signal_id,
+            opened_at_ms=opened_at_ms,
+            metadata={"mode": "LIVE", "position_id": position_id},
+        )
 
 
 def update_live_reduce(
