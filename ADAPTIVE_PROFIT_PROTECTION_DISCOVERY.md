@@ -785,6 +785,309 @@ Do not change V3 thresholds, enable live, or resume entries merely because a des
 
 ---
 
+# 13A. Stage 2 execution sequence
+
+Stage 2 should be executed in the following order. A new chat must not skip directly to a later subsection unless the earlier subsection has passed its QA.
+
+## Stage 2A - Peak / outcome anatomy
+
+Purpose:
+- establish the basic distribution of peak economic ROI,
+- quantify final capture and giveback,
+- separate small moves from meaningful runners.
+
+Required work:
+- assign every trade to the mandatory peak-economic-ROI bucket,
+- calculate peak economic PnL / ROI,
+- final net PnL / ROI,
+- capture ratio,
+- giveback dollars,
+- giveback ratio,
+- peak-to-close time,
+- REDUCE count / state.
+
+Minimum output:
+
+~~~text
+stage2_trade_anatomy.csv
+stage2_peak_bucket_summary.csv
+~~~
+
+Do not yet use taker, OI, structure, or volatility to select a protector rule.
+
+## Stage 2B - Giveback decay through time
+
+Purpose:
+- determine how quickly peak profit decays,
+- determine whether a pullback commonly recovers to another peak.
+
+Required horizons:
+
+~~~text
++1m
++3m
++5m
++10m
++15m
+~~~
+
+For each peak bucket calculate:
+- retained fraction,
+- new-peak probability,
+- 25% / 50% / 75% giveback probability,
+- median / P25 / P75 economic PnL path.
+
+Minimum output:
+
+~~~text
+stage2_decay_curves.csv
+~~~
+
+Key result:
+- empirical continuation window for each peak-size bucket.
+
+## Stage 2C - Time-since-peak hazard
+
+Purpose:
+- answer whether a stale peak becomes progressively less likely to continue.
+
+Time-since-peak bins:
+
+~~~text
+0-1m
+1-3m
+3-5m
+5-10m
+10-20m
+>20m
+~~~
+
+For every bin report:
+- probability of new peak in next 1m / 3m / 5m,
+- expected future upside,
+- expected future downside,
+- probability of >=25% / >=50% / >=75% giveback,
+- final capture distribution.
+
+Minimum output:
+
+~~~text
+stage2_time_since_peak.csv
+~~~
+
+This is the factual basis for any future time-decay tightening term.
+
+## Stage 2D - Continuation evidence anatomy
+
+Purpose:
+- identify what strong runners look like while they are still healthy.
+
+At minimum analyze:
+- side-adjusted 1m return,
+- side-adjusted 3m return,
+- favorable / neutral / adverse microstructure,
+- taker alignment,
+- OI alignment,
+- realized volatility,
+- repeated-new-peak behavior.
+
+Compare evidence around:
+
+~~~text
+T-3m
+T-1m
+T = peak
+T+1m
+T+3m
+T+5m
+~~~
+
+Minimum output:
+
+~~~text
+stage2_evidence_transition.csv
+~~~
+
+The key question is not "what predicts profit in general?" but:
+
+> What evidence is present when a profitable pullback is still likely to continue?
+
+## Stage 2E - Flow x positioning interaction
+
+Purpose:
+- test whether taker and OI jointly distinguish continuation from exhaustion.
+
+Required interaction matrix:
+
+~~~text
+FLOW aligned  + OI aligned
+FLOW aligned  + OI supportive/deleveraging
+FLOW aligned  + OI opposite
+
+FLOW neutral  + each OI state
+
+FLOW opposite + OI aligned
+FLOW opposite + OI supportive/deleveraging
+FLOW opposite + OI opposite
+~~~
+
+For each cell report:
+- N,
+- new-peak probability,
+- continuation probability,
+- median future upside,
+- median giveback,
+- final capture.
+
+Minimum output:
+
+~~~text
+stage2_flow_oi_matrix.csv
+~~~
+
+Small-N cells must be marked unstable and must not be promoted into rules.
+
+## Stage 2F - Volatility allowance anatomy
+
+Purpose:
+- determine how much breathing room is normal at different volatility levels.
+
+Use empirical realized-volatility quantiles from the frozen cohort. Record the actual quantile cutoffs in the manifest.
+
+For each volatility state test recovery after current giveback levels such as:
+
+~~~text
+20%
+30%
+40%
+50%
+60%
+~~~
+
+Questions:
+- how often does price recover to a new peak?
+- how much additional upside follows?
+- how much downside follows if it fails?
+- does high volatility genuinely require a looser lock?
+
+Minimum output:
+
+~~~text
+stage2_volatility_analysis.csv
+~~~
+
+This stage may support or reject a future volatility allowance term.
+
+## Stage 2G - Already-reduced state anatomy
+
+Purpose:
+- determine whether a position that has already been reduced should receive less tolerance on a second deterioration.
+
+Compare:
+- never reduced,
+- recently reduced,
+- reduced and then made a new peak,
+- reduced and then failed to make a new peak.
+
+Report:
+- new-peak probability,
+- future upside,
+- future giveback,
+- final capture,
+- time from REDUCE to CLOSE,
+- second-deterioration behavior.
+
+Minimum output:
+
+~~~text
+stage2_reduced_state_analysis.csv
+~~~
+
+This stage tests the existing V3 escalation concept without assuming it is correct.
+
+## Stage 2H - Casebook + synthesis
+
+Purpose:
+- translate aggregate statistics into understandable trade paths,
+- prevent aggregate optimization from hiding destroyed runners.
+
+Mandatory case groups:
+- top 10 peak-economic runners,
+- top 10 final-PnL winners,
+- top 10 largest givebacks,
+- positive peak -> final loss,
+- peak >=2% and capture >=70%,
+- peak >=2% and capture <30%.
+
+Mandatory named cases where present:
+
+~~~text
+GRASSUSDT
+CELOUSDT
+ARXUSDT
+MINAUSDT
+~~~
+
+Every case must show:
+
+~~~text
+timestamp
+economic PnL
+economic ROI
+known peak
+giveback ratio
+time since peak
+taker state
+OI state
+structure state
+volatility state
+position reduction state
+actual V3 action
+~~~
+
+Minimum outputs:
+
+~~~text
+stage2_casebook.csv
+stage2_casebook.md
+~~~
+
+The final Stage 2 synthesis must produce hypotheses in the form:
+
+~~~text
+OBSERVATION
+    what the frozen data shows
+
+POSSIBLE V4 IMPLICATION
+    what this might imply for a protector
+
+CONFIDENCE / LIMITATION
+    sample size, reconstruction limit, or conflicting evidence
+~~~
+
+It must not output a final V4 lock table.
+
+## Stage 2 substage completion rule
+
+Stage 2 is not complete merely because all files exist.
+
+Required order:
+
+~~~text
+2A -> 2B -> 2C -> 2D -> 2E -> 2F -> 2G -> 2H
+~~~
+
+After every substage:
+1. report row/sample coverage,
+2. report missing-data counts,
+3. check causal timestamp rules,
+4. record any small-N/unstable segments,
+5. preserve the same frozen 497-trade cohort.
+
+Only after 2H passes may the workstream proceed to Stage 3 Static Frontier Baseline.
+
+---
+
 # 14. Required Stage 2 outputs
 
 Minimum:
