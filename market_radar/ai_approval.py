@@ -436,6 +436,21 @@ def review_signal(
         signal["signal_id"],
         ai_finished_at_ms=ai_finished_at_ms,
     )
+
+    if result["final_verdict"] == "APPROVE":
+        try:
+            from .paper_trading import process_approved_signal
+
+            result["stage13_handoff"] = process_approved_signal(
+                str(signal["signal_id"])
+            )
+        except Exception as exc:
+            result["stage13_handoff"] = {
+                "status": "ERROR",
+                "error_type": type(exc).__name__,
+                "error": str(exc)[:300],
+            }
+
     return result
 
 
