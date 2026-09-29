@@ -477,6 +477,22 @@ Stage 11B is a failover-only resilience layer:
 - alternate failure or absence fails closed to VETO
 - shadow voting, escalation, quorum, and tiebreaker paths are forbidden
 
+
+Stage 11C is the final deterministic execution-time direction gate.
+
+Stage 11C invariants:
+
+- runs only after final Stage 11 APPROVE
+- reads fresh public market data at execution time
+- output is ENTER, WAIT, or CANCEL
+- never reverses the Stage 6/11 direction
+- stale signal/approval or excessive price chase may CANCEL
+- fresh contradiction may CANCEL
+- mixed/insufficient fresh evidence returns WAIT
+- only ENTER may create a new entry order
+- Stage 11C verdict, reasons, and snapshot must be persisted
+- an ENTER verdict has a short fill-freshness TTL; stale gate results cannot fill
+
 ---
 
 ## 17. Stage 12 — Position Lifecycle
