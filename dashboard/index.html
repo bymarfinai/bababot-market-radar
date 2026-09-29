@@ -297,8 +297,11 @@ function settledValue(x,fallback){return x.status==='fulfilled'?x.value:fallback
 function latestEvalMap(){
   var m={};
   state.evals.forEach(function(x){
-    var id=x.position_id;
-    if(!m[id]||Number(x.candle_close_time_ms)>Number(m[id].candle_close_time_ms))m[id]=x;
+    var id=x.position_id,cur=m[id];
+    if(!cur||
+      Number(x.candle_close_time_ms||0)>Number(cur.candle_close_time_ms||0)||
+      (Number(x.candle_close_time_ms||0)===Number(cur.candle_close_time_ms||0)&&Number(x.evaluated_at_ms||0)>Number(cur.evaluated_at_ms||0))
+    )m[id]=x;
   });
   return m;
 }
@@ -564,19 +567,35 @@ function renderHealthInspector(){
 }
 function renderPositions(){
   var map=latestEvalMap();
-  el('positionsMeta').textContent=state.positions.length+' monitored';
+  var waiting=state.positions.filter(function(p){return !map[p.position_id]}).length;
+  el('positionsMeta').textContent=state.positions.length+' monitored'+(waiting?' · '+waiting+' initializing':'');
   el('positionRows').innerHTML=state.positions.length?state.positions.map(function(p){
-    var e=map[p.position_id]||{},h=healthView(e);
+    var e=map[p.position_id]||null;
+    if(!e){
+      return '<tr class="click pos-row" data-symbol="'+esc(p.symbol)+'">'+
+        '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">awaiting first fast snapshot · '+age(p.opened_at_ms)+'</div></td>'+
+        '<td>'+badge(p.side)+'</td><td>'+badge('INITIALIZING')+'</td>'+
+        '<td>'+px(p.entry_price)+'</td>'+
+        '<td class="muted">fetching…</td><td class="muted">pending</td>'+
+        '<td class="muted">awaiting 5m</td><td class="muted">awaiting 5m</td>'+
+        '<td class="muted">pending</td><td class="muted">pending</td>'+
+        '<td class="muted">pending</td><td class="muted">—</td>'+
+        '<td>'+badge('PENDING')+'</td><td>'+badge('PENDING')+'</td><td>'+badge('PENDING')+'</td></tr>';
+    }
+    var h=healthView(e),snap=e.snapshot||{},initialFast=snap.monitoring_state==='INITIAL_FAST'||snap.awaiting_thesis_health===true;
     var hp=h.adaptive===null?0:Math.max(0,Math.min(100,Number(h.adaptive)));
+    var healthBase=initialFast?'<span class="muted">awaiting 5m</span>':num(h.base,0);
+    var healthAdaptive=initialFast?'<span class="muted">awaiting 5m</span>':'<div style="display:flex;align-items:center;gap:6px"><span>'+num(h.adaptive,0)+'</span><div class="bar"><i style="width:'+hp+'%"></i></div></div>';
+    var monitorLabel=initialFast?'FAST MONITORING':esc(e.lifecycle_version||'—');
     return '<tr class="click pos-row" data-symbol="'+esc(p.symbol)+'">'+
-      '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">'+esc(e.lifecycle_version||'—')+'</div></td><td>'+badge(p.side)+'</td><td>'+esc(p.status||'—')+'</td>'+
+      '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">'+monitorLabel+' · '+age(e.evaluated_at_ms)+'</div></td><td>'+badge(p.side)+'</td><td>'+esc(p.status||'—')+'</td>'+
       '<td>'+px(p.entry_price)+'</td><td>'+px(e.current_price)+'</td><td class="'+(Number(e.unrealized_pnl_pct||0)>=0?'green':'red')+'">'+pct(e.unrealized_pnl_pct)+'</td>'+
-      '<td>'+num(h.base,0)+'</td>'+
-      '<td><div style="display:flex;align-items:center;gap:6px"><span>'+num(h.adaptive,0)+'</span><div class="bar"><i style="width:'+hp+'%"></i></div></div></td>'+
+      '<td>'+healthBase+'</td>'+
+      '<td>'+healthAdaptive+'</td>'+
       '<td class="green">'+pct(e.mfe_pct)+'</td><td class="red">'+pct(e.mae_pct)+'</td>'+
       '<td>'+pct(h.givebackAbs)+'<div class="cell-sub">'+num(h.givebackRatio*100,0)+'% MFE</div></td>'+
-      '<td class="'+(h.totalPenalty>0?'amber':'muted')+'">-'+num(h.totalPenalty,0)+'<div class="cell-sub">MAE '+num(h.maePenalty,0)+' / GB '+num(h.givebackPenalty,0)+'</div></td>'+
-      '<td>'+badge(e.deterministic_action)+'</td><td>'+badge(e.ai_action)+'</td><td>'+badge(e.final_action)+'</td></tr>';
+      '<td class="'+(initialFast?'muted':(h.totalPenalty>0?'amber':'muted'))+'">'+(initialFast?'awaiting 5m':'-'+num(h.totalPenalty,0)+'<div class="cell-sub">MAE '+num(h.maePenalty,0)+' / GB '+num(h.givebackPenalty,0)+'</div>')+'</td>'+
+      '<td>'+badge(e.deterministic_action)+'</td><td>'+(initialFast?badge('PENDING'):badge(e.ai_action))+'</td><td>'+badge(e.final_action)+'</td></tr>';
   }).join(''):'<tr><td colspan="15" class="empty"><strong>No open positions</strong><span>New positions appear here after an approved paper or live entry.</span></td></tr>';
   document.querySelectorAll('.pos-row').forEach(function(tr){tr.onclick=function(){selectSymbol(tr.dataset.symbol)}});
   renderHealthInspector();
