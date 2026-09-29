@@ -143,7 +143,7 @@ def list_live_entry_candidates(
           and a.reviewed_at_ms >= ?
           and p.position_id is null
           and o.order_id is null
-        order by a.reviewed_at_ms asc
+        order by a.reviewed_at_ms desc
         limit ?
     """
     if persistence_backend() == "sqlite":
