@@ -222,10 +222,10 @@ def backfill_position_cohorts() -> dict[str, int]:
         with _sqlite_connect(database_path()) as conn:
             rows = conn.execute(
                 """
-                select signal_id, min(opened_at_ms) as opened_at_ms
+                select signal_id, opened_at_ms, raw_json
                 from positions
                 where signal_id is not null and opened_at_ms is not null
-                group by signal_id
+                order by signal_id, opened_at_ms asc
                 """
             ).fetchall()
             data = [dict(row) for row in rows]
@@ -243,11 +243,25 @@ def backfill_position_cohorts() -> dict[str, int]:
                 data = [dict(row) for row in cur.fetchall()]
 
     counts = {PRE_COHORT: 0, POST_COHORT: 0}
+    seen: set[str] = set()
     for row in data:
+        signal_id = str(row["signal_id"])
+        if signal_id in seen:
+            continue
+        seen.add(signal_id)
+        position_meta: dict[str, Any] = {}
+        try:
+            position_meta = json.loads(row.get("raw_json") or "{}")
+        except Exception:
+            position_meta = {}
         result = label_signal_cohort(
-            str(row["signal_id"]),
+            signal_id,
             opened_at_ms=int(row["opened_at_ms"]),
-            metadata={"source": "position_backfill"},
+            metadata={
+                "source": "position_backfill",
+                "stage11c_version": position_meta.get("stage11c_version"),
+                "stage13_version": position_meta.get("paper_trading_version"),
+            },
         )
         counts[result["cohort"]] += 1
     return counts
