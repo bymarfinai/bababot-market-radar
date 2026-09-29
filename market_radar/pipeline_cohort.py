@@ -117,15 +117,26 @@ def label_signal_cohort(
     _initialize()
     cohort = cohort_for_opened_at(opened_at_ms)
     now_ms = int(time.time() * 1000)
-    stack = POST_STACK if cohort == POST_COHORT else {
-        "decision_version": "legacy_or_mixed",
-        "persistence_version": "legacy_or_mixed",
-        "approval_version": "legacy_or_mixed",
-        "failover_version": "legacy_or_mixed",
-        "fresh_gate_version": "legacy_or_mixed",
-        "paper_trading_version": "legacy_or_mixed",
-    }
-    raw = json.dumps(metadata or {}, separators=(",", ":"), allow_nan=False)
+    meta = dict(metadata or {})
+    if cohort == POST_COHORT:
+        stack = dict(POST_STACK)
+        for key in tuple(stack):
+            if meta.get(key):
+                stack[key] = str(meta[key])
+        if meta.get("stage11c_version"):
+            stack["fresh_gate_version"] = str(meta["stage11c_version"])
+        if meta.get("stage13_version"):
+            stack["paper_trading_version"] = str(meta["stage13_version"])
+    else:
+        stack = {
+            "decision_version": "legacy_or_mixed",
+            "persistence_version": "legacy_or_mixed",
+            "approval_version": "legacy_or_mixed",
+            "failover_version": "legacy_or_mixed",
+            "fresh_gate_version": "legacy_or_mixed",
+            "paper_trading_version": "legacy_or_mixed",
+        }
+    raw = json.dumps(meta, separators=(",", ":"), allow_nan=False)
     values = (
         signal_id,
         cohort,
@@ -245,6 +256,7 @@ def backfill_position_cohorts() -> dict[str, int]:
 def list_cohorts(
     *,
     cohort: str | None = None,
+    fresh_gate_version: str | None = None,
     limit: int = 100,
 ) -> list[dict[str, Any]]:
     _initialize()
@@ -252,71 +264,37 @@ def list_cohorts(
     cohort_clean = str(cohort or "").upper() or None
     if cohort_clean and cohort_clean not in {PRE_COHORT, POST_COHORT}:
         raise ValueError(f"invalid cohort: {cohort}")
+    fresh_gate_clean = str(fresh_gate_version or "").strip() or None
+
+    where: list[str] = []
+    params: list[Any] = []
+    if cohort_clean:
+        where.append("c.cohort=?")
+        params.append(cohort_clean)
+    if fresh_gate_clean:
+        where.append("c.fresh_gate_version=?")
+        params.append(fresh_gate_clean)
+    clause = (" where " + " and ".join(where)) if where else ""
+    query = """
+        select c.*, s.symbol, s.side,
+               p.position_id, p.mode, p.status,
+               p.closed_at_ms, p.realized_pnl, p.realized_pnl_pct
+        from pipeline_cohorts c
+        join signals s on s.signal_id=c.signal_id
+        left join positions p on p.signal_id=c.signal_id
+    """ + clause + """
+        order by c.position_opened_at_ms desc
+        limit ?
+    """
+    params.append(safe_limit)
 
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
-            if cohort_clean:
-                rows = conn.execute(
-                    """
-                    select c.*, s.symbol, s.side,
-                           p.position_id, p.mode, p.status,
-                           p.closed_at_ms, p.realized_pnl, p.realized_pnl_pct
-                    from pipeline_cohorts c
-                    join signals s on s.signal_id=c.signal_id
-                    left join positions p on p.signal_id=c.signal_id
-                    where c.cohort=?
-                    order by c.position_opened_at_ms desc
-                    limit ?
-                    """,
-                    (cohort_clean, safe_limit),
-                ).fetchall()
-            else:
-                rows = conn.execute(
-                    """
-                    select c.*, s.symbol, s.side,
-                           p.position_id, p.mode, p.status,
-                           p.closed_at_ms, p.realized_pnl, p.realized_pnl_pct
-                    from pipeline_cohorts c
-                    join signals s on s.signal_id=c.signal_id
-                    left join positions p on p.signal_id=c.signal_id
-                    order by c.position_opened_at_ms desc
-                    limit ?
-                    """,
-                    (safe_limit,),
-                ).fetchall()
-            out = [dict(row) for row in rows]
+            out = [dict(row) for row in conn.execute(query, params).fetchall()]
     else:
         with _postgres_connect() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-                if cohort_clean:
-                    cur.execute(
-                        """
-                        select c.*, s.symbol, s.side,
-                               p.position_id, p.mode, p.status,
-                               p.closed_at_ms, p.realized_pnl, p.realized_pnl_pct
-                        from pipeline_cohorts c
-                        join signals s on s.signal_id=c.signal_id
-                        left join positions p on p.signal_id=c.signal_id
-                        where c.cohort=%s
-                        order by c.position_opened_at_ms desc
-                        limit %s
-                        """,
-                        (cohort_clean, safe_limit),
-                    )
-                else:
-                    cur.execute(
-                        """
-                        select c.*, s.symbol, s.side,
-                               p.position_id, p.mode, p.status,
-                               p.closed_at_ms, p.realized_pnl, p.realized_pnl_pct
-                        from pipeline_cohorts c
-                        join signals s on s.signal_id=c.signal_id
-                        left join positions p on p.signal_id=c.signal_id
-                        order by c.position_opened_at_ms desc
-                        limit %s
-                        """,
-                        (safe_limit,),
-                    )
+                cur.execute(query.replace("?", "%s"), params)
                 out = [dict(row) for row in cur.fetchall()]
     for row in out:
         try:
@@ -331,6 +309,7 @@ def cohort_summary() -> dict[str, Any]:
     query = """
         select
             c.cohort,
+            c.fresh_gate_version,
             count(distinct c.signal_id) as trades,
             count(distinct case when p.status='CLOSED' then p.position_id end) as closed,
             count(distinct case when p.status in ('OPEN','REDUCED') then p.position_id end) as active,
@@ -339,8 +318,8 @@ def cohort_summary() -> dict[str, Any]:
             coalesce(sum(case when p.status='CLOSED' then p.realized_pnl else 0 end),0) as net_pnl
         from pipeline_cohorts c
         left join positions p on p.signal_id=c.signal_id and p.mode='PAPER'
-        group by c.cohort
-        order by c.cohort
+        group by c.cohort, c.fresh_gate_version
+        order by c.cohort, c.fresh_gate_version
     """
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
