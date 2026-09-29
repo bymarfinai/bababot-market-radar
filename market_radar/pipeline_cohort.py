@@ -338,7 +338,7 @@ def cohort_summary() -> dict[str, Any]:
             coalesce(sum(case when p.status='CLOSED' and p.realized_pnl <= 0 then 1 else 0 end),0) as losses,
             coalesce(sum(case when p.status='CLOSED' then p.realized_pnl else 0 end),0) as net_pnl
         from pipeline_cohorts c
-        left join positions p on p.signal_id=c.signal_id
+        left join positions p on p.signal_id=c.signal_id and p.mode='PAPER'
         group by c.cohort
         order by c.cohort
     """
