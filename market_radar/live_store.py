@@ -461,7 +461,12 @@ def create_live_position(
         label_signal_cohort(
             signal_id,
             opened_at_ms=opened_at_ms,
-            metadata={"mode": "LIVE", "position_id": position_id},
+            metadata={
+                "mode": "LIVE",
+                "position_id": position_id,
+                "stage11c_version": metadata.get("stage11c_version"),
+                "stage13_version": metadata.get("paper_trading_version"),
+            },
         )
 
 
