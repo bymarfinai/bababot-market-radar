@@ -474,6 +474,9 @@ def _execute_open(
 
     metadata = {
         "paper_trading_version": PAPER_TRADING_VERSION,
+        "stage11c_version": payload.get("stage11c_version"),
+        "stage11c_checked_at_ms": payload.get("stage11c_checked_at_ms"),
+        "stage11c_evidence_families": (payload.get("stage11c_snapshot") or {}).get("evidence_families"),
         "initial_notional_usdt": notional,
         "initial_quantity": quantity,
         "entry_market_price": market_price,
