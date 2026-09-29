@@ -4,6 +4,7 @@ import json
 import os
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Iterable
 
 import psycopg2.extras
@@ -18,7 +19,7 @@ from .persistence import (
 )
 
 
-STAGE11C_VERSION = "stage11c-v1-fresh-direction"
+STAGE11C_VERSION = "stage11c-v2-evidence-families"
 
 _STORE_LOCK = threading.Lock()
 _STORE_READY: set[tuple[str, str]] = set()
@@ -166,14 +167,168 @@ def _taker_share(row: list[Any]) -> float:
     return buy / total if total > 0 else 0.5
 
 
+def _soft_chase_pct() -> float:
+    return max(
+        0.10,
+        min(float(os.environ.get("STAGE11C_SOFT_CHASE_PCT", "0.50")), _max_chase_pct()),
+    )
+
+
+def _oi_min_change_pct() -> float:
+    return max(
+        0.0,
+        min(float(os.environ.get("STAGE11C_OI_MIN_CHANGE_PCT", "0.05")), 5.0),
+    )
+
+
+def _impulse_concentration_ratio() -> float:
+    return max(
+        0.50,
+        min(float(os.environ.get("STAGE11C_IMPULSE_CONCENTRATION_RATIO", "0.80")), 1.50),
+    )
+
+
+def _impulse_ret1_min_pct() -> float:
+    return max(
+        0.05,
+        min(float(os.environ.get("STAGE11C_IMPULSE_RET1_MIN_PCT", "0.20")), 2.0),
+    )
+
+
+def _decision_reasons(candidate: dict[str, Any]) -> list[str]:
+    raw = candidate.get("decision_reasons_json")
+    if isinstance(raw, list):
+        return [str(x) for x in raw]
+    try:
+        parsed = json.loads(raw or "[]")
+        return [str(x) for x in parsed] if isinstance(parsed, list) else []
+    except Exception:
+        return []
+
+
+def _fresh_oi_change_pct(
+    oi_hist: Iterable[dict[str, Any]] | None,
+    now_ms: int,
+) -> float | None:
+    rows: list[tuple[int, float]] = []
+    for item in oi_hist or []:
+        try:
+            ts = int(item.get("timestamp") or 0)
+            oi = float(item.get("sumOpenInterest"))
+        except (TypeError, ValueError):
+            continue
+        if ts <= now_ms and oi > 0:
+            rows.append((ts, oi))
+    rows.sort()
+    if len(rows) < 2:
+        return None
+    first = rows[-2][1]
+    last = rows[-1][1]
+    if first <= 0:
+        return None
+    return 100.0 * (last / first - 1.0)
+
+
+def _positioning_family(
+    candidate: dict[str, Any],
+    *,
+    oi_hist: Iterable[dict[str, Any]] | None,
+    now_ms: int,
+    side_ret3: float,
+) -> tuple[str, dict[str, Any]]:
+    change = _fresh_oi_change_pct(oi_hist, now_ms)
+    source = "fresh_5m_oi"
+    threshold = _oi_min_change_pct()
+
+    if change is not None:
+        if abs(change) < threshold:
+            return "NEUTRAL", {
+                "source": source,
+                "oi_change_pct": change,
+                "threshold_pct": threshold,
+                "interpretation": "oi_change_below_floor",
+            }
+        if change > 0:
+            if side_ret3 >= _ret3_threshold_pct():
+                status = "ALIGNED"
+                interpretation = "fresh_positioning_with_proposed_move"
+            elif side_ret3 <= -_ret3_threshold_pct():
+                status = "OPPOSITE"
+                interpretation = "fresh_positioning_against_proposed_move"
+            else:
+                status = "NEUTRAL"
+                interpretation = "fresh_oi_without_directional_price_confirmation"
+        else:
+            if side_ret3 >= _ret3_threshold_pct():
+                status = "SUPPORTIVE"
+                interpretation = "position_unwind_supporting_proposed_move"
+            elif side_ret3 <= -_ret3_threshold_pct():
+                status = "OPPOSITE"
+                interpretation = "proposed_side_liquidation_or_unwind"
+            else:
+                status = "NEUTRAL"
+                interpretation = "oi_unwind_without_directional_price_confirmation"
+        return status, {
+            "source": source,
+            "oi_change_pct": change,
+            "threshold_pct": threshold,
+            "interpretation": interpretation,
+        }
+
+    reasons = _decision_reasons(candidate)
+    side = str(candidate.get("side") or "").upper()
+    side_word = "long" if side == "LONG" else "short"
+    opposite_word = "short" if side == "LONG" else "long"
+    if any(f"confirm:oi_fresh_{side_word}" in reason for reason in reasons):
+        return "ALIGNED", {
+            "source": "signal_context_fallback",
+            "oi_change_pct": candidate.get("raw_oi_change_pct"),
+            "interpretation": f"signal_confirm_oi_fresh_{side_word}",
+        }
+    if any(f"confirm:oi_fresh_{opposite_word}" in reason for reason in reasons):
+        return "OPPOSITE", {
+            "source": "signal_context_fallback",
+            "oi_change_pct": candidate.get("raw_oi_change_pct"),
+            "interpretation": f"signal_confirm_oi_fresh_{opposite_word}",
+        }
+    supportive = (
+        (side == "LONG" and any("oi_short_covering" in reason for reason in reasons))
+        or (side == "SHORT" and any("oi_long_liquidation" in reason for reason in reasons))
+    )
+    if supportive:
+        return "SUPPORTIVE", {
+            "source": "signal_context_fallback",
+            "oi_change_pct": candidate.get("raw_oi_change_pct"),
+            "interpretation": "signal_position_unwind_supportive",
+        }
+    return "NEUTRAL", {
+        "source": "signal_context_fallback",
+        "oi_change_pct": candidate.get("raw_oi_change_pct"),
+        "interpretation": "no_directional_positioning_confirmation",
+    }
+
+
+def _regime_family(candidate: dict[str, Any]) -> str:
+    side = str(candidate.get("side") or "").upper()
+    regime = str(candidate.get("market_regime") or "").upper()
+    if regime == "SIDEWAYS" or not regime:
+        return "NEUTRAL"
+    if (side == "LONG" and regime == "BULL") or (side == "SHORT" and regime == "BEAR"):
+        return "ALIGNED"
+    if (side == "LONG" and regime == "BEAR") or (side == "SHORT" and regime == "BULL"):
+        return "OPPOSITE"
+    return "NEUTRAL"
+
+
 def evaluate_fresh_entry(
     candidate: dict[str, Any],
     *,
     current_price: float,
     klines_1m: Iterable[list[Any]],
     now_ms: int,
+    oi_hist: Iterable[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Pure deterministic Stage 11C decision from fresh public market data."""
+    """Stage 11C V2: normalize correlated evidence into independent families."""
     side = str(candidate.get("side") or "").upper()
     signal_price = _f(candidate.get("signal_price"), -1.0)
     signal_time_ms = int(candidate.get("signal_time_ms") or 0)
@@ -189,60 +344,36 @@ def evaluate_fresh_entry(
         "signal_time_ms": signal_time_ms,
         "approval_reviewed_at_ms": approval_ms,
         "closed_1m_count": len(rows),
+        "stage": str(candidate.get("stage") or "").upper(),
+        "signal_structure_status": str(candidate.get("structure_status") or "").upper(),
+        "signal_market_regime": str(candidate.get("market_regime") or "").upper(),
     }
 
     if side not in {"LONG", "SHORT"}:
-        return {
-            "verdict": "CANCEL",
-            "reasons": ["invalid_side"],
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "CANCEL", "reasons": ["invalid_side"], "snapshot": snapshot, "version": STAGE11C_VERSION}
     if signal_price <= 0 or current_price <= 0:
-        return {
-            "verdict": "CANCEL",
-            "reasons": ["invalid_price"],
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "CANCEL", "reasons": ["invalid_price"], "snapshot": snapshot, "version": STAGE11C_VERSION}
 
     signal_age_ms = now_ms - signal_time_ms if signal_time_ms > 0 else 10**18
     approval_age_ms = now_ms - approval_ms if approval_ms > 0 else 10**18
     snapshot["signal_age_ms"] = signal_age_ms
     snapshot["approval_age_ms"] = approval_age_ms
-
     if signal_time_ms <= 0 or signal_age_ms > _max_signal_age_ms():
         reasons.append("signal_stale")
     if approval_ms <= 0 or approval_age_ms > _max_approval_age_ms():
         reasons.append("approval_stale")
     if reasons:
-        return {
-            "verdict": "CANCEL",
-            "reasons": reasons,
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "CANCEL", "reasons": reasons, "snapshot": snapshot, "version": STAGE11C_VERSION}
 
     drift_pct = 100.0 * (current_price / signal_price - 1.0)
     side_drift_pct = drift_pct if side == "LONG" else -drift_pct
     snapshot["price_drift_pct"] = drift_pct
     snapshot["side_adjusted_drift_pct"] = side_drift_pct
-
     if side_drift_pct >= _max_chase_pct():
-        return {
-            "verdict": "CANCEL",
-            "reasons": ["price_chased_too_far"],
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "CANCEL", "reasons": ["price_chased_too_far"], "snapshot": snapshot, "version": STAGE11C_VERSION}
 
     if len(rows) < 4:
-        return {
-            "verdict": "WAIT",
-            "reasons": ["insufficient_closed_1m_bars"],
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "WAIT", "reasons": ["insufficient_closed_1m_bars"], "snapshot": snapshot, "version": STAGE11C_VERSION}
 
     latest = rows[-1]
     prev = rows[-2]
@@ -251,12 +382,7 @@ def evaluate_fresh_entry(
     prev_close = _f(prev[4])
     base3_close = _f(base3[4])
     if min(latest_close, prev_close, base3_close) <= 0:
-        return {
-            "verdict": "WAIT",
-            "reasons": ["invalid_1m_close"],
-            "snapshot": snapshot,
-            "version": STAGE11C_VERSION,
-        }
+        return {"verdict": "WAIT", "reasons": ["invalid_1m_close"], "snapshot": snapshot, "version": STAGE11C_VERSION}
 
     ret1_pct = 100.0 * (latest_close / prev_close - 1.0)
     ret3_pct = 100.0 * (latest_close / base3_close - 1.0)
@@ -269,10 +395,12 @@ def evaluate_fresh_entry(
     prior_low = min(_f(row[3]) for row in prior3)
     if side == "LONG":
         opposite_structure = latest_close < prior_low
+        aligned_micro_structure = latest_close > prior_high
         taker_aligned = taker_buy_share >= _taker_buy_threshold()
         taker_opposite = taker_buy_share <= _taker_sell_threshold()
     else:
         opposite_structure = latest_close > prior_high
+        aligned_micro_structure = latest_close < prior_low
         taker_aligned = taker_buy_share <= _taker_sell_threshold()
         taker_opposite = taker_buy_share >= _taker_buy_threshold()
 
@@ -280,6 +408,46 @@ def evaluate_fresh_entry(
     ret1_opposite = side_ret1 <= -_ret1_threshold_pct()
     ret3_aligned = side_ret3 >= _ret3_threshold_pct()
     ret3_opposite = side_ret3 <= -_ret3_threshold_pct()
+
+    price_family = (
+        "OPPOSITE"
+        if opposite_structure or ret3_opposite
+        else "ALIGNED"
+        if ret3_aligned
+        else "NEUTRAL"
+    )
+    flow_family = "ALIGNED" if taker_aligned else "OPPOSITE" if taker_opposite else "NEUTRAL"
+    positioning_family, positioning_detail = _positioning_family(
+        candidate,
+        oi_hist=oi_hist,
+        now_ms=now_ms,
+        side_ret3=side_ret3,
+    )
+    regime_family = _regime_family(candidate)
+
+    impulse_ratio = (
+        abs(side_ret1) / max(abs(side_ret3), 1e-9)
+        if abs(side_ret3) >= _ret3_threshold_pct()
+        else 0.0
+    )
+    concentrated_impulse = (
+        side_ret1 >= _impulse_ret1_min_pct()
+        and impulse_ratio >= _impulse_concentration_ratio()
+    )
+    soft_chase = side_drift_pct >= _soft_chase_pct()
+
+    families = {
+        "PRICE_STRUCTURE": price_family,
+        "FLOW": flow_family,
+        "POSITIONING": positioning_family,
+        "REGIME": regime_family,
+    }
+    aligned_count = sum(status == "ALIGNED" for status in families.values())
+    opposing_count = sum(status == "OPPOSITE" for status in families.values())
+    near_entry_support = (
+        flow_family == "ALIGNED"
+        or positioning_family in {"ALIGNED", "SUPPORTIVE"}
+    )
 
     snapshot.update(
         {
@@ -292,72 +460,106 @@ def evaluate_fresh_entry(
             "prior_3m_high": prior_high,
             "prior_3m_low": prior_low,
             "opposite_micro_structure": opposite_structure,
+            "aligned_micro_structure": aligned_micro_structure,
             "ret1_aligned": ret1_aligned,
             "ret3_aligned": ret3_aligned,
-            "taker_aligned": taker_aligned,
             "ret1_opposite": ret1_opposite,
             "ret3_opposite": ret3_opposite,
+            "taker_aligned": taker_aligned,
             "taker_opposite": taker_opposite,
+            "evidence_families": families,
+            "aligned_family_count": aligned_count,
+            "opposing_family_count": opposing_count,
+            "positioning_detail": positioning_detail,
+            "near_entry_support": near_entry_support,
+            "soft_chase": soft_chase,
+            "soft_chase_threshold_pct": _soft_chase_pct(),
+            "impulse_concentration_ratio": impulse_ratio,
+            "concentrated_impulse": concentrated_impulse,
         }
     )
 
-    if opposite_structure and ret3_opposite:
+    # Hard reversal evidence from the price family remains fail-closed.
+    if price_family == "OPPOSITE":
+        cancel_reasons = ["family:price_structure_opposite"]
+        if opposite_structure:
+            cancel_reasons.append("opposite_micro_structure")
+        if ret3_opposite:
+            cancel_reasons.append("ret3_opposite")
+        return {"verdict": "CANCEL", "reasons": cancel_reasons, "snapshot": snapshot, "version": STAGE11C_VERSION}
+
+    # Two independent near-entry contradictions are enough to invalidate the setup.
+    if flow_family == "OPPOSITE" and positioning_family == "OPPOSITE":
         return {
             "verdict": "CANCEL",
-            "reasons": ["opposite_micro_structure", "ret3_opposite"],
+            "reasons": ["family:flow_opposite", "family:positioning_opposite"],
             "snapshot": snapshot,
             "version": STAGE11C_VERSION,
         }
 
-    if ret3_opposite and taker_opposite:
+    if side_drift_pct <= -_max_adverse_pct() and price_family != "ALIGNED":
         return {
             "verdict": "CANCEL",
-            "reasons": ["ret3_opposite", "taker_opposite"],
+            "reasons": ["adverse_drift_too_far", "family:price_structure_not_aligned"],
             "snapshot": snapshot,
             "version": STAGE11C_VERSION,
         }
 
-    if (
-        side_drift_pct <= -_max_adverse_pct()
-        and ret3_opposite
+    if price_family != "ALIGNED":
+        return {
+            "verdict": "WAIT",
+            "reasons": ["family:price_structure_not_aligned"],
+            "snapshot": snapshot,
+            "version": STAGE11C_VERSION,
+        }
+
+    # Regime is a modifier only. It can never qualify a trade by itself.
+    if not near_entry_support:
+        return {
+            "verdict": "WAIT",
+            "reasons": ["independent_near_entry_support_missing"],
+            "snapshot": snapshot,
+            "version": STAGE11C_VERSION,
+        }
+
+    # A live price that has already run > soft chase requires BOTH independent
+    # near-entry families to be fresh and aligned. This prevents momentum/chase
+    # from being counted as multiple confirmations.
+    if soft_chase and not (
+        flow_family == "ALIGNED" and positioning_family == "ALIGNED"
     ):
         return {
-            "verdict": "CANCEL",
-            "reasons": ["adverse_drift_too_far", "ret3_opposite"],
+            "verdict": "WAIT",
+            "reasons": ["soft_chase_requires_flow_and_positioning"],
             "snapshot": snapshot,
             "version": STAGE11C_VERSION,
         }
 
-    if (
-        ret3_aligned
-        and (ret1_aligned or taker_aligned)
-        and not opposite_structure
+    # If most of the 3m move is concentrated in the latest 1m, treat it as one
+    # impulse, not two independent momentum confirmations.
+    if concentrated_impulse and not (
+        flow_family == "ALIGNED" and positioning_family == "ALIGNED"
     ):
-        enter_reasons = ["ret3_aligned"]
-        if ret1_aligned:
-            enter_reasons.append("ret1_aligned")
-        if taker_aligned:
-            enter_reasons.append("taker_aligned")
         return {
-            "verdict": "ENTER",
-            "reasons": enter_reasons,
+            "verdict": "WAIT",
+            "reasons": ["concentrated_impulse_requires_independent_support"],
             "snapshot": snapshot,
             "version": STAGE11C_VERSION,
         }
 
-    wait_reasons = ["fresh_direction_not_confirmed"]
-    if ret3_opposite:
-        wait_reasons.append("ret3_opposite")
-    if ret1_opposite:
-        wait_reasons.append("ret1_opposite")
-    if taker_opposite:
-        wait_reasons.append("taker_opposite")
-    if opposite_structure:
-        wait_reasons.append("opposite_micro_structure")
-
+    enter_reasons = [
+        "family:price_structure_aligned",
+        f"family:flow_{flow_family.lower()}",
+        f"family:positioning_{positioning_family.lower()}",
+        f"family:regime_{regime_family.lower()}",
+    ]
+    if regime_family == "OPPOSITE":
+        enter_reasons.append("counter_regime_entry")
+    if positioning_family == "SUPPORTIVE":
+        enter_reasons.append("positioning_unwind_supportive_not_fresh")
     return {
-        "verdict": "WAIT",
-        "reasons": wait_reasons,
+        "verdict": "ENTER",
+        "reasons": enter_reasons,
         "snapshot": snapshot,
         "version": STAGE11C_VERSION,
     }
@@ -478,14 +680,23 @@ def check_fresh_entry(
 
     try:
         symbol = str(candidate["symbol"]).upper()
-        rows = client.klines(symbol=symbol, interval="1m", limit=8)
-        current_price = float(client.ticker_price(symbol))
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            kline_future = pool.submit(client.klines, symbol=symbol, interval="1m", limit=8)
+            price_future = pool.submit(client.ticker_price, symbol)
+            oi_future = pool.submit(client.open_interest_hist, symbol, "5m", 3)
+            rows = kline_future.result()
+            current_price = float(price_future.result())
+            try:
+                oi_hist = oi_future.result()
+            except Exception:
+                oi_hist = None
         checked_at_ms = int(time.time() * 1000)
         result = evaluate_fresh_entry(
             candidate,
             current_price=current_price,
             klines_1m=rows,
             now_ms=checked_at_ms,
+            oi_hist=oi_hist,
         )
     except Exception as exc:
         checked_at_ms = int(time.time() * 1000)
