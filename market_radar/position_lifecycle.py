@@ -956,25 +956,43 @@ def evaluate_position(
             hard_risk = True
             hard_reasons.append("hard_stop_crossed")
 
-    # V3 keeps Thesis Health independent from path-memory guards.
-    health = _health_from_snapshot(side, snapshot)
     age_minutes = max(
         0.0,
         (int(time.time() * 1000) - int(position.get("opened_at_ms") or 0))
         / 60_000.0,
     )
-    guards = _lifecycle_guards(
-        age_minutes=age_minutes,
-        status=str(position.get("status") or "OPEN"),
-        mfe_pct=mfe,
-        mae_pct=mae,
-        current_pnl_pct=pnl,
-        contradiction_count=len(health["contradictions"]),
-    )
-    deterministic_action = _max_action(
-        health["deterministic_action"],
-        guards["action"],
-    )
+    if _fast_guards_enabled():
+        # V3 keeps Thesis Health independent from path-memory guards.
+        health = _health_from_snapshot(side, snapshot)
+        guards = _lifecycle_guards(
+            age_minutes=age_minutes,
+            status=str(position.get("status") or "OPEN"),
+            mfe_pct=mfe,
+            mae_pct=mae,
+            current_pnl_pct=pnl,
+            contradiction_count=len(health["contradictions"]),
+        )
+        deterministic_action = _max_action(
+            health["deterministic_action"],
+            guards["action"],
+        )
+    else:
+        # Validation/rollback mode: preserve Stage 12 V2 behavior exactly.
+        health = _health_from_snapshot(
+            side,
+            snapshot,
+            mfe_pct=mfe,
+            mae_pct=mae,
+            unrealized_pnl_pct=pnl,
+        )
+        guards = {
+            "action": "HOLD",
+            "reasons": [],
+            "early_invalidation": {"action": "HOLD", "active": False, "reasons": []},
+            "profit_protection": {"action": "HOLD", "active": False, "reasons": []},
+            "disabled": True,
+        }
+        deterministic_action = health["deterministic_action"]
 
     ai_view: dict[str, Any] | None = None
     if not hard_risk and deterministic_action != "CLOSE":
