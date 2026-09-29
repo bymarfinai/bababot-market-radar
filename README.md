@@ -6,6 +6,8 @@ Market Radar has **zero runtime dependency** on bymarfinai/bababot-discovery. Di
 
 The frozen product contract and production-extension rules are documented in BLUEPRINT.md.
 
+Adaptive Stage 12 profit-protection research is documented in ADAPTIVE_PROFIT_PROTECTION_DISCOVERY.md. That file is the source-of-truth for the frozen 497-trade discovery cohort, Stage 1 reconstruction, and the Stage 2 Giveback Anatomy plan.
+
 ## Current development state
 
 **Stages 1–15 are implemented.**
