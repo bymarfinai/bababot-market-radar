@@ -14,6 +14,7 @@ from market_radar.position_lifecycle import (
     _health_from_snapshot,
     _lifecycle_guards,
     _profit_protection_guard,
+    _should_persist_fast_evaluation,
     _mfe_mae,
     _position_memory_penalties,
     _side_return,
@@ -270,6 +271,20 @@ class Stage12LifecycleTests(unittest.TestCase):
         )
         self.assertEqual(result["action"], "CLOSE")
         self.assertIn("already_reduced_escalate_close", result["reasons"])
+
+    def test_v3_initial_fast_hold_is_persisted_for_monitoring_ux(self):
+        self.assertTrue(
+            _should_persist_fast_evaluation("HOLD", has_previous=False)
+        )
+        self.assertFalse(
+            _should_persist_fast_evaluation("HOLD", has_previous=True)
+        )
+        self.assertTrue(
+            _should_persist_fast_evaluation("REDUCE", has_previous=True)
+        )
+        self.assertTrue(
+            _should_persist_fast_evaluation("CLOSE", has_previous=True)
+        )
 
     def test_v3_healthy_profitable_position_does_not_overprotect(self):
         result = _profit_protection_guard(
