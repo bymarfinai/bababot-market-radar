@@ -133,7 +133,9 @@ def list_live_entry_candidates(
         select
             a.signal_id, a.reviewed_at_ms,
             s.symbol, s.side, s.signal_time_ms, s.signal_price,
-            s.stage, s.long_score, s.short_score, s.score_edge
+            s.stage, s.long_score, s.short_score, s.score_edge,
+                    s.structure_status, s.taker_bias, s.raw_oi_change_pct,
+                    s.market_regime, s.decision_reasons_json
         from entry_approvals a
         join signals s on s.signal_id = a.signal_id
         left join positions p
