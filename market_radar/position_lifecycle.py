@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict
 from typing import Any
 
@@ -21,8 +23,10 @@ from .stage1_scanner import latest_closed_kline
 from .stage_classifier import classify_movement_stage
 
 
-POSITION_LIFECYCLE_VERSION = "stage12-v2-adaptive-health"
+POSITION_LIFECYCLE_VERSION = "stage12-v3-three-layer"
 _processing_lock = threading.Lock()
+_fast_loop_lock = threading.Lock()
+_fast_loop_started = False
 
 POSITION_SYSTEM_PROMPT = """You are BabaBot's AI Position Supervisor.
 
@@ -118,6 +122,549 @@ def _position_memory_penalties(
         "giveback_penalty": giveback_penalty,
         "total_penalty": mae_penalty + giveback_penalty,
     }
+
+
+
+
+_ACTION_RANK = {"HOLD": 0, "REDUCE": 1, "CLOSE": 2}
+
+
+def _cfg_float(name: str, default: float, lo: float, hi: float) -> float:
+    try:
+        value = float(os.environ.get(name, str(default)))
+    except (TypeError, ValueError):
+        value = default
+    return max(lo, min(value, hi))
+
+
+def _fast_guards_enabled() -> bool:
+    return os.environ.get("STAGE12_V3_FAST_GUARD_ENABLED", "1").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+def _fast_poll_seconds() -> float:
+    return _cfg_float("STAGE12_FAST_POLL_SECONDS", 15.0, 5.0, 60.0)
+
+
+def _early_window_minutes() -> float:
+    return _cfg_float("STAGE12_EARLY_WINDOW_MINUTES", 30.0, 5.0, 120.0)
+
+
+def _early_mfe_max_pct() -> float:
+    return _cfg_float("STAGE12_EARLY_MFE_MAX_PCT", 0.35, 0.05, 2.0)
+
+
+def _early_close_mae_pct() -> float:
+    return -abs(_cfg_float("STAGE12_EARLY_CLOSE_MAE_PCT", 1.0, 0.25, 5.0))
+
+
+def _early_close_pnl_pct() -> float:
+    return -abs(_cfg_float("STAGE12_EARLY_CLOSE_PNL_PCT", 0.60, 0.10, 5.0))
+
+
+def _early_reduce_pnl_pct() -> float:
+    return -abs(_cfg_float("STAGE12_EARLY_REDUCE_PNL_PCT", 0.35, 0.05, 3.0))
+
+
+def _early_min_contradictions() -> int:
+    return int(_cfg_float("STAGE12_EARLY_MIN_CONTRADICTIONS", 2, 1, 3))
+
+
+def _protect_arm_mfe_pct() -> float:
+    return _cfg_float("STAGE12_PROTECT_ARM_MFE_PCT", 0.50, 0.10, 5.0)
+
+
+def _protect_reduce_ratio() -> float:
+    return _cfg_float("STAGE12_PROTECT_REDUCE_GIVEBACK_RATIO", 0.55, 0.20, 1.50)
+
+
+def _protect_close_ratio() -> float:
+    return _cfg_float("STAGE12_PROTECT_CLOSE_GIVEBACK_RATIO", 0.80, 0.30, 2.0)
+
+
+def _fast_price_ret3_threshold_pct() -> float:
+    return _cfg_float("STAGE12_FAST_RET3_THRESHOLD_PCT", 0.10, 0.01, 2.0)
+
+
+def _fast_oi_floor_pct() -> float:
+    return _cfg_float("STAGE12_FAST_OI_MIN_CHANGE_PCT", 0.05, 0.0, 5.0)
+
+
+def _max_action(*actions: str) -> str:
+    return max(actions, key=lambda item: _ACTION_RANK.get(str(item).upper(), 0)).upper()
+
+
+def _early_invalidation_guard(
+    *,
+    age_minutes: float,
+    status: str,
+    mfe_pct: float,
+    mae_pct: float,
+    current_pnl_pct: float,
+    contradiction_count: int,
+) -> dict[str, Any]:
+    """Detect a thesis that was wrong almost immediately after entry."""
+    mfe = max(0.0, float(mfe_pct))
+    mae = min(0.0, float(mae_pct))
+    current = float(current_pnl_pct)
+    contradictions = max(0, int(contradiction_count))
+    reasons: list[str] = []
+
+    if age_minutes > _early_window_minutes() or mfe > _early_mfe_max_pct():
+        return {
+            "action": "HOLD",
+            "active": False,
+            "reasons": [],
+            "age_minutes": round(age_minutes, 3),
+        }
+
+    severe_mae = mae <= _early_close_mae_pct()
+    strong_loss = current <= _early_close_pnl_pct()
+    weak_loss = current <= _early_reduce_pnl_pct()
+    enough_conflict = contradictions >= _early_min_contradictions()
+
+    if severe_mae and current < 0 and contradictions >= 1:
+        reasons.extend(["early_low_mfe", "early_severe_mae", "fresh_contradiction"])
+        action = "CLOSE"
+    elif strong_loss and enough_conflict:
+        reasons.extend(["early_low_mfe", "early_strong_loss", "multiple_fresh_contradictions"])
+        action = "CLOSE"
+    elif weak_loss and enough_conflict:
+        reasons.extend(["early_low_mfe", "early_adverse_move", "multiple_fresh_contradictions"])
+        action = "REDUCE"
+    else:
+        action = "HOLD"
+
+    if str(status).upper() == "REDUCED" and action == "REDUCE":
+        action = "CLOSE"
+        reasons.append("already_reduced_escalate_close")
+
+    return {
+        "action": action,
+        "active": action != "HOLD",
+        "reasons": reasons,
+        "age_minutes": round(age_minutes, 3),
+        "mfe_pct": round(mfe, 6),
+        "mae_pct": round(mae, 6),
+        "current_pnl_pct": round(current, 6),
+        "contradiction_count": contradictions,
+    }
+
+
+def _profit_protection_guard(
+    *,
+    status: str,
+    mfe_pct: float,
+    current_pnl_pct: float,
+    contradiction_count: int,
+) -> dict[str, Any]:
+    """Protect a trade that was demonstrably right before it gives profit back."""
+    mfe = max(0.0, float(mfe_pct))
+    current = float(current_pnl_pct)
+    contradictions = max(0, int(contradiction_count))
+    giveback_abs = max(0.0, mfe - current)
+    giveback_ratio = giveback_abs / mfe if mfe > 0 else 0.0
+    reasons: list[str] = []
+
+    if mfe < _protect_arm_mfe_pct():
+        return {
+            "action": "HOLD",
+            "active": False,
+            "reasons": [],
+            "mfe_pct": round(mfe, 6),
+            "giveback_ratio": round(giveback_ratio, 6),
+        }
+
+    if mfe >= 1.0 and giveback_ratio >= _protect_close_ratio():
+        action = "CLOSE"
+        reasons.extend(["profit_protection_armed", "major_mfe_giveback"])
+    elif current <= 0.0 and giveback_ratio >= 1.0 and contradictions >= 1:
+        action = "CLOSE"
+        reasons.extend(["profit_protection_armed", "gave_back_all_profit", "fresh_contradiction"])
+    elif mfe >= 1.0 and giveback_ratio >= _protect_reduce_ratio():
+        action = "REDUCE"
+        reasons.extend(["profit_protection_armed", "mfe_giveback_reduce"])
+    elif mfe >= _protect_arm_mfe_pct() and giveback_ratio >= 0.75 and contradictions >= 1:
+        action = "REDUCE"
+        reasons.extend(["profit_protection_armed", "small_mfe_giveback", "fresh_contradiction"])
+    else:
+        action = "HOLD"
+
+    if str(status).upper() == "REDUCED" and action == "REDUCE":
+        action = "CLOSE"
+        reasons.append("already_reduced_escalate_close")
+
+    return {
+        "action": action,
+        "active": action != "HOLD",
+        "reasons": reasons,
+        "mfe_pct": round(mfe, 6),
+        "current_pnl_pct": round(current, 6),
+        "giveback_abs_pct": round(giveback_abs, 6),
+        "giveback_ratio": round(giveback_ratio, 6),
+        "contradiction_count": contradictions,
+    }
+
+
+def _lifecycle_guards(
+    *,
+    age_minutes: float,
+    status: str,
+    mfe_pct: float,
+    mae_pct: float,
+    current_pnl_pct: float,
+    contradiction_count: int,
+) -> dict[str, Any]:
+    early = _early_invalidation_guard(
+        age_minutes=age_minutes,
+        status=status,
+        mfe_pct=mfe_pct,
+        mae_pct=mae_pct,
+        current_pnl_pct=current_pnl_pct,
+        contradiction_count=contradiction_count,
+    )
+    protection = _profit_protection_guard(
+        status=status,
+        mfe_pct=mfe_pct,
+        current_pnl_pct=current_pnl_pct,
+        contradiction_count=contradiction_count,
+    )
+    action = _max_action(early["action"], protection["action"])
+    reasons: list[str] = []
+    if early["action"] == action and early["active"]:
+        reasons.extend(early["reasons"])
+    if protection["action"] == action and protection["active"]:
+        reasons.extend(protection["reasons"])
+    return {
+        "action": action,
+        "reasons": list(dict.fromkeys(reasons)),
+        "early_invalidation": early,
+        "profit_protection": protection,
+    }
+
+
+def _fast_taker_share(row: list[Any]) -> float:
+    try:
+        total = max(0.0, float(row[7]))
+        buy = min(total, max(0.0, float(row[10])))
+    except (TypeError, ValueError, IndexError):
+        return 0.5
+    return buy / total if total > 0 else 0.5
+
+
+def _fast_oi_change_pct(rows: list[dict[str, Any]], now_ms: int) -> float | None:
+    valid: list[tuple[int, float]] = []
+    for item in rows:
+        try:
+            ts = int(item.get("timestamp") or 0)
+            value = float(item.get("sumOpenInterest"))
+        except (TypeError, ValueError):
+            continue
+        if ts <= now_ms and value > 0:
+            valid.append((ts, value))
+    valid.sort()
+    if len(valid) < 2:
+        return None
+    first = valid[-2][1]
+    last = valid[-1][1]
+    return 100.0 * (last / first - 1.0) if first > 0 else None
+
+
+def _build_fast_snapshot(
+    client: BinancePublicClient,
+    position: dict[str, Any],
+) -> dict[str, Any]:
+    symbol = str(position["symbol"]).upper()
+    now_ms = int(time.time() * 1000)
+    rows = client.klines(symbol=symbol, interval="1m", limit=7)
+    closed = [row for row in rows if len(row) > 10 and int(row[6]) < now_ms]
+    if len(closed) < 4:
+        raise RuntimeError("insufficient closed 1m bars for Stage 12 V3 fast guard")
+
+    current_price = float(client.ticker_price(symbol))
+    try:
+        oi_rows = client.open_interest_hist(symbol, period="5m", limit=3)
+    except Exception:
+        oi_rows = []
+
+    latest = closed[-1]
+    prev = closed[-2]
+    base3 = closed[-4]
+    latest_close = float(latest[4])
+    prev_close = float(prev[4])
+    base3_close = float(base3[4])
+    if min(latest_close, prev_close, base3_close, current_price) <= 0:
+        raise RuntimeError("invalid fast lifecycle price")
+
+    side = str(position["side"]).upper()
+    sign = 1.0 if side == "LONG" else -1.0
+    ret1 = 100.0 * (latest_close / prev_close - 1.0)
+    ret3 = 100.0 * (latest_close / base3_close - 1.0)
+    side_ret1 = sign * ret1
+    side_ret3 = sign * ret3
+    taker_buy_share = _fast_taker_share(latest)
+
+    prior3 = closed[-4:-1]
+    prior_high = max(float(row[2]) for row in prior3)
+    prior_low = min(float(row[3]) for row in prior3)
+    if side == "LONG":
+        opposite_structure = latest_close < prior_low
+        flow_opposite = taker_buy_share <= 0.45
+        flow_aligned = taker_buy_share >= 0.55
+    else:
+        opposite_structure = latest_close > prior_high
+        flow_opposite = taker_buy_share >= 0.55
+        flow_aligned = taker_buy_share <= 0.45
+
+    price_opposite = (
+        opposite_structure
+        or side_ret3 <= -_fast_price_ret3_threshold_pct()
+    )
+    oi_change = _fast_oi_change_pct(oi_rows, now_ms)
+    positioning_opposite = bool(
+        oi_change is not None
+        and abs(oi_change) >= _fast_oi_floor_pct()
+        and side_ret3 <= -_fast_price_ret3_threshold_pct()
+    )
+
+    contradictions: list[str] = []
+    if price_opposite:
+        contradictions.append("fast_price_structure_against_position")
+    if flow_opposite:
+        contradictions.append("fast_taker_flow_against_position")
+    if positioning_opposite:
+        contradictions.append("fast_positioning_against_position")
+
+    return {
+        "evaluation_layer": "FAST_GUARD",
+        "symbol": symbol,
+        "now_ms": now_ms,
+        "candle_close_time_ms": int(latest[6]),
+        "current_price": current_price,
+        "latest_1m_open": float(latest[1]),
+        "latest_1m_high": float(latest[2]),
+        "latest_1m_low": float(latest[3]),
+        "latest_1m_close": latest_close,
+        "ret_1m_pct": ret1,
+        "ret_3m_pct": ret3,
+        "side_ret_1m_pct": side_ret1,
+        "side_ret_3m_pct": side_ret3,
+        "taker_buy_share_1m": taker_buy_share,
+        "flow_aligned": flow_aligned,
+        "flow_opposite": flow_opposite,
+        "opposite_micro_structure": opposite_structure,
+        "fresh_oi_change_pct": oi_change,
+        "positioning_opposite": positioning_opposite,
+        "contradictions": contradictions,
+    }
+
+
+def evaluate_fast_position(
+    client: BinancePublicClient,
+    position: dict[str, Any],
+    *,
+    persist: bool = True,
+) -> dict[str, Any]:
+    snapshot = _build_fast_snapshot(client, position)
+    side = str(position["side"]).upper()
+    entry = float(position["entry_price"])
+    current = float(snapshot["current_price"])
+    pnl = _side_return(side, entry, current)
+
+    previous = latest_position_evaluation(str(position["position_id"]))
+    prev_mfe = (
+        float(previous["mfe_pct"])
+        if previous and previous.get("mfe_pct") is not None
+        else None
+    )
+    prev_mae = (
+        float(previous["mae_pct"])
+        if previous and previous.get("mae_pct") is not None
+        else None
+    )
+
+    # Reconstruct the excursion since the last 5m thesis evaluation from the
+    # current closed 1m bar plus live ticker. Full 5m evaluations preserve the
+    # complete longer-term MFE/MAE path.
+    high = max(float(snapshot["latest_1m_high"]), current)
+    low = min(float(snapshot["latest_1m_low"]), current)
+    mfe, mae = _mfe_mae(
+        side=side,
+        entry=entry,
+        high=high,
+        low=low,
+        previous_mfe=prev_mfe,
+        previous_mae=prev_mae,
+    )
+
+    age_minutes = max(
+        0.0,
+        (int(snapshot["now_ms"]) - int(position.get("opened_at_ms") or snapshot["now_ms"]))
+        / 60_000.0,
+    )
+    contradictions = list(snapshot["contradictions"])
+    guards = _lifecycle_guards(
+        age_minutes=age_minutes,
+        status=str(position.get("status") or "OPEN"),
+        mfe_pct=mfe,
+        mae_pct=mae,
+        current_pnl_pct=pnl,
+        contradiction_count=len(contradictions),
+    )
+
+    hard_risk = False
+    hard_reasons: list[str] = []
+    stop = position.get("stop_loss")
+    if stop is not None:
+        stop_f = float(stop)
+        if side == "LONG" and low <= stop_f:
+            hard_risk = True
+        elif side == "SHORT" and high >= stop_f:
+            hard_risk = True
+        if hard_risk:
+            hard_reasons.append("hard_stop_crossed_fast_guard")
+
+    action = "CLOSE" if hard_risk else str(guards["action"])
+    previous_health = (
+        float(previous["health_score"])
+        if previous and previous.get("health_score") is not None
+        else 100.0
+    )
+    evaluated_at = int(time.time() * 1000)
+    bucket_ms = int(_fast_poll_seconds() * 1000)
+    evaluation_id = (
+        f"{position['position_id']}:FAST:"
+        f"{evaluated_at // max(bucket_ms, 1)}"
+    )
+    result = {
+        "evaluation_id": evaluation_id,
+        "position_id": position["position_id"],
+        "evaluated_at_ms": evaluated_at,
+        "candle_close_time_ms": snapshot["candle_close_time_ms"],
+        "current_price": current,
+        "unrealized_pnl_pct": round(pnl, 6),
+        "mfe_pct": mfe,
+        "mae_pct": mae,
+        "health_score": previous_health,
+        "deterministic_action": action,
+        "ai_action": None,
+        "ai_confidence": None,
+        "final_action": action,
+        "hard_risk_triggered": hard_risk,
+        "reasons_json": json.dumps(
+            hard_reasons + guards["reasons"],
+            separators=(",", ":"),
+        ),
+        "contradictions_json": json.dumps(contradictions, separators=(",", ":")),
+        "snapshot_json": json.dumps(
+            {
+                **snapshot,
+                "age_minutes": round(age_minutes, 3),
+                "v3_guards": guards,
+                "thesis_health_score": previous_health,
+            },
+            separators=(",", ":"),
+            allow_nan=False,
+        ),
+        "ai_json": None,
+        "lifecycle_version": POSITION_LIFECYCLE_VERSION,
+    }
+
+    # HOLD observations are intentionally not persisted. This prevents a fast
+    # HOLD from masking a still-unexecuted 5m REDUCE/CLOSE while full 5m
+    # evaluations continue to preserve the MFE/MAE path.
+    if persist and action in {"REDUCE", "CLOSE"}:
+        save_position_evaluation(result)
+    return result
+
+
+def process_fast_guards(*, persist: bool = True) -> dict[str, Any]:
+    if not _fast_guards_enabled() and persist:
+        return {"status": "DISABLED", "processed": 0, "hold": 0, "reduce": 0, "close": 0}
+
+    positions = list_open_positions()
+    if not positions:
+        return {"status": "IDLE", "processed": 0, "hold": 0, "reduce": 0, "close": 0}
+
+    client = BinancePublicClient(timeout=5.0, retries=1)
+    results: list[dict[str, Any]] = []
+    errors: list[str] = []
+    workers = max(1, min(int(_cfg_float("STAGE12_FAST_WORKERS", 8, 1, 16)), len(positions)))
+
+    def _one(position: dict[str, Any]) -> dict[str, Any]:
+        return evaluate_fast_position(client, position, persist=persist)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        future_map = {pool.submit(_one, position): position for position in positions}
+        for future in as_completed(future_map):
+            position = future_map[future]
+            try:
+                results.append(future.result())
+            except Exception as exc:
+                errors.append(
+                    f"{position.get('position_id')}: {type(exc).__name__}: {str(exc)[:240]}"
+                )
+
+    counts = {"HOLD": 0, "REDUCE": 0, "CLOSE": 0}
+    for item in results:
+        counts[str(item["final_action"]).upper()] += 1
+    return {
+        "status": "COMPLETE",
+        "processed": len(results),
+        "hold": counts["HOLD"],
+        "reduce": counts["REDUCE"],
+        "close": counts["CLOSE"],
+        "errors": errors,
+        "results": results,
+    }
+
+
+def start_fast_lifecycle_loop() -> bool:
+    global _fast_loop_started
+    if not _fast_guards_enabled():
+        return False
+
+    with _fast_loop_lock:
+        if _fast_loop_started:
+            return False
+        _fast_loop_started = True
+
+    def _runner() -> None:
+        while True:
+            started = time.time()
+            try:
+                result = process_fast_guards(persist=True)
+                meaningful = (
+                    result.get("reduce", 0)
+                    or result.get("close", 0)
+                    or result.get("errors")
+                )
+                if meaningful:
+                    print(
+                        "Stage 12 V3 fast guard: "
+                        f"processed={result.get('processed', 0)} "
+                        f"hold={result.get('hold', 0)} "
+                        f"reduce={result.get('reduce', 0)} "
+                        f"close={result.get('close', 0)} "
+                        f"errors={len(result.get('errors') or [])}",
+                        flush=True,
+                    )
+            except Exception as exc:
+                print(
+                    "Stage 12 V3 fast guard error: "
+                    f"{type(exc).__name__}: {str(exc)[:300]}",
+                    flush=True,
+                )
+            elapsed = time.time() - started
+            time.sleep(max(1.0, _fast_poll_seconds() - elapsed))
+
+    threading.Thread(
+        target=_runner,
+        name="stage12-v3-fast-guard",
+        daemon=True,
+    ).start()
+    return True
 
 
 def _health_from_snapshot(
@@ -405,17 +952,38 @@ def evaluate_position(
             hard_risk = True
             hard_reasons.append("hard_stop_crossed")
 
-    health = _health_from_snapshot(
-        side,
-        snapshot,
+    # V3 keeps Thesis Health independent from path-memory guards.
+    health = _health_from_snapshot(side, snapshot)
+    age_minutes = max(
+        0.0,
+        (int(time.time() * 1000) - int(position.get("opened_at_ms") or 0))
+        / 60_000.0,
+    )
+    guards = _lifecycle_guards(
+        age_minutes=age_minutes,
+        status=str(position.get("status") or "OPEN"),
         mfe_pct=mfe,
         mae_pct=mae,
-        unrealized_pnl_pct=pnl,
+        current_pnl_pct=pnl,
+        contradiction_count=len(health["contradictions"]),
     )
+    deterministic_action = _max_action(
+        health["deterministic_action"],
+        guards["action"],
+    )
+
     ai_view: dict[str, Any] | None = None
-    if not hard_risk:
+    if not hard_risk and deterministic_action != "CLOSE":
         try:
-            ai_view = _ai_position_view(position, snapshot, health)
+            ai_view = _ai_position_view(
+                position,
+                snapshot,
+                {
+                    **health,
+                    "deterministic_action": deterministic_action,
+                    "v3_guards": guards,
+                },
+            )
         except Exception as exc:
             ai_view = {
                 "action": None,
@@ -425,7 +993,7 @@ def evaluate_position(
             }
 
     final_action = _arbitrate(
-        health["deterministic_action"],
+        deterministic_action,
         ai_view.get("action") if ai_view else None,
         health["health_score"],
         hard_risk=hard_risk,
@@ -444,13 +1012,13 @@ def evaluate_position(
         "mfe_pct": mfe,
         "mae_pct": mae,
         "health_score": health["health_score"],
-        "deterministic_action": health["deterministic_action"],
+        "deterministic_action": deterministic_action,
         "ai_action": ai_view.get("action") if ai_view else None,
         "ai_confidence": ai_view.get("confidence") if ai_view else None,
         "final_action": final_action,
         "hard_risk_triggered": hard_risk,
         "reasons_json": json.dumps(
-            hard_reasons + (ai_view.get("reasons") if ai_view else []),
+            hard_reasons + guards["reasons"] + (ai_view.get("reasons") if ai_view else []),
             separators=(",", ":"),
         ),
         "contradictions_json": json.dumps(
@@ -460,9 +1028,12 @@ def evaluate_position(
         "snapshot_json": json.dumps(
             {
                 **snapshot,
+                "evaluation_layer": "THESIS_5M",
                 "base_health_score": health["base_health_score"],
                 "position_memory": health["position_memory"],
                 "health_components": health["components"],
+                "age_minutes": round(age_minutes, 3),
+                "v3_guards": guards,
             },
             separators=(",", ":"),
             allow_nan=False,
