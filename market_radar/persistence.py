@@ -1691,7 +1691,7 @@ def latest_position_evaluation(
                 select *
                 from position_evaluations
                 where position_id = ?
-                order by candle_close_time_ms desc
+                order by candle_close_time_ms desc, evaluated_at_ms desc
                 limit 1
                 """,
                 (position_id,),
@@ -1706,7 +1706,7 @@ def latest_position_evaluation(
                 select *
                 from position_evaluations
                 where position_id = %s
-                order by candle_close_time_ms desc
+                order by candle_close_time_ms desc, evaluated_at_ms desc
                 limit 1
                 """,
                 (position_id,),
@@ -1789,7 +1789,7 @@ def list_position_evaluations(
         if position_id:
             query += " where position_id = ?"
             params.append(position_id)
-        query += " order by candle_close_time_ms desc limit ?"
+        query += " order by candle_close_time_ms desc, evaluated_at_ms desc limit ?"
         params.append(safe_limit)
         with _sqlite_connect(db_path) as conn:
             rows = [dict(row) for row in conn.execute(query, tuple(params)).fetchall()]
@@ -1800,7 +1800,7 @@ def list_position_evaluations(
         if position_id:
             query += " where position_id = %s"
             params.append(position_id)
-        query += " order by candle_close_time_ms desc limit %s"
+        query += " order by candle_close_time_ms desc, evaluated_at_ms desc limit %s"
         params.append(safe_limit)
         with _postgres_connect() as conn:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
