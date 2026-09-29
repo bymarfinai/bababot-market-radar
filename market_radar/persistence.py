@@ -1678,6 +1678,240 @@ def list_open_positions(
             return [dict(row) for row in cur.fetchall()]
 
 
+def list_position_history(
+    *,
+    limit: int = 100,
+    mode: str = "PAPER",
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Return Binance-style closed-position history with execution accounting."""
+    safe_limit = max(1, min(int(limit), 200))
+    mode = str(mode or "PAPER").upper()
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            positions = [
+                dict(row)
+                for row in conn.execute(
+                    """
+                    select *
+                    from positions
+                    where status='CLOSED' and mode=?
+                    order by closed_at_ms desc, position_id
+                    limit ?
+                    """,
+                    (mode, safe_limit),
+                ).fetchall()
+            ]
+            if not positions:
+                return []
+            ids = [row["position_id"] for row in positions]
+            marks = ",".join("?" for _ in ids)
+            eval_rows = [
+                dict(row)
+                for row in conn.execute(
+                    f"""
+                    select position_id,
+                           max(mfe_pct) as max_mfe_pct,
+                           min(mae_pct) as min_mae_pct
+                    from position_evaluations
+                    where position_id in ({marks})
+                    group by position_id
+                    """,
+                    tuple(ids),
+                ).fetchall()
+            ]
+            order_rows = [
+                dict(row)
+                for row in conn.execute(
+                    f"""
+                    select *
+                    from paper_orders
+                    where position_id in ({marks}) and status='FILLED'
+                    order by executed_at_ms asc, created_at_ms asc
+                    """,
+                    tuple(ids),
+                ).fetchall()
+            ]
+    else:
+        initialize_postgres()
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(
+                    """
+                    select *
+                    from positions
+                    where status='CLOSED' and mode=%s
+                    order by closed_at_ms desc, position_id
+                    limit %s
+                    """,
+                    (mode, safe_limit),
+                )
+                positions = [dict(row) for row in cur.fetchall()]
+                if not positions:
+                    return []
+                ids = [row["position_id"] for row in positions]
+                cur.execute(
+                    """
+                    select position_id,
+                           max(mfe_pct) as max_mfe_pct,
+                           min(mae_pct) as min_mae_pct
+                    from position_evaluations
+                    where position_id = any(%s)
+                    group by position_id
+                    """,
+                    (ids,),
+                )
+                eval_rows = [dict(row) for row in cur.fetchall()]
+                cur.execute(
+                    """
+                    select *
+                    from paper_orders
+                    where position_id = any(%s) and status='FILLED'
+                    order by executed_at_ms asc, created_at_ms asc
+                    """,
+                    (ids,),
+                )
+                order_rows = [dict(row) for row in cur.fetchall()]
+
+    eval_map = {row["position_id"]: row for row in eval_rows}
+    orders_by_position: dict[str, list[dict[str, Any]]] = {}
+    for row in order_rows:
+        orders_by_position.setdefault(str(row.get("position_id") or ""), []).append(row)
+
+    output: list[dict[str, Any]] = []
+    for position in positions:
+        raw = {}
+        try:
+            raw = json.loads(position.get("raw_json") or "{}")
+        except Exception:
+            raw = {}
+
+        position_id = str(position["position_id"])
+        orders = orders_by_position.get(position_id, [])
+        open_order = next(
+            (row for row in orders if str(row.get("action") or "").upper() == "OPEN"),
+            None,
+        )
+        initial_qty = float(
+            raw.get("initial_quantity")
+            or (open_order or {}).get("executed_quantity")
+            or 0.0
+        )
+        initial_notional = float(raw.get("initial_notional_usdt") or 0.0)
+        entry_fee_total = float(
+            raw.get("entry_fee_total")
+            or (open_order or {}).get("fee")
+            or 0.0
+        )
+        entry_price = float(position.get("entry_price") or 0.0)
+        side = str(position.get("side") or "").upper()
+
+        cumulative = 0.0
+        exited_qty = 0.0
+        weighted_exit = 0.0
+        total_exit_qty = 0.0
+        executions: list[dict[str, Any]] = []
+
+        for order in orders:
+            action = str(order.get("action") or "").upper()
+            qty = float(order.get("executed_quantity") or 0.0)
+            fill = float(order.get("fill_price") or 0.0)
+            fee = float(order.get("fee") or 0.0)
+            event_pnl = None
+            gross_pnl = None
+            allocated_entry_fee = 0.0
+
+            if action in {"REDUCE", "CLOSE"} and qty > 0 and fill > 0 and entry_price > 0:
+                gross_pnl = (
+                    qty * (fill - entry_price)
+                    if side == "LONG"
+                    else qty * (entry_price - fill)
+                )
+                allocated_entry_fee = (
+                    entry_fee_total * (qty / initial_qty)
+                    if initial_qty > 0
+                    else 0.0
+                )
+                event_pnl = gross_pnl - allocated_entry_fee - fee
+                cumulative += event_pnl
+                exited_qty += qty
+                weighted_exit += qty * fill
+                total_exit_qty += qty
+
+            remaining_qty = max(0.0, initial_qty - exited_qty)
+            executions.append(
+                {
+                    "order_id": order.get("order_id"),
+                    "action": action,
+                    "executed_at_ms": order.get("executed_at_ms") or order.get("created_at_ms"),
+                    "fill_price": order.get("fill_price"),
+                    "market_price": order.get("market_price"),
+                    "quantity": qty,
+                    "fee": fee,
+                    "gross_pnl": gross_pnl,
+                    "allocated_entry_fee": allocated_entry_fee,
+                    "event_net_pnl": event_pnl,
+                    "cumulative_net_pnl": cumulative,
+                    "remaining_quantity": remaining_qty,
+                    "remaining_pct": (
+                        max(0.0, remaining_qty / initial_qty * 100.0)
+                        if initial_qty > 0
+                        else 0.0
+                    ),
+                    "reason": order.get("reason"),
+                }
+            )
+
+        avg_close_price = (
+            weighted_exit / total_exit_qty
+            if total_exit_qty > 0
+            else position.get("exit_price")
+        )
+        evaluation = eval_map.get(position_id, {})
+        total_fees = sum(float(row.get("fee") or 0.0) for row in orders)
+        final_net = float(position.get("realized_pnl") or 0.0)
+
+        output.append(
+            {
+                "position_id": position_id,
+                "signal_id": position.get("signal_id"),
+                "symbol": position.get("symbol"),
+                "side": side,
+                "mode": position.get("mode"),
+                "status": position.get("status"),
+                "opened_at_ms": position.get("opened_at_ms"),
+                "closed_at_ms": position.get("closed_at_ms"),
+                "duration_ms": (
+                    int(position["closed_at_ms"]) - int(position["opened_at_ms"])
+                    if position.get("closed_at_ms") and position.get("opened_at_ms")
+                    else None
+                ),
+                "entry_price": position.get("entry_price"),
+                "avg_close_price": avg_close_price,
+                "initial_notional_usdt": initial_notional,
+                "initial_quantity": initial_qty,
+                "closed_volume": total_exit_qty,
+                "reduce_count": sum(
+                    1 for row in orders
+                    if str(row.get("action") or "").upper() == "REDUCE"
+                ),
+                "gross_pnl": float(raw.get("realized_gross") or 0.0),
+                "fees": total_fees,
+                "net_pnl": final_net,
+                "net_roi_pct": position.get("realized_pnl_pct"),
+                "mfe_pct": evaluation.get("max_mfe_pct"),
+                "mae_pct": evaluation.get("min_mae_pct"),
+                "close_reason": position.get("close_reason"),
+                "accounting_check_pnl": cumulative,
+                "accounting_delta": final_net - cumulative,
+                "executions": executions,
+            }
+        )
+    return output
+
+
 def latest_position_evaluation(
     position_id: str,
     *,
