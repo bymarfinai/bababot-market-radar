@@ -124,6 +124,11 @@ APPROVE / WATCH / VETO
         ├──────────────► VETO/WATCH: no new entry
         │
         ▼
+Stage 11C — fresh direction gate
+        │
+        ├──────────────► WAIT/CANCEL: no new entry
+        │
+        ▼
 Stage 13/15 entry executor
         │
         ▼
@@ -537,8 +542,14 @@ Paper trading must:
 - prevent duplicate same-signal entries
 - limit open positions
 - consume Stage 11 APPROVE
+- require Stage 11C ENTER before opening
+- immediately hand off fresh APPROVE → 11C → order → fill without waiting for poll cadence
+- keep polling only as recovery for WAIT/deferred/transient handoff failures
+- serialize event-driven and polling entry execution through one entry lock
 - consume Stage 12 REDUCE/CLOSE
 - persist fills and PnL
+
+Current paper execution version is `stage13-v2-event-driven`.
 
 Paper performance may be used as a live-entry gate.
 
