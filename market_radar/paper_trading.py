@@ -14,6 +14,8 @@ from .paper_store import (
     count_open_paper_positions,
     create_order,
     create_position,
+    get_entry_candidate,
+    get_paper_order,
     get_position,
     has_open_paper_symbol,
     initialize_paper_store,
@@ -25,8 +27,9 @@ from .paper_store import (
 )
 
 
-PAPER_TRADING_VERSION = "stage13-v1"
+PAPER_TRADING_VERSION = "stage13-v2-event-driven"
 _loop_lock = threading.Lock()
+_entry_handoff_lock = threading.Lock()
 _loop_started = False
 
 
@@ -132,6 +135,128 @@ def _metadata(position: dict[str, Any]) -> dict[str, Any]:
         return {}
 
 
+def _stage11c_order_payload(
+    candidate: dict[str, Any],
+    gate: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
+        "signal_time_ms": candidate["signal_time_ms"],
+        "signal_price": candidate["signal_price"],
+        "stage": candidate["stage"],
+        "long_score": candidate["long_score"],
+        "short_score": candidate["short_score"],
+        "score_edge": candidate["score_edge"],
+        "stage11c_checked_at_ms": gate.get("checked_at_ms"),
+        "stage11c_verdict": gate.get("verdict"),
+        "stage11c_reasons": gate.get("reasons") or [],
+        "stage11c_snapshot": gate.get("snapshot") or {},
+        "stage11c_version": gate.get("version"),
+        "stage13_version": PAPER_TRADING_VERSION,
+    }
+
+
+def process_approved_signal(signal_id: str) -> dict[str, Any]:
+    """Immediate Stage 11 -> 11C -> Stage 13 paper entry handoff.
+
+    The polling loop remains a recovery path, but fresh APPROVE decisions no
+    longer need to wait for PAPER_POLL_SECONDS before revalidation/execution.
+    """
+    if not paper_trading_enabled():
+        return {"status": "DISABLED", "signal_id": signal_id}
+
+    with _entry_handoff_lock:
+        control = get_control_state()
+        if not control.get("entries_enabled"):
+            return {
+                "status": "CONTROL_BLOCKED",
+                "signal_id": signal_id,
+            }
+
+        candidate = get_entry_candidate(signal_id)
+        if candidate is None:
+            return {
+                "status": "NOT_ELIGIBLE",
+                "signal_id": signal_id,
+            }
+
+        if _at_open_capacity():
+            return {
+                "status": "DEFERRED",
+                "reason": "max_open_positions",
+                "signal_id": signal_id,
+            }
+
+        symbol = str(candidate["symbol"]).upper()
+        if has_open_paper_symbol(symbol):
+            return {
+                "status": "SKIPPED",
+                "reason": "symbol_position_already_open",
+                "signal_id": signal_id,
+            }
+
+        client = BinancePublicClient(timeout=5.0, retries=1)
+        gate = check_fresh_entry(client, candidate)
+        verdict = str(gate.get("verdict") or "WAIT").upper()
+
+        if verdict == "WAIT":
+            return {
+                "status": "WAIT",
+                "signal_id": signal_id,
+                "stage11c": gate,
+            }
+
+        payload = _stage11c_order_payload(candidate, gate)
+        order_id = create_order(
+            source_type="ENTRY",
+            source_id=signal_id,
+            position_id=f"PAPER:{signal_id}",
+            signal_id=signal_id,
+            symbol=symbol,
+            side=str(candidate["side"]),
+            action="OPEN",
+            requested_quantity=None,
+            reason=(
+                "stage11c_enter"
+                if verdict == "ENTER"
+                else "stage11c_cancel"
+            ),
+            payload=payload,
+        )
+
+        if verdict == "CANCEL":
+            mark_order(
+                order_id,
+                status="SKIPPED",
+                reason="stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500],
+            )
+            return {
+                "status": "CANCEL",
+                "signal_id": signal_id,
+                "order_id": order_id,
+                "stage11c": gate,
+            }
+
+        order = get_paper_order(order_id)
+        if order is None:
+            return {
+                "status": "ERROR",
+                "reason": "created_order_not_found",
+                "signal_id": signal_id,
+                "order_id": order_id,
+                "stage11c": gate,
+            }
+
+        execution = _execute_open(client, order)
+        return {
+            "status": execution.get("status"),
+            "signal_id": signal_id,
+            "order_id": order_id,
+            "stage11c": gate,
+            "execution": execution,
+        }
+
+
 def sync_entry_orders() -> dict[str, int]:
     if not paper_trading_enabled():
         return {
@@ -185,20 +310,7 @@ def sync_entry_orders() -> dict[str, int]:
             stage11c_wait += 1
             continue
 
-        payload = {
-            "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
-            "signal_time_ms": candidate["signal_time_ms"],
-            "signal_price": candidate["signal_price"],
-            "stage": candidate["stage"],
-            "long_score": candidate["long_score"],
-            "short_score": candidate["short_score"],
-            "score_edge": candidate["score_edge"],
-            "stage11c_checked_at_ms": gate.get("checked_at_ms"),
-            "stage11c_verdict": verdict,
-            "stage11c_reasons": gate.get("reasons") or [],
-            "stage11c_snapshot": gate.get("snapshot") or {},
-            "stage11c_version": gate.get("version"),
-        }
+        payload = _stage11c_order_payload(candidate, gate)
 
         order_id = create_order(
             source_type="ENTRY",
@@ -606,18 +718,19 @@ def paper_cycle() -> dict[str, Any]:
     lifecycle = sync_lifecycle_orders()
     exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
     control = get_control_state()
-    entries = sync_entry_orders()
-    if control.get("entries_enabled"):
-        entry_exec = execute_pending_orders(actions={"OPEN"})
-    else:
-        entry_exec = {
-            "processed": 0,
-            "filled": 0,
-            "skipped": 0,
-            "deferred": 0,
-            "errors": [],
-            "fills": [],
-        }
+    with _entry_handoff_lock:
+        entries = sync_entry_orders()
+        if control.get("entries_enabled"):
+            entry_exec = execute_pending_orders(actions={"OPEN"})
+        else:
+            entry_exec = {
+                "processed": 0,
+                "filled": 0,
+                "skipped": 0,
+                "deferred": 0,
+                "errors": [],
+                "fills": [],
+            }
     return {
         "status": "COMPLETE",
         "lifecycle_queued": lifecycle["queued"],
