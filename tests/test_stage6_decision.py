@@ -201,6 +201,87 @@ class Stage6DecisionTests(unittest.TestCase):
         self.assertEqual(result.decision, "NO TRADE")
         self.assertLess(result.decision_context_balance, 1)
 
+    def test_volume_expansion_alone_cannot_qualify_expansion(self):
+        result = decide(
+            candidate(
+                stage="EXPANSION",
+                ctx=context(
+                    structure="NO_STRUCTURAL_BREAK",
+                    taker="BALANCED",
+                    oi="UNRESOLVED",
+                    regime="SIDEWAYS",
+                    volume_confirmed=True,
+                ),
+            )
+        )
+        self.assertEqual(result.decision, "NO TRADE")
+        self.assertEqual(result.decision_context_confirmations, 0)
+        self.assertIn(
+            "core_directional_confirmations_below_1",
+            result.decision_reasons,
+        )
+        self.assertIn("activity:volume_expansion", result.decision_reasons)
+
+    def test_regime_alone_cannot_qualify_expansion(self):
+        result = decide(
+            candidate(
+                stage="EXPANSION",
+                ctx=context(
+                    structure="NO_STRUCTURAL_BREAK",
+                    taker="BALANCED",
+                    oi="UNRESOLVED",
+                    regime="BULL",
+                    volume_confirmed=True,
+                ),
+            )
+        )
+        self.assertEqual(result.decision, "NO TRADE")
+        self.assertEqual(result.decision_context_confirmations, 1)
+        self.assertIn("confirm:regime_bull", result.decision_reasons)
+        self.assertIn(
+            "core_directional_confirmations_below_1",
+            result.decision_reasons,
+        )
+
+    def test_single_core_directional_confirmation_can_qualify_expansion(self):
+        result = decide(
+            candidate(
+                stage="EXPANSION",
+                ctx=context(
+                    structure="NO_STRUCTURAL_BREAK",
+                    taker="BUY",
+                    oi="UNRESOLVED",
+                    regime="SIDEWAYS",
+                    volume_confirmed=False,
+                ),
+            )
+        )
+        self.assertEqual(result.decision, "LONG")
+        self.assertEqual(result.decision_context_confirmations, 1)
+        self.assertEqual(result.decision_context_balance, 1)
+        self.assertIn("confirm:taker_buy", result.decision_reasons)
+
+    def test_ignition_requires_two_directional_confirmations_not_volume(self):
+        result = decide(
+            candidate(
+                stage="IGNITION",
+                ctx=context(
+                    structure="NO_STRUCTURAL_BREAK",
+                    taker="BUY",
+                    oi="UNRESOLVED",
+                    regime="SIDEWAYS",
+                    volume_confirmed=True,
+                ),
+            )
+        )
+        self.assertEqual(result.decision, "NO TRADE")
+        self.assertEqual(result.decision_context_confirmations, 1)
+        self.assertIn(
+            "directional_confirmations_below_2",
+            result.decision_reasons,
+        )
+        self.assertIn("activity:volume_expansion", result.decision_reasons)
+
     def test_funding_does_not_act_as_standalone_direction_trigger(self):
         # Strong positive funding does not veto an otherwise aligned LONG.
         # Funding is retained as positioning context only.
