@@ -51,7 +51,7 @@ def row(
 
 
 def rows(closes: list[float], taker_share: float) -> list[list]:
-    base = NOW - 240_000
+    base = NOW - 300_000
     return [
         row(base + (i + 1) * 60_000, close, taker_share=taker_share)
         for i, close in enumerate(closes)
