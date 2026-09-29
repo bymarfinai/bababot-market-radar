@@ -511,33 +511,45 @@ Stage 11C V2 invariants:
 
 ## 17. Stage 12 — Position Lifecycle
 
-For already-open positions, system must distinguish entry decision from ongoing position health.
+Current version: `stage12-v3-three-layer`.
 
-Deterministic actions:
+For already-open positions, entry validation and lifecycle management remain
+separate. Stage 12 V3 has three ordered deterministic layers:
+
+~~~text
+Early Wrong-Direction Guard
+        ↓
+Profit Protection / Giveback Guard
+        ↓
+Thesis Health
+        ↓
+HOLD / REDUCE / CLOSE
+~~~
+
+Invariants:
+
+- early invalidation is allowed to close a position before the slower health
+  score collapses when MFE stays small and fresh independent evidence turns
+  against the entry
+- profit protection is allowed to REDUCE/CLOSE after meaningful MFE when a
+  large fraction of that favorable excursion is given back
+- Thesis Health remains the slower 5m/15m/1h market-thesis layer
+- fast guards use current price, closed 1m context, taker flow and fresh raw OI
+- fast guards are deterministic and do not call AI
+- AI position supervision remains secondary to the 5m Thesis Health path
+- deterministic CLOSE and hard-risk CLOSE cannot be overridden
+- Stage 12 may close an invalid LONG/SHORT but may never reverse it into the
+  opposite side
+- a new opposite position still requires a new independent Stage 6 → 11C path
+- risk-reducing exits remain available in PAUSE_ENTRIES and EXIT_ONLY
+
+Deterministic actions remain:
 
 ~~~text
 HOLD
 REDUCE
 CLOSE
 ~~~
-
-Position health may use:
-
-- current movement
-- 5m/15m/1h directional momentum
-- structure
-- taker flow
-- OI
-- regime
-- opposing score
-- MFE/MAE
-- hard stop
-
-AI position supervisor is secondary.
-
-Hard-risk or deterministic CLOSE cannot be upgraded back to HOLD by AI.
-
----
 
 ## 18. Stage 13 — Paper Trading
 
