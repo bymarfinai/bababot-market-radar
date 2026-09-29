@@ -7,6 +7,7 @@ from typing import Any
 
 import psycopg2.extras
 
+from .pipeline_cohort import label_signal_cohort
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -456,6 +457,11 @@ def create_position(
                 signal_id,
                 position_opened_at_ms=opened_at_ms,
             )
+            label_signal_cohort(
+                signal_id,
+                opened_at_ms=opened_at_ms,
+                metadata={"mode": "PAPER", "position_id": position_id},
+            )
         return
 
     with _postgres_connect() as conn:
@@ -488,6 +494,11 @@ def create_position(
         update_entry_latency(
             signal_id,
             position_opened_at_ms=opened_at_ms,
+        )
+        label_signal_cohort(
+            signal_id,
+            opened_at_ms=opened_at_ms,
+            metadata={"mode": "PAPER", "position_id": position_id},
         )
 
 
