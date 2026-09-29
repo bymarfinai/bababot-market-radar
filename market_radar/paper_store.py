@@ -126,7 +126,7 @@ def list_entry_candidates(
                   and a.reviewed_at_ms >= ?
                   and p.position_id is null
                   and o.order_id is null
-                order by a.reviewed_at_ms asc
+                order by a.reviewed_at_ms desc
                 limit ?
                 """,
                 (cutoff, safe_limit),
@@ -150,7 +150,7 @@ def list_entry_candidates(
                   and a.reviewed_at_ms >= %s
                   and p.position_id is null
                   and o.order_id is null
-                order by a.reviewed_at_ms asc
+                order by a.reviewed_at_ms desc
                 limit %s
                 """,
                 (cutoff, safe_limit),
