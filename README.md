@@ -218,12 +218,17 @@ Additional rules:
 - EXHAUSTION is always NO TRADE
 - required OI, funding, and regime context must be available
 - a confirmed structural break directly against the proposed side is a hard conflict
-- IGNITION requires at least 2 context confirmations
-- EXPANSION requires at least 1 context confirmation
-- context confirmation-minus-conflict balance must be at least +1
+- volume expansion is **activity evidence only** and does not count as directional confirmation
+- core directional confirmations are structure alignment, taker-flow alignment, and fresh-OI alignment
+- market regime can reinforce the proposed side but cannot qualify an entry by itself
+- every LONG/SHORT requires at least 1 core directional confirmation
+- IGNITION requires at least 2 total directional confirmations
+- EXPANSION requires at least 1 total directional confirmation
+- directional confirmation-minus-conflict balance must be at least +1
 - funding is observational context and is not a standalone trigger or veto
 
-Every rejected setup receives explicit decision reasons.
+Every rejected setup receives explicit decision reasons. Stage 6 decision version is
+`stage6-v2-directional-context`.
 
 ## Stage 7 — MCP and read API
 
