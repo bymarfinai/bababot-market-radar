@@ -423,12 +423,37 @@ VETO
 It may **not reverse direction**. A LONG signal cannot become SHORT and a SHORT
 signal cannot become LONG.
 
-## Stage 11B — Legacy multi-model module / rollback path
+## Stage 11B — Failover-only resilience
 
-The Stage 11B shadow/escalation/tiebreak code remains in the repository for
-rollback compatibility, but **it is no longer part of the Stage 11 normal
-entry path**. The current production direction is fast provider failover rather
-than per-signal multi-model voting.
+Stage 11B is no longer a shadow-voting or escalation layer.
+
+Current version:
+
+~~~text
+stage11b-v3-failover-only
+~~~
+
+It runs only when the selected Stage 11 fast lane fails.
+
+~~~text
+Stage 11 primary lane
+    ↓ ERROR
+Stage 11B
+    ↓
+try exactly one alternate fast lane
+    ├── success → use APPROVE / WATCH / VETO from that lane
+    └── failure → VETO
+~~~
+
+Invariants:
+
+- Stage 11B never runs after a successful primary review
+- exactly one alternate provider/model may be attempted
+- no quorum, majority vote, shadow review, escalation, or tiebreaker
+- no direction reversal
+- no alternate lane available → VETO
+- alternate lane error → VETO
+- every failover review is persisted with role `FAST_FAILOVER`
 
 ## Stage 12 — Position lifecycle
 
