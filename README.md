@@ -455,6 +455,56 @@ Invariants:
 - alternate lane error → VETO
 - every failover review is persisted with role `FAST_FAILOVER`
 
+## Stage 11C — Fresh Direction Gate
+
+Stage 11C is the final deterministic revalidation before a new entry order is created.
+
+Current version:
+
+~~~text
+stage11c-v1-fresh-direction
+~~~
+
+Flow:
+
+~~~text
+Stage 11 APPROVE
+    ↓
+fresh Binance public data
+    ├── current ticker price
+    └── latest closed 1m candles
+    ↓
+Stage 11C
+    ├── ENTER  → create entry order
+    ├── WAIT   → no order; retry on a later paper/live cycle
+    └── CANCEL → persist skipped entry; do not retry
+~~~
+
+Fresh checks include:
+
+- signal age and approval age
+- favorable price drift / chase protection
+- adverse price drift
+- closed-1m momentum over 1m and 3m
+- latest closed-1m taker buy share
+- opposite micro-structure against the proposed side
+
+Stage 11C never changes LONG into SHORT or SHORT into LONG.
+
+Default entry confirmation requires aligned 3m momentum plus either aligned 1m
+momentum or aligned taker flow. Hard fresh contradictions may CANCEL the setup.
+Mixed evidence returns WAIT.
+
+Every evaluation is persisted in `entry_revalidations` and exposed through:
+
+~~~text
+GET /approval/revalidations
+~~~
+
+Stage 10 also records `stage11c_started_at_ms` and
+`stage11c_finished_at_ms`. Orders carry the Stage 11C snapshot and must fill
+within the configured Stage 11C fill-freshness window.
+
 ## Stage 12 — Position lifecycle
 
 Every open/reduced position is evaluated against fresh closed-candle market context.
