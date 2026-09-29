@@ -9,6 +9,7 @@ from typing import Any
 
 from .binance import BinanceTradingClient
 from .control_state import get_control_state
+from .fresh_entry_gate import check_fresh_entry, fill_max_age_ms
 from .live_store import (
     close_live_position,
     count_open_live_positions,
@@ -346,24 +347,63 @@ def _submit_market(
 
 def sync_live_entry_orders() -> dict[str, Any]:
     if not live_env_enabled() or not live_credentials_configured():
-        return {"queued": 0, "blocked": True, "reasons": ["live_locked"]}
+        return {
+            "queued": 0,
+            "blocked": True,
+            "reasons": ["live_locked"],
+            "stage11c_enter": 0,
+            "stage11c_wait": 0,
+            "stage11c_cancel": 0,
+        }
 
     client = BinanceTradingClient()
     guard = preflight(client=client, require_arm=True, require_entry_mode=True)
     if not guard["ok"]:
-        return {"queued": 0, "blocked": True, "reasons": guard["reasons"]}
+        return {
+            "queued": 0,
+            "blocked": True,
+            "reasons": guard["reasons"],
+            "stage11c_enter": 0,
+            "stage11c_wait": 0,
+            "stage11c_cancel": 0,
+        }
 
     queued = 0
+    stage11c_enter = 0
+    stage11c_wait = 0
+    stage11c_cancel = 0
+
     for candidate in list_live_entry_candidates(
         max_age_ms=_entry_age_ms(),
-        limit=10,
+        limit=max(1, min(int(os.environ.get("STAGE11C_MAX_PER_CYCLE", "12")), 50)),
     ):
         if count_open_live_positions() >= _max_open():
             break
         symbol = str(candidate["symbol"]).upper()
         if has_open_live_symbol(symbol):
             continue
-        create_live_order(
+
+        gate = check_fresh_entry(client, candidate)
+        verdict = str(gate.get("verdict") or "WAIT").upper()
+        if verdict == "WAIT":
+            stage11c_wait += 1
+            continue
+
+        payload = {
+            "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
+            "signal_time_ms": candidate["signal_time_ms"],
+            "signal_price": candidate["signal_price"],
+            "stage": candidate["stage"],
+            "long_score": candidate["long_score"],
+            "short_score": candidate["short_score"],
+            "score_edge": candidate["score_edge"],
+            "stage11c_checked_at_ms": gate.get("checked_at_ms"),
+            "stage11c_verdict": verdict,
+            "stage11c_reasons": gate.get("reasons") or [],
+            "stage11c_snapshot": gate.get("snapshot") or {},
+            "stage11c_version": gate.get("version"),
+        }
+        order_id = create_live_order(
             source_type="ENTRY",
             source_id=str(candidate["signal_id"]),
             position_id=f"LIVE:{candidate['signal_id']}",
@@ -372,21 +412,36 @@ def sync_live_entry_orders() -> dict[str, Any]:
             side=str(candidate["side"]),
             action="OPEN",
             requested_quantity=None,
-            reason="stage11_final_approve",
-            payload={
-                "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
-                "signal_time_ms": candidate["signal_time_ms"],
-                "signal_price": candidate["signal_price"],
-                "stage": candidate["stage"],
-                "long_score": candidate["long_score"],
-                "short_score": candidate["short_score"],
-                "score_edge": candidate["score_edge"],
-            },
+            reason=(
+                "stage11c_enter"
+                if verdict == "ENTER"
+                else "stage11c_cancel"
+            ),
+            payload=payload,
         )
+
+        if verdict == "CANCEL":
+            mark_live_order(
+                order_id,
+                status="SKIPPED",
+                reason="stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500],
+            )
+            stage11c_cancel += 1
+            continue
+
         queued += 1
+        stage11c_enter += 1
         if queued >= _max_open():
             break
-    return {"queued": queued, "blocked": False, "reasons": []}
+
+    return {
+        "queued": queued,
+        "blocked": False,
+        "reasons": [],
+        "stage11c_enter": stage11c_enter,
+        "stage11c_wait": stage11c_wait,
+        "stage11c_cancel": stage11c_cancel,
+    }
 
 
 def sync_live_lifecycle_orders() -> dict[str, int]:
@@ -432,14 +487,24 @@ def _execute_open(
     order: dict[str, Any],
 ) -> dict[str, Any]:
     payload = json.loads(order.get("payload_json") or "{}")
+    now_ms = int(time.time() * 1000)
     approval_ms = int(payload.get("approval_reviewed_at_ms") or 0)
-    if approval_ms <= 0 or int(time.time() * 1000) - approval_ms > _entry_age_ms():
+    if approval_ms <= 0 or now_ms - approval_ms > _entry_age_ms():
         mark_live_order(
             str(order["order_id"]),
             status="SKIPPED",
             reason="approval_stale_before_live_fill",
         )
         return {"status": "SKIPPED", "reason": "stale_approval"}
+
+    gate_ms = int(payload.get("stage11c_checked_at_ms") or 0)
+    if gate_ms <= 0 or now_ms - gate_ms > fill_max_age_ms():
+        mark_live_order(
+            str(order["order_id"]),
+            status="SKIPPED",
+            reason="stage11c_stale_before_live_fill",
+        )
+        return {"status": "SKIPPED", "reason": "stage11c_stale"}
 
     guard = preflight(client=client, require_arm=True, require_entry_mode=True)
     if not guard["ok"]:
@@ -959,6 +1024,9 @@ def start_live_trading_loop() -> bool:
                         "Stage 15 live: "
                         f"lifecycle_queued={result['lifecycle_queued']} "
                         f"entry_queued={result['entry'].get('queued', 0)} "
+                        f"11c_enter={result['entry'].get('stage11c_enter', 0)} "
+                        f"11c_wait={result['entry'].get('stage11c_wait', 0)} "
+                        f"11c_cancel={result['entry'].get('stage11c_cancel', 0)} "
                         f"exit_filled={exit_exec.get('filled', 0)} "
                         f"entry_filled={entry_exec.get('filled', 0)} "
                         f"blocked={exit_exec.get('blocked', 0) + entry_exec.get('blocked', 0)} "
