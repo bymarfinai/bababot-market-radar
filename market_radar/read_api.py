@@ -1072,7 +1072,12 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             try:
                 limit = int(query.get("limit", ["100"])[0])
                 cohort = query.get("cohort", [None])[0]
-                rows = list_cohorts(cohort=cohort, limit=limit)
+                fresh_gate_version = query.get("fresh_gate_version", [None])[0]
+                rows = list_cohorts(
+                    cohort=cohort,
+                    fresh_gate_version=fresh_gate_version,
+                    limit=limit,
+                )
             except ValueError as exc:
                 self._json(
                     HTTPStatus.BAD_REQUEST,
