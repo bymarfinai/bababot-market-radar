@@ -37,7 +37,7 @@ class Stage12LifecycleTests(unittest.TestCase):
         health = _health_from_snapshot("LONG", snapshot)
         self.assertEqual(health["deterministic_action"], "HOLD")
         self.assertGreaterEqual(health["health_score"], 90.0)
-        self.assertEqual(_side_return("LONG", 100.0, 108.0), 8.0)
+        self.assertAlmostEqual(_side_return("LONG", 100.0, 108.0), 8.0, places=9)
 
     def test_strong_reversal_closes_long(self):
         snapshot = {
