@@ -561,7 +561,7 @@ def list_unacted_live_lifecycle_actions(limit: int = 100) -> list[dict[str, Any]
               select e2.evaluation_id
               from position_evaluations e2
               where e2.position_id=e.position_id
-              order by e2.candle_close_time_ms desc
+              order by e2.candle_close_time_ms desc, e2.evaluated_at_ms desc
               limit 1
           )
           and e.final_action in ('REDUCE','CLOSE')
