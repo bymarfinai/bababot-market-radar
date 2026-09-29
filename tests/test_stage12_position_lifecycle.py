@@ -199,6 +199,18 @@ class Stage12LifecycleTests(unittest.TestCase):
         self.assertEqual(rose["action"], "CLOSE")
         self.assertEqual(pha["action"], "CLOSE")
 
+    def test_v3_single_contradiction_severe_mae_reduces_not_closes(self):
+        result = _early_invalidation_guard(
+            age_minutes=10.0,
+            status="OPEN",
+            mfe_pct=0.05,
+            mae_pct=-1.17,
+            current_pnl_pct=-0.87,
+            contradiction_count=1,
+        )
+        self.assertEqual(result["action"], "REDUCE")
+        self.assertIn("single_fresh_contradiction", result["reasons"])
+
     def test_v3_profit_protection_matches_giveback_examples(self):
         with patch.dict(
             os.environ,
