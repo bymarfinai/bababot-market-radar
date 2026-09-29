@@ -10,8 +10,9 @@ import requests
 
 
 _VALID_AI_VERDICTS = {"APPROVE", "VETO", "WATCH"}
-_provider_rate_lock = threading.Lock()
-_last_provider_call_monotonic = 0.0
+_provider_rate_locks: dict[str, threading.Lock] = {}
+_provider_rate_locks_guard = threading.Lock()
+_last_provider_call_monotonic_by_provider: dict[str, float] = {}
 _blocked_until_by_target: dict[str, float] = {}
 
 
@@ -74,14 +75,29 @@ def _timeout_seconds() -> float:
     )
 
 
-def _min_call_interval_seconds() -> float:
-    return max(
-        0.0,
-        min(
-            float(os.environ.get("AI_APPROVAL_MIN_CALL_INTERVAL_SECONDS", "2")),
-            15.0,
-        ),
+def _min_call_interval_seconds(provider: str | None = None) -> float:
+    provider_key = (provider or "").strip().upper()
+    provider_specific = (
+        os.environ.get(f"AI_APPROVAL_MIN_CALL_INTERVAL_SECONDS_{provider_key}")
+        if provider_key
+        else None
     )
+    raw = (
+        provider_specific
+        if provider_specific is not None
+        else os.environ.get("AI_APPROVAL_MIN_CALL_INTERVAL_SECONDS", "2")
+    )
+    return max(0.0, min(float(raw), 15.0))
+
+
+def _provider_rate_lock(provider: str) -> threading.Lock:
+    key = provider.strip().lower()
+    with _provider_rate_locks_guard:
+        lock = _provider_rate_locks.get(key)
+        if lock is None:
+            lock = threading.Lock()
+            _provider_rate_locks[key] = lock
+        return lock
 
 
 def _normalize_json_text(text: str) -> dict[str, Any]:
@@ -144,16 +160,17 @@ def parse_provider_response(data: dict[str, Any]) -> dict[str, Any]:
 def _rate_limited_post(
     url: str,
     *,
+    provider: str,
     headers: dict[str, str],
     body: dict[str, Any],
 ) -> requests.Response:
-    global _last_provider_call_monotonic
+    provider_key = provider.strip().lower()
+    lock = _provider_rate_lock(provider_key)
 
-    with _provider_rate_lock:
+    with lock:
         now = time.monotonic()
-        wait = _min_call_interval_seconds() - (
-            now - _last_provider_call_monotonic
-        )
+        last = _last_provider_call_monotonic_by_provider.get(provider_key, 0.0)
+        wait = _min_call_interval_seconds(provider_key) - (now - last)
         if wait > 0:
             time.sleep(wait)
 
@@ -163,7 +180,7 @@ def _rate_limited_post(
             json=body,
             timeout=_timeout_seconds(),
         )
-        _last_provider_call_monotonic = time.monotonic()
+        _last_provider_call_monotonic_by_provider[provider_key] = time.monotonic()
         return response
 
 
@@ -287,6 +304,7 @@ def call_model_review(
         try:
             response = _rate_limited_post(
                 f"{base_url}/chat/completions",
+                provider=provider,
                 headers=headers,
                 body=body,
             )
