@@ -580,6 +580,9 @@ def _execute_open(
 
     metadata = {
         "live_trading_version": LIVE_TRADING_VERSION,
+        "stage11c_version": payload.get("stage11c_version"),
+        "stage11c_checked_at_ms": payload.get("stage11c_checked_at_ms"),
+        "stage11c_evidence_families": (payload.get("stage11c_snapshot") or {}).get("evidence_families"),
         "binance_entry_order_id": str(result.get("orderId") or ""),
         "entry_client_order_id": str(order["client_order_id"]),
         "entry_commission_usdt": float(stats["commission"]),
