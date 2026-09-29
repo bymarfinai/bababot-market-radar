@@ -9,8 +9,10 @@ from market_radar.models import MarketScan, MovementDetection, SymbolSnapshot
 from market_radar.persistence import (
     initialize_database,
     list_signals,
+    get_entry_latency,
     persistence_summary,
     record_actionable_signals,
+    update_entry_latency,
 )
 
 
@@ -116,8 +118,10 @@ class Stage10PersistenceTests(unittest.TestCase):
                     )
                 }
             self.assertTrue(
-                {"signals", "signal_outcomes", "ai_reviews", "positions", "trade_events"}
-                <= names
+                {
+                    "signals", "signal_outcomes", "ai_reviews", "positions",
+                    "trade_events", "entry_latency",
+                } <= names
             )
 
     def test_only_actionable_signals_are_persisted(self):
@@ -131,6 +135,37 @@ class Stage10PersistenceTests(unittest.TestCase):
             sol = next(row for row in rows if row["symbol"] == "SOLUSDT")
             self.assertEqual(sol["signal_price"], 201.5)
             self.assertEqual(sol["side"], "LONG")
+
+    def test_entry_latency_starts_with_signal_timing_and_derives_segments(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            db = Path(tmp) / "radar.sqlite3"
+            record_actionable_signals(sample_scan(), db)
+            rows = get_entry_latency(path=db)
+            self.assertEqual(len(rows), 2)
+            sol = next(row for row in rows if row["signal_id"].startswith("SOLUSDT:"))
+            self.assertEqual(sol["candle_close_at_ms"], 1_000)
+            self.assertEqual(sol["scan_started_at_ms"], 100)
+            self.assertEqual(sol["scan_finished_at_ms"], 200)
+            self.assertEqual(sol["signal_created_at_ms"], 200)
+            self.assertEqual(sol["scan_duration_ms"], 100)
+            self.assertEqual(sol["candle_to_signal_ms"], -800)
+
+            update_entry_latency(
+                sol["signal_id"],
+                path=db,
+                ai_queued_at_ms=300,
+                ai_started_at_ms=350,
+                ai_finished_at_ms=500,
+                order_created_at_ms=550,
+                position_opened_at_ms=600,
+            )
+            row = get_entry_latency(signal_id=sol["signal_id"], path=db)[0]
+            self.assertEqual(row["signal_to_ai_queue_ms"], 100)
+            self.assertEqual(row["ai_queue_wait_ms"], 50)
+            self.assertEqual(row["ai_review_ms"], 150)
+            self.assertEqual(row["approval_to_order_ms"], 50)
+            self.assertEqual(row["order_to_fill_ms"], 50)
+            self.assertEqual(row["signal_to_fill_ms"], 400)
 
     def test_replaying_same_scan_is_idempotent(self):
         with tempfile.TemporaryDirectory() as tmp:
