@@ -485,17 +485,26 @@ Stage 11B is a failover-only resilience layer:
 
 Stage 11C is the final deterministic execution-time direction gate.
 
-Stage 11C invariants:
+Stage 11C V2 invariants:
 
+- current version is `stage11c-v2-evidence-families`
 - runs only after final Stage 11 APPROVE
 - reads fresh public market data at execution time
 - output is ENTER, WAIT, or CANCEL
 - never reverses the Stage 6/11 direction
-- stale signal/approval or excessive price chase may CANCEL
-- fresh contradiction may CANCEL
+- correlated observations must be normalized into PRICE_STRUCTURE, FLOW,
+  POSITIONING, and REGIME families
+- 1m and 3m momentum cannot be counted as two independent votes
+- REGIME is a modifier and cannot qualify an entry by itself
+- ENTER requires aligned PRICE_STRUCTURE plus independent near-entry support
+  from FLOW or POSITIONING
+- raw OI changes below the configured floor are neutral, not confirmation
+- soft chase / concentrated impulse requires both FLOW and POSITIONING to align
+- stale signal/approval or hard excessive price chase may CANCEL
+- hard fresh contradiction may CANCEL
 - mixed/insufficient fresh evidence returns WAIT
 - only ENTER may create a new entry order
-- Stage 11C verdict, reasons, and snapshot must be persisted
+- Stage 11C verdict, family map, reasons, and snapshot must be persisted
 - an ENTER verdict has a short fill-freshness TTL; stale gate results cannot fill
 
 ---
