@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 READY  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 READY  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -133,7 +133,7 @@ Freeze and reconstruct a causal research dataset for the V3 cohort.
 Understand when, how quickly, and under which evidence states profitable trades start giving back peak economic PnL. No final parameter optimization.
 
 ### Stage 3 - Static Frontier Baseline
-**Status: NEXT**
+**Status: COMPLETE / QA PASS**
 
 Sweep simple static protection rules first:
 - arm threshold,
@@ -144,6 +144,7 @@ Sweep simple static protection rules first:
 Adaptive logic must later outperform this baseline to justify complexity.
 
 ### Stage 4 - Adaptive Feature Discovery
+**Status: NEXT**
 
 Test which features add stable information about continuation vs giveback:
 - peak size,
@@ -1290,6 +1291,164 @@ Stage 2 ends with hypotheses only. Stage 3 must now establish the Static Frontie
 
 ---
 
+# 17B. Stage 3 formal completion record
+
+**Status: COMPLETE / QA PASS**
+
+Audit package:
+
+https://radar.43-153-193-103.sslip.io/audit/stage3_static_frontier_497trades.zip
+
+SHA256:
+
+`985bdc104c6bb9d23ab9383d8dacd694491dc1ce4133a5f92becfbae90e6ea57`
+
+Static sweep:
+
+```text
+Global policies: 168
+Tiered policies: 648
+Total policies: 816
+Pareto frontier policies: 47
+```
+
+Global arms tested:
+
+```text
+0.5%, 0.75%, 1%, 1.5%, 2%, 3%, 5%
+```
+
+Global giveback ratios tested:
+
+```text
+20%, 30%, 40%, 50%, 60%, 70%, 80%, 90%
+```
+
+Action modes:
+
+```text
+CLOSE_FIRST
+REDUCE_ONCE
+REDUCE_THEN_CLOSE
+```
+
+Tiered static scheme:
+
+```text
+0.5-2% peak economic ROI
+2-5%
+>=5%
+```
+
+with tier giveback values drawn from 30-80%.
+
+Simulation invariants:
+
+- causal closed-1m decisions only,
+- 497 frozen trades remain unchanged,
+- 12,191 strict pre-close 1m rows,
+- 497 overlapping final candles that closed after exact position exit remain excluded,
+- actual V3 REDUCE events are ignored inside the counterfactual policy state,
+- synthetic REDUCE uses 50% remaining quantity,
+- fee = 0.075%,
+- adverse slippage = 2 bps,
+- economic-PnL floor is ratcheted and cannot loosen,
+- future opportunity peak is used only for evaluation, never as a trigger,
+- exact actual V3 close timestamp/fill is the right-censor boundary,
+- no continuation after the actual V3 exit is invented.
+
+Baselines:
+
+```text
+ACTUAL_V3 total net PnL              = -257.28 USDT
+FULL_HOLD_TO_V3_CENSOR total net PnL = -130.51 USDT
+ACTUAL_V3 MFE>=2 price capture       = 33.67%
+FULL_HOLD MFE>=2 price capture       = 38.64%
+```
+
+Static envelope:
+
+- 724 / 816 policies beat actual V3 total net PnL.
+- 46 / 816 policies beat full-hold-to-censor total net PnL.
+- 43 policies reach >=60% median capture on the Stage 3 opportunity-economic-peak >=2% cohort.
+- 11 policies reach >=65%.
+- **0 policies reach >=70%**.
+- 6 policies reach >=50% median capture against persisted MFE >=2%.
+- **0 policies reach >=55% persisted-MFE >=2 capture**.
+
+Key benchmark points:
+
+### Net-PnL benchmark
+
+```text
+G_A5_GB20_CLOSE_FIRST
+```
+
+- total net PnL: **-74.06 USDT**
+- delta vs actual V3: **+183.22 USDT**
+- delta vs full-hold censor: **+56.45 USDT**
+- economic-peak >=2 median capture: **57.51%**
+- persisted-MFE >=2 median capture: **39.93%**
+- persisted-MFE >=5 median capture: **57.21%**
+- premature CLOSE on economic-peak >=2 cohort: **8.33%**
+- trigger rate: **1.81% of trades**
+
+This is the strongest observed static total-PnL benchmark and is deliberately low-intervention.
+
+### Balanced capture benchmark
+
+```text
+G_A3_GB30_CLOSE_FIRST
+```
+
+- total net PnL: **-110.57 USDT**
+- economic-peak >=2 median capture: **62.94%**
+- persisted-MFE >=2 median capture: **41.64%**
+- persisted-MFE >=5 median capture: **57.97%**
+- premature CLOSE: **16.67%**
+- trigger rate: **3.82%**
+
+### Static capture ceiling
+
+```text
+G_A2_GB20_REDUCE_THEN_CLOSE
+```
+
+- total net PnL: **-116.84 USDT**
+- economic-peak >=2 median capture: **68.51%**
+- persisted-MFE >=2 median capture: **53.05%**
+- premature CLOSE: **38.89%**
+- premature REDUCE: **50.00%**
+
+This rule reaches the highest observed static capture but does so by sacrificing too many runners.
+
+Stage 3 conclusions:
+
+1. **Static protection improves V3 materially but has a hard trade-off.** More aggressive protection raises capture while sharply increasing premature exits.
+2. **A sparse protector can improve economics substantially.** The best total-PnL static rule acts on only ~1.8% of trades.
+3. **Peak-tier complexity did not beat the best simple global rule on total PnL.** Static tiering is therefore not justified by this frozen cohort alone.
+4. **REDUCE_ONCE preserves runner survival but gives up capture and net-PnL improvement relative to the strongest CLOSE_FIRST rules.**
+5. **No static policy reaches the V4 research ambition.** The adaptive workstream must create value from causal state information, not from another fixed giveback retune.
+6. The whole frozen 497-trade cohort remains negative under every tested static rule. Profit protection improves exit economics but cannot repair poor entry/loss trades by itself.
+
+Required Stage 3 outputs:
+
+```text
+stage3_policy_results.csv
+stage3_pareto_frontier.csv
+stage3_benchmark_shortlist.csv
+stage3_envelope_summary.csv
+stage3_baselines.csv
+stage3_selected_policy_trade_replay.csv
+stage3_manifest.json
+stage3_qa.json
+stage3_report.md
+```
+
+Stage 4 must compare adaptive features against this static envelope under the same causal and right-censoring rules.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1301,8 +1460,8 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. Stage 2 is COMPLETE / QA PASS. The next research stage is Stage 3 - Static Frontier Baseline.
-9. Stage 2 is locked as descriptive evidence; do not reinterpret its findings as approved V4 production thresholds.
+8. Stage 2 and Stage 3 are COMPLETE / QA PASS. The next research stage is Stage 4 - Adaptive Feature Discovery.
+9. Stage 2 is locked as descriptive evidence and Stage 3 is locked as the static benchmark envelope; neither is an approved V4 production rule.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
 12. Do not enable live trading.
@@ -1319,8 +1478,8 @@ At document creation:
 ~~~text
 Stage 1: COMPLETE / QA PASS
 Stage 2: COMPLETE / QA PASS
-Stage 3: READY TO EXECUTE
-Stage 4: NOT STARTED
+Stage 3: COMPLETE / QA PASS
+Stage 4: READY TO EXECUTE
 Stage 5: NOT STARTED
 Stage 6: NOT STARTED
 Stage 7: NOT STARTED
