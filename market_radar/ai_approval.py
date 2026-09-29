@@ -22,7 +22,12 @@ from .ai_provider import (
     tiebreaker_provider,
 )
 from .multi_model import run_primary_fallback, run_stage11b
-from .persistence import get_pending_entry_signals, save_entry_approval, save_model_review
+from .persistence import (
+    get_pending_entry_signals,
+    save_entry_approval,
+    save_model_review,
+    update_entry_latency,
+)
 
 
 AI_APPROVAL_VERSION = "stage11-v2-primary-fallback"
@@ -215,6 +220,10 @@ def review_signal(
     now_ms: int | None = None,
 ) -> dict[str, Any]:
     reviewed_at_ms = int(now_ms if now_ms is not None else time.time() * 1000)
+    update_entry_latency(
+        signal["signal_id"],
+        ai_started_at_ms=reviewed_at_ms,
+    )
     risk = evaluate_entry_risk(signal, now_ms=reviewed_at_ms)
 
     if risk["verdict"] != "PASS":
@@ -331,6 +340,13 @@ def review_signal(
                 "ai_latency_ms": primary_latency_ms,
             }
 
+    ai_finished_at_ms = int(time.time() * 1000)
+    result["entry_latency"] = {
+        "ai_started_at_ms": reviewed_at_ms,
+        "ai_finished_at_ms": ai_finished_at_ms,
+        "ai_total_ms": max(0, ai_finished_at_ms - reviewed_at_ms),
+    }
+
     save_entry_approval(
         signal_id=signal["signal_id"],
         reviewed_at_ms=reviewed_at_ms,
@@ -344,6 +360,10 @@ def review_signal(
         risk_reasons=result["risk_reasons"],
         ai_reasons=result["ai_reasons"],
         raw=result,
+    )
+    update_entry_latency(
+        signal["signal_id"],
+        ai_finished_at_ms=ai_finished_at_ms,
     )
     return result
 
@@ -371,6 +391,13 @@ def process_pending_approvals() -> dict[str, Any]:
                 "veto": 0,
                 "watch": 0,
             }
+
+        queued_at_ms = int(time.time() * 1000)
+        for signal in signals:
+            update_entry_latency(
+                signal["signal_id"],
+                ai_queued_at_ms=queued_at_ms,
+            )
 
         results: list[dict[str, Any]] = []
         with ThreadPoolExecutor(max_workers=_workers()) as pool:
