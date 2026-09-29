@@ -224,9 +224,14 @@ def _early_invalidation_guard(
     weak_loss = current <= _early_reduce_pnl_pct()
     enough_conflict = contradictions >= _early_min_contradictions()
 
-    if severe_mae and current < 0 and contradictions >= 1:
-        reasons.extend(["early_low_mfe", "early_severe_mae", "fresh_contradiction"])
+    if severe_mae and current < 0 and (
+        contradictions >= 2 or (mae <= -1.5 and contradictions >= 1)
+    ):
+        reasons.extend(["early_low_mfe", "early_severe_mae", "independent_fresh_contradictions"])
         action = "CLOSE"
+    elif severe_mae and weak_loss and contradictions >= 1:
+        reasons.extend(["early_low_mfe", "early_severe_mae", "single_fresh_contradiction"])
+        action = "REDUCE"
     elif strong_loss and enough_conflict:
         reasons.extend(["early_low_mfe", "early_strong_loss", "multiple_fresh_contradictions"])
         action = "CLOSE"
