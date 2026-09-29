@@ -81,6 +81,22 @@ class PipelineCohortTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["signal_id"], "TEST:POST:LONG")
 
+        v2 = label_signal_cohort(
+            "TEST:POST:LONG",
+            opened_at_ms=DEFAULT_BOUNDARY_MS + 10,
+            metadata={"stage11c_version": "stage11c-v2-evidence-families"},
+        )
+        self.assertEqual(
+            v2["fresh_gate_version"],
+            "stage11c-v2-evidence-families",
+        )
+        filtered = list_cohorts(
+            cohort=POST_COHORT,
+            fresh_gate_version="stage11c-v2-evidence-families",
+            limit=10,
+        )
+        self.assertEqual(len(filtered), 1)
+
     def test_backfill_separates_pre_and_post_positions(self):
         with _sqlite_connect(self.db) as conn:
             seed_signal(conn, "TEST:PRE:LONG", DEFAULT_BOUNDARY_MS - 10)
