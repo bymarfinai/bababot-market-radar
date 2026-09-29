@@ -276,6 +276,19 @@ def _positioning_family(
         }
 
     reasons = _decision_reasons(candidate)
+    fallback_change = candidate.get("raw_oi_change_pct")
+    try:
+        fallback_change_f = float(fallback_change)
+    except (TypeError, ValueError):
+        fallback_change_f = None
+    if fallback_change_f is not None and abs(fallback_change_f) < threshold:
+        return "NEUTRAL", {
+            "source": "signal_context_fallback",
+            "oi_change_pct": fallback_change_f,
+            "threshold_pct": threshold,
+            "interpretation": "signal_oi_change_below_floor",
+        }
+
     side = str(candidate.get("side") or "").upper()
     side_word = "long" if side == "LONG" else "short"
     opposite_word = "short" if side == "LONG" else "long"
