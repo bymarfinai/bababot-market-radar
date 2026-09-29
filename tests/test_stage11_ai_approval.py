@@ -119,11 +119,17 @@ class Stage11ApprovalTests(unittest.TestCase):
             "reasons": ["context aligned"],
             "risk_flags": [],
         }
-        result = review_signal(
-            good_signal(),
-            target=("clario", "gemini-3.7-flash"),
-            now_ms=1_300_000,
-        )
+        with patch(
+            "market_radar.paper_trading.process_approved_signal",
+            return_value={"status": "FILLED"},
+        ) as handoff:
+            result = review_signal(
+                good_signal(),
+                target=("clario", "gemini-3.7-flash"),
+                now_ms=1_300_000,
+            )
+        handoff.assert_called_once_with("SOLUSDT:1000000:LONG")
+        self.assertEqual(result["stage13_handoff"]["status"], "FILLED")
         self.assertEqual(result["risk_verdict"], "PASS")
         self.assertEqual(result["ai_verdict"], "APPROVE")
         self.assertEqual(result["final_verdict"], "APPROVE")
