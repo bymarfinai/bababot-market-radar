@@ -164,6 +164,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <button class="terminal-tab active" data-tab="positions">Positions <span id="positionsMeta">—</span></button>
     <button class="terminal-tab" data-tab="openorders">Open Orders</button>
     <button class="terminal-tab" data-tab="orders">Order History</button>
+    <button class="terminal-tab" data-tab="positionhistory">Position History</button>
     <button class="terminal-tab" data-tab="signals">Signal History</button>
     <button class="terminal-tab" data-tab="ai">AI Risk <span id="aiMeta">—</span></button>
     <button class="terminal-tab" data-tab="control">Trading Control</button>
@@ -182,6 +183,12 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   <div class="terminal-pane" data-pane="orders">
     <div class="pane-meta"><span id="feeMeta">—</span></div>
     <div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Mode</th><th>Action</th><th>Status</th><th>Fill / Ref</th><th>Qty</th><th>Fee</th><th>Slip</th><th>Reason</th></tr></thead><tbody id="orderRows"></tbody></table></div>
+  </div>
+
+  <div class="terminal-pane" data-pane="positionhistory">
+    <div class="pane-meta"><span id="positionHistoryMeta">Closed position history</span></div>
+    <div id="positionHistoryDetail" class="health-inspector"><div class="health-empty">Select a closed position to inspect OPEN / REDUCE / CLOSE accounting.</div></div>
+    <div class="table-wrap"><table><thead><tr><th>Close Time</th><th>Symbol</th><th>Side</th><th>Closing PnL</th><th>ROI</th><th>Entry Price</th><th>Avg. Close Price</th><th>Closed Vol.</th><th>MFE / MAE</th><th>Reduce</th><th>Exit Reason</th></tr></thead><tbody id="positionHistoryRows"><tr><td colspan="11" class="empty"><strong>Loading position history</strong><span>One row per fully closed paper position.</span></td></tr></tbody></table></div>
   </div>
 
   <div class="terminal-pane" data-pane="signals">
@@ -269,11 +276,11 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 'use strict';
 var API='https://core-prod.43-153-193-103.sslip.io';
 var state={
-  radar:null,paper:null,positions:[],evals:[],approvals:[],approvalSummary:null,
+  radar:null,paper:null,positions:[],evals:[],positionHistory:[],approvals:[],approvalSummary:null,
   models:[],modelSummary:null,orders:[],history:[],historySummary:null,control:null,
   livePreflight:null,liveSummary:null,liveOrders:[],livePositions:[],
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
-  ticker:null,depth:null,marketSearch:'',terminalTab:'positions',
+  ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
   controlAuthVerified:false,controlBusy:false
 };
 function el(id){return document.getElementById(id)}
@@ -647,6 +654,70 @@ function renderApprovals(){
       '<td>'+(x.confidence===null||x.confidence===undefined?'—':num(Number(x.confidence)*100,0)+'%')+'</td><td>'+((x.latency_ms||0)/1000).toFixed(1)+'s</td></tr>';
   }).join(''):'<tr><td colspan="7" class="empty">No model reviews.</td></tr>';
 }
+function renderPositionHistoryDetail(){
+  var box=el('positionHistoryDetail');
+  if(!box)return;
+  var x=(state.positionHistory||[]).find(function(r){return r.position_id===state.selectedClosedPositionId})||null;
+  if(!x){box.innerHTML='<div class="health-empty">Select a closed position to inspect OPEN / REDUCE / CLOSE accounting.</div>';return;}
+  var execs=x.executions||[];
+  var execHtml=execs.map(function(e){
+    var ep=e.event_net_pnl;
+    var cp=Number(e.cumulative_net_pnl||0);
+    return [
+      '<tr>',
+      '<td>'+dt(e.executed_at_ms)+'</td>',
+      '<td>'+badge(e.action)+'</td>',
+      '<td class="mono">'+px(e.fill_price)+'</td>',
+      '<td class="mono">'+num(e.quantity,5)+'</td>',
+      '<td class="red">'+(Number(e.fee||0)>0?money(-Number(e.fee)):'$0.00')+'</td>',
+      '<td class="'+(ep===null||ep===undefined?'muted':(Number(ep)>=0?'green':'red'))+'">'+(ep===null||ep===undefined?'—':money(Number(ep)))+'</td>',
+      '<td class="'+(cp>=0?'green':'red')+'">'+money(cp)+'</td>',
+      '<td>'+num(e.remaining_pct,1)+'%</td>',
+      '<td class="reason-cell">'+esc(prettyReason(e.reason))+'</td>',
+      '</tr>'
+    ].join('');
+  }).join('');
+  box.innerHTML=[
+    '<div class="health-inspector-head"><div><div class="panel-sub">Closed Position Detail</div><h3>'+esc(x.symbol)+' '+badge(x.side)+'</h3></div><div class="health-version">'+esc(x.mode||'PAPER')+'</div></div>',
+    '<div class="health-metrics">',
+      '<div class="health-card"><span>Net PnL</span><strong class="'+(Number(x.net_pnl||0)>=0?'green':'red')+'">'+money(Number(x.net_pnl||0))+'</strong><small>after paper fees</small></div>',
+      '<div class="health-card"><span>ROI</span><strong class="'+(Number(x.net_roi_pct||0)>=0?'green':'red')+'">'+pct(x.net_roi_pct)+'</strong><small>vs initial notional</small></div>',
+      '<div class="health-card"><span>Gross / Fees</span><strong>'+money(Number(x.gross_pnl||0))+' / '+money(-Number(x.fees||0))+'</strong><small>position accounting</small></div>',
+      '<div class="health-card"><span>MFE / MAE</span><strong><span class="green">'+pct(x.mfe_pct)+'</span> / <span class="red">'+pct(x.mae_pct)+'</span></strong><small>trade path</small></div>',
+      '<div class="health-card"><span>Entry / Avg Close</span><strong>'+px(x.entry_price)+' / '+px(x.avg_close_price)+'</strong><small>executed prices</small></div>',
+      '<div class="health-card"><span>Reduce Count</span><strong>'+num(x.reduce_count,0)+'</strong><small>partial exits</small></div>',
+      '<div class="health-card"><span>Accounting Delta</span><strong class="'+(Math.abs(Number(x.accounting_delta||0))<0.000001?'green':'red')+'">'+money(Number(x.accounting_delta||0))+'</strong><small>must reconcile to zero</small></div>',
+    '</div>',
+    '<div class="table-wrap" style="margin-top:10px;max-height:220px"><table><thead><tr><th>Time</th><th>Event</th><th>Fill</th><th>Qty</th><th>Fee</th><th>Net Event</th><th>Cumulative PnL</th><th>Remaining</th><th>Reason</th></tr></thead><tbody>'+execHtml+'</tbody></table></div>'
+  ].join('');
+}
+function renderPositionHistory(){
+  if(!el('positionHistoryRows'))return;
+  var rows=state.positionHistory||[];
+  var wins=rows.filter(function(x){return Number(x.net_pnl||0)>0}).length;
+  var net=rows.reduce(function(s,x){return s+Number(x.net_pnl||0)},0);
+  if(el('positionHistoryMeta'))el('positionHistoryMeta').textContent=rows.length+' recent closed · '+wins+' wins · net '+money(net)+' · click row for execution trail';
+  el('positionHistoryRows').innerHTML=rows.length?rows.map(function(x){
+    var pnl=Number(x.net_pnl||0),roi=Number(x.net_roi_pct||0);
+    return [
+      '<tr class="click ph-row" data-position-id="'+esc(x.position_id)+'">',
+      '<td><div class="cell-main">'+dt(x.closed_at_ms)+'</div><div class="cell-sub">opened '+dt(x.opened_at_ms)+'</div></td>',
+      '<td><strong>'+esc(x.symbol)+'</strong><div class="cell-sub">'+esc(x.mode||'PAPER')+'</div></td>',
+      '<td>'+badge(x.side)+'</td>',
+      '<td><strong class="'+(pnl>=0?'green':'red')+'">'+money(pnl)+'</strong><div class="cell-sub">gross '+money(Number(x.gross_pnl||0))+' · fee '+money(-Number(x.fees||0))+'</div></td>',
+      '<td class="'+(roi>=0?'green':'red')+'">'+pct(roi)+'</td>',
+      '<td class="mono">'+px(x.entry_price)+'</td>',
+      '<td class="mono">'+px(x.avg_close_price)+'</td>',
+      '<td class="mono">'+num(x.closed_volume,5)+'</td>',
+      '<td><span class="green">'+pct(x.mfe_pct)+'</span> / <span class="red">'+pct(x.mae_pct)+'</span></td>',
+      '<td>'+num(x.reduce_count,0)+'</td>',
+      '<td class="reason-cell" title="'+esc(x.close_reason||'')+'">'+esc(prettyReason(x.close_reason))+'</td>',
+      '</tr>'
+    ].join('');
+  }).join(''):'<tr><td colspan="11" class="empty"><strong>No closed positions yet</strong><span>Fully closed paper positions will appear here.</span></td></tr>';
+  document.querySelectorAll('.ph-row').forEach(function(tr){tr.onclick=function(){state.selectedClosedPositionId=tr.dataset.positionId;renderPositionHistoryDetail()}});
+  renderPositionHistoryDetail();
+}
 function renderOrders(){
   var rows=[];
   (state.orders||[]).forEach(function(x){if(x.status!=='PENDING')rows.push({order:x,mode:'PAPER'})});
@@ -736,6 +807,7 @@ async function refresh(){
       getJSON('/paper/summary'),
       getJSON('/positions/open'),
       getJSON('/positions/evaluations?limit=300'),
+      getJSON('/positions/history?limit=120'),
       getJSON('/approval/summary'),
       getJSON('/approval/reviews?limit=100'),
       getJSON('/approval/models?limit=120'),
@@ -752,18 +824,19 @@ async function refresh(){
     state.paper=settledValue(res[1],state.paper);
     state.positions=(settledValue(res[2],{positions:state.positions}).positions||[]);
     state.evals=(settledValue(res[3],{evaluations:state.evals}).evaluations||[]);
-    state.approvalSummary=settledValue(res[4],state.approvalSummary);
-    state.approvals=(settledValue(res[5],{reviews:state.approvals}).reviews||[]);
-    state.models=(settledValue(res[6],{reviews:state.models}).reviews||[]);
-    state.orders=(settledValue(res[7],{orders:state.orders}).orders||[]);
-    state.history=(settledValue(res[8],{signals:state.history}).signals||[]);
-    state.historySummary=settledValue(res[9],state.historySummary);
-    state.control=settledValue(res[10],state.control);
-    state.livePreflight=settledValue(res[11],state.livePreflight);
-    state.liveSummary=settledValue(res[12],state.liveSummary);
-    state.liveOrders=(settledValue(res[13],{orders:state.liveOrders}).orders||[]);
-    state.livePositions=(settledValue(res[14],{positions:state.livePositions}).positions||[]);
-    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();await loadChart();
+    state.positionHistory=(settledValue(res[4],{positions:state.positionHistory}).positions||[]);
+    state.approvalSummary=settledValue(res[5],state.approvalSummary);
+    state.approvals=(settledValue(res[6],{reviews:state.approvals}).reviews||[]);
+    state.models=(settledValue(res[7],{reviews:state.models}).reviews||[]);
+    state.orders=(settledValue(res[8],{orders:state.orders}).orders||[]);
+    state.history=(settledValue(res[9],{signals:state.history}).signals||[]);
+    state.historySummary=settledValue(res[10],state.historySummary);
+    state.control=settledValue(res[11],state.control);
+    state.livePreflight=settledValue(res[12],state.livePreflight);
+    state.liveSummary=settledValue(res[13],state.liveSummary);
+    state.liveOrders=(settledValue(res[14],{orders:state.liveOrders}).orders||[]);
+    state.livePositions=(settledValue(res[15],{positions:state.livePositions}).positions||[]);
+    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderPositionHistory();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();await loadChart();
   }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
 }
 function controlToken(){
