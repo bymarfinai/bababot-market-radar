@@ -1137,7 +1137,12 @@ def get_pending_entry_signals(
                         or (a.ai_verdict = 'ERROR' and a.reviewed_at_ms <= ?)
                       )
                   and s.signal_time_ms >= ?
-                order by s.signal_time_ms asc, s.signal_id
+                order by
+                    s.signal_time_ms desc,
+                    case when s.side='LONG' then s.long_score else s.short_score end desc,
+                    s.score_edge desc,
+                    s.decision_context_balance desc,
+                    s.signal_id
                 limit ?
                 """,
                 (retry_before, cutoff, safe_limit),
@@ -1157,7 +1162,12 @@ def get_pending_entry_signals(
                         or (a.ai_verdict = 'ERROR' and a.reviewed_at_ms <= %s)
                       )
                   and s.signal_time_ms >= %s
-                order by s.signal_time_ms asc, s.signal_id
+                order by
+                    s.signal_time_ms desc,
+                    case when s.side='LONG' then s.long_score else s.short_score end desc,
+                    s.score_edge desc,
+                    s.decision_context_balance desc,
+                    s.signal_id
                 limit %s
                 """,
                 (retry_before, cutoff, safe_limit),
