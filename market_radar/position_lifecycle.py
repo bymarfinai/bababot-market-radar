@@ -138,7 +138,7 @@ def _cfg_float(name: str, default: float, lo: float, hi: float) -> float:
 
 
 def _fast_guards_enabled() -> bool:
-    return os.environ.get("STAGE12_V3_FAST_GUARD_ENABLED", "1").strip().lower() in {
+    return os.environ.get("STAGE12_V3_FAST_GUARD_ENABLED", "0").strip().lower() in {
         "1", "true", "yes", "on"
     }
 
@@ -446,6 +446,8 @@ def _build_fast_snapshot(
         "latest_1m_high": float(latest[2]),
         "latest_1m_low": float(latest[3]),
         "latest_1m_close": latest_close,
+        "rolling_1m_high": max(float(row[2]) for row in closed[-5:]),
+        "rolling_1m_low": min(float(row[3]) for row in closed[-5:]),
         "ret_1m_pct": ret1,
         "ret_3m_pct": ret3,
         "side_ret_1m_pct": side_ret1,
@@ -484,11 +486,13 @@ def evaluate_fast_position(
         else None
     )
 
-    # Reconstruct the excursion since the last 5m thesis evaluation from the
-    # current closed 1m bar plus live ticker. Full 5m evaluations preserve the
-    # complete longer-term MFE/MAE path.
-    high = max(float(snapshot["latest_1m_high"]), current)
-    low = min(float(snapshot["latest_1m_low"]), current)
+    # Reconstruct the excursion over the rolling fast window, not just the
+    # latest minute. This prevents an earlier intrawindow MFE peak from being
+    # forgotten after price retraces before the next 5m thesis evaluation.
+    fast_high = float(snapshot.get("rolling_1m_high") or snapshot["latest_1m_high"])
+    fast_low = float(snapshot.get("rolling_1m_low") or snapshot["latest_1m_low"])
+    high = max(fast_high, current)
+    low = min(fast_low, current)
     mfe, mae = _mfe_mae(
         side=side,
         entry=entry,
