@@ -327,6 +327,7 @@ ai_model_reviews
 positions
 position_evaluations
 trade_events
+entry_latency
 persistence_meta
 paper_orders
 live_orders
@@ -339,6 +340,25 @@ Actionable signal identity is deterministic:
 ~~~text
 symbol + candle_close_time_ms + side
 ~~~
+
+Stage 10 V3 also records end-to-end entry timing in `entry_latency`:
+
+~~~text
+candle_close_at_ms
+scan_started_at_ms
+scan_finished_at_ms
+signal_created_at_ms
+ai_queued_at_ms
+ai_started_at_ms
+ai_finished_at_ms
+stage11c_started_at_ms
+stage11c_finished_at_ms
+order_created_at_ms
+position_opened_at_ms
+~~~
+
+Stage 11C timestamps are reserved and remain null until that stage is implemented.
+The read-only endpoint `GET /history/entry-latency` returns the raw timestamps plus derived segments such as scan duration, AI queue wait, AI review time, order-to-fill time, signal-to-fill, and candle-to-fill.
 
 ## Stage 11 — Entry risk gate and AI approval
 
