@@ -14,7 +14,7 @@ from .execution_handoff import (
     write_execution_handoff_atomic,
 )
 from .paper_trading import start_paper_trading_loop
-from .position_lifecycle import start_position_lifecycle_worker
+from .position_lifecycle import start_fast_lifecycle_loop, start_position_lifecycle_worker
 from .persistence import (
     database_path,
     persistence_summary,
@@ -110,6 +110,7 @@ def main() -> int:
 
     start_pending_approval_worker()
     start_position_lifecycle_worker()
+    start_fast_lifecycle_loop()
     start_paper_trading_loop()
     start_live_trading_loop()
 
