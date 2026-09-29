@@ -13,6 +13,7 @@ from .persistence import (
     database_path,
     initialize_database,
     persistence_backend,
+    update_entry_latency,
 )
 
 
@@ -230,9 +231,10 @@ def create_order(
         created, requested_quantity, reason, payload_json,
     )
 
+    inserted = False
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
-            conn.execute(
+            cur = conn.execute(
                 """
                 insert or ignore into paper_orders (
                     order_id, source_type, source_id, position_id, signal_id,
@@ -242,21 +244,29 @@ def create_order(
                 """,
                 values,
             )
-        return order_id
+            inserted = bool(cur.rowcount)
+    else:
+        with _postgres_connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    insert into paper_orders (
+                        order_id, source_type, source_id, position_id, signal_id,
+                        symbol, side, action, status, created_at_ms,
+                        requested_quantity, reason, payload_json
+                    ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    on conflict(source_type, source_id) do nothing
+                    returning order_id
+                    """,
+                    values,
+                )
+                inserted = cur.fetchone() is not None
 
-    with _postgres_connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                """
-                insert into paper_orders (
-                    order_id, source_type, source_id, position_id, signal_id,
-                    symbol, side, action, status, created_at_ms,
-                    requested_quantity, reason, payload_json
-                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                on conflict(source_type, source_id) do nothing
-                """,
-                values,
-            )
+    if inserted and source_type.upper() == "ENTRY" and signal_id:
+        update_entry_latency(
+            str(signal_id),
+            order_created_at_ms=created,
+        )
     return order_id
 
 
@@ -391,6 +401,11 @@ def create_position(
                     """,
                     (signal_id, position_id, opened_at_ms, raw),
                 )
+        if cur.rowcount:
+            update_entry_latency(
+                signal_id,
+                position_opened_at_ms=opened_at_ms,
+            )
         return
 
     with _postgres_connect() as conn:
@@ -418,6 +433,12 @@ def create_position(
                     """,
                     (signal_id, position_id, opened_at_ms, raw),
                 )
+
+    if inserted:
+        update_entry_latency(
+            signal_id,
+            position_opened_at_ms=opened_at_ms,
+        )
 
 
 def update_position_reduce(
