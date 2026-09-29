@@ -197,6 +197,26 @@ create table if not exists trade_events (
 
 create index if not exists idx_trade_events_time
 on trade_events(event_time_ms desc);
+
+create table if not exists entry_latency (
+    signal_id text primary key references signals(signal_id) on delete cascade,
+    candle_close_at_ms integer,
+    scan_started_at_ms integer,
+    scan_finished_at_ms integer,
+    signal_created_at_ms integer,
+    ai_queued_at_ms integer,
+    ai_started_at_ms integer,
+    ai_finished_at_ms integer,
+    stage11c_started_at_ms integer,
+    stage11c_finished_at_ms integer,
+    order_created_at_ms integer,
+    position_opened_at_ms integer,
+    updated_at_ms integer not null,
+    telemetry_version text not null
+);
+
+create index if not exists idx_entry_latency_signal_created
+on entry_latency(signal_created_at_ms desc);
 """
 
 
@@ -377,18 +397,18 @@ on trade_events(event_time_ms desc);
 
 create table if not exists entry_latency (
     signal_id text primary key references signals(signal_id) on delete cascade,
-    candle_close_at_ms integer,
-    scan_started_at_ms integer,
-    scan_finished_at_ms integer,
-    signal_created_at_ms integer,
-    ai_queued_at_ms integer,
-    ai_started_at_ms integer,
-    ai_finished_at_ms integer,
-    stage11c_started_at_ms integer,
-    stage11c_finished_at_ms integer,
-    order_created_at_ms integer,
-    position_opened_at_ms integer,
-    updated_at_ms integer not null,
+    candle_close_at_ms bigint,
+    scan_started_at_ms bigint,
+    scan_finished_at_ms bigint,
+    signal_created_at_ms bigint,
+    ai_queued_at_ms bigint,
+    ai_started_at_ms bigint,
+    ai_finished_at_ms bigint,
+    stage11c_started_at_ms bigint,
+    stage11c_finished_at_ms bigint,
+    order_created_at_ms bigint,
+    position_opened_at_ms bigint,
+    updated_at_ms bigint not null,
     telemetry_version text not null
 );
 
