@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 READY  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 READY  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -128,11 +128,12 @@ Any illustrative coefficients discussed in chat are examples only, not approved 
 Freeze and reconstruct a causal research dataset for the V3 cohort.
 
 ### Stage 2 - Giveback Anatomy
-**Status: NEXT**
+**Status: COMPLETE / QA PASS**
 
 Understand when, how quickly, and under which evidence states profitable trades start giving back peak economic PnL. No final parameter optimization.
 
 ### Stage 3 - Static Frontier Baseline
+**Status: NEXT**
 
 Sweep simple static protection rules first:
 - arm threshold,
@@ -1220,6 +1221,75 @@ Other desired outcomes:
 Targets may be revised if Stage 2-6 show they are unrealistic or harmful.
 ---
 
+# 17A. Stage 2 formal completion record
+
+**Status: COMPLETE / QA PASS**
+
+Audit package:
+
+https://radar.43-153-193-103.sslip.io/audit/stage2_giveback_anatomy_497trades.zip
+
+SHA256:
+
+`4c7c9b35fc7a4ff6ff1bb6a894870ace13e0d0b82f1016dac64f18b6985fe47c`
+
+Formal causal refinement:
+
+- all 497 frozen trades are accounted for,
+- 12,191 closed-1m rows remain after requiring candle close <= exact position close,
+- 497 final overlapping candles that closed after the exact position exit are excluded from causal features,
+- 18 sub-minute trades have no fully closed 1m candle before exit; they remain represented at trade/exact-event level and are never assigned fabricated 1m states,
+- missing taker rows: 10,
+- missing OI rows: 0,
+- OI-lookahead rows: 0,
+- REDUCE-before-execution rows: 0,
+- negative time-since-peak rows: 0.
+
+Empirical rv15 volatility quartiles used only for Stage 2 descriptive segmentation:
+
+```text
+Q25 = 0.092258%
+Q50 = 0.129143%
+Q75 = 0.183898%
+```
+
+Metric distinction is mandatory:
+
+- persisted price MFE >=2% remains 54 trades and is the continuity diagnostic behind the earlier ~33.7% price-MFE capture observation,
+- primary Stage 2 peak economic ROI >=2% contains 24 trades,
+- median final economic capture for the primary >=2% cohort is ~57.15%,
+- persisted MFE and economic peak ROI must never be treated as the same accounting measure.
+
+Formal Stage 2 findings:
+
+1. **Peak age matters.** In the primary 2-3% economic-peak bucket, probability of a new peak within the next 5m falls from ~75.5% at peak age 0-1m to ~32.1% at 3-5m and ~9.1% after >20m. In the 3-5% bucket it falls from ~63.2% at 0-1m to ~29.4% at 3-5m and ~4.4% after >20m.
+2. **Giveback alone is not sufficient.** Healthy runners commonly pull back before continuing. Stage 2 therefore does not support a fixed giveback threshold as a standalone V4 exit trigger.
+3. **Persistent adverse evidence separates failures better than a single 1m pullback.** At T+3m after the reference peak, GIVEBACK_FAILURE states show worse median side-adjusted 3m momentum (~-0.296% vs ~-0.107% for RUNNERS), more opposing taker flow (~53.3% vs ~36.2%), more opposing OI (~44.0% vs ~25.4%), more adverse structure (~17.3% vs ~9.4%), and median contradiction count 2 vs 1.
+4. **Volatility is not automatically a breathing-room bonus.** At first 30% giveback across the cohort, LOW/MID rv15 states recovered to a new peak ~72%, HIGH ~50%, and EXTREME ~33%. This is descriptive only and must be tested causally in Stage 4 before any adaptive volatility allowance is approved.
+5. **Prior REDUCE does not justify automatic CLOSE on a second breach.** Across already-reduced trades, roughly half of observed post-REDUCE 30-50% breaches still recovered to a new economic peak. A second breach therefore needs context/evidence, not only state memory.
+
+Required Stage 2 outputs completed:
+
+```text
+stage2_trade_anatomy.csv
+stage2_peak_bucket_summary.csv
+stage2_decay_curves.csv
+stage2_time_since_peak.csv
+stage2_evidence_transition.csv
+stage2_flow_oi_matrix.csv
+stage2_volatility_analysis.csv
+stage2_reduced_state_analysis.csv
+stage2_casebook.csv
+stage2_casebook.md
+stage2_manifest.json
+stage2_qa.json
+stage2_report.md
+```
+
+Stage 2 ends with hypotheses only. Stage 3 must now establish the Static Frontier Baseline before adaptive feature or lock search is allowed.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1231,8 +1301,8 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. The next research stage is Stage 2 - Giveback Anatomy.
-9. Stage 2 is descriptive; do not optimize final V4 thresholds yet.
+8. Stage 2 is COMPLETE / QA PASS. The next research stage is Stage 3 - Static Frontier Baseline.
+9. Stage 2 is locked as descriptive evidence; do not reinterpret its findings as approved V4 production thresholds.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
 12. Do not enable live trading.
@@ -1248,8 +1318,8 @@ At document creation:
 
 ~~~text
 Stage 1: COMPLETE / QA PASS
-Stage 2: READY TO EXECUTE
-Stage 3: NOT STARTED
+Stage 2: COMPLETE / QA PASS
+Stage 3: READY TO EXECUTE
 Stage 4: NOT STARTED
 Stage 5: NOT STARTED
 Stage 6: NOT STARTED
