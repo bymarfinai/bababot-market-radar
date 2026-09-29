@@ -41,6 +41,11 @@ class Stage11ApprovalTests(unittest.TestCase):
             {
                 "AI_APPROVAL_MAX_AGE_MINUTES": "15",
                 "AI_APPROVAL_ENABLED": "true",
+                "AI_FAST_POOL_TARGETS": (
+                    "clario:gemini-3.7-flash,"
+                    "thirty:thirty/gpt-5.6-luna"
+                ),
+                "AI_APPROVAL_WORKERS": "2",
             },
             clear=False,
         )
@@ -89,9 +94,10 @@ class Stage11ApprovalTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "APPROVE")
         self.assertEqual(result["confidence"], 0.82)
 
+    @patch("market_radar.ai_approval.update_entry_latency")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_risk_fail_never_calls_ai(self, ai_call, save):
+    def test_risk_fail_never_calls_ai(self, ai_call, save, telemetry):
         signal = good_signal()
         signal["structure_status"] = "BREAKDOWN"
         result = review_signal(signal, now_ms=1_300_000)
@@ -100,48 +106,12 @@ class Stage11ApprovalTests(unittest.TestCase):
         ai_call.assert_not_called()
         save.assert_called_once()
 
+    @patch("market_radar.ai_approval.update_entry_latency")
     @patch("market_radar.ai_approval.save_model_review")
-    @patch("market_radar.ai_approval.run_primary_fallback")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_ai_error_uses_degraded_consensus(
-        self, ai_call, save, fallback, save_model
-    ):
-        ai_call.side_effect = TimeoutError("provider timeout")
-        fallback.return_value = {
-            "final_verdict": "WATCH",
-            "fallback_reason": "no_dual_approve",
-        }
-        result = review_signal(good_signal(), now_ms=1_300_000)
-        self.assertEqual(result["risk_verdict"], "PASS")
-        self.assertEqual(result["ai_verdict"], "PRIMARY_FALLBACK")
-        self.assertEqual(result["final_verdict"], "WATCH")
-        fallback.assert_called_once()
-        save_model.assert_called_once()
-        save.assert_called_once()
-
-    @patch("market_radar.ai_approval.save_model_review")
-    @patch("market_radar.ai_approval.run_primary_fallback")
-    @patch("market_radar.ai_approval.save_entry_approval")
-    @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_ai_error_can_approve_only_via_fallback_consensus(
-        self, ai_call, save, fallback, save_model
-    ):
-        ai_call.side_effect = TimeoutError("provider timeout")
-        fallback.return_value = {
-            "final_verdict": "APPROVE",
-            "fallback_reason": "dual_approve",
-        }
-        result = review_signal(good_signal(), now_ms=1_300_000)
-        self.assertEqual(result["ai_verdict"], "PRIMARY_FALLBACK")
-        self.assertEqual(result["final_verdict"], "APPROVE")
-        fallback.assert_called_once()
-
-    @patch("market_radar.ai_approval.run_stage11b")
-    @patch("market_radar.ai_approval.save_entry_approval")
-    @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_only_ai_approve_after_risk_pass_approves(
-        self, ai_call, save, stage11b
+    def test_fast_primary_approve_is_final_without_shadow(
+        self, ai_call, save, save_model, telemetry
     ):
         ai_call.return_value = {
             "verdict": "APPROVE",
@@ -149,16 +119,77 @@ class Stage11ApprovalTests(unittest.TestCase):
             "reasons": ["context aligned"],
             "risk_flags": [],
         }
-        stage11b.return_value = {
-            "final_verdict": "APPROVE",
-            "escalated": False,
-        }
-        result = review_signal(good_signal(), now_ms=1_300_000)
+        result = review_signal(
+            good_signal(),
+            target=("clario", "gemini-3.7-flash"),
+            now_ms=1_300_000,
+        )
         self.assertEqual(result["risk_verdict"], "PASS")
         self.assertEqual(result["ai_verdict"], "APPROVE")
         self.assertEqual(result["final_verdict"], "APPROVE")
-        stage11b.assert_called_once()
+        self.assertFalse(result["fast_pool"]["fallback_used"])
+        self.assertEqual(ai_call.call_count, 1)
+        save_model.assert_called_once()
         save.assert_called_once()
+
+    @patch("market_radar.ai_approval.update_entry_latency")
+    @patch("market_radar.ai_approval.save_model_review")
+    @patch("market_radar.ai_approval.save_entry_approval")
+    @patch("market_radar.ai_approval.call_ai_entry_review")
+    def test_primary_error_routes_once_to_other_fast_lane(
+        self, ai_call, save, save_model, telemetry
+    ):
+        ai_call.side_effect = [
+            TimeoutError("clario timeout"),
+            {
+                "verdict": "WATCH",
+                "confidence": 0.7,
+                "reasons": ["fallback lane reviewed"],
+                "risk_flags": [],
+            },
+        ]
+        result = review_signal(
+            good_signal(),
+            target=("clario", "gemini-3.7-flash"),
+            now_ms=1_300_000,
+        )
+        self.assertEqual(result["final_verdict"], "WATCH")
+        self.assertTrue(result["fast_pool"]["fallback_used"])
+        self.assertEqual(ai_call.call_count, 2)
+        providers = [call.kwargs["provider"] for call in ai_call.call_args_list]
+        self.assertEqual(providers, ["clario", "thirty"])
+        self.assertEqual(save_model.call_count, 2)
+
+    @patch("market_radar.ai_approval.update_entry_latency")
+    @patch("market_radar.ai_approval.save_model_review")
+    @patch("market_radar.ai_approval.save_entry_approval")
+    @patch("market_radar.ai_approval.call_ai_entry_review")
+    def test_all_fast_lanes_failed_fail_closed(
+        self, ai_call, save, save_model, telemetry
+    ):
+        ai_call.side_effect = TimeoutError("provider down")
+        result = review_signal(
+            good_signal(),
+            target=("clario", "gemini-3.7-flash"),
+            now_ms=1_300_000,
+        )
+        self.assertEqual(result["ai_verdict"], "ERROR")
+        self.assertEqual(result["final_verdict"], "VETO")
+        self.assertTrue(result["fast_pool"]["fallback_used"])
+        self.assertEqual(ai_call.call_count, 2)
+        self.assertEqual(save_model.call_count, 2)
+
+    def test_fast_pool_uses_two_distinct_default_lanes(self):
+        from market_radar.ai_approval import _fast_pool_targets, _workers
+
+        self.assertEqual(
+            _fast_pool_targets(),
+            [
+                ("clario", "gemini-3.7-flash"),
+                ("thirty", "thirty/gpt-5.6-luna"),
+            ],
+        )
+        self.assertEqual(_workers(), 2)
 
 
 if __name__ == "__main__":
