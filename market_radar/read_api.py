@@ -20,6 +20,7 @@ from .execution_handoff import (
     default_execution_handoff_path,
     load_execution_handoff,
 )
+from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
@@ -696,6 +697,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "entry_approvals": "/approval/reviews",
                     "entry_approval_summary": "/approval/summary",
                     "entry_latency": "/history/entry-latency",
+                    "entry_revalidations": "/approval/revalidations",
                     "model_reviews": "/approval/models",
                     "model_review_summary": "/approval/models/summary",
                     "open_positions": "/positions/open",
@@ -1080,6 +1082,38 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "count": len(rows),
                     "latency": rows,
                 },
+            )
+            return
+
+        if parsed.path == "/approval/revalidations":
+            query = parse_qs(parsed.query)
+            try:
+                limit = int(query.get("limit", ["100"])[0])
+                signal_id = query.get("signal_id", [None])[0]
+                verdict = query.get("verdict", [None])[0]
+                rows = list_revalidations(
+                    signal_id=signal_id,
+                    verdict=verdict,
+                    limit=limit,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_revalidation_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_revalidation_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {"count": len(rows), "revalidations": rows},
             )
             return
 
