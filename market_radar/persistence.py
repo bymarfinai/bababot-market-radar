@@ -15,7 +15,8 @@ import psycopg2.extras
 from .models import MarketScan
 
 
-PERSISTENCE_VERSION = "stage10-v2-postgres"
+PERSISTENCE_VERSION = "stage10-v3-entry-latency"
+ENTRY_LATENCY_VERSION = "stage10-v3-entry-latency"
 DEFAULT_DB_PATH = "data/market_radar.sqlite3"
 
 _SCHEMA_INIT_LOCK = threading.Lock()
@@ -374,6 +375,26 @@ create table if not exists trade_events (
 create index if not exists idx_trade_events_time
 on trade_events(event_time_ms desc);
 
+create table if not exists entry_latency (
+    signal_id text primary key references signals(signal_id) on delete cascade,
+    candle_close_at_ms integer,
+    scan_started_at_ms integer,
+    scan_finished_at_ms integer,
+    signal_created_at_ms integer,
+    ai_queued_at_ms integer,
+    ai_started_at_ms integer,
+    ai_finished_at_ms integer,
+    stage11c_started_at_ms integer,
+    stage11c_finished_at_ms integer,
+    order_created_at_ms integer,
+    position_opened_at_ms integer,
+    updated_at_ms integer not null,
+    telemetry_version text not null
+);
+
+create index if not exists idx_entry_latency_signal_created
+on entry_latency(signal_created_at_ms desc);
+
 create table if not exists persistence_meta (
     key text primary key,
     value text,
@@ -452,6 +473,119 @@ def initialize_database(
     initialize_postgres()
     migrate_sqlite_history_once()
     return "postgres"
+
+
+_ENTRY_LATENCY_FIELDS = {
+    "candle_close_at_ms",
+    "scan_started_at_ms",
+    "scan_finished_at_ms",
+    "signal_created_at_ms",
+    "ai_queued_at_ms",
+    "ai_started_at_ms",
+    "ai_finished_at_ms",
+    "stage11c_started_at_ms",
+    "stage11c_finished_at_ms",
+    "order_created_at_ms",
+    "position_opened_at_ms",
+}
+
+
+def update_entry_latency(
+    signal_id: str,
+    *,
+    path: str | os.PathLike[str] | None = None,
+    **timestamps: int | None,
+) -> None:
+    """Upsert additive Stage 10 entry-latency telemetry for one signal."""
+    unknown = set(timestamps) - _ENTRY_LATENCY_FIELDS
+    if unknown:
+        raise ValueError(f"unknown entry latency fields: {sorted(unknown)}")
+    fields = {k: int(v) for k, v in timestamps.items() if v is not None}
+    if not fields:
+        return
+    now_ms = int(time.time() * 1000)
+    cols = ["signal_id", *fields.keys(), "updated_at_ms", "telemetry_version"]
+    vals = [signal_id, *fields.values(), now_ms, ENTRY_LATENCY_VERSION]
+    updates = [*fields.keys(), "updated_at_ms", "telemetry_version"]
+
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        placeholders = ",".join("?" for _ in cols)
+        set_sql = ",".join(f"{x}=excluded.{x}" for x in updates)
+        with _sqlite_connect(db_path) as conn:
+            conn.execute(
+                f"insert into entry_latency ({','.join(cols)}) values ({placeholders}) "
+                f"on conflict(signal_id) do update set {set_sql}",
+                vals,
+            )
+        return
+
+    initialize_postgres()
+    placeholders = ",".join("%s" for _ in cols)
+    set_sql = ",".join(f"{x}=excluded.{x}" for x in updates)
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                f"insert into entry_latency ({','.join(cols)}) values ({placeholders}) "
+                f"on conflict(signal_id) do update set {set_sql}",
+                vals,
+            )
+
+
+def get_entry_latency(
+    *,
+    signal_id: str | None = None,
+    limit: int = 100,
+    path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Read telemetry rows and attach derived latency segments in milliseconds."""
+    safe_limit = max(1, min(int(limit), 1000))
+    if path is not None or persistence_backend() == "sqlite":
+        db_path = initialize_sqlite(path)
+        with _sqlite_connect(db_path) as conn:
+            if signal_id:
+                rows = conn.execute(
+                    "select * from entry_latency where signal_id=? limit ?",
+                    (signal_id, safe_limit),
+                ).fetchall()
+            else:
+                rows = conn.execute(
+                    "select * from entry_latency order by signal_created_at_ms desc limit ?",
+                    (safe_limit,),
+                ).fetchall()
+            out = [dict(row) for row in rows]
+    else:
+        initialize_postgres()
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                if signal_id:
+                    cur.execute(
+                        "select * from entry_latency where signal_id=%s limit %s",
+                        (signal_id, safe_limit),
+                    )
+                else:
+                    cur.execute(
+                        "select * from entry_latency order by signal_created_at_ms desc limit %s",
+                        (safe_limit,),
+                    )
+                out = [dict(row) for row in cur.fetchall()]
+
+    def delta(row: dict[str, Any], end: str, start: str) -> int | None:
+        if row.get(end) is None or row.get(start) is None:
+            return None
+        return int(row[end]) - int(row[start])
+
+    for row in out:
+        row["scan_duration_ms"] = delta(row, "scan_finished_at_ms", "scan_started_at_ms")
+        row["candle_to_signal_ms"] = delta(row, "signal_created_at_ms", "candle_close_at_ms")
+        row["signal_to_ai_queue_ms"] = delta(row, "ai_queued_at_ms", "signal_created_at_ms")
+        row["ai_queue_wait_ms"] = delta(row, "ai_started_at_ms", "ai_queued_at_ms")
+        row["ai_review_ms"] = delta(row, "ai_finished_at_ms", "ai_started_at_ms")
+        row["approval_to_order_ms"] = delta(row, "order_created_at_ms", "ai_finished_at_ms")
+        row["order_to_fill_ms"] = delta(row, "position_opened_at_ms", "order_created_at_ms")
+        row["signal_to_fill_ms"] = delta(row, "position_opened_at_ms", "signal_created_at_ms")
+        row["candle_to_fill_ms"] = delta(row, "position_opened_at_ms", "candle_close_at_ms")
+    return out
 
 
 def _price_map(scan: MarketScan) -> dict[str, float]:
@@ -562,6 +696,21 @@ def _record_sqlite(
                         ),
                     ),
                 )
+                conn.execute(
+                    """
+                    insert or ignore into entry_latency (
+                        signal_id, candle_close_at_ms, scan_started_at_ms,
+                        scan_finished_at_ms, signal_created_at_ms,
+                        updated_at_ms, telemetry_version
+                    ) values (?,?,?,?,?,?,?)
+                    """,
+                    (
+                        signal_id, candidate.candle_close_time_ms,
+                        scan.scan_started_at_ms, scan.scan_finished_at_ms,
+                        scan.scan_finished_at_ms, scan.scan_finished_at_ms,
+                        ENTRY_LATENCY_VERSION,
+                    ),
+                )
     return {"inserted": inserted, "updated": updated}
 
 
@@ -634,6 +783,22 @@ def _record_postgres(scan: MarketScan) -> dict[str, int]:
                                 },
                                 separators=(",", ":"),
                             ),
+                        ),
+                    )
+                    cur.execute(
+                        """
+                        insert into entry_latency (
+                            signal_id, candle_close_at_ms, scan_started_at_ms,
+                            scan_finished_at_ms, signal_created_at_ms,
+                            updated_at_ms, telemetry_version
+                        ) values (%s,%s,%s,%s,%s,%s,%s)
+                        on conflict(signal_id) do nothing
+                        """,
+                        (
+                            signal_id, candidate.candle_close_time_ms,
+                            scan.scan_started_at_ms, scan.scan_finished_at_ms,
+                            scan.scan_finished_at_ms, scan.scan_finished_at_ms,
+                            ENTRY_LATENCY_VERSION,
                         ),
                     )
     return {"inserted": inserted, "updated": updated}
