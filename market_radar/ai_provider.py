@@ -28,43 +28,10 @@ def primary_provider() -> str:
     return os.environ.get("AI_PRIMARY_PROVIDER", provider_name()).strip().lower()
 
 
-def shadow_provider() -> str:
-    return os.environ.get("AI_SHADOW_PROVIDER", "thirty").strip().lower()
-
-
-def escalation_provider() -> str:
-    return os.environ.get("AI_ESCALATION_PROVIDER", "thirty").strip().lower()
-
-
-def tiebreaker_provider() -> str:
-    return os.environ.get("AI_TIEBREAKER_PROVIDER", "thirty").strip().lower()
-
-
 def active_model() -> str:
     return os.environ.get(
         "AI_PRIMARY_MODEL",
         os.environ.get("CLARIO_MODEL", "gemini-3.7-flash"),
-    ).strip()
-
-
-def shadow_model() -> str:
-    return os.environ.get(
-        "AI_SHADOW_MODEL",
-        os.environ.get("CLARIO_SHADOW_MODEL", "deepseek-v4.1-flash"),
-    ).strip()
-
-
-def escalation_model() -> str:
-    return os.environ.get(
-        "AI_ESCALATION_MODEL",
-        os.environ.get("CLARIO_ESCALATION_MODEL", "gpt-5.6-sol"),
-    ).strip()
-
-
-def tiebreaker_model() -> str:
-    return os.environ.get(
-        "AI_TIEBREAKER_MODEL",
-        os.environ.get("CLARIO_TIEBREAKER_MODEL", "claude-opus-5"),
     ).strip()
 
 
