@@ -446,25 +446,31 @@ Stage 6 signal
     ↓
 deterministic fail-closed risk gate
     ↓
-AI review
+priority queue (freshest / strongest first)
     ↓
-optional shadow/escalation/tiebreaker
+one fast AI lane
+    ├── Clario: gemini-3.7-flash
+    └── Thirty: thirty/gpt-5.6-luna
     ↓
 APPROVE / WATCH / VETO
 ~~~
 
-AI rules:
+Stage 11 V3 invariants:
 
+- one signal receives one normal-path AI review, not per-signal shadow voting
+- signals are distributed across independent provider lanes concurrently
+- each provider owns an independent rate-limit lock
+- a primary provider error may route once to the other fast lane
+- if both fast lanes fail, the signal fails closed
 - cannot reverse LONG into SHORT
 - cannot reverse SHORT into LONG
 - cannot invent missing market data
 - cannot bypass deterministic safety failure
-- provider failure fails closed
-- quota failure fails closed
 - WATCH does not permit entry
 - only final APPROVE may feed an entry executor
 
-Multi-model logic may improve review robustness but does not replace deterministic gates.
+Legacy Stage 11B shadow/escalation/tiebreak code may remain available for rollback
+compatibility, but is not part of the normal entry path.
 
 ---
 
