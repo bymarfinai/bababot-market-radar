@@ -687,6 +687,46 @@ recovery poll interval = 10 seconds
 
 Paper trading is controlled by PAPER_TRADING_ENABLED.
 
+### Entry rebuild performance cohorts
+
+Performance after the Stage 6/10/11/11B/11C/13 rebuild is isolated by a
+permanent hard boundary:
+
+~~~text
+boundary_ms = 1790655250219
+PRE_ENTRY_REBUILD  = position opened before boundary
+POST_ENTRY_REBUILD = position opened at/after boundary
+~~~
+
+The boundary is based on actual `positions.opened_at_ms`, not signal time.
+
+Every opened position is labeled in `pipeline_cohorts`. POST rows freeze the
+production stack:
+
+~~~text
+stage6-v2-directional-context
+stage10-v3-entry-latency
+stage11-v3-fast-pool
+stage11b-v3-failover-only
+stage11c-v1-fresh-direction
+stage13-v2-event-driven
+~~~
+
+PRE rows are deliberately marked `legacy_or_mixed` rather than assigning a
+false historical version.
+
+Use the separated cohort endpoints for performance analysis:
+
+~~~text
+GET /history/cohorts
+GET /history/cohorts?cohort=POST_ENTRY_REBUILD
+GET /history/cohorts/summary
+~~~
+
+`GET /paper/summary` also includes `pipeline_cohorts`. Aggregate lifetime
+paper totals remain available for audit, but must not be used as the KPI for
+the rebuilt entry pipeline.
+
 ## Stage 14 — Trading Control Center
 
 Persistent control modes:
