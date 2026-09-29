@@ -1,14 +1,19 @@
 from __future__ import annotations
 
+import os
 import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from market_radar.persistence import initialize_sqlite
 from market_radar.position_lifecycle import (
     _arbitrate,
+    _early_invalidation_guard,
     _health_from_snapshot,
+    _lifecycle_guards,
+    _profit_protection_guard,
     _mfe_mae,
     _position_memory_penalties,
     _side_return,
@@ -152,6 +157,116 @@ class Stage12LifecycleTests(unittest.TestCase):
         )
         self.assertEqual(mfe, 5.0)
         self.assertEqual(mae, -2.0)
+
+    def test_v3_early_invalidation_closes_wrong_direction_examples(self):
+        with patch.dict(
+            os.environ,
+            {
+                "STAGE12_EARLY_WINDOW_MINUTES": "30",
+                "STAGE12_EARLY_MFE_MAX_PCT": "0.35",
+                "STAGE12_EARLY_CLOSE_MAE_PCT": "1.0",
+                "STAGE12_EARLY_CLOSE_PNL_PCT": "0.60",
+                "STAGE12_EARLY_REDUCE_PNL_PCT": "0.35",
+                "STAGE12_EARLY_MIN_CONTRADICTIONS": "2",
+            },
+            clear=False,
+        ):
+            aztec = _early_invalidation_guard(
+                age_minutes=18.5,
+                status="OPEN",
+                mfe_pct=0.0,
+                mae_pct=-1.572,
+                current_pnl_pct=-1.519,
+                contradiction_count=3,
+            )
+            rose = _early_invalidation_guard(
+                age_minutes=18.5,
+                status="OPEN",
+                mfe_pct=0.0,
+                mae_pct=-0.730,
+                current_pnl_pct=-0.730,
+                contradiction_count=3,
+            )
+            pha = _early_invalidation_guard(
+                age_minutes=19.4,
+                status="OPEN",
+                mfe_pct=0.246,
+                mae_pct=-1.822,
+                current_pnl_pct=-1.571,
+                contradiction_count=2,
+            )
+        self.assertEqual(aztec["action"], "CLOSE")
+        self.assertEqual(rose["action"], "CLOSE")
+        self.assertEqual(pha["action"], "CLOSE")
+
+    def test_v3_profit_protection_matches_giveback_examples(self):
+        with patch.dict(
+            os.environ,
+            {
+                "STAGE12_PROTECT_ARM_MFE_PCT": "0.50",
+                "STAGE12_PROTECT_REDUCE_GIVEBACK_RATIO": "0.55",
+                "STAGE12_PROTECT_CLOSE_GIVEBACK_RATIO": "0.80",
+            },
+            clear=False,
+        ):
+            nmr = _profit_protection_guard(
+                status="OPEN",
+                mfe_pct=2.147,
+                current_pnl_pct=-0.245,
+                contradiction_count=1,
+            )
+            opg = _profit_protection_guard(
+                status="OPEN",
+                mfe_pct=1.901,
+                current_pnl_pct=0.060,
+                contradiction_count=2,
+            )
+            bless = _profit_protection_guard(
+                status="OPEN",
+                mfe_pct=1.623,
+                current_pnl_pct=0.602,
+                contradiction_count=3,
+            )
+            plume = _profit_protection_guard(
+                status="OPEN",
+                mfe_pct=0.708,
+                current_pnl_pct=-0.748,
+                contradiction_count=1,
+            )
+        self.assertEqual(nmr["action"], "CLOSE")
+        self.assertEqual(opg["action"], "CLOSE")
+        self.assertEqual(bless["action"], "REDUCE")
+        self.assertEqual(plume["action"], "CLOSE")
+
+    def test_v3_layer_borderline_stays_with_thesis_health(self):
+        guards = _lifecycle_guards(
+            age_minutes=32.6,
+            status="OPEN",
+            mfe_pct=0.327,
+            mae_pct=-0.330,
+            current_pnl_pct=-0.281,
+            contradiction_count=3,
+        )
+        self.assertEqual(guards["action"], "HOLD")
+
+    def test_v3_already_reduced_escalates_second_protection_to_close(self):
+        result = _profit_protection_guard(
+            status="REDUCED",
+            mfe_pct=1.50,
+            current_pnl_pct=0.60,
+            contradiction_count=1,
+        )
+        self.assertEqual(result["action"], "CLOSE")
+        self.assertIn("already_reduced_escalate_close", result["reasons"])
+
+    def test_v3_healthy_profitable_position_does_not_overprotect(self):
+        result = _profit_protection_guard(
+            status="OPEN",
+            mfe_pct=1.50,
+            current_pnl_pct=1.20,
+            contradiction_count=0,
+        )
+        self.assertEqual(result["action"], "HOLD")
 
     def test_position_evaluation_table_exists(self):
         with tempfile.TemporaryDirectory() as tmp:
