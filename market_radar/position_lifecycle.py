@@ -195,6 +195,15 @@ def _max_action(*actions: str) -> str:
     return max(actions, key=lambda item: _ACTION_RANK.get(str(item).upper(), 0)).upper()
 
 
+def _should_persist_fast_evaluation(action: str, *, has_previous: bool) -> bool:
+    """Persist actionable fast guards plus the first monitoring snapshot.
+
+    Subsequent fast HOLDs remain ephemeral so they cannot mask an unexecuted
+    5m REDUCE/CLOSE in the lifecycle-order reader.
+    """
+    return (not has_previous) or str(action).upper() in {"REDUCE", "CLOSE"}
+
+
 def _early_invalidation_guard(
     *,
     age_minutes: float,
@@ -571,7 +580,13 @@ def evaluate_fast_position(
                 **snapshot,
                 "age_minutes": round(age_minutes, 3),
                 "v3_guards": guards,
-                "thesis_health_score": previous_health,
+                "thesis_health_score": (
+                    previous_health if previous is not None else None
+                ),
+                "monitoring_state": (
+                    "INITIAL_FAST" if previous is None else "FAST_GUARD"
+                ),
+                "awaiting_thesis_health": previous is None,
             },
             separators=(",", ":"),
             allow_nan=False,
@@ -580,10 +595,13 @@ def evaluate_fast_position(
         "lifecycle_version": POSITION_LIFECYCLE_VERSION,
     }
 
-    # HOLD observations are intentionally not persisted. This prevents a fast
-    # HOLD from masking a still-unexecuted 5m REDUCE/CLOSE while full 5m
-    # evaluations continue to preserve the MFE/MAE path.
-    if persist and action in {"REDUCE", "CLOSE"}:
+    # Persist the first fast snapshot so a newly opened position has immediate
+    # current price/PnL/MFE/MAE visibility. Later HOLDs remain ephemeral, which
+    # prevents them from masking a still-unexecuted 5m REDUCE/CLOSE.
+    if persist and _should_persist_fast_evaluation(
+        action,
+        has_previous=previous is not None,
+    ):
         save_position_evaluation(result)
     return result
 
