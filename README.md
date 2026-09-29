@@ -357,7 +357,7 @@ order_created_at_ms
 position_opened_at_ms
 ~~~
 
-Stage 11C timestamps are reserved and remain null until that stage is implemented.
+Stage 11C populates its start/finish timestamps on every execution-time revalidation.
 The read-only endpoint `GET /history/entry-latency` returns the raw timestamps plus derived segments such as scan duration, AI queue wait, AI review time, order-to-fill time, signal-to-fill, and candle-to-fill.
 
 ## Stage 11 — Entry risk gate and fast AI pool
@@ -462,8 +462,31 @@ Stage 11C is the final deterministic revalidation before a new entry order is cr
 Current version:
 
 ~~~text
-stage11c-v1-fresh-direction
+stage11c-v2-evidence-families
 ~~~
+
+V2 no longer treats correlated manifestations of the same price impulse as
+independent confirmations. Fresh evidence is normalized into four families:
+
+~~~text
+PRICE_STRUCTURE
+FLOW
+POSITIONING
+REGIME
+~~~
+
+Family semantics:
+
+- PRICE_STRUCTURE uses fresh closed-1m/3m direction and micro-structure
+- FLOW uses fresh closed-1m taker imbalance
+- POSITIONING prefers fresh Binance 5m raw open-interest change; signal-time
+  positioning is only a fallback when fresh OI cannot be read
+- REGIME uses the completed higher-timeframe regime from the original causal
+  signal and acts as a modifier, never as the sole reason to enter
+
+The latest 1m return is no longer counted as a second vote on top of 3m
+momentum. It is used only to detect impulse concentration / potential
+exhaustion.
 
 Flow:
 
@@ -471,8 +494,11 @@ Flow:
 Stage 11 APPROVE
     ↓
 fresh Binance public data
-    ├── current ticker price
-    └── latest closed 1m candles
+    ├── ticker price
+    ├── closed 1m candles
+    └── raw 5m OI history
+    ↓
+normalize independent evidence families
     ↓
 Stage 11C
     ├── ENTER  → create entry order
@@ -480,30 +506,35 @@ Stage 11C
     └── CANCEL → persist skipped entry; do not retry
 ~~~
 
-Fresh checks include:
+Core V2 invariants:
 
-- signal age and approval age
-- favorable price drift / chase protection
-- adverse price drift
-- closed-1m momentum over 1m and 3m
-- latest closed-1m taker buy share
-- opposite micro-structure against the proposed side
+- PRICE_STRUCTURE must be aligned before ENTER
+- REGIME cannot qualify an entry by itself
+- at least one independent near-entry family from FLOW or POSITIONING must
+  support the proposed side
+- simultaneous FLOW + POSITIONING opposition cancels
+- hard price reversal / opposite micro-structure cancels
+- hard chase remains 0.75% by default
+- a soft chase zone begins at 0.50%; inside it, both FLOW and POSITIONING must
+  independently align before ENTER
+- if most of the 3m impulse is concentrated in the latest 1m, both FLOW and
+  POSITIONING must independently align before ENTER
+- POSITIONING ignores raw OI changes smaller than 0.05% by default
+- Stage 11C never changes LONG into SHORT or SHORT into LONG
 
-Stage 11C never changes LONG into SHORT or SHORT into LONG.
+Every evaluation persists the family map, fresh OI detail, chase flags and
+impulse-concentration diagnostics in `entry_revalidations`.
 
-Default entry confirmation requires aligned 3m momentum plus either aligned 1m
-momentum or aligned taker flow. Hard fresh contradictions may CANCEL the setup.
-Mixed evidence returns WAIT.
-
-Every evaluation is persisted in `entry_revalidations` and exposed through:
+Useful inspection:
 
 ~~~text
 GET /approval/revalidations
+GET /history/cohorts?cohort=POST_ENTRY_REBUILD&fresh_gate_version=stage11c-v2-evidence-families
 ~~~
 
-Stage 10 also records `stage11c_started_at_ms` and
+Stage 10 records `stage11c_started_at_ms` and
 `stage11c_finished_at_ms`. Orders carry the Stage 11C snapshot and must fill
-within the configured Stage 11C fill-freshness window.
+within the configured fill-freshness window.
 
 ## Stage 12 — Position lifecycle
 
