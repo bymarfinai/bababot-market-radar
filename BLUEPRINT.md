@@ -469,8 +469,13 @@ Stage 11 V3 invariants:
 - WATCH does not permit entry
 - only final APPROVE may feed an entry executor
 
-Legacy Stage 11B shadow/escalation/tiebreak code may remain available for rollback
-compatibility, but is not part of the normal entry path.
+Stage 11B is a failover-only resilience layer:
+
+- it activates only after the selected Stage 11 lane errors
+- it may attempt exactly one alternate fast lane
+- successful alternate verdict becomes the Stage 11 verdict
+- alternate failure or absence fails closed to VETO
+- shadow voting, escalation, quorum, and tiebreaker paths are forbidden
 
 ---
 
