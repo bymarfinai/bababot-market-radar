@@ -7,7 +7,7 @@ from typing import Any
 
 import psycopg2.extras
 
-from .pipeline_cohort import label_signal_cohort
+from .pipeline_cohort import cohort_summary, label_signal_cohort
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -726,4 +726,7 @@ def paper_summary() -> dict[str, Any]:
     wins = int(values["wins"])
     values["win_rate_pct"] = round(100.0 * wins / closed, 4) if closed else None
     values["paper_store_version"] = PAPER_STORE_VERSION
+    # Always expose the hard PRE/POST boundary next to aggregate legacy totals.
+    # Consumers should use pipeline_cohorts for post-rebuild evaluation.
+    values["pipeline_cohorts"] = cohort_summary()
     return values
