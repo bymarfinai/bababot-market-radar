@@ -553,6 +553,20 @@ Current paper execution version is `stage13-v2-event-driven`.
 
 Paper performance may be used as a live-entry gate.
 
+Performance evaluation of the rebuilt entry pipeline must use a hard cohort
+boundary based on actual position open time:
+
+~~~text
+boundary_ms = 1790655250219
+PRE_ENTRY_REBUILD  = opened_at_ms < boundary
+POST_ENTRY_REBUILD = opened_at_ms >= boundary
+~~~
+
+PRE and POST must never be blended when evaluating whether the rebuilt entry
+pipeline improved win rate, PnL, MFE/MAE, immediate wrong-direction rate, or
+entry latency. Historical PRE data remains available only as a comparison
+baseline.
+
 Paper trading is not historical backtesting.
 
 ---
