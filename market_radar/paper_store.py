@@ -158,6 +158,56 @@ def list_entry_candidates(
             return [dict(row) for row in cur.fetchall()]
 
 
+def get_entry_candidate(signal_id: str) -> dict[str, Any] | None:
+    """Return one approved paper-entry candidate if it is still unacted."""
+    initialize_paper_store()
+    params = (signal_id,)
+    query = """
+        select
+            a.signal_id, a.reviewed_at_ms,
+            s.symbol, s.side, s.signal_time_ms, s.signal_price,
+            s.stage, s.long_score, s.short_score, s.score_edge
+        from entry_approvals a
+        join signals s on s.signal_id = a.signal_id
+        left join positions p on p.signal_id = a.signal_id
+        left join paper_orders o
+          on o.source_type='ENTRY' and o.source_id=a.signal_id
+        where a.signal_id=?
+          and a.final_verdict='APPROVE'
+          and p.position_id is null
+          and o.order_id is null
+        limit 1
+    """
+    if persistence_backend() == "sqlite":
+        with _sqlite_connect(database_path()) as conn:
+            row = conn.execute(query, params).fetchone()
+            return dict(row) if row else None
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(query.replace("?", "%s"), params)
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+
+def get_paper_order(order_id: str) -> dict[str, Any] | None:
+    initialize_paper_store()
+    if persistence_backend() == "sqlite":
+        with _sqlite_connect(database_path()) as conn:
+            row = conn.execute(
+                "select * from paper_orders where order_id=?",
+                (order_id,),
+            ).fetchone()
+            return dict(row) if row else None
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                "select * from paper_orders where order_id=%s",
+                (order_id,),
+            )
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+
 def count_open_paper_positions() -> int:
     initialize_paper_store()
     query = """
