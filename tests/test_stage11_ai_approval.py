@@ -133,21 +133,28 @@ class Stage11ApprovalTests(unittest.TestCase):
         save.assert_called_once()
 
     @patch("market_radar.ai_approval.update_entry_latency")
+    @patch("market_radar.ai_approval.run_stage11b_failover")
     @patch("market_radar.ai_approval.save_model_review")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_primary_error_routes_once_to_other_fast_lane(
-        self, ai_call, save, save_model, telemetry
+    def test_primary_error_routes_once_to_stage11b(
+        self, ai_call, save, save_model, failover, telemetry
     ):
-        ai_call.side_effect = [
-            TimeoutError("clario timeout"),
-            {
+        ai_call.side_effect = TimeoutError("clario timeout")
+        failover.return_value = {
+            "status": "OK",
+            "final_verdict": "WATCH",
+            "fallback_reason": "alternate_fast_lane_succeeded",
+            "alternate": {
+                "status": "OK",
+                "provider": "thirty",
+                "model": "thirty/gpt-5.6-luna",
                 "verdict": "WATCH",
                 "confidence": 0.7,
                 "reasons": ["fallback lane reviewed"],
                 "risk_flags": [],
             },
-        ]
+        }
         result = review_signal(
             good_signal(),
             target=("clario", "gemini-3.7-flash"),
@@ -155,19 +162,29 @@ class Stage11ApprovalTests(unittest.TestCase):
         )
         self.assertEqual(result["final_verdict"], "WATCH")
         self.assertTrue(result["fast_pool"]["fallback_used"])
-        self.assertEqual(ai_call.call_count, 2)
-        providers = [call.kwargs["provider"] for call in ai_call.call_args_list]
-        self.assertEqual(providers, ["clario", "thirty"])
-        self.assertEqual(save_model.call_count, 2)
+        self.assertEqual(ai_call.call_count, 1)
+        failover.assert_called_once()
+        self.assertEqual(
+            failover.call_args.kwargs["alternate_target"],
+            ("thirty", "thirty/gpt-5.6-luna"),
+        )
+        self.assertEqual(save_model.call_count, 1)
 
     @patch("market_radar.ai_approval.update_entry_latency")
+    @patch("market_radar.ai_approval.run_stage11b_failover")
     @patch("market_radar.ai_approval.save_model_review")
     @patch("market_radar.ai_approval.save_entry_approval")
     @patch("market_radar.ai_approval.call_ai_entry_review")
-    def test_all_fast_lanes_failed_fail_closed(
-        self, ai_call, save, save_model, telemetry
+    def test_stage11b_failure_fails_closed(
+        self, ai_call, save, save_model, failover, telemetry
     ):
         ai_call.side_effect = TimeoutError("provider down")
+        failover.return_value = {
+            "status": "ERROR",
+            "final_verdict": "VETO",
+            "fallback_reason": "alternate_fast_lane_failed",
+            "alternate": {"status": "ERROR"},
+        }
         result = review_signal(
             good_signal(),
             target=("clario", "gemini-3.7-flash"),
@@ -176,8 +193,9 @@ class Stage11ApprovalTests(unittest.TestCase):
         self.assertEqual(result["ai_verdict"], "ERROR")
         self.assertEqual(result["final_verdict"], "VETO")
         self.assertTrue(result["fast_pool"]["fallback_used"])
-        self.assertEqual(ai_call.call_count, 2)
-        self.assertEqual(save_model.call_count, 2)
+        self.assertEqual(ai_call.call_count, 1)
+        failover.assert_called_once()
+        self.assertEqual(save_model.call_count, 1)
 
     def test_fast_pool_uses_two_distinct_default_lanes(self):
         from market_radar.ai_approval import _fast_pool_targets, _workers
