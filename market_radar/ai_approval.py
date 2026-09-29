@@ -14,6 +14,7 @@ from .ai_provider import (
     parse_provider_response,
     primary_provider,
 )
+from .multi_model import run_stage11b_failover
 from .persistence import (
     get_pending_entry_signals,
     save_entry_approval,
@@ -359,17 +360,17 @@ def review_signal(
         fallback = None
 
         if primary.get("status") != "OK":
-            fallback_target = _alternate_target(primary_target)
-            if fallback_target is not None:
-                fallback = _review_with_target(
-                    signal,
-                    provider=fallback_target[0],
-                    model=fallback_target[1],
-                    role="FAST_FAILOVER",
-                    reviewed_at_ms=reviewed_at_ms,
-                )
-                if fallback.get("status") == "OK":
-                    chosen = fallback
+            fallback = run_stage11b_failover(
+                signal_id=signal["signal_id"],
+                reviewed_at_ms=reviewed_at_ms,
+                payload=_signal_for_ai(signal),
+                system_prompt=SYSTEM_PROMPT,
+                failed_target=primary_target,
+                alternate_target=_alternate_target(primary_target),
+            )
+            alternate = fallback.get("alternate") or {}
+            if fallback.get("status") == "OK" and alternate.get("status") == "OK":
+                chosen = alternate
 
         if chosen.get("status") == "OK":
             ai_verdict = str(chosen.get("verdict") or "WATCH")
@@ -381,7 +382,10 @@ def review_signal(
             ai_verdict = "ERROR"
             final_verdict = "VETO"
             confidence = None
-            ai_reasons = ["fast_pool_all_targets_failed"]
+            ai_reasons = [
+                (fallback or {}).get("fallback_reason")
+                or "fast_pool_all_targets_failed"
+            ]
             model_name = f"{provider}:{model}"
 
         result = {
