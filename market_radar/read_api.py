@@ -25,6 +25,7 @@ from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
 from .persistence import (
     entry_approval_summary,
+    get_entry_latency,
     list_entry_approvals,
     list_model_reviews,
     list_open_positions,
@@ -694,6 +695,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "persistence_summary": "/history/summary",
                     "entry_approvals": "/approval/reviews",
                     "entry_approval_summary": "/approval/summary",
+                    "entry_latency": "/history/entry-latency",
                     "model_reviews": "/approval/models",
                     "model_review_summary": "/approval/models/summary",
                     "open_positions": "/positions/open",
@@ -1043,6 +1045,40 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 {
                     "count": len(rows),
                     "signals": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/history/entry-latency":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                signal_id = query.get("signal_id", [None])[0]
+                rows = get_entry_latency(
+                    signal_id=signal_id,
+                    limit=limit,
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_entry_latency_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "entry_latency_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "latency": rows,
                 },
             )
             return
