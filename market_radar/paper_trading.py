@@ -8,6 +8,7 @@ from typing import Any
 
 from .binance import BinancePublicClient
 from .control_state import get_control_state
+from .fresh_entry_gate import check_fresh_entry, fill_max_age_ms
 from .paper_store import (
     close_position,
     count_open_paper_positions,
@@ -138,6 +139,9 @@ def sync_entry_orders() -> dict[str, int]:
             "capacity_blocked": 0,
             "symbol_blocked": 0,
             "control_blocked": 0,
+            "stage11c_enter": 0,
+            "stage11c_wait": 0,
+            "stage11c_cancel": 0,
         }
 
     control = get_control_state()
@@ -147,14 +151,21 @@ def sync_entry_orders() -> dict[str, int]:
             "capacity_blocked": 0,
             "symbol_blocked": 0,
             "control_blocked": 1,
+            "stage11c_enter": 0,
+            "stage11c_wait": 0,
+            "stage11c_cancel": 0,
         }
 
     queued = 0
     capacity_blocked = 0
     symbol_blocked = 0
+    stage11c_enter = 0
+    stage11c_wait = 0
+    stage11c_cancel = 0
+    client = BinancePublicClient(timeout=5.0, retries=1)
     candidates = list_entry_candidates(
         max_age_ms=_entry_max_age_ms(),
-        limit=50,
+        limit=max(1, min(int(os.environ.get("STAGE11C_MAX_PER_CYCLE", "12")), 50)),
     )
 
     for candidate in candidates:
@@ -167,7 +178,29 @@ def sync_entry_orders() -> dict[str, int]:
             symbol_blocked += 1
             continue
 
-        create_order(
+        gate = check_fresh_entry(client, candidate)
+        verdict = str(gate.get("verdict") or "WAIT").upper()
+
+        if verdict == "WAIT":
+            stage11c_wait += 1
+            continue
+
+        payload = {
+            "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
+            "signal_time_ms": candidate["signal_time_ms"],
+            "signal_price": candidate["signal_price"],
+            "stage": candidate["stage"],
+            "long_score": candidate["long_score"],
+            "short_score": candidate["short_score"],
+            "score_edge": candidate["score_edge"],
+            "stage11c_checked_at_ms": gate.get("checked_at_ms"),
+            "stage11c_verdict": verdict,
+            "stage11c_reasons": gate.get("reasons") or [],
+            "stage11c_snapshot": gate.get("snapshot") or {},
+            "stage11c_version": gate.get("version"),
+        }
+
+        order_id = create_order(
             source_type="ENTRY",
             source_id=str(candidate["signal_id"]),
             position_id=f"PAPER:{candidate['signal_id']}",
@@ -176,24 +209,34 @@ def sync_entry_orders() -> dict[str, int]:
             side=str(candidate["side"]),
             action="OPEN",
             requested_quantity=None,
-            reason="stage11_final_approve",
-            payload={
-                "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
-                "signal_time_ms": candidate["signal_time_ms"],
-                "signal_price": candidate["signal_price"],
-                "stage": candidate["stage"],
-                "long_score": candidate["long_score"],
-                "short_score": candidate["short_score"],
-                "score_edge": candidate["score_edge"],
-            },
+            reason=(
+                "stage11c_enter"
+                if verdict == "ENTER"
+                else "stage11c_cancel"
+            ),
+            payload=payload,
         )
+
+        if verdict == "CANCEL":
+            mark_order(
+                order_id,
+                status="SKIPPED",
+                reason="stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500],
+            )
+            stage11c_cancel += 1
+            continue
+
         queued += 1
+        stage11c_enter += 1
 
     return {
         "queued": queued,
         "capacity_blocked": capacity_blocked,
         "symbol_blocked": symbol_blocked,
         "control_blocked": 0,
+        "stage11c_enter": stage11c_enter,
+        "stage11c_wait": stage11c_wait,
+        "stage11c_cancel": stage11c_cancel,
     }
 
 
@@ -265,14 +308,24 @@ def _execute_open(
     except Exception:
         payload = {}
 
+    now_ms = int(time.time() * 1000)
     approval_ms = int(payload.get("approval_reviewed_at_ms") or 0)
-    if approval_ms > 0 and int(time.time() * 1000) - approval_ms > _entry_max_age_ms():
+    if approval_ms > 0 and now_ms - approval_ms > _entry_max_age_ms():
         mark_order(
             str(order["order_id"]),
             status="SKIPPED",
             reason="approval_stale_before_fill",
         )
         return {"status": "SKIPPED", "reason": "approval_stale_before_fill"}
+
+    gate_ms = int(payload.get("stage11c_checked_at_ms") or 0)
+    if gate_ms <= 0 or now_ms - gate_ms > fill_max_age_ms():
+        mark_order(
+            str(order["order_id"]),
+            status="SKIPPED",
+            reason="stage11c_stale_before_fill",
+        )
+        return {"status": "SKIPPED", "reason": "stage11c_stale_before_fill"}
 
     if _at_open_capacity():
         return {"status": "DEFERRED", "reason": "max_open_positions"}
@@ -573,6 +626,9 @@ def paper_cycle() -> dict[str, Any]:
         "entry_capacity_blocked": entries["capacity_blocked"],
         "entry_symbol_blocked": entries["symbol_blocked"],
         "entry_control_blocked": entries.get("control_blocked", 0),
+        "stage11c_enter": entries.get("stage11c_enter", 0),
+        "stage11c_wait": entries.get("stage11c_wait", 0),
+        "stage11c_cancel": entries.get("stage11c_cancel", 0),
         "entry_execution": entry_exec,
     }
 
@@ -627,6 +683,9 @@ def start_paper_trading_loop() -> bool:
                         f"entry_filled={entry_exec.get('filled', 0)} "
                         f"deferred={exit_exec.get('deferred', 0) + entry_exec.get('deferred', 0)} "
                         f"control_blocked={result.get('entry_control_blocked', 0)} "
+                        f"11c_enter={result.get('stage11c_enter', 0)} "
+                        f"11c_wait={result.get('stage11c_wait', 0)} "
+                        f"11c_cancel={result.get('stage11c_cancel', 0)} "
                         f"errors={len(exit_exec.get('errors') or []) + len(entry_exec.get('errors') or [])} "
                         f"exit_sample={exit_sample or '-'} "
                         f"entry_sample={entry_sample or '-'}",
