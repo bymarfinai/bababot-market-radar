@@ -32,6 +32,7 @@ from .persistence import (
     list_model_reviews,
     list_open_positions,
     list_position_evaluations,
+    list_position_history,
     list_signals,
     model_review_summary,
     persistence_summary,
@@ -704,6 +705,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "model_reviews": "/approval/models",
                     "model_review_summary": "/approval/models/summary",
                     "open_positions": "/positions/open",
+                    "position_history": "/positions/history",
                     "position_evaluations": "/positions/evaluations",
                     "paper_summary": "/paper/summary",
                     "paper_orders": "/paper/orders",
@@ -1263,6 +1265,34 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     {
                         "error": "open_positions_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "positions": rows,
+                },
+            )
+            return
+
+        if parsed.path == "/positions/history":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                mode = query.get("mode", ["PAPER"])[0]
+                rows = list_position_history(
+                    limit=limit,
+                    mode=mode,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "position_history_read_failed",
                         "detail": str(exc),
                     },
                 )
