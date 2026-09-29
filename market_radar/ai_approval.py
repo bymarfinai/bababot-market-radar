@@ -10,18 +10,10 @@ from typing import Any
 
 from .ai_provider import (
     active_model,
-    call_entry_review,
-    escalation_model,
-    escalation_provider,
+    call_model_review,
     parse_provider_response,
     primary_provider,
-    provider_name,
-    shadow_model,
-    shadow_provider,
-    tiebreaker_model,
-    tiebreaker_provider,
 )
-from .multi_model import run_primary_fallback, run_stage11b
 from .persistence import (
     get_pending_entry_signals,
     save_entry_approval,
@@ -30,7 +22,8 @@ from .persistence import (
 )
 
 
-AI_APPROVAL_VERSION = "stage11-v2-primary-fallback"
+AI_APPROVAL_VERSION = "stage11-v3-fast-pool"
+FAST_POOL_VERSION = "stage11-fast-pool-v1"
 RISK_GATE_VERSION = "stage11-risk-v1"
 PROMPT_VERSION = "stage11-entry-review-v1"
 
@@ -81,11 +74,45 @@ def _max_age_ms() -> int:
 
 
 def _max_per_scan() -> int:
-    return max(1, min(int(os.environ.get("AI_APPROVAL_MAX_PER_SCAN", "12")), 50))
+    return max(1, min(int(os.environ.get("AI_APPROVAL_MAX_PER_SCAN", "24")), 50))
+
+
+def _fast_pool_targets() -> list[tuple[str, str]]:
+    raw = os.environ.get(
+        "AI_FAST_POOL_TARGETS",
+        "clario:gemini-3.7-flash,thirty:thirty/gpt-5.6-luna",
+    )
+    targets: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for item in raw.split(","):
+        provider, sep, model = item.strip().partition(":")
+        target = (provider.strip().lower(), model.strip())
+        if not sep or not target[0] or not target[1] or target in seen:
+            continue
+        targets.append(target)
+        seen.add(target)
+    if not targets:
+        targets.append((primary_provider(), active_model()))
+    return targets
 
 
 def _workers() -> int:
-    return max(1, min(int(os.environ.get("AI_APPROVAL_WORKERS", "1")), 4))
+    default = min(len(_fast_pool_targets()), 4)
+    return max(
+        1,
+        min(int(os.environ.get("AI_APPROVAL_WORKERS", str(default))), 4),
+    )
+
+
+def _target_for_index(index: int) -> tuple[str, str]:
+    targets = _fast_pool_targets()
+    return targets[index % len(targets)]
+
+
+def _alternate_target(
+    primary: tuple[str, str],
+) -> tuple[str, str] | None:
+    return next((target for target in _fast_pool_targets() if target != primary), None)
 
 
 def evaluate_entry_risk(
@@ -205,18 +232,92 @@ def _parse_ai_response(data: dict[str, Any]) -> dict[str, Any]:
     return parse_provider_response(data)
 
 
-def call_ai_entry_review(signal: dict[str, Any]) -> dict[str, Any]:
+def call_ai_entry_review(
+    signal: dict[str, Any],
+    *,
+    provider: str | None = None,
+    model: str | None = None,
+) -> dict[str, Any]:
     if not approval_enabled():
         raise RuntimeError("AI_APPROVAL_ENABLED is false")
-    return call_entry_review(
+    return call_model_review(
         _signal_for_ai(signal),
         system_prompt=SYSTEM_PROMPT,
+        provider=(provider or primary_provider()),
+        model=(model or active_model()),
     )
+
+
+def _review_with_target(
+    signal: dict[str, Any],
+    *,
+    provider: str,
+    model: str,
+    role: str,
+    reviewed_at_ms: int,
+) -> dict[str, Any]:
+    started = time.monotonic()
+    try:
+        result = call_ai_entry_review(
+            signal,
+            provider=provider,
+            model=model,
+        )
+        latency_ms = int((time.monotonic() - started) * 1000)
+        row = {
+            **result,
+            "provider": provider,
+            "model": model,
+            "latency_ms": latency_ms,
+            "status": "OK",
+            "role": role,
+        }
+        save_model_review(
+            signal_id=signal["signal_id"],
+            reviewed_at_ms=reviewed_at_ms,
+            role=role,
+            model=f"{provider}:{model}",
+            verdict=result["verdict"],
+            confidence=result["confidence"],
+            reasons=result.get("reasons") or [],
+            risk_flags=result.get("risk_flags") or [],
+            latency_ms=latency_ms,
+            status="OK",
+            error_text=None,
+            raw=row,
+        )
+        return row
+    except Exception as exc:
+        latency_ms = int((time.monotonic() - started) * 1000)
+        save_model_review(
+            signal_id=signal["signal_id"],
+            reviewed_at_ms=reviewed_at_ms,
+            role=role,
+            model=f"{provider}:{model}",
+            verdict=None,
+            confidence=None,
+            reasons=[],
+            risk_flags=[],
+            latency_ms=latency_ms,
+            status="ERROR",
+            error_text=f"{type(exc).__name__}: {str(exc)[:300]}",
+            raw=None,
+        )
+        return {
+            "status": "ERROR",
+            "role": role,
+            "provider": provider,
+            "model": model,
+            "latency_ms": latency_ms,
+            "error_type": type(exc).__name__,
+            "error": str(exc)[:500],
+        }
 
 
 def review_signal(
     signal: dict[str, Any],
     *,
+    target: tuple[str, str] | None = None,
     now_ms: int | None = None,
 ) -> dict[str, Any]:
     reviewed_at_ms = int(now_ms if now_ms is not None else time.time() * 1000)
@@ -225,6 +326,7 @@ def review_signal(
         ai_started_at_ms=reviewed_at_ms,
     )
     risk = evaluate_entry_risk(signal, now_ms=reviewed_at_ms)
+    primary_target = target or _target_for_index(0)
 
     if risk["verdict"] != "PASS":
         result = {
@@ -238,107 +340,72 @@ def review_signal(
             "ai_reasons": [],
             "risk": risk,
             "ai": None,
+            "fast_pool": {
+                "version": FAST_POOL_VERSION,
+                "primary_target": primary_target,
+                "fallback_used": False,
+            },
         }
     else:
-        started = time.monotonic()
-        try:
-            ai = call_ai_entry_review(signal)
-            primary_latency_ms = int((time.monotonic() - started) * 1000)
-            primary = {
-                **ai,
-                "model": active_model(),
-                "latency_ms": primary_latency_ms,
-            }
-            try:
-                stage11b = run_stage11b(
-                    signal_id=signal["signal_id"],
+        provider, model = primary_target
+        primary = _review_with_target(
+            signal,
+            provider=provider,
+            model=model,
+            role="FAST_PRIMARY",
+            reviewed_at_ms=reviewed_at_ms,
+        )
+        chosen = primary
+        fallback = None
+
+        if primary.get("status") != "OK":
+            fallback_target = _alternate_target(primary_target)
+            if fallback_target is not None:
+                fallback = _review_with_target(
+                    signal,
+                    provider=fallback_target[0],
+                    model=fallback_target[1],
+                    role="FAST_FAILOVER",
                     reviewed_at_ms=reviewed_at_ms,
-                    payload=_signal_for_ai(signal),
-                    system_prompt=SYSTEM_PROMPT,
-                    primary=primary,
                 )
-            except Exception as stage11b_exc:
-                result = {
-                    "signal_id": signal["signal_id"],
-                    "risk_verdict": "PASS",
-                    "ai_verdict": ai["verdict"],
-                    "final_verdict": "VETO",
-                    "confidence": ai["confidence"],
-                    "model": active_model(),
-                    "risk_reasons": [],
-                    "ai_reasons": ["multi_model_supervision_failed"],
-                    "risk": risk,
-                    "ai": ai,
-                    "stage11b": {
-                        "status": "ERROR",
-                        "error_type": type(stage11b_exc).__name__,
-                        "error": str(stage11b_exc)[:500],
-                    },
-                    "ai_latency_ms": primary_latency_ms,
-                }
-            else:
-                result = {
-                    "signal_id": signal["signal_id"],
-                    "risk_verdict": "PASS",
-                    "ai_verdict": ai["verdict"],
-                    "final_verdict": stage11b["final_verdict"],
-                    "confidence": ai["confidence"],
-                    "model": active_model(),
-                    "risk_reasons": [],
-                    "ai_reasons": ai["reasons"],
-                    "risk": risk,
-                    "ai": ai,
-                    "stage11b": stage11b,
-                    "ai_latency_ms": primary_latency_ms,
-                }
-        except Exception as exc:
-            primary_latency_ms = int((time.monotonic() - started) * 1000)
-            primary_error = {
-                "status": "ERROR",
-                "provider": primary_provider(),
-                "model": active_model(),
-                "error_type": type(exc).__name__,
-                "error": str(exc)[:500],
-                "latency_ms": primary_latency_ms,
-            }
-            save_model_review(
-                signal_id=signal["signal_id"],
-                reviewed_at_ms=reviewed_at_ms,
-                role="PRIMARY",
-                model=f"{primary_provider()}:{active_model()}",
-                verdict=None,
-                confidence=None,
-                reasons=[],
-                risk_flags=[],
-                latency_ms=primary_latency_ms,
-                status="ERROR",
-                error_text=f"{type(exc).__name__}: {str(exc)[:300]}",
-                raw=None,
-            )
-            stage11b = run_primary_fallback(
-                signal_id=signal["signal_id"],
-                reviewed_at_ms=reviewed_at_ms,
-                payload=_signal_for_ai(signal),
-                system_prompt=SYSTEM_PROMPT,
-                primary_error=primary_error,
-            )
-            result = {
-                "signal_id": signal["signal_id"],
-                "risk_verdict": "PASS",
-                "ai_verdict": "PRIMARY_FALLBACK",
-                "final_verdict": stage11b["final_verdict"],
-                "confidence": None,
-                "model": active_model(),
-                "risk_reasons": [],
-                "ai_reasons": [
-                    "primary_failed_degraded_consensus",
-                    stage11b.get("fallback_reason") or "fallback_applied",
-                ],
-                "risk": risk,
-                "ai": primary_error,
-                "stage11b": stage11b,
-                "ai_latency_ms": primary_latency_ms,
-            }
+                if fallback.get("status") == "OK":
+                    chosen = fallback
+
+        if chosen.get("status") == "OK":
+            ai_verdict = str(chosen.get("verdict") or "WATCH")
+            final_verdict = ai_verdict
+            confidence = float(chosen.get("confidence") or 0.0)
+            ai_reasons = list(chosen.get("reasons") or [])
+            model_name = f"{chosen.get('provider')}:{chosen.get('model')}"
+        else:
+            ai_verdict = "ERROR"
+            final_verdict = "VETO"
+            confidence = None
+            ai_reasons = ["fast_pool_all_targets_failed"]
+            model_name = f"{provider}:{model}"
+
+        result = {
+            "signal_id": signal["signal_id"],
+            "risk_verdict": "PASS",
+            "ai_verdict": ai_verdict,
+            "final_verdict": final_verdict,
+            "confidence": confidence,
+            "model": model_name,
+            "risk_reasons": [],
+            "ai_reasons": ai_reasons,
+            "risk": risk,
+            "ai": chosen,
+            "fast_pool": {
+                "version": FAST_POOL_VERSION,
+                "primary_target": {
+                    "provider": provider,
+                    "model": model,
+                },
+                "primary": primary,
+                "fallback_used": fallback is not None,
+                "fallback": fallback,
+            },
+        }
 
     ai_finished_at_ms = int(time.time() * 1000)
     result["entry_latency"] = {
@@ -400,8 +467,12 @@ def process_pending_approvals() -> dict[str, Any]:
             )
 
         results: list[dict[str, Any]] = []
+        targets = [_target_for_index(index) for index in range(len(signals))]
         with ThreadPoolExecutor(max_workers=_workers()) as pool:
-            futures = [pool.submit(review_signal, signal) for signal in signals]
+            futures = [
+                pool.submit(review_signal, signal, target=target)
+                for signal, target in zip(signals, targets)
+            ]
             for future in as_completed(futures):
                 results.append(future.result())
 
@@ -459,40 +530,24 @@ def start_pending_approval_worker() -> bool:
                 ),
                 {},
             )
-            escalated = sum(
+            fallback_used = sum(
                 1 for item in results
-                if (item.get("stage11b") or {}).get("escalated")
+                if (item.get("fast_pool") or {}).get("fallback_used")
             )
-            shadow_disagree = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "OK"
-                and ((item.get("stage11b") or {}).get("shadow") or {}).get("verdict")
-                    != ((item.get("stage11b") or {}).get("primary") or {}).get("verdict")
-            )
-            shadow_ok = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "OK"
-            )
-            shadow_error = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("shadow") or {}).get("status") == "ERROR"
-            )
-            escalation_ok = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("gpt") or {}).get("status") == "OK"
-            )
-            escalation_error = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("gpt") or {}).get("status") == "ERROR"
-            )
-            tiebreaker_ok = sum(
-                1 for item in results
-                if ((item.get("stage11b") or {}).get("opus") or {}).get("status") == "OK"
-            )
+            lane_counts: dict[str, int] = {}
+            for item in results:
+                pool_info = item.get("fast_pool") or {}
+                primary = pool_info.get("primary_target") or {}
+                if isinstance(primary, dict):
+                    lane = f"{primary.get('provider')}:{primary.get('model')}"
+                else:
+                    lane = str(primary)
+                lane_counts[lane] = lane_counts.get(lane, 0) + 1
             print(
                 "Stage 11 approvals: "
-                f"provider={provider_name()} "
-                f"model={active_model()} "
+                f"version={AI_APPROVAL_VERSION} "
+                f"pool={_fast_pool_targets()} "
+                f"workers={_workers()} "
                 f"status={result.get('status')} "
                 f"processed={result.get('processed', 0)} "
                 f"approve={result.get('approve', 0)} "
@@ -500,17 +555,8 @@ def start_pending_approval_worker() -> bool:
                 f"watch={result.get('watch', 0)} "
                 f"risk_fail={risk_fail} "
                 f"ai_error={ai_error} "
-                f"provider_blocked={provider_blocked} "
-                f"stage11b_escalated={escalated} "
-                f"shadow={shadow_provider()}:{shadow_model()} "
-                f"shadow_ok={shadow_ok} "
-                f"shadow_error={shadow_error} "
-                f"shadow_disagree={shadow_disagree} "
-                f"escalation={escalation_provider()}:{escalation_model()} "
-                f"escalation_ok={escalation_ok} "
-                f"escalation_error={escalation_error} "
-                f"tiebreaker={tiebreaker_provider()}:{tiebreaker_model()} "
-                f"tiebreaker_ok={tiebreaker_ok} "
+                f"fallback_used={fallback_used} "
+                f"lanes={lane_counts} "
                 f"sample_issue={sample_issue} "
                 f"error_type={sample_error.get('error_type')} "
                 f"error={str(sample_error.get('error') or '')[:180]}",
