@@ -360,7 +360,7 @@ position_opened_at_ms
 Stage 11C timestamps are reserved and remain null until that stage is implemented.
 The read-only endpoint `GET /history/entry-latency` returns the raw timestamps plus derived segments such as scan duration, AI queue wait, AI review time, order-to-fill time, signal-to-fill, and candle-to-fill.
 
-## Stage 11 — Entry risk gate and AI approval
+## Stage 11 — Entry risk gate and fast AI pool
 
 Only deterministic Stage 6 LONG / SHORT signals reach Stage 11.
 
@@ -376,6 +376,42 @@ Before an AI model is called, a fail-closed deterministic risk gate verifies:
 - no hard structural conflict
 - signal is not stale
 
+Current approval version:
+
+~~~text
+stage11-v3-fast-pool
+~~~
+
+Normal path is now one review per signal, not shadow voting.
+
+~~~text
+fresh/strong actionable signals
+        ↓
+priority queue
+        ↓
+┌───────────────────────────────┬────────────────────────────────┐
+│ Clario                        │ Thirty                         │
+│ gemini-3.7-flash              │ thirty/gpt-5.6-luna           │
+└───────────────────────────────┴────────────────────────────────┘
+        ↓
+APPROVE / WATCH / VETO
+~~~
+
+Signals are distributed round-robin across the two fast lanes and processed
+concurrently. Each provider has its own rate-limit lock, so a slow Clario call
+does not serialize Thirty and vice versa.
+
+Pending signals are prioritized by:
+
+1. newest signal time
+2. winning direction score
+3. score edge
+4. directional context balance
+
+A successful primary lane verdict is final for Stage 11. No shadow model is
+called on the normal path. If that lane errors, the signal is routed once to
+the other fast lane. If both lanes fail, the signal fails closed to VETO.
+
 The AI supervisor may return:
 
 ~~~text
@@ -384,50 +420,15 @@ WATCH
 VETO
 ~~~
 
-It may **not reverse direction**. A LONG signal cannot become SHORT and a SHORT signal cannot become LONG.
+It may **not reverse direction**. A LONG signal cannot become SHORT and a SHORT
+signal cannot become LONG.
 
-Primary-provider failures use a guarded degraded fallback; if fallback consensus is unavailable or conflicting, the system still fails closed.
+## Stage 11B — Legacy multi-model module / rollback path
 
-## Stage 11B — Multi-model supervision
-
-Default model roles are environment-configurable.
-
-Current production profile:
-
-~~~text
-PRIMARY     → gemini-3.7-flash
-SHADOW      → gpt-5.6-sol
-ESCALATION  → claude-sonnet-4.6
-TIEBREAKER  → claude-sonnet-4.6
-~~~
-
-Normal path:
-
-~~~text
-Gemini primary
-→ Sol shadow
-→ Sonnet escalation when confidence/disagreement requires it
-→ if escalation and tiebreak targets are identical, reuse the same Sonnet result
-  instead of paying for a duplicate call
-~~~
-
-Primary failure path:
-
-~~~text
-Gemini transport/endpoint failure
-→ try the alternate Clario endpoint for the same Gemini model
-→ if Gemini still fails, enter DEGRADED_PRIMARY_FALLBACK
-→ Sol + Sonnet review the same payload independently
-
-Sol APPROVE + Sonnet APPROVE → APPROVE
-any VETO                    → VETO
-all other mixed cases       → WATCH
-both fallback models fail   → VETO
-~~~
-
-A single fallback model can therefore never approve a new entry by itself.
-
-Escalation/fallback use remains rate-capped per 5-minute window.
+The Stage 11B shadow/escalation/tiebreak code remains in the repository for
+rollback compatibility, but **it is no longer part of the Stage 11 normal
+entry path**. The current production direction is fast provider failover rather
+than per-signal multi-model voting.
 
 ## Stage 12 — Position lifecycle
 
