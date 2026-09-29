@@ -52,6 +52,7 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .trade-inner{padding:12px}.trade-symbol{display:flex;justify-content:space-between;align-items:flex-start}.trade-symbol h3{margin:0;font-size:17px}.big-price{font-size:24px;font-weight:650;margin-top:5px}.score-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:12px}.score-box{padding:10px;background:#11151a}.score-box:first-child{border-right:1px solid var(--line)}.score-box span{display:block;font-size:8px;color:var(--muted);margin-bottom:5px}.score-box strong{font-size:20px}.kv{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:10px}.kv div{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.kv span{display:block;font-size:7px;color:var(--muted);margin-bottom:4px}.kv strong{display:block;font-size:9px;overflow:hidden;text-overflow:ellipsis}.reason-list{margin-top:12px;border-top:1px solid var(--line);padding:9px 3px 0 0;max-height:210px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}.reason-title{font-size:9px;color:var(--muted);margin-bottom:5px}.reason{padding:6px 0;border-bottom:1px solid var(--line2);font-size:9px;line-height:1.4}
 .bottom-terminal{background:var(--bg)}.terminal-tabs{height:42px;display:flex;align-items:center;gap:18px;padding:0 12px;border-bottom:1px solid var(--line2);background:#0d1014;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}.terminal-tabs::-webkit-scrollbar{display:none}.terminal-tab{height:42px;border:0;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;position:relative;white-space:nowrap}.terminal-tab.active{color:var(--text)}.terminal-tab.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--yellow)}
 .terminal-pane{display:none}.terminal-pane.active{display:block}.terminal-pane .table-wrap{max-height:280px;overflow-y:auto;overflow-x:auto}.pane-meta{padding:7px 10px;color:var(--muted);font-size:9px;border-bottom:1px solid var(--line2)}.cell-main{font-size:9px;color:#d6dbe2}.cell-sub{margin-top:2px;font-size:7px;color:var(--muted);line-height:1.25}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.reason-cell{max-width:220px;overflow:hidden;text-overflow:ellipsis}.score-pair{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px}.ctx-pill{display:inline-flex;min-width:22px;justify-content:center;padding:2px 5px;border-radius:999px;background:#151a20;border:1px solid var(--line);font-size:8px;color:#c7cdd5}.exec-note{font-size:7px;color:var(--muted);margin-top:2px}
+.ph-row{cursor:pointer}.ph-row:hover td{background:#12171d}.ph-symbol{display:flex;align-items:center;gap:6px;white-space:nowrap}.ph-pnl{font-weight:800;font-size:11px}.ph-detail td{padding:0!important;background:#090c10!important}.ph-detail-wrap{padding:10px 14px 12px;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2)}.ph-detail-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}.ph-detail-head strong{font-size:10px}.ph-detail-head span{font-size:8px;color:var(--muted)}.ph-exec-table{width:100%;border-collapse:collapse}.ph-exec-table th{font-size:7px;color:var(--muted);text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--line2)}.ph-exec-table td{padding:7px 8px!important;background:transparent!important;border-bottom:1px solid #151a20;font-size:8px}.ph-check{margin-top:7px;font-size:8px;color:var(--muted)}.ph-arrow{font-size:10px;color:var(--muted)}
 .health-inspector{padding:12px;border-bottom:1px solid var(--line2);background:linear-gradient(180deg,#0f1318 0%,#0b0e11 100%)}
 .health-inspector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.health-inspector-head h3{font-size:12px;margin:2px 0 0}.health-version{font:8px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);padding:4px 6px;border:1px solid var(--line);border-radius:3px}
 .health-metrics{display:grid;grid-template-columns:repeat(7,minmax(88px,1fr));gap:6px}.health-card{padding:8px 9px;background:#12161b;border:1px solid var(--line2);border-radius:4px;min-width:0}.health-card span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}.health-card strong{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.health-card small{display:block;margin-top:3px;color:var(--muted2);font-size:7px}
@@ -164,6 +165,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <button class="terminal-tab active" data-tab="positions">Positions <span id="positionsMeta">—</span></button>
     <button class="terminal-tab" data-tab="openorders">Open Orders</button>
     <button class="terminal-tab" data-tab="orders">Order History</button>
+    <button class="terminal-tab" data-tab="positionhistory">Position History</button>
     <button class="terminal-tab" data-tab="signals">Signal History</button>
     <button class="terminal-tab" data-tab="ai">AI Risk <span id="aiMeta">—</span></button>
     <button class="terminal-tab" data-tab="control">Trading Control</button>
@@ -182,6 +184,11 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   <div class="terminal-pane" data-pane="orders">
     <div class="pane-meta"><span id="feeMeta">—</span></div>
     <div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Mode</th><th>Action</th><th>Status</th><th>Fill / Ref</th><th>Qty</th><th>Fee</th><th>Slip</th><th>Reason</th></tr></thead><tbody id="orderRows"></tbody></table></div>
+  </div>
+
+  <div class="terminal-pane" data-pane="positionhistory">
+    <div class="pane-meta"><span id="positionHistoryMeta">Closed position accounting</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Side</th><th>Closing PnL</th><th>ROI</th><th>Entry Price</th><th>Avg. Close Price</th><th>Closed Vol.</th><th>MFE / MAE</th><th>Open Time</th><th>Close Time</th><th>Exit Reason</th><th></th></tr></thead><tbody id="positionHistoryRows"><tr><td colspan="12" class="empty"><strong>Loading position history</strong><span>One row per fully closed position.</span></td></tr></tbody></table></div>
   </div>
 
   <div class="terminal-pane" data-pane="signals">
@@ -269,11 +276,11 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 'use strict';
 var API='https://core-prod.43-153-193-103.sslip.io';
 var state={
-  radar:null,paper:null,positions:[],evals:[],approvals:[],approvalSummary:null,
+  radar:null,paper:null,positions:[],evals:[],positionHistory:[],approvals:[],approvalSummary:null,
   models:[],modelSummary:null,orders:[],history:[],historySummary:null,control:null,
   livePreflight:null,liveSummary:null,liveOrders:[],livePositions:[],
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
-  ticker:null,depth:null,marketSearch:'',terminalTab:'positions',
+  ticker:null,depth:null,marketSearch:'',terminalTab:'positions',expandedPositionId:null,
   controlAuthVerified:false,controlBusy:false
 };
 function el(id){return document.getElementById(id)}
@@ -282,6 +289,7 @@ function money(v){if(v===null||v===undefined)return '—';var x=Number(v);return
 function px(v){if(v===null||v===undefined)return '—';var x=Number(v);if(x>=1000)return x.toLocaleString(undefined,{maximumFractionDigits:2});if(x>=1)return x.toLocaleString(undefined,{maximumFractionDigits:5});return x.toPrecision(6)}
 function pct(v){if(v===null||v===undefined)return '—';var x=Number(v);return (x>=0?'+':'')+x.toFixed(2)+'%'}
 function age(ms){if(!ms)return '—';var s=Math.max(0,Math.round((Date.now()-Number(ms))/1000));if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m '+(s%60)+'s';return Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m'}
+function durationShort(ms){ms=Number(ms||0);if(ms<=0)return '—';var s=Math.round(ms/1000);if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';if(s<86400)return Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m';return Math.floor(s/86400)+'d '+Math.floor((s%86400)/3600)+'h'}
 function tm(ms){if(!ms)return '—';return new Date(Number(ms)).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
 function dt(ms){if(!ms)return '—';return new Date(Number(ms)).toLocaleString()}
 function clsVerdict(v){v=String(v||'').toUpperCase();if(v==='APPROVE'||v==='LONG'||v==='HOLD'||v==='OPEN'||v==='FILLED'||v==='RUN')return 'long';if(v==='VETO'||v==='SHORT'||v==='CLOSE'||v==='FAILED'||v==='ERROR'||v==='SKIPPED'||v==='CANCELLED')return 'short';if(v==='WATCH'||v==='REDUCE'||v==='PENDING'||v==='SUBMITTED'||v==='DEFERRED'||v==='PAUSE_ENTRIES'||v==='EXIT_ONLY')return 'watch';return 'neutral'}
@@ -646,6 +654,277 @@ function renderApprovals(){
     return '<tr><td>'+tm(x.reviewed_at_ms)+'</td><td>'+esc(x.symbol)+'</td><td>'+esc(x.role)+'</td><td>'+esc(x.model)+'</td><td>'+badge(x.verdict||x.status)+'</td>'+
       '<td>'+(x.confidence===null||x.confidence===undefined?'—':num(Number(x.confidence)*100,0)+'%')+'</td><td>'+((x.latency_ms||0)/1000).toFixed(1)+'s</td></tr>';
   }).join(''):'<tr><td colspan="7" class="empty">No model reviews.</td></tr>';
+}
+function renderPositionHistory(){
+  if(!el('positionHistoryRows'))return;
+  var rows=state.positionHistory||[];
+  var wins=rows.filter(function(x){return Number(x.net_pnl||0)>0}).length;
+  var losses=rows.filter(function(x){return Number(x.net_pnl||0)<=0}).length;
+  var net=rows.reduce(function(s,x){return s+Number(x.net_pnl||0)},0);
+  if(el('positionHistoryMeta'))el('positionHistoryMeta').textContent=rows.length+' closed · '+wins+' wins / '+losses+' losses · net '+money(net)+' · click a position for executions';
+  el('positionHistoryRows').innerHTML=rows.length?rows.map(function(x){
+    var pnl=Number(x.net_pnl||0),roi=Number(x.net_roi_pct||0),expanded=state.expandedPositionId===x.position_id;
+    var main='<tr class="ph-row" data-position-id="'+esc(x.position_id)+'">'+
+      '<td><div class="ph-symbol"><strong>'+esc(x.symbol)+'</strong><span class="badge neutral">PERP</span></div><div class="cell-sub">'+esc(x.mode||'PAPER')+' · '+durationShort(x.duration_ms)+' · '+Number(x.reduce_count||0)+' reduce</div></td>'+
+      '<td>'+badge(x.side)+'</td>'+
+      '<td><div class="ph-pnl '+(pnl>=0?'green':'red')+'">'+money(pnl)+'</div><div class="cell-sub">gross '+money(Number(x.gross_pnl||0))+' · fee '+money(-Number(x.fees||0))+'</div></td>'+
+      '<td class="'+(roi>=0?'green':'red')+'"><strong>'+pct(roi)+'</strong><div class="cell-sub">vs initial 
+  var rows=[];
+  (state.orders||[]).forEach(function(x){if(x.status!=='PENDING')rows.push({order:x,mode:'PAPER'})});
+  (state.liveOrders||[]).forEach(function(x){if(x.status!=='PENDING'&&x.status!=='SUBMITTED')rows.push({order:x,mode:'LIVE'})});
+  rows.sort(function(a,b){return Number(b.order.executed_at_ms||b.order.created_at_ms||0)-Number(a.order.executed_at_ms||a.order.created_at_ms||0)});
+  rows=rows.slice(0,120);
+  var totalFees=rows.reduce(function(sum,w){return sum+Number(w.order.fee||0)},0);
+  var filled=rows.filter(function(w){return w.order.status==='FILLED'}).length;
+  var skipped=rows.filter(function(w){return w.order.status==='SKIPPED'}).length;
+  if(el('feeMeta'))el('feeMeta').textContent=rows.length+' orders · '+filled+' filled · '+skipped+' skipped · fees '+money(-totalFees);
+  el('orderRows').innerHTML=rows.length?rows.map(function(w){
+    var x=w.order;
+    var slip=slippageBps(x.market_price,x.fill_price);
+    var fillMain=x.fill_price!==null&&x.fill_price!==undefined?px(x.fill_price):'—';
+    var refSub=x.market_price!==null&&x.market_price!==undefined?'ref '+px(x.market_price):'no reference';
+    var qty=x.executed_quantity!==null&&x.executed_quantity!==undefined?x.executed_quantity:x.requested_quantity;
+    return '<tr>'+
+      '<td>'+tm(x.executed_at_ms||x.created_at_ms)+'</td><td><strong>'+esc(x.symbol)+'</strong></td><td>'+badge(x.side)+'</td>'+
+      '<td>'+esc(w.mode)+'</td><td>'+badge(x.action)+'</td><td>'+badge(x.status)+'</td>'+
+      '<td><div class="cell-main mono">'+fillMain+'</div><div class="cell-sub">'+refSub+'</div></td>'+
+      '<td class="mono">'+num(qty,5)+'</td><td class="'+(Number(x.fee||0)>0?'red':'muted')+'">'+(Number(x.fee||0)>0?money(-Number(x.fee)):'$0.00')+'</td>'+
+      '<td class="mono">'+(slip===null?'—':num(slip,2)+' bps')+'</td>'+
+      '<td class="reason-cell" title="'+esc(x.reason||'')+'">'+esc(prettyReason(x.reason))+'</td></tr>';
+  }).join(''):'<tr><td colspan="11" class="empty"><strong>No completed orders yet</strong><span>Filled, skipped, cancelled, and failed execution records will appear here.</span></td></tr>';
+}
+function renderHistory(){
+  var am=approvalSignalMap(),xm=entryExecutionMap();
+  el('historyRows').innerHTML=state.history.length?state.history.slice(0,120).map(function(x){
+    var a=am[x.signal_id]||null,exec=xm[x.signal_id]||null;
+    var ai=a?(a.final_verdict||a.ai_verdict||a.risk_verdict):'—';
+    var execLabel='—',execMode='';
+    if(exec){
+      execLabel=exec.order.status||'—';
+      execMode=exec.mode;
+    }else if(a&&a.final_verdict==='APPROVE'){
+      execLabel='NO ORDER';
+    }
+    return '<tr class="click hist-row" data-symbol="'+esc(x.symbol)+'">'+
+      '<td>'+tm(x.signal_time_ms)+'</td><td><strong>'+esc(x.symbol)+'</strong></td><td>'+badge(x.side)+'</td>'+
+      '<td>'+esc(x.stage||'—')+'</td><td class="mono">'+px(x.signal_price)+'</td>'+
+      '<td class="score-pair"><span class="green">'+num(x.long_score,0)+'</span> / <span class="red">'+num(x.short_score,0)+'</span></td>'+
+      '<td class="mono">'+num(x.score_edge,1)+'</td><td><span class="ctx-pill">'+num(x.decision_context_balance,0)+'</span></td>'+
+      '<td>'+esc(x.structure_status||'—')+'</td><td>'+esc(x.taker_bias||'—')+'</td>'+
+      '<td class="'+(Number(x.raw_oi_change_pct||0)>=0?'green':'red')+'">'+pct(x.raw_oi_change_pct)+'</td>'+
+      '<td>'+esc(x.market_regime||'—')+'</td><td>'+badge(ai)+'</td>'+
+      '<td>'+badge(execLabel)+(execMode?'<div class="exec-note">'+esc(execMode)+'</div>':'')+'</td></tr>';
+  }).join(''):'<tr><td colspan="14" class="empty"><strong>No persisted signals yet</strong><span>Actionable Stage 6 signals will appear here.</span></td></tr>';
+  document.querySelectorAll('.hist-row').forEach(function(tr){tr.onclick=function(){selectSymbol(tr.dataset.symbol)}});
+}
+function drawChart(){
+  var canvas=el('chart'),ctx=canvas.getContext('2d'),cssW=canvas.clientWidth,cssH=canvas.clientHeight,dpr=window.devicePixelRatio||1;
+  canvas.width=Math.max(1,Math.floor(cssW*dpr));canvas.height=Math.max(1,Math.floor(cssH*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);ctx.fillStyle='#0b0e11';ctx.fillRect(0,0,cssW,cssH);
+  var arr=state.candles||[];if(!arr.length){ctx.fillStyle='#848e9c';ctx.font='12px sans-serif';ctx.fillText('No candle data',18,28);return}
+  var padL=10,padR=62,padT=18,padB=28,volH=58,plotH=cssH-padT-padB-volH,plotW=cssW-padL-padR;
+  var lo=Math.min.apply(null,arr.map(function(x){return x.low})),hi=Math.max.apply(null,arr.map(function(x){return x.high}));var range=Math.max(hi-lo,hi*0.0001);
+  function y(v){return padT+(hi-v)/range*plotH}
+  ctx.strokeStyle='#1f252d';ctx.lineWidth=1;ctx.fillStyle='#848e9c';ctx.font='9px ui-monospace';
+  for(var i=0;i<5;i++){var yy=padT+i*plotH/4;ctx.beginPath();ctx.moveTo(padL,yy);ctx.lineTo(padL+plotW,yy);ctx.stroke();var val=hi-i*range/4;ctx.fillText(px(val),padL+plotW+6,yy+3)}
+  var step=plotW/arr.length,body=Math.max(2,Math.min(8,step*.62)),maxVol=Math.max.apply(null,arr.map(function(x){return x.quote_volume||x.volume||0}));
+  arr.forEach(function(c,i){var x=padL+i*step+step/2,up=c.close>=c.open,color=up?'#0ECB81':'#F6465D';ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x,y(c.high));ctx.lineTo(x,y(c.low));ctx.stroke();var top=Math.min(y(c.open),y(c.close)),h=Math.max(1,Math.abs(y(c.close)-y(c.open)));ctx.fillRect(x-body/2,top,body,h);
+    var vh=maxVol?((c.quote_volume||c.volume||0)/maxVol)*volH*.78:0;ctx.globalAlpha=.35;ctx.fillRect(x-body/2,padT+plotH+volH-vh,body,vh);ctx.globalAlpha=1});
+  ctx.fillStyle='#848e9c';ctx.font='9px sans-serif';
+  var marks=[0,Math.floor(arr.length/2),arr.length-1];marks.forEach(function(i){var c=arr[i];var x=padL+i*step;ctx.fillText(new Date(c.open_time_ms).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),x,padT+plotH+volH+16)});
+  var last=arr[arr.length-1];el('chartOhlc').textContent='O '+px(last.open)+'  H '+px(last.high)+'  L '+px(last.low)+'  C '+px(last.close);el('chartRange').textContent='Range '+px(lo)+' – '+px(hi);el('chartUpdate').textContent='Updated '+tm(last.close_time_ms);
+}
+async function loadChart(){
+  if(!state.selectedSymbol)return;
+  el('chartTitle').textContent=state.selectedSymbol+' Perpetual';
+  var s=encodeURIComponent(state.selectedSymbol);
+  var results=await Promise.allSettled([
+    getJSON('/market/klines?symbol='+s+'&interval='+encodeURIComponent(state.interval)+'&limit=120'),
+    getJSON('/market/ticker?symbol='+s),
+    getJSON('/market/depth?symbol='+s+'&limit=20')
+  ]);
+  var k=settledValue(results[0],null),t=settledValue(results[1],null),d=settledValue(results[2],null);
+  if(k)state.candles=k.candles||[];
+  if(t)state.ticker=t;
+  if(d)state.depth=d;
+  drawChart();renderTicker();renderOrderBook();
+}
+async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();await loadChart()}
+async function refresh(){
+  try{
+    var res=await Promise.allSettled([
+      getJSON('/radar/latest'),
+      getJSON('/paper/summary'),
+      getJSON('/positions/open'),
+      getJSON('/positions/evaluations?limit=300'),
+      getJSON('/positions/history?limit=120'),
+      getJSON('/approval/summary'),
+      getJSON('/approval/reviews?limit=100'),
+      getJSON('/approval/models?limit=120'),
+      getJSON('/paper/orders?limit=120'),
+      getJSON('/history/signals?limit=120'),
+      getJSON('/history/summary'),
+      getJSON('/control/state'),
+      getJSON('/live/preflight'),
+      getJSON('/live/summary'),
+      getJSON('/live/orders?limit=80'),
+      getJSON('/live/positions')
+    ]);
+    state.radar=settledValue(res[0],state.radar);
+    state.paper=settledValue(res[1],state.paper);
+    state.positions=(settledValue(res[2],{positions:state.positions}).positions||[]);
+    state.evals=(settledValue(res[3],{evaluations:state.evals}).evaluations||[]);
+    state.positionHistory=(settledValue(res[4],{positions:state.positionHistory}).positions||[]);
+    state.approvalSummary=settledValue(res[5],state.approvalSummary);
+    state.approvals=(settledValue(res[6],{reviews:state.approvals}).reviews||[]);
+    state.models=(settledValue(res[7],{reviews:state.models}).reviews||[]);
+    state.orders=(settledValue(res[8],{orders:state.orders}).orders||[]);
+    state.history=(settledValue(res[9],{signals:state.history}).signals||[]);
+    state.historySummary=settledValue(res[10],state.historySummary);
+    state.control=settledValue(res[11],state.control);
+    state.livePreflight=settledValue(res[12],state.livePreflight);
+    state.liveSummary=settledValue(res[13],state.liveSummary);
+    state.liveOrders=(settledValue(res[14],{orders:state.liveOrders}).orders||[]);
+    state.livePositions=(settledValue(res[15],{positions:state.livePositions}).positions||[]);
+    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderPositionHistory();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();await loadChart();
+  }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
+}
+function controlToken(){
+  return el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
+}
+async function verifyControlToken(silent){
+  var token=controlToken();
+  if(!token){
+    state.controlAuthVerified=false;
+    sessionStorage.removeItem('baba_control_token_v1');
+    renderControl();
+    if(!silent){el('controlMessage').textContent='Paste the Admin Control Token first.';el('controlMessage').className='red control-message'}
+    return false;
+  }
+  state.controlBusy=true;renderControl();
+  try{
+    var r=await fetch(API+'/control/verify',{method:'POST',headers:{'X-Baba-Control-Token':token}});
+    var body=await r.json();
+    if(!r.ok)throw new Error(body.error||('HTTP '+r.status));
+    state.controlAuthVerified=true;
+    if(body.control)state.control=body.control;
+    sessionStorage.setItem('baba_control_token_v1',token);
+    if(!silent){el('controlMessage').textContent='Control token verified. Mode controls are unlocked for this tab.';el('controlMessage').className='green control-message'}
+    return true;
+  }catch(e){
+    state.controlAuthVerified=false;
+    sessionStorage.removeItem('baba_control_token_v1');
+    el('controlMessage').textContent='Token verification failed: '+e.message;
+    el('controlMessage').className='red control-message';
+    return false;
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
+}
+async function setMode(mode){
+  if(!state.controlAuthVerified){
+    el('controlMessage').textContent='Verify the Admin Control Token before changing mode.';
+    el('controlMessage').className='red control-message';return;
+  }
+  if(state.control&&state.control.mode===mode){
+    el('controlMessage').textContent='Already in '+mode+'. No change sent.';
+    el('controlMessage').className='muted control-message';return;
+  }
+  if(mode==='RUN'&&!confirm('Switch to RUN and allow eligible new entries? Live orders still require the separate live environment, credentials, and ARM guard.'))return;
+  var token=controlToken();
+  state.controlBusy=true;renderControl();
+  try{
+    var r=await fetch(API+'/control/state',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({mode:mode,note:'dashboard_ui4'})});
+    var body=await r.json();if(!r.ok)throw new Error(body.error||('HTTP '+r.status));
+    state.control=body;
+    el('controlMessage').textContent='Mode changed to '+body.mode+' · '+dt(body.updated_at_ms);
+    el('controlMessage').className='green control-message';
+  }catch(e){
+    if(String(e.message).indexOf('invalid_control_token')>=0){state.controlAuthVerified=false;sessionStorage.removeItem('baba_control_token_v1')}
+    el('controlMessage').textContent='Control failed: '+e.message;
+    el('controlMessage').className='red control-message';
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
+}
+async function setLiveArm(armed){
+  if(!state.controlAuthVerified){
+    el('controlMessage').textContent='Verify the Admin Control Token before changing live guard state.';
+    el('controlMessage').className='red control-message';return;
+  }
+  var token=controlToken();
+  if(armed && !confirm('ARM guarded LIVE trading? This can submit real Binance futures orders only when every separate live preflight guard passes.'))return;
+  state.controlBusy=true;renderControl();
+  try{
+    var r=await fetch(API+'/control/live-arm',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify({armed:armed,note:'dashboard_ui4'})});
+    var body=await r.json();
+    if(!r.ok){
+      if(body.preflight)state.livePreflight=body.preflight;
+      throw new Error(body.error||('HTTP '+r.status));
+    }
+    state.control=body;
+    await refresh();
+    el('controlMessage').textContent='Live guard: '+(body.live_armed?'ARMED':'DISARMED');
+    el('controlMessage').className=(body.live_armed?'red':'green')+' control-message';
+  }catch(e){
+    if(String(e.message).indexOf('invalid_control_token')>=0){state.controlAuthVerified=false;sessionStorage.removeItem('baba_control_token_v1')}
+    el('controlMessage').textContent='Live control failed: '+e.message;
+    el('controlMessage').className='red control-message';
+  }finally{
+    state.controlBusy=false;renderControl();
+  }
+}
+document.querySelectorAll('.radar-filter').forEach(function(b){b.onclick=function(){document.querySelectorAll('.radar-filter').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.radarFilter=b.dataset.filter;renderRadar()}});
+if(el('marketSearch'))el('marketSearch').addEventListener('input',function(){state.marketSearch=this.value.trim();renderRadar()});
+document.querySelectorAll('.terminal-tab').forEach(function(b){b.onclick=function(){showTerminalTab(b.dataset.tab)}});
+showTerminalTab('positions');
+document.querySelectorAll('.interval-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.interval-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.interval=b.dataset.interval;loadChart()}});
+document.querySelectorAll('.control-btn').forEach(function(b){b.onclick=function(){setMode(b.dataset.mode)}});
+el('armLive').onclick=function(){setLiveArm(true)};
+el('disarmLive').onclick=function(){setLiveArm(false)};
+el('verifyToken').onclick=function(){verifyControlToken(false)};
+el('clearToken').onclick=function(){
+  sessionStorage.removeItem('baba_control_token_v1');el('controlToken').value='';state.controlAuthVerified=false;
+  el('controlMessage').textContent='Control token cleared from this browser tab.';el('controlMessage').className='muted control-message';renderControl();
+};
+el('controlToken').addEventListener('input',function(){
+  state.controlAuthVerified=false;
+  el('controlMessage').textContent='Token changed. Verify it to unlock controls.';
+  el('controlMessage').className='muted control-message';renderControl();
+});
+var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)el('controlToken').value=saved;
+window.addEventListener('resize',function(){drawChart()});
+refresh().then(function(){if(saved)verifyControlToken(true)});
+setInterval(refresh,10000);setInterval(function(){if(state.radar){el('stAge').textContent=age(state.radar.scan_finished_at_ms)}},1000);
+})();
+</script>
+</body>
+</html>
++num(x.initial_notional_usdt,0)+'</div></td>'+
+      '<td class="mono">'+px(x.entry_price)+'</td><td class="mono">'+px(x.avg_close_price)+'</td>'+
+      '<td><div class="mono">'+num(x.closed_volume,5)+'</div><div class="cell-sub">initial '+num(x.initial_quantity,5)+'</div></td>'+
+      '<td><span class="green">'+pct(x.mfe_pct)+'</span> / <span class="red">'+pct(x.mae_pct)+'</span></td>'+
+      '<td><div>'+dt(x.opened_at_ms)+'</div></td><td><div>'+dt(x.closed_at_ms)+'</div></td>'+
+      '<td class="reason-cell" title="'+esc(x.close_reason||'')+'">'+esc(prettyReason(x.close_reason))+'</td>'+
+      '<td><span class="ph-arrow">'+(expanded?'▲':'▼')+'</span></td></tr>';
+    if(!expanded)return main;
+    var execs=x.executions||[];
+    var details='<tr class="ph-detail"><td colspan="12"><div class="ph-detail-wrap">'+
+      '<div class="ph-detail-head"><strong>'+esc(x.symbol)+' execution trail</strong><span>Net position PnL '+money(pnl)+' · accounting delta '+money(Number(x.accounting_delta||0))+'</span></div>'+
+      '<table class="ph-exec-table"><thead><tr><th>Time</th><th>Event</th><th>Fill</th><th>Qty</th><th>Fee</th><th>Gross Event</th><th>Net Event</th><th>Cumulative PnL</th><th>Remaining</th><th>Reason</th></tr></thead><tbody>'+
+      execs.map(function(e){
+        var ep=e.event_net_pnl;
+        return '<tr><td>'+dt(e.executed_at_ms)+'</td><td>'+badge(e.action)+'</td><td class="mono">'+px(e.fill_price)+'</td><td class="mono">'+num(e.quantity,5)+'</td>'+
+          '<td class="red">'+(Number(e.fee||0)>0?money(-Number(e.fee)):'$0.00')+'</td>'+
+          '<td class="'+(Number(e.gross_pnl||0)>=0?'green':'red')+'">'+(e.gross_pnl===null||e.gross_pnl===undefined?'—':money(Number(e.gross_pnl)))+'</td>'+
+          '<td class="'+(Number(ep||0)>=0?'green':'red')+'">'+(ep===null||ep===undefined?'—':money(Number(ep)))+'</td>'+
+          '<td class="'+(Number(e.cumulative_net_pnl||0)>=0?'green':'red')+'">'+money(Number(e.cumulative_net_pnl||0))+'</td>'+
+          '<td>'+num(e.remaining_pct,1)+'%</td><td>'+esc(prettyReason(e.reason))+'</td></tr>';
+      }).join('')+
+      '</tbody></table><div class="ph-check">Final DB realized PnL is authoritative. Event reconstruction is shown for audit and should reconcile to zero accounting delta.</div></div></td></tr>';
+    return main+details;
+  }).join(''):'<tr><td colspan="12" class="empty"><strong>No closed positions yet</strong><span>Fully closed paper positions will appear here.</span></td></tr>';
+  document.querySelectorAll('.ph-row').forEach(function(tr){tr.onclick=function(){var id=tr.dataset.positionId;state.expandedPositionId=state.expandedPositionId===id?null:id;renderPositionHistory()}});
 }
 function renderOrders(){
   var rows=[];
