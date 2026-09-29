@@ -24,6 +24,7 @@ from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
+from .pipeline_cohort import cohort_summary, list_cohorts
 from .persistence import (
     entry_approval_summary,
     get_entry_latency,
@@ -698,6 +699,8 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "entry_approval_summary": "/approval/summary",
                     "entry_latency": "/history/entry-latency",
                     "entry_revalidations": "/approval/revalidations",
+                    "pipeline_cohorts": "/history/cohorts",
+                    "pipeline_cohort_summary": "/history/cohorts/summary",
                     "model_reviews": "/approval/models",
                     "model_review_summary": "/approval/models/summary",
                     "open_positions": "/positions/open",
@@ -1048,6 +1051,46 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "count": len(rows),
                     "signals": rows,
                 },
+            )
+            return
+
+        if parsed.path == "/history/cohorts/summary":
+            try:
+                self._json(HTTPStatus.OK, cohort_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "pipeline_cohort_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/history/cohorts":
+            query = parse_qs(parsed.query)
+            try:
+                limit = int(query.get("limit", ["100"])[0])
+                cohort = query.get("cohort", [None])[0]
+                rows = list_cohorts(cohort=cohort, limit=limit)
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_cohort_filter", "detail": str(exc)},
+                )
+                return
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "pipeline_cohort_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {"count": len(rows), "cohorts": rows},
             )
             return
 
