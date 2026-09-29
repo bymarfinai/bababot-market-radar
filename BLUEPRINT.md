@@ -304,8 +304,15 @@ Core invariants:
 - EXHAUSTION cannot become a new trade
 - hard structure contradiction blocks the proposed side
 - score and score-edge gates must pass
-- context confirmation must outweigh conflict
+- activity evidence such as volume expansion cannot qualify LONG/SHORT by itself
+- every LONG/SHORT requires at least one core directional confirmation from structure, taker flow, or fresh OI
+- market regime may reinforce direction but cannot be the sole entry proof
+- IGNITION requires at least two total directional confirmations
+- EXPANSION requires at least one total directional confirmation
+- directional confirmation must outweigh conflict
 - reasons must be inspectable
+
+Current decision version: `stage6-v2-directional-context`.
 
 Stage 6 remains deterministic.
 
