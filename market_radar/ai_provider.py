@@ -164,6 +164,7 @@ def _rate_limited_post(
     headers: dict[str, str],
     body: dict[str, Any],
 ) -> requests.Response:
+    """Space request starts per provider without serializing in-flight calls."""
     provider_key = provider.strip().lower()
     lock = _provider_rate_lock(provider_key)
 
@@ -173,15 +174,14 @@ def _rate_limited_post(
         wait = _min_call_interval_seconds(provider_key) - (now - last)
         if wait > 0:
             time.sleep(wait)
-
-        response = requests.post(
-            url,
-            headers=headers,
-            json=body,
-            timeout=_timeout_seconds(),
-        )
         _last_provider_call_monotonic_by_provider[provider_key] = time.monotonic()
-        return response
+
+    return requests.post(
+        url,
+        headers=headers,
+        json=body,
+        timeout=_timeout_seconds(),
+    )
 
 
 def _is_quota_exhausted(response: requests.Response) -> bool:
