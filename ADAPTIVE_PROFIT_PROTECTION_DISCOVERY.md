@@ -2040,3 +2040,15 @@ Runtime state is time-sensitive. Always refresh production before relying on it.
 ## V5-0 — Sub-1% prospective decision gate
 
 V5-0 extends the research to trades that make meaningful but sub-1% economic MFE before fading. The design is prospective-first rather than another historical optimization loop. It arms at 0.50% economic MFE, watches 30-50% giveback, forces a HOLD/REDUCE/CLOSE decision at >=50% giveback using momentum/structure/taker/OI evidence, and uses a 100% giveback hard stop. Once peak economic MFE reaches 1.00%, V5-0 no longer intervenes; the >=1% logic is reserved for V5-1. V5-0 remains a shadow lane; V3 remains paper authority.
+
+
+## V5-0 prospective activation record
+
+- status: RUNNING / prospective paper-shadow
+- production main commit: 9986ae4555003f0193cd202646f7aa963ac0a713
+- V5_0_START_MS: 1790749213663
+- authority: V3_CONTROL
+- activation zero-state: 0 V5-0 lanes before entries resumed
+- entry control resumed to RUN after activation verification
+- live trading: disabled / disarmed
+- validation: 8/8 V5-0 Stage6 tests PASS; 138/138 full suite PASS
