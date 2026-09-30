@@ -13,6 +13,7 @@ from market_radar.stage6_validation import (
     _adaptive_lock,
     _evaluate_lane,
     _v5_sub1_decision,
+    _pp_decision_ge1,
     finalize_stage6_position,
     process_stage6_shadow_cycle,
     register_stage6_position,
@@ -71,6 +72,8 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
                 "STAGE6_RUN_ID": "test-stage6",
                 "V5_0_SHADOW_ENABLED": "true",
                 "V5_0_START_MS": str(self.start),
+                "PP_DECISION_STAGE2_ENABLED": "true",
+                "PP_DECISION_STAGE2_START_MS": str(self.start),
                 "PAPER_FEE_RATE": "0.00075",
                 "PAPER_SLIPPAGE_BPS": "2",
             },
@@ -110,6 +113,11 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(POLICIES["V5-0"]["handoff_roi_pct"], 1.00)
         self.assertEqual(POLICIES["V5-0"]["decision_giveback_ratio"], 0.50)
         self.assertEqual(POLICIES["V5-0"]["close_score"], 4)
+        self.assertEqual(POLICIES["PP-DECISION-1P"]["arm_min_roi_pct"], 1.00)
+        self.assertEqual(POLICIES["PP-DECISION-1P"]["watch_giveback_ratio"], 0.25)
+        self.assertEqual(POLICIES["PP-DECISION-1P"]["decision_giveback_ratio"], 0.35)
+        self.assertEqual(POLICIES["PP-DECISION-1P"]["force_reduce_giveback_ratio"], 0.50)
+        self.assertEqual(POLICIES["PP-DECISION-1P"]["hard_close_giveback_ratio"], 0.60)
 
     def test_only_entries_strictly_after_stage6_start_are_registered(self):
         self.assertFalse(self._register(opened_at_ms=self.start))
@@ -307,6 +315,127 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(ev2["action"], "CLOSE")
         self.assertEqual(closed["status"], "CLOSED")
         self.assertEqual(closed["close_reason"], "V5_SUB1_DECISION_GATE")
+
+    def test_pp_decision_stage2_exact_158_to_100_case_is_mandatory(self):
+        policy = POLICIES["PP-DECISION-1P"]
+        peak = 7.90  # 1.58% of $500 initial notional
+        current = 5.00  # 1.00% current economic PnL
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=1.58, economic=current, peak=peak,
+            evidence={"danger_score": 0}, status="OPEN",
+        )
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+        self.assertAlmostEqual(meta["giveback_ratio"], (7.90 - 5.00) / 7.90)
+        self.assertEqual(action, "HOLD")
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=1.58, economic=current, peak=peak,
+            evidence={"danger_score": 2}, status="OPEN",
+        )
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+        self.assertEqual(action, "REDUCE")
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=1.58, economic=current, peak=peak,
+            evidence={"danger_score": 4}, status="OPEN",
+        )
+        self.assertEqual(action, "CLOSE")
+
+    def test_pp_decision_stage2_force_protect_and_hard_close(self):
+        policy = POLICIES["PP-DECISION-1P"]
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=2.0, economic=5.0, peak=10.0,
+            evidence={"danger_score": 0}, status="OPEN",
+        )
+        self.assertEqual(meta["gate"], "FORCE_PROTECT")
+        self.assertEqual(action, "REDUCE")
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=2.0, economic=5.0, peak=10.0,
+            evidence={"danger_score": 0}, status="REDUCED",
+        )
+        self.assertEqual(action, "CLOSE")
+
+        action, meta = _pp_decision_ge1(
+            policy, peak_roi=2.0, economic=4.0, peak=10.0,
+            evidence={"danger_score": 0}, status="OPEN",
+        )
+        self.assertEqual(meta["gate"], "HARD_CLOSE")
+        self.assertEqual(action, "CLOSE")
+
+    def test_pp_decision_stage2_not_armed_below_one_percent(self):
+        action, meta = _pp_decision_ge1(
+            POLICIES["PP-DECISION-1P"],
+            peak_roi=0.99, economic=2.0, peak=4.95,
+            evidence={"danger_score": 6}, status="OPEN",
+        )
+        self.assertEqual(meta["gate"], "DISARMED")
+        self.assertEqual(action, "HOLD")
+
+    def test_pp_decision_stage2_lane_ratchets_floor_and_closes(self):
+        trade = {
+            "side": "LONG",
+            "entry_price": 100.0,
+            "initial_quantity": 5.0,
+            "initial_notional": 500.0,
+            "entry_fee_total": 0.375,
+        }
+        lane = {
+            "policy_id": "PP-DECISION-1P",
+            "status": "OPEN",
+            "remaining_quantity": 5.0,
+            "realized_gross": 0.0,
+            "realized_net": 0.0,
+            "allocated_entry_fee": 0.0,
+            "exit_fees": 0.0,
+            "policy_peak_pnl": 0.0,
+            "policy_peak_at_ms": None,
+            "profit_floor": None,
+            "action_count": 0,
+            "trigger_count": 0,
+            "closed_at_ms": None,
+            "exit_price": None,
+            "close_reason": None,
+        }
+        peak_lane, peak_event = _evaluate_lane(
+            trade=trade, lane=lane,
+            feature={
+                "candle_close_ms": 1_000_000, "close": 101.80,
+                "side_ret3": 0.30, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(peak_event["action"], "HOLD")
+        self.assertEqual(peak_event["evidence"]["gate"], "ARMED_GE1")
+        self.assertIsNotNone(peak_lane["profit_floor"])
+        floor1 = peak_lane["profit_floor"]
+
+        decision_lane, decision_event = _evaluate_lane(
+            trade=trade, lane=peak_lane,
+            feature={
+                "candle_close_ms": 1_060_000, "close": 101.10,
+                "side_ret3": -0.20, "taker_strength": 0.00,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(decision_event["evidence"]["gate"], "MANDATORY_DECISION")
+        self.assertEqual(decision_event["action"], "REDUCE")
+        self.assertEqual(decision_lane["status"], "REDUCED")
+        self.assertGreaterEqual(decision_lane["profit_floor"], floor1)
+
+        closed, close_event = _evaluate_lane(
+            trade=trade, lane=decision_lane,
+            feature={
+                "candle_close_ms": 1_120_000, "close": 100.65,
+                "side_ret3": -0.30, "taker_strength": -0.10,
+                "micro_against": True, "oi_change": 0.10, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(close_event["action"], "CLOSE")
+        self.assertEqual(closed["status"], "CLOSED")
+        self.assertEqual(closed["close_reason"], "PP_DECISION_GE1_GATE")
 
     def test_closed_1m_shadow_cycle_and_v3_censor_are_persisted(self):
         self.assertTrue(self._register())
