@@ -1,6 +1,23 @@
 # Stage 6 Prospective Paper Validation
 
-Status: **CODE READY / NOT DEPLOYED / ENTRIES STILL PAUSED**
+Status: **DEPLOYED / PROSPECTIVE COHORT RUNNING / ENTRIES ENABLED**
+
+
+## Active prospective run
+
+- merged to main: `68ab376ddf091acd1e9dd96cf5bd5f8c1762e062`
+- Stage 6 version: `stage6-prospective-shadow-v1`
+- run ID: `stage6-prospective-1790740200126`
+- Stage 6 start ms: `1790740200126`
+- discovery cutoff ms: `1790687518406`
+- authority: `V3_CONTROL`
+- paper entries: **RUN / enabled**
+- lifecycle exits: **enabled**
+- live trading: **disarmed / env disabled / submission disabled**
+- initial cohort state at activation: **0 registered / 0 open / 0 closed**
+- summary endpoint: `https://core-prod.43-153-193-103.sslip.io/stage6/summary`
+
+The three Stage 5 adaptive candidates and all three static comparators remain frozen. No tuning is permitted while this prospective cohort accumulates.
 
 ## Purpose
 
