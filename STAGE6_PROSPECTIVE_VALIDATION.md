@@ -223,3 +223,16 @@ Stage 2 is a prospective paper-shadow lane only. It cannot submit paper or live 
 
 - Stage 2 isolated tests: 12 / 12 PASS
 - full repository suite with Stage 2 build: 142 / 142 PASS
+
+
+## PP-DECISION V1 Stage 2 prospective activation record
+
+- status: RUNNING / prospective paper-shadow
+- code main commit: 298cb671e207bf917b245d74956097acf54905ee
+- PP_DECISION_STAGE2_START_MS: 1790751331084
+- lane ID: PP-DECISION-1P
+- authority: PP-LEGACY V3
+- activation zero-state: 0 Stage 2 lanes before entries resumed
+- entry control resumed to RUN after zero-state verification
+- live trading: disabled / disarmed
+- validation: 12/12 Stage 2 tests PASS; 142/142 full suite PASS
