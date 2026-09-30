@@ -1,5 +1,3 @@
-[Reading 1344 lines from start (total: 1344 lines, 0 remaining)]
-
 from __future__ import annotations
 
 import json
@@ -1344,5 +1342,3 @@ def stage6_summary() -> dict[str, Any]:
         },
         "policies": policies,
     }
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
