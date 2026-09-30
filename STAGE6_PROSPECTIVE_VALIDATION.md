@@ -188,3 +188,38 @@ V5-0 is intentionally not tuned on the historical cohort. Synthetic/historical c
 - entry control resumed to RUN after activation verification
 - live trading: disabled / disarmed
 - validation: 8/8 V5-0 Stage6 tests PASS; 138/138 full suite PASS
+
+
+## PP-DECISION V1 — Stage 2
+
+Stage 2 adds the >=1% decision-gate lane while preserving PP-LEGACY V3 as actual paper authority. The lane ID is `PP-DECISION-1P`.
+
+Frozen Stage 2 contract:
+
+- arm when economic MFE >=1.00%
+- giveback <25%: HOLD
+- giveback 25-35%: WATCH; REDUCE only when danger score >=4
+- giveback >=35%: mandatory HOLD / REDUCE / CLOSE decision
+- mandatory danger score 0-1: HOLD
+- mandatory danger score 2-3: REDUCE 50%
+- mandatory danger score >=4: CLOSE
+- giveback >=50%: force protection; at least REDUCE, or CLOSE when danger >=4 / already reduced
+- giveback >=60%: hard CLOSE
+- protection floor ratchets upward with the peak and never loosens
+
+Danger score remains causal:
+
+- adverse 3m momentum: +2
+- micro-structure break against position: +2
+- opposing taker flow: +1
+- adverse OI confirmation: +1
+
+Reference case: economic MFE +1.58% falling to +1.00% is ~36.7% giveback, therefore it must enter `MANDATORY_DECISION`.
+
+Stage 2 is a prospective paper-shadow lane only. It cannot submit paper or live orders.
+
+
+### Stage 2 test record
+
+- Stage 2 isolated tests: 12 / 12 PASS
+- full repository suite with Stage 2 build: 142 / 142 PASS
