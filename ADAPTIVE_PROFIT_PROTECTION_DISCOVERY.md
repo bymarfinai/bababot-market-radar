@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 COMPLETE / Stage 6 READY  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 COMPLETE / Stage 6 BLOCKED  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -171,8 +171,7 @@ Goals:
 - avoid unstable parameter surfaces.
 
 ### Stage 6 - Walk-Forward Validation
-**Status: NEXT**
-**Status: NEXT**
+**Status: BLOCKED / WAITING CLEAN POST-CUTOFF COHORT**
 
 Use chronological discovery / validation / untouched-test partitions. Never random-split the time series. Reject settings that work only in discovery.
 
@@ -1834,6 +1833,116 @@ Stage 6 must carry **all three formal candidates** forward and must not tune the
 
 ---
 
+# 17E. Stage 6 readiness / boundary-overlap audit
+
+**Formal status: BLOCKED / WAITING CLEAN POST-CUTOFF COHORT**
+
+Audit package:
+
+https://radar.43-153-193-103.sslip.io/audit/stage6_walkforward_readiness_bridge21.zip
+
+SHA256:
+
+`3aaa6470860213cf96ffd610beddcb703727513e12bdb64d3cd271a3aaf8cf98`
+
+Research branch:
+
+`research/adaptive-profit-protection-stage6`
+
+Research commits:
+
+- bridge reconstruction: `00cb3a45312b29b87ebdb53688836a94fd3a2c8b`
+- bridge evaluator: `1a3c8fad03125e049daf5d8bdcd08645d54ca0a6`
+
+Discovery cutoff remains:
+
+`1790687518406`
+
+Current post-cutoff inventory:
+
+```text
+positions closed after cutoff:                 21
+positions opened after cutoff:                  0
+boundary-overlap positions:                    21
+clean Stage 6 validation trades:                0
+untouched Stage 6 test trades consumed:         0
+```
+
+All 21 positions that closed after the cutoff were already open before the cutoff. Because the adaptive lock is path-dependent from trade open through the running economic peak/floor, these boundary-overlap positions are **not** a clean chronological Stage 6 validation cohort.
+
+Therefore:
+
+- do not count the 21 bridge positions toward formal Stage 6 acceptance,
+- do not tune Stage 5 parameters from these results,
+- keep S5-A / S5-B / S5-C frozen,
+- preserve the untouched-test cohort.
+
+Bridge reconstruction is complete:
+
+```text
+trades: 21
+symbols: 21
+strict market-data reconstruction: complete
+closed-1m rows: 1,699
+market-data failures: 0
+```
+
+Bridge diagnostic only:
+
+```text
+S5-A:
+  net PnL              +93.74 USDT
+  win rate              52.38%
+  economic >=2 trades        4
+  median capture        74.75%
+  premature close      100.00%
+
+S5-B:
+  net PnL              +65.78 USDT
+  median capture        57.41%
+  premature close      100.00%
+
+S5-C:
+  net PnL              +65.78 USDT
+  median capture        57.41%
+  premature close      100.00%
+
+STATIC_NET:
+  net PnL              +91.74 USDT
+  median capture        74.15%
+  premature close       25.00%
+
+STATIC_BALANCED:
+  net PnL             +112.02 USDT
+  median capture        84.74%
+  premature close        0.00%
+
+ACTUAL_V3:
+  net PnL              +89.82 USDT
+```
+
+Interpretation:
+
+- S5-A is slightly above Actual V3 on bridge total PnL,
+- STATIC_BALANCED is materially better in this 21-trade bridge,
+- only four bridge trades reached economic peak >=2%, so the large-runner metrics are extremely underpowered,
+- S5-A/B/C all close those four before the whole-trade opportunity peak,
+- this is a **runner-risk warning** for Stage 6/7, not a formal rejection from a clean test.
+
+Clean Stage 6 eligibility rule:
+
+```text
+opened_at_ms > 1790687518406
+```
+
+Stage 6 can formally resume only when paper trades satisfying that rule exist.
+
+No Stage 5 parameter may be changed while waiting for the clean validation cohort.
+
+Production was not modified by this readiness audit.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1845,7 +1954,7 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. Stages 2, 3, 4, and 5 are COMPLETE / QA PASS. The next research stage is Stage 6 - Walk-Forward Validation.
+8. Stages 2, 3, 4, and 5 are COMPLETE / QA PASS. Stage 6 has started but is BLOCKED because there are currently zero clean trades opened after the discovery cutoff.
 9. Stage 2 is locked as descriptive anatomy, Stage 3 as the static benchmark envelope, Stage 4 as the feature-screen contract, and Stage 5 as the adaptive candidate frontier. None is approved for production.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
@@ -1866,7 +1975,7 @@ Stage 2: COMPLETE / QA PASS
 Stage 3: COMPLETE / QA PASS
 Stage 4: COMPLETE / QA PASS
 Stage 5: COMPLETE / QA PASS
-Stage 6: READY TO EXECUTE
+Stage 6: BLOCKED / WAITING CLEAN POST-CUTOFF COHORT
 Stage 7: NOT STARTED
 Stage 8: NOT STARTED
 ~~~
