@@ -1,3 +1,5 @@
+[Reading 2042 lines from start (total: 2042 lines, 0 remaining)]
+
 # Adaptive Profit Protection Discovery
 
 **Project:** BabaBot Market Radar / Market Detektor  
@@ -2036,3 +2038,9 @@ live             = disabled / disarmed
 ~~~
 
 Runtime state is time-sensitive. Always refresh production before relying on it.
+
+## V5-0 — Sub-1% prospective decision gate
+
+V5-0 extends the research to trades that make meaningful but sub-1% economic MFE before fading. The design is prospective-first rather than another historical optimization loop. It arms at 0.50% economic MFE, watches 30-50% giveback, forces a HOLD/REDUCE/CLOSE decision at >=50% giveback using momentum/structure/taker/OI evidence, and uses a 100% giveback hard stop. Once peak economic MFE reaches 1.00%, V5-0 no longer intervenes; the >=1% logic is reserved for V5-1. V5-0 remains a shadow lane; V3 remains paper authority.
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
