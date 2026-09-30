@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+import json
+import threading
+import time
 from typing import Any
 
+from .persistence import _postgres_connect, _sqlite_connect, database_path, persistence_backend
 from .stage6_validation import POLICIES, _pp_decision_unified
 
 
-PP_DECISION_V2_VERSION = "pp-decision-v2-stage1-fast-decay"
+PP_DECISION_V2_VERSION = "pp-decision-v2-stage3-prospective-fast-shadow"
+_V2_STORE_LOCK = threading.Lock()
+_V2_STORE_READY: set[tuple[str, str]] = set()
 _ACTION_RANK = {"HOLD": 0, "REDUCE": 1, "CLOSE": 2}
 
 # Stage 1 intentionally overlays the frozen V1 policy instead of retuning it.
@@ -155,3 +161,136 @@ def evaluate_pp_decision_v2(
     result["overlay_action"] = overlay
     result["final_action"] = _max_action(base_action, overlay)
     return result
+
+
+SQLITE_V2_SCHEMA = """
+create table if not exists pp_decision_v2_observations (
+    observation_id text primary key,
+    position_id text not null,
+    opened_at_ms integer not null,
+    evaluated_at_ms integer not null,
+    current_price real not null,
+    current_pnl_pct real not null,
+    mfe_pct real not null,
+    previous_pnl_pct real,
+    elapsed_seconds real,
+    giveback_ratio real not null,
+    drop_pct_points real,
+    decay_ratio_per_min real,
+    danger_score integer not null,
+    base_v1_action text not null,
+    overlay_action text not null,
+    final_action text not null,
+    fast_gate text not null,
+    position_status text not null,
+    snapshot_json text not null default '{}',
+    created_at_ms integer not null
+);
+create index if not exists idx_pp_decision_v2_position_time
+on pp_decision_v2_observations(position_id, evaluated_at_ms);
+create index if not exists idx_pp_decision_v2_gate_time
+on pp_decision_v2_observations(fast_gate, evaluated_at_ms);
+"""
+
+POSTGRES_V2_SCHEMA = """
+create table if not exists pp_decision_v2_observations (
+    observation_id text primary key,
+    position_id text not null,
+    opened_at_ms bigint not null,
+    evaluated_at_ms bigint not null,
+    current_price double precision not null,
+    current_pnl_pct double precision not null,
+    mfe_pct double precision not null,
+    previous_pnl_pct double precision,
+    elapsed_seconds double precision,
+    giveback_ratio double precision not null,
+    drop_pct_points double precision,
+    decay_ratio_per_min double precision,
+    danger_score integer not null,
+    base_v1_action text not null,
+    overlay_action text not null,
+    final_action text not null,
+    fast_gate text not null,
+    position_status text not null,
+    snapshot_json text not null default '{}',
+    created_at_ms bigint not null
+);
+create index if not exists idx_pp_decision_v2_position_time
+on pp_decision_v2_observations(position_id, evaluated_at_ms);
+create index if not exists idx_pp_decision_v2_gate_time
+on pp_decision_v2_observations(fast_gate, evaluated_at_ms);
+"""
+
+
+def initialize_pp_decision_v2_store() -> None:
+    backend = persistence_backend()
+    key = (backend, str(database_path()) if backend == "sqlite" else "postgres")
+    with _V2_STORE_LOCK:
+        if key in _V2_STORE_READY:
+            return
+        if backend == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                conn.executescript(SQLITE_V2_SCHEMA)
+        else:
+            with _postgres_connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(POSTGRES_V2_SCHEMA)
+        _V2_STORE_READY.add(key)
+
+
+def save_pp_decision_v2_observation(
+    *,
+    position_id: str,
+    opened_at_ms: int,
+    evaluated_at_ms: int,
+    current_price: float,
+    current_pnl_pct: float,
+    mfe_pct: float,
+    previous_pnl_pct: float | None,
+    position_status: str,
+    result: dict[str, Any],
+    snapshot: dict[str, Any],
+) -> bool:
+    initialize_pp_decision_v2_store()
+    observation_id = f"{position_id}:{int(evaluated_at_ms)}"
+    now = int(time.time() * 1000)
+    values = (
+        observation_id, str(position_id), int(opened_at_ms), int(evaluated_at_ms),
+        float(current_price), float(current_pnl_pct), float(mfe_pct),
+        None if previous_pnl_pct is None else float(previous_pnl_pct),
+        None if result.get("elapsed_seconds") is None else float(result["elapsed_seconds"]),
+        float(result.get("giveback_ratio") or 0.0),
+        None if result.get("drop_pct_points") is None else float(result["drop_pct_points"]),
+        None if result.get("decay_ratio_per_min") is None else float(result["decay_ratio_per_min"]),
+        int(result.get("danger_score") or 0), str(result.get("base_v1_action") or "HOLD"),
+        str(result.get("overlay_action") or "HOLD"), str(result.get("final_action") or "HOLD"),
+        str(result.get("fast_gate") or "DISARMED"), str(position_status).upper(),
+        json.dumps(snapshot, separators=(",", ":"), allow_nan=False), now,
+    )
+    if persistence_backend() == "sqlite":
+        with _sqlite_connect(database_path()) as conn:
+            cur = conn.execute(
+                """
+                insert or ignore into pp_decision_v2_observations (
+                    observation_id,position_id,opened_at_ms,evaluated_at_ms,current_price,
+                    current_pnl_pct,mfe_pct,previous_pnl_pct,elapsed_seconds,giveback_ratio,
+                    drop_pct_points,decay_ratio_per_min,danger_score,base_v1_action,
+                    overlay_action,final_action,fast_gate,position_status,snapshot_json,created_at_ms
+                ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                """, values,
+            )
+            return cur.rowcount > 0
+    with _postgres_connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                insert into pp_decision_v2_observations (
+                    observation_id,position_id,opened_at_ms,evaluated_at_ms,current_price,
+                    current_pnl_pct,mfe_pct,previous_pnl_pct,elapsed_seconds,giveback_ratio,
+                    drop_pct_points,decay_ratio_per_min,danger_score,base_v1_action,
+                    overlay_action,final_action,fast_gate,position_status,snapshot_json,created_at_ms
+                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                on conflict(observation_id) do nothing
+                """, values,
+            )
+            return cur.rowcount > 0
