@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 READY  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 READY  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -144,7 +144,7 @@ Sweep simple static protection rules first:
 Adaptive logic must later outperform this baseline to justify complexity.
 
 ### Stage 4 - Adaptive Feature Discovery
-**Status: NEXT**
+**Status: COMPLETE / QA PASS**
 
 Test which features add stable information about continuation vs giveback:
 - peak size,
@@ -159,6 +159,7 @@ Test which features add stable information about continuation vs giveback:
 Discard features that do not add stable out-of-sample value.
 
 ### Stage 5 - Adaptive Lock Search
+**Status: NEXT**
 
 Search constrained adaptive formulas or tables.
 
@@ -1449,6 +1450,218 @@ Stage 4 must compare adaptive features against this static envelope under the sa
 
 ---
 
+# 17C. Stage 4 formal completion record
+
+**Status: COMPLETE / QA PASS**
+
+Audit package:
+
+https://radar.43-153-193-103.sslip.io/audit/stage4_adaptive_feature_discovery_497trades.zip
+
+SHA256:
+
+`12c30cb11059d82a450e6e5369512f60e9a70847e3843328f8d8395f312142e3`
+
+Reproducible research script:
+
+- branch: `research/adaptive-profit-protection-stage4`
+- commit: `8e0e66ef46f14593da8336a70cfb19610d59c984`
+- file: `research/adaptive_profit_protection_stage4.py`
+
+Validation design:
+
+```text
+Frozen trades: 497
+Strict causal closed-1m rows: 12,191
+Post-close overlap rows excluded: 497
+Split: DEV 60% / OOS-MID 20% / OOS-LATE 20%
+Position split leakage: 0
+Giveback anchors: 20%, 30%, 40%, 50%
+First-30% anchor counts:
+  DEV      = 164
+  OOS-MID  = 43
+  OOS-LATE = 39
+```
+
+The main Stage 4 screen uses all first-crossing states with a positive known economic peak. The economic-peak >=0.5% subset is kept as sensitivity-only because at the first-30% anchor it contains only 45 states, too sparse for robust two-holdout discrimination.
+
+Future behavior is used only as the outcome label. Every predictor is known at or before the anchor.
+
+Important methodological caveat:
+
+- some nonlinear indicator forms were motivated by Stage 2 descriptive work on the same frozen cohort,
+- therefore the Stage 4 OOS splits demonstrate **temporal stability inside the frozen cohort**, not a pristine external holdout,
+- Stage 6 remains mandatory before production approval.
+
+Final feature-family decisions:
+
+```text
+PEAK_SIZE        -> KEEP_STRONG
+PEAK_RECENCY     -> KEEP_STRONG_NONLINEAR
+MICRO_STRUCTURE  -> KEEP_STRONG_NONLINEAR
+TAKER_FLOW       -> KEEP_STRONG_NONLINEAR
+OI               -> KEEP_WEAK_CONDITIONAL
+VOLATILITY       -> KEEP_WEAK_MODIFIER
+PRIOR_REDUCE     -> DISCARD_AS_DERIORATION_EVIDENCE
+HTF_THESIS       -> DEFER_LOW_COVERAGE
+```
+
+### Peak size
+
+Peak size is the strongest stable base feature.
+
+At first-30% giveback:
+
+- incremental temporal-OOS AUC vs intercept-only baseline: about **+0.168**,
+- combined-OOS bootstrap interval excludes zero.
+
+Peak size therefore remains the primary context variable entering Stage 5.
+
+### Peak recency / stale peak
+
+Linear peak-age features alone were unstable, but the Stage-2-motivated nonlinear state `time_since_peak >= 3m` remained directionally terminal in both OOS windows.
+
+At first-30% giveback:
+
+- OOS-MID terminal-risk difference: about **+19.2 pp**,
+- OOS-LATE: about **+37.1 pp**,
+- combined OOS: about **+31.0 pp**.
+
+Support is small, so stale-peak is retained as evidence, not as a standalone hard exit trigger.
+
+### 3m adverse persistence
+
+Side-adjusted 3m return <= -0.10% is one of the strongest stable deterioration signals.
+
+Combined OOS at first-30% giveback:
+
+- terminal-risk difference: about **+30.5 pp**,
+- bootstrap 95% interval: approximately **+3.8 to +52.9 pp**.
+
+This remains materially stronger than a single adverse 1m candle.
+
+### Taker flow
+
+The 45/55 opposing-taker state is the most consistently additive signal after conditioning on the other compact Stage 4 features.
+
+Combined OOS:
+
+- terminal-risk difference: about **+27.6 pp**,
+- bootstrap interval: approximately **+5.9 to +48.5 pp**.
+
+Conditional ablation reduces AUC in both OOS splits when opposing taker is removed.
+
+### Open interest
+
+Adverse OI-building remains directionally useful:
+
+- combined-OOS terminal-risk difference: about **+25.8 pp**.
+
+However:
+
+- bootstrap interval crosses zero,
+- the diagnostic definition overlaps adverse 3m persistence,
+- raw OI incremental lift is small.
+
+Therefore OI enters Stage 5 only as **conditional corroboration**, not a standalone hard trigger.
+
+### Volatility
+
+Extreme rv15 using the Stage 2 empirical-Q75 diagnostic boundary shows:
+
+- combined-OOS terminal-risk difference: about **+23.6 pp**,
+- bootstrap interval: approximately **+3.4 to +43.3 pp**.
+
+But the continuous volatility family is not linearly stable and larger-peak support becomes weak. Volatility is therefore a **modifier**, not primary deterioration evidence.
+
+This reverses the naive assumption that high volatility should automatically receive more breathing room.
+
+### Prior REDUCE state
+
+Prior REDUCE changes sign across holdouts and adds no stable deterioration information.
+
+Therefore:
+
+- do not use prior REDUCE itself as evidence that the trade is failing,
+- retain it only as execution-state memory when deciding whether an action means REDUCE or CLOSE.
+
+### Higher-timeframe thesis context
+
+Fresh THESIS_5M evidence with <=10m staleness has only about **30.5%** coverage at the first-30% anchor and negative incremental OOS lift.
+
+Therefore HTF thesis context is deferred from the core protector. It may be reconsidered later as an optional contextual layer, but Stage 5 must not depend on it.
+
+### Evidence stacking
+
+The strongest Stage 4 conclusion is that deterioration should be treated as a stack of causal evidence, not one fixed trigger.
+
+Evidence primitives used in the diagnostic stack:
+
+```text
+stale peak >= 3m
+3m side-adjusted return <= -0.10%
+opposing taker 45/55
+adverse OI-building
+extreme rv15
+micro-break against position
+```
+
+At first-30% giveback:
+
+```text
+OOS-MID:
+  evidence count >=2 -> 70.6% terminal
+  evidence count < 2 -> 34.6% terminal
+
+OOS-LATE:
+  evidence count >=2 -> 85.7% terminal
+  evidence count < 2 -> 56.0% terminal
+```
+
+Evidence count >=3 reaches 66.7% terminal in OOS-MID and 100% in OOS-LATE, but support is only six states in each holdout, so this is not yet an approved threshold.
+
+Conditional multifeature ablation indicates:
+
+- opposing taker is the most consistently additive feature,
+- volatility contributes mainly in OOS-LATE,
+- stale peak, adverse 3m, and adverse OI overlap materially.
+
+Stage 5 should therefore search **evidence stacks and lock/action policies**, not independent hard triggers for every feature.
+
+Stage 3 hurdles remain unchanged:
+
+```text
+Best static total net PnL             = -74.06 USDT
+Best static economic >=2 capture      = 68.51%
+Best static persisted-MFE >=2 capture = 53.05%
+```
+
+Required Stage 4 outputs:
+
+```text
+stage4_anchor_dataset.csv
+stage4_family_results.csv
+stage4_feature_results_30pct.csv
+stage4_keep_discard_summary.csv
+stage4_primary30_descriptive.csv
+stage4_bootstrap_30pct.csv
+stage4_nonlinear_oos_screen.csv
+stage4_nonlinear_bootstrap.csv
+stage4_final_family_decisions.csv
+stage4_evidence_stack.csv
+stage4_conditional_ablation.csv
+stage4_stage3_reference.csv
+stage4_manifest.json
+stage4_qa.json
+stage4_report.md
+```
+
+Stage 4 does **not** select V4 lock percentages, action thresholds, REDUCE/CLOSE thresholds, or production coefficients.
+
+Stage 5 must now search adaptive lock/action policies using only the promoted causal feature families and must beat the Stage 3 static frontier under the same causal and censoring rules.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1460,8 +1673,8 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. Stage 2 and Stage 3 are COMPLETE / QA PASS. The next research stage is Stage 4 - Adaptive Feature Discovery.
-9. Stage 2 is locked as descriptive evidence and Stage 3 is locked as the static benchmark envelope; neither is an approved V4 production rule.
+8. Stages 2, 3, and 4 are COMPLETE / QA PASS. The next research stage is Stage 5 - Adaptive Lock Search.
+9. Stage 2 is locked as descriptive anatomy, Stage 3 as the static benchmark envelope, and Stage 4 as the feature-screen contract. None is an approved V4 production rule.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
 12. Do not enable live trading.
@@ -1479,8 +1692,8 @@ At document creation:
 Stage 1: COMPLETE / QA PASS
 Stage 2: COMPLETE / QA PASS
 Stage 3: COMPLETE / QA PASS
-Stage 4: READY TO EXECUTE
-Stage 5: NOT STARTED
+Stage 4: COMPLETE / QA PASS
+Stage 5: READY TO EXECUTE
 Stage 6: NOT STARTED
 Stage 7: NOT STARTED
 Stage 8: NOT STARTED
