@@ -2074,3 +2074,16 @@ PP-DECISION V1 development stages:
 ## PP-DECISION V1 Stage 2 — >=1% gate
 
 Stage 2 arms at economic MFE >=1%, watches from 25% peak giveback, mandates a decision at 35%, forces protection at 50%, and hard-closes at 60% giveback. Decision evidence uses the same causal momentum / micro-structure / taker / OI danger score as Stage 1.
+
+
+## PP-DECISION V1 Stage 2 prospective activation record
+
+- status: RUNNING / prospective paper-shadow
+- code main commit: 298cb671e207bf917b245d74956097acf54905ee
+- PP_DECISION_STAGE2_START_MS: 1790751331084
+- lane ID: PP-DECISION-1P
+- authority: PP-LEGACY V3
+- activation zero-state: 0 Stage 2 lanes before entries resumed
+- entry control resumed to RUN after zero-state verification
+- live trading: disabled / disarmed
+- validation: 12/12 Stage 2 tests PASS; 142/142 full suite PASS
