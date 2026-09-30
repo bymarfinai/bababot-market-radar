@@ -176,3 +176,15 @@ Frozen V5-0 contract:
 Danger score uses closed 1m information only: adverse 3m momentum +2, micro-structure break +2, opposing taker flow +1, adverse OI confirmation +1.
 
 V5-0 is intentionally not tuned on the historical cohort. Synthetic/historical checks are safety and causality checks only; prospective paper-shadow data is the primary validation source.
+
+
+## V5-0 prospective activation record
+
+- status: RUNNING / prospective paper-shadow
+- production main commit: 9986ae4555003f0193cd202646f7aa963ac0a713
+- V5_0_START_MS: 1790749213663
+- authority: V3_CONTROL
+- activation zero-state: 0 V5-0 lanes before entries resumed
+- entry control resumed to RUN after activation verification
+- live trading: disabled / disarmed
+- validation: 8/8 V5-0 Stage6 tests PASS; 138/138 full suite PASS
