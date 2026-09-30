@@ -25,7 +25,11 @@ from .paper_store import (
     mark_order,
     update_position_reduce,
 )
-
+from .stage6_validation import (
+    finalize_stage6_position,
+    process_stage6_shadow_cycle,
+    register_stage6_position,
+)
 
 PAPER_TRADING_VERSION = "stage13-v2-event-driven"
 _loop_lock = threading.Lock()
@@ -513,6 +517,24 @@ def _execute_open(
         fee=fee,
         reason="paper_market_entry",
     )
+    try:
+        register_stage6_position(
+            position_id=str(order["position_id"]),
+            signal_id=str(order["signal_id"]),
+            symbol=symbol,
+            side=str(order["side"]),
+            opened_at_ms=opened_at_ms,
+            entry_price=fill,
+            initial_quantity=quantity,
+            initial_notional=notional,
+            entry_fee_total=fee,
+        )
+    except Exception as exc:
+        print(
+            "Stage 6 register warning: "
+            f"{type(exc).__name__}: {str(exc)[:240]}",
+            flush=True,
+        )
     return {
         "status": "FILLED",
         "action": "OPEN",
@@ -649,6 +671,22 @@ def _execute_exit(
         fee=exit_fee,
         reason=str(order.get("reason") or action.lower()),
     )
+    if action == "CLOSE":
+        try:
+            finalize_stage6_position(
+                position_id=str(position["position_id"]),
+                closed_at_ms=executed_at,
+                actual_exit_price=fill,
+                actual_realized_pnl=realized_net,
+                actual_realized_pnl_pct=realized_pct,
+                actual_close_reason=str(order.get("reason") or "stage12_close"),
+            )
+        except Exception as exc:
+            print(
+                "Stage 6 finalize warning: "
+                f"{type(exc).__name__}: {str(exc)[:240]}",
+                flush=True,
+            )
     return {
         "status": "FILLED",
         "action": action,
@@ -718,6 +756,16 @@ def paper_cycle() -> dict[str, Any]:
     if not paper_trading_enabled():
         return {"status": "DISABLED"}
 
+    try:
+        stage6 = process_stage6_shadow_cycle()
+    except Exception as exc:
+        stage6 = {
+            "status": "ERROR",
+            "processed_trades": 0,
+            "processed_candles": 0,
+            "errors": [f"{type(exc).__name__}: {str(exc)[:240]}"],
+        }
+
     lifecycle = sync_lifecycle_orders()
     exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
     control = get_control_state()
@@ -736,6 +784,7 @@ def paper_cycle() -> dict[str, Any]:
             }
     return {
         "status": "COMPLETE",
+        "stage6_validation": stage6,
         "lifecycle_queued": lifecycle["queued"],
         "exit_execution": exits,
         "entry_queued": entries["queued"],
