@@ -2115,3 +2115,17 @@ Stage 4 validates the unified Stage 3 engine without parameter hunting. The robu
 ## PP-DECISION V1 Stage 5 — Final Paper Shadow
 
 Stage 5 freezes PP-DECISION V1 and starts a separate clean prospective lane (`PP-DECISION-V1-FINAL`) only after Stage 4 robustness has passed. The final lane is byte-for-policy equivalent to the Stage 3 unified rules and exists to create a clean post-freeze promotion cohort, not to introduce another protector design. PP-LEGACY V3 remains actual paper authority.
+
+
+## PP-DECISION V1 Stage 5 prospective activation record
+
+- status: RUNNING / final prospective paper-shadow
+- code main commit: c4a3c2d082bfc447a31c9e6ed58d797039340945
+- PP_DECISION_STAGE5_START_MS: 1790753619332
+- final lane ID: PP-DECISION-V1-FINAL
+- policy frozen against Stage 3 unified: true
+- authority: PP-LEGACY V3
+- activation zero-state: 0 final lanes before entries resumed
+- entry control resumed to RUN after zero-state verification
+- live trading: disabled / disarmed
+- validation: 4/4 Stage 5 tests PASS; 1,960-state policy parity PASS; 161/161 full suite PASS
