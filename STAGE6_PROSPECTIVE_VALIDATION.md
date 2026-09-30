@@ -1,5 +1,3 @@
-[Reading 178 lines from start (total: 178 lines, 0 remaining)]
-
 # Stage 6 Prospective Paper Validation
 
 Status: **DEPLOYED / PROSPECTIVE COHORT RUNNING / ENTRIES ENABLED**
@@ -178,5 +176,3 @@ Frozen V5-0 contract:
 Danger score uses closed 1m information only: adverse 3m momentum +2, micro-structure break +2, opposing taker flow +1, adverse OI confirmation +1.
 
 V5-0 is intentionally not tuned on the historical cohort. Synthetic/historical checks are safety and causality checks only; prospective paper-shadow data is the primary validation source.
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
