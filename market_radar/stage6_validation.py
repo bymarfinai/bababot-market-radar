@@ -105,6 +105,23 @@ POLICIES: dict[str, dict[str, Any]] = {
         "close_score": 4,
         "reduce_fraction": 0.50,
     },
+    "PP-DECISION-V1": {
+        "kind": "PP_DECISION_UNIFIED",
+        "mode": "DECISION_GATE",
+        "sub1_arm_min_roi_pct": 0.50,
+        "handoff_roi_pct": 1.00,
+        "sub1_watch_giveback_ratio": 0.30,
+        "sub1_decision_giveback_ratio": 0.50,
+        "sub1_hard_stop_giveback_ratio": 1.00,
+        "ge1_watch_giveback_ratio": 0.25,
+        "ge1_decision_giveback_ratio": 0.35,
+        "ge1_force_reduce_giveback_ratio": 0.50,
+        "ge1_hard_close_giveback_ratio": 0.60,
+        "watch_reduce_score": 4,
+        "reduce_score": 2,
+        "close_score": 4,
+        "reduce_fraction": 0.50,
+    },
 }
 
 SQLITE_SCHEMA = """
@@ -301,6 +318,19 @@ def pp_decision_stage2_start_ms() -> int:
         return 0
 
 
+def pp_decision_stage3_enabled() -> bool:
+    return os.environ.get("PP_DECISION_STAGE3_ENABLED", "false").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+def pp_decision_stage3_start_ms() -> int:
+    try:
+        return int(os.environ.get("PP_DECISION_STAGE3_START_MS", "0") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
     ids: list[str] = []
     for policy_id in POLICIES:
@@ -311,6 +341,12 @@ def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
             if (
                 not pp_decision_stage2_enabled()
                 or int(opened_at_ms) <= pp_decision_stage2_start_ms()
+            ):
+                continue
+        if policy_id == "PP-DECISION-V1":
+            if (
+                not pp_decision_stage3_enabled()
+                or int(opened_at_ms) <= pp_decision_stage3_start_ms()
             ):
                 continue
         ids.append(policy_id)
@@ -824,6 +860,60 @@ def _pp_decision_ge1(
     return "HOLD", meta
 
 
+def _pp_decision_unified(
+    policy: dict[str, Any],
+    *,
+    peak_roi: float,
+    economic: float,
+    peak: float,
+    evidence: dict[str, int],
+    status: str,
+) -> tuple[str, dict[str, Any]]:
+    handoff = float(policy["handoff_roi_pct"])
+    if peak_roi < handoff:
+        sub1_policy = {
+            "arm_min_roi_pct": float(policy["sub1_arm_min_roi_pct"]),
+            "handoff_roi_pct": handoff,
+            "watch_giveback_ratio": float(policy["sub1_watch_giveback_ratio"]),
+            "decision_giveback_ratio": float(policy["sub1_decision_giveback_ratio"]),
+            "hard_stop_giveback_ratio": float(policy["sub1_hard_stop_giveback_ratio"]),
+            "watch_reduce_score": int(policy["watch_reduce_score"]),
+            "reduce_score": int(policy["reduce_score"]),
+            "close_score": int(policy["close_score"]),
+        }
+        action, meta = _v5_sub1_decision(
+            sub1_policy,
+            peak_roi=peak_roi,
+            economic=economic,
+            peak=peak,
+            evidence=evidence,
+            status=status,
+        )
+        meta["zone"] = "SUB1"
+        return action, meta
+
+    ge1_policy = {
+        "arm_min_roi_pct": handoff,
+        "watch_giveback_ratio": float(policy["ge1_watch_giveback_ratio"]),
+        "decision_giveback_ratio": float(policy["ge1_decision_giveback_ratio"]),
+        "force_reduce_giveback_ratio": float(policy["ge1_force_reduce_giveback_ratio"]),
+        "hard_close_giveback_ratio": float(policy["ge1_hard_close_giveback_ratio"]),
+        "watch_reduce_score": int(policy["watch_reduce_score"]),
+        "reduce_score": int(policy["reduce_score"]),
+        "close_score": int(policy["close_score"]),
+    }
+    action, meta = _pp_decision_ge1(
+        ge1_policy,
+        peak_roi=peak_roi,
+        economic=economic,
+        peak=peak,
+        evidence=evidence,
+        status=status,
+    )
+    meta["zone"] = "GE1"
+    return action, meta
+
+
 def _evaluate_lane(
     *,
     trade: dict[str, Any],
@@ -876,6 +966,9 @@ def _evaluate_lane(
     if policy["kind"] == "PP_DECISION_GE1" and peak_roi >= float(policy["arm_min_roi_pct"]):
         candidate = peak * (1.0 - float(policy["hard_close_giveback_ratio"]))
         floor = candidate if floor is None else max(floor, candidate)
+    if policy["kind"] == "PP_DECISION_UNIFIED" and peak_roi >= float(policy["handoff_roi_pct"]):
+        candidate = peak * (1.0 - float(policy["ge1_hard_close_giveback_ratio"]))
+        floor = candidate if floor is None else max(floor, candidate)
     breached = bool(floor is not None and economic <= floor + 1e-12)
     action = "HOLD"
     status = str(lane["status"])
@@ -907,6 +1000,17 @@ def _evaluate_lane(
         )
         if action != "HOLD":
             trigger_count += 1
+    elif policy["kind"] == "PP_DECISION_UNIFIED" and status in {"OPEN", "REDUCED"}:
+        action, decision_meta = _pp_decision_unified(
+            policy,
+            peak_roi=peak_roi,
+            economic=economic,
+            peak=peak,
+            evidence=ev,
+            status=status,
+        )
+        if action != "HOLD":
+            trigger_count += 1
     elif breached and status in {"OPEN", "REDUCED"}:
         trigger_count += 1
         if policy["mode"] == "CLOSE_FIRST":
@@ -917,7 +1021,7 @@ def _evaluate_lane(
     if action == "REDUCE":
         qty = remaining * (
             float(policy.get("reduce_fraction", 0.50))
-            if policy["kind"] in {"V5_SUB1_DECISION", "PP_DECISION_GE1"}
+            if policy["kind"] in {"V5_SUB1_DECISION", "PP_DECISION_GE1", "PP_DECISION_UNIFIED"}
             else 0.50
         )
         allocated = entry_fee_total * (qty / initial_qty) if initial_qty > 0 else 0.0
@@ -951,6 +1055,8 @@ def _evaluate_lane(
             if policy["kind"] == "V5_SUB1_DECISION"
             else "PP_DECISION_GE1_GATE"
             if policy["kind"] == "PP_DECISION_GE1"
+            else "PP_DECISION_V1_UNIFIED_GATE"
+            if policy["kind"] == "PP_DECISION_UNIFIED"
             else "POLICY_FLOOR"
         )
 
@@ -1442,6 +1548,18 @@ def stage6_summary() -> dict[str, Any]:
             "force_reduce_giveback_ratio": POLICIES["PP-DECISION-1P"]["force_reduce_giveback_ratio"],
             "hard_close_giveback_ratio": POLICIES["PP-DECISION-1P"]["hard_close_giveback_ratio"],
         },
+        "pp_decision_stage3": {
+            "display_name": "PP-DECISION V1 / Stage 3 / Unified Protector",
+            "enabled": pp_decision_stage3_enabled(),
+            "prospective_start_ms": pp_decision_stage3_start_ms(),
+            "scope": "single stateful lane from economic MFE 0.50% through >=1.00%",
+            "lane_id": "PP-DECISION-V1",
+            "handoff_roi_pct": POLICIES["PP-DECISION-V1"]["handoff_roi_pct"],
+            "sub1_decision_giveback_ratio": POLICIES["PP-DECISION-V1"]["sub1_decision_giveback_ratio"],
+            "ge1_decision_giveback_ratio": POLICIES["PP-DECISION-V1"]["ge1_decision_giveback_ratio"],
+            "ge1_force_reduce_giveback_ratio": POLICIES["PP-DECISION-V1"]["ge1_force_reduce_giveback_ratio"],
+            "ge1_hard_close_giveback_ratio": POLICIES["PP-DECISION-V1"]["ge1_hard_close_giveback_ratio"],
+        },
         "registered_trades": len(trades),
         "open_trades": sum(str(x["status"]) == "ACTIVE" for x in trades),
         "closed_trades": len(closed_trades),
@@ -1455,3 +1573,4 @@ def stage6_summary() -> dict[str, Any]:
         },
         "policies": policies,
     }
+
