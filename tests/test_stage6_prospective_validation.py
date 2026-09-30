@@ -1,5 +1,3 @@
-[Reading 408 lines from start (total: 408 lines, 0 remaining)]
-
 from __future__ import annotations
 
 import os
@@ -408,5 +406,3 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
