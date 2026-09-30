@@ -115,3 +115,18 @@ The dedicated observation stream fixes the main limitation discovered in Stage 2
 - dedicated observation logging test: PASS
 - strict post-boundary gating test: PASS
 - full repository regression: 174 / 174 PASS
+
+
+## Stage 3 prospective activation record
+
+- status: RUNNING / prospective fast shadow
+- code main commit: badde777c37357a61ecd1717e9d420488da3c192
+- PP_DECISION_V2_STAGE3_START_MS: 1790757169768
+- strict cohort rule: only positions opened strictly after the boundary are included
+- activation zero-state: 0 V2 observations and 0 post-boundary positions before entries resumed
+- observation table: pp_decision_v2_observations
+- fast cadence: existing Stage 12 fast loop, default 15 seconds
+- authority: PP-LEGACY V3
+- V1 Final / Adaptive remain shadow comparators
+- live trading: disabled / disarmed
+- validation: 13/13 targeted Stage 3 tests PASS; 11,760/11,760 never-relaxes-V1 sweep PASS; 174/174 full suite PASS
