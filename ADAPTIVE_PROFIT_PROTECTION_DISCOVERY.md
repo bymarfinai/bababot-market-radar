@@ -2092,3 +2092,16 @@ Stage 2 arms at economic MFE >=1%, watches from 25% peak giveback, mandates a de
 ## PP-DECISION V1 Stage 3 — Unified Protector
 
 Stage 3 combines the Stage 1 Sub-1% and Stage 2 >=1% rules into one stateful shadow lane (`PP-DECISION-V1`). Handoff at 1.00% changes the decision regime but does not reset MFE, action count, REDUCED status, or the later >=1% ratcheting floor. This is the first lane intended to represent the eventual PP-DECISION V1 engine as one protector rather than separate research components.
+
+
+## PP-DECISION V1 Stage 3 prospective activation record
+
+- status: RUNNING / prospective paper-shadow
+- code main commit: 360adf69cec5e8355ba603a85bc1a10213219588
+- PP_DECISION_STAGE3_START_MS: 1790752024290
+- unified lane ID: PP-DECISION-V1
+- authority: PP-LEGACY V3
+- activation zero-state: 0 unified Stage 3 lanes before entries resumed
+- entry control resumed to RUN after zero-state verification
+- live trading: disabled / disarmed
+- validation: 16/16 Stage 3 tests PASS; 146/146 full suite PASS
