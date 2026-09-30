@@ -290,3 +290,30 @@ The same causal danger score is used across both zones: adverse 3m momentum +2, 
 - entry control resumed to RUN after zero-state verification
 - live trading: disabled / disarmed
 - validation: 16/16 Stage 3 tests PASS; 146/146 full suite PASS
+
+
+## PP-DECISION V1 — Stage 4 Robustness
+
+Stage 4 does not create a new trading lane and does not retune Stage 3 thresholds. It hardens the already-running unified `PP-DECISION-V1` lane through deterministic robustness tests.
+
+Coverage:
+
+- exact Sub-1% boundaries: 30% watch, 50% mandatory, 100% hard stop
+- exact >=1% boundaries: 25% watch, 35% mandatory, 50% force protect, 60% hard close
+- 0.50% and 1.00% peak-zone boundaries
+- LONG / SHORT feature symmetry
+- missing optional momentum/taker/OI/vol inputs
+- high volatility without adverse evidence
+- REDUCED state cannot be repeatedly reduced at actionable gates
+- CLOSED state is idempotent
+- extreme negative current PnL after a profitable >=1% peak
+- monotonic action severity as danger score increases
+- deterministic state-space sweep across peak zone, giveback, danger 0-6 and OPEN/REDUCED states
+
+Results:
+
+- Stage 4 isolated robustness tests: 11 / 11 PASS
+- deterministic state-space cases: 1,960 / 1,960 PASS
+- full repository suite with Stage 4 robustness build: 157 / 157 PASS
+- no Stage 3 logic or threshold change was required
+- no new prospective boundary is created; the existing Stage 3 unified lane remains the candidate under test
