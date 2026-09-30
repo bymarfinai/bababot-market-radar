@@ -24,6 +24,7 @@ from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
+from .stage6_validation import stage6_summary
 from .pipeline_cohort import cohort_summary, list_cohorts
 from .persistence import (
     entry_approval_summary,
@@ -708,6 +709,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "position_history": "/positions/history",
                     "position_evaluations": "/positions/evaluations",
                     "paper_summary": "/paper/summary",
+                    "stage6_summary": "/stage6/summary",
                     "paper_orders": "/paper/orders",
                     "candles": "/market/klines",
                     "ticker_24h": "/market/ticker",
@@ -1342,6 +1344,19 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     {
                         "error": "paper_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/stage6/summary":
+            try:
+                self._json(HTTPStatus.OK, stage6_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "stage6_summary_failed",
                         "detail": str(exc),
                     },
                 )
