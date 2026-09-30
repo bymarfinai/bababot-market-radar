@@ -172,6 +172,7 @@ Goals:
 
 ### Stage 6 - Walk-Forward Validation
 **Status: NEXT**
+**Status: NEXT**
 
 Use chronological discovery / validation / untouched-test partitions. Never random-split the time series. Reject settings that work only in discovery.
 
