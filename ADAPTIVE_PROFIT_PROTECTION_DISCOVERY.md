@@ -2052,3 +2052,25 @@ V5-0 extends the research to trades that make meaningful but sub-1% economic MFE
 - entry control resumed to RUN after activation verification
 - live trading: disabled / disarmed
 - validation: 8/8 V5-0 Stage6 tests PASS; 138/138 full suite PASS
+
+
+## PP-DECISION naming
+
+Current nomenclature:
+
+- `PP-LEGACY V3`: actual paper profit-protection authority
+- `PP-ADAPTIVE V1`: former S5-A/B/C adaptive shadow baselines
+- `PP-DECISION V1`: next-generation decision-gate protector under development
+
+PP-DECISION V1 development stages:
+
+1. Stage 1 / Sub-1%: former internal `V5-0` lane; prospective shadow active
+2. Stage 2 / MFE >=1%: `PP-DECISION-1P` lane
+3. Stage 3 / Unified Protector: combine Stage 1 + Stage 2
+4. Stage 4 / Robustness
+5. Stage 5 / Final Paper Shadow
+
+
+## PP-DECISION V1 Stage 2 — >=1% gate
+
+Stage 2 arms at economic MFE >=1%, watches from 25% peak giveback, mandates a decision at 35%, forces protection at 50%, and hard-closes at 60% giveback. Decision evidence uses the same causal momentum / micro-structure / taker / OI danger score as Stage 1.
