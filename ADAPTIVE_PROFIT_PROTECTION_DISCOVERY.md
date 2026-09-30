@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 COMPLETE / Stage 6 BLOCKED  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 COMPLETE / Stage 6 RUNNING  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -171,7 +171,7 @@ Goals:
 - avoid unstable parameter surfaces.
 
 ### Stage 6 - Walk-Forward Validation
-**Status: BLOCKED / WAITING CLEAN POST-CUTOFF COHORT**
+**Status: RUNNING / PROSPECTIVE CLEAN PAPER COHORT**
 
 Use chronological discovery / validation / untouched-test partitions. Never random-split the time series. Reject settings that work only in discovery.
 
@@ -1943,6 +1943,52 @@ Production was not modified by this readiness audit.
 
 ---
 
+# 17F. Stage 6 prospective activation record
+
+**Status: RUNNING / CLEAN COHORT COLLECTION ACTIVE**
+
+Deployment:
+
+```text
+main merge commit = 68ab376ddf091acd1e9dd96cf5bd5f8c1762e062
+Stage 6 version   = stage6-prospective-shadow-v1
+run ID            = stage6-prospective-1790740200126
+Stage 6 start ms  = 1790740200126
+discovery cutoff  = 1790687518406
+```
+
+Eligibility rule:
+
+```text
+opened_at_ms > 1790740200126
+```
+
+Activation checks:
+
+- deployed container full test suite: **136 / 136 PASS**,
+- Stage 6 recorder enabled before entries resumed,
+- initial Stage 6 summary: **0 registered / 0 open / 0 closed**,
+- control mode changed from `PAUSE_ENTRIES` to `RUN` only after the zero-state check,
+- paper entries enabled,
+- lifecycle exits enabled,
+- live trading remains disarmed and disabled,
+- public summary endpoint verified:
+  `https://core-prod.43-153-193-103.sslip.io/stage6/summary`.
+
+Authority / comparison contract:
+
+- actual paper lifecycle authority remains `V3_CONTROL`,
+- frozen S5-A / S5-B / S5-C run causal closed-1m shadow lanes,
+- STATIC_NET / STATIC_BALANCED / STATIC_CAPTURE run in parallel,
+- lanes use the same entry, quantity, fee and slippage assumptions,
+- a policy lane may close itself earlier,
+- an unclosed lane is right-censored at exact V3 control close,
+- Stage 6 parameters are frozen and may not be tuned from ongoing results.
+
+The prior 21 boundary-overlap trades remain diagnostic-only and are not part of this prospective cohort.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1954,7 +2000,7 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. Stages 2, 3, 4, and 5 are COMPLETE / QA PASS. Stage 6 has started but is BLOCKED because there are currently zero clean trades opened after the discovery cutoff.
+8. Stages 2, 3, 4, and 5 are COMPLETE / QA PASS. Stage 6 prospective validation is RUNNING with a fresh start boundary; only positions opened after the Stage 6 start timestamp are eligible.
 9. Stage 2 is locked as descriptive anatomy, Stage 3 as the static benchmark envelope, Stage 4 as the feature-screen contract, and Stage 5 as the adaptive candidate frontier. None is approved for production.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
@@ -1975,7 +2021,7 @@ Stage 2: COMPLETE / QA PASS
 Stage 3: COMPLETE / QA PASS
 Stage 4: COMPLETE / QA PASS
 Stage 5: COMPLETE / QA PASS
-Stage 6: BLOCKED / WAITING CLEAN POST-CUTOFF COHORT
+Stage 6: RUNNING / PROSPECTIVE CLEAN PAPER COHORT
 Stage 7: NOT STARTED
 Stage 8: NOT STARTED
 ~~~
