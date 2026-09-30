@@ -2087,3 +2087,9 @@ Stage 2 arms at economic MFE >=1%, watches from 25% peak giveback, mandates a de
 - entry control resumed to RUN after zero-state verification
 - live trading: disabled / disarmed
 - validation: 12/12 Stage 2 tests PASS; 142/142 full suite PASS
+
+
+## PP-DECISION V1 Stage 3 — Unified Protector
+
+Stage 3 combines the Stage 1 Sub-1% and Stage 2 >=1% rules into one stateful shadow lane (`PP-DECISION-V1`). Handoff at 1.00% changes the decision regime but does not reset MFE, action count, REDUCED status, or the later >=1% ratcheting floor. This is the first lane intended to represent the eventual PP-DECISION V1 engine as one protector rather than separate research components.
+
