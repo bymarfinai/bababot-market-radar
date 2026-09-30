@@ -77,6 +77,8 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
                 "PP_DECISION_STAGE2_START_MS": str(self.start),
                 "PP_DECISION_STAGE3_ENABLED": "true",
                 "PP_DECISION_STAGE3_START_MS": str(self.start),
+                "PP_DECISION_STAGE5_ENABLED": "true",
+                "PP_DECISION_STAGE5_START_MS": str(self.start),
                 "PAPER_FEE_RATE": "0.00075",
                 "PAPER_SLIPPAGE_BPS": "2",
             },

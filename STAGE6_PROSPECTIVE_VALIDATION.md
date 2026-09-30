@@ -317,3 +317,41 @@ Results:
 - full repository suite with Stage 4 robustness build: 157 / 157 PASS
 - no Stage 3 logic or threshold change was required
 - no new prospective boundary is created; the existing Stage 3 unified lane remains the candidate under test
+
+
+## PP-DECISION V1 — Stage 5 Final Paper Shadow
+
+Stage 5 creates a clean post-freeze prospective cohort using lane `PP-DECISION-V1-FINAL`. The final lane is an exact frozen copy of the Stage 3 unified policy after Stage 4 robustness passed. No thresholds, danger weights, state transitions, fee/slippage model, or floor behavior are changed.
+
+Purpose:
+
+- isolate a clean post-Stage-4 prospective cohort
+- compare the frozen final candidate against PP-LEGACY V3, PP-ADAPTIVE baselines, and earlier PP-DECISION research lanes
+- prevent pre-freeze Stage 3 observations from being mixed into the final promotion cohort
+
+Frozen final contract:
+
+**Sub-1% zone**
+- arm at economic MFE 0.50%
+- 30% giveback: WATCH
+- 50% giveback: mandatory decision
+- danger 0-1 HOLD, 2-3 REDUCE 50%, >=4 CLOSE
+- 100% giveback: hard CLOSE
+
+**>=1% zone**
+- 25% giveback: WATCH
+- 35% giveback: mandatory decision
+- danger 0-1 HOLD, 2-3 REDUCE 50%, >=4 CLOSE
+- 50% giveback: force protection
+- 60% giveback: hard CLOSE
+
+State remains unified across the 1.00% handoff. PP-LEGACY V3 remains actual paper authority; the final candidate cannot submit paper/live orders.
+
+Stage 5 pre-activation validation:
+
+- exact policy equality with Stage 3 unified: PASS
+- decision parity across 1,960 deterministic states: PASS
+- strict prospective start-boundary gating: PASS
+- stateful replay parity with Stage 3 unified lane: PASS
+- Stage 5 isolated tests: 4 / 4 PASS
+- full repository suite with Stage 5 final-shadow build: 161 / 161 PASS

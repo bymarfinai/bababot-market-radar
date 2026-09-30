@@ -122,6 +122,23 @@ POLICIES: dict[str, dict[str, Any]] = {
         "close_score": 4,
         "reduce_fraction": 0.50,
     },
+    "PP-DECISION-V1-FINAL": {
+        "kind": "PP_DECISION_UNIFIED",
+        "mode": "DECISION_GATE",
+        "sub1_arm_min_roi_pct": 0.50,
+        "handoff_roi_pct": 1.00,
+        "sub1_watch_giveback_ratio": 0.30,
+        "sub1_decision_giveback_ratio": 0.50,
+        "sub1_hard_stop_giveback_ratio": 1.00,
+        "ge1_watch_giveback_ratio": 0.25,
+        "ge1_decision_giveback_ratio": 0.35,
+        "ge1_force_reduce_giveback_ratio": 0.50,
+        "ge1_hard_close_giveback_ratio": 0.60,
+        "watch_reduce_score": 4,
+        "reduce_score": 2,
+        "close_score": 4,
+        "reduce_fraction": 0.50,
+    },
 }
 
 SQLITE_SCHEMA = """
@@ -331,6 +348,19 @@ def pp_decision_stage3_start_ms() -> int:
         return 0
 
 
+def pp_decision_stage5_enabled() -> bool:
+    return os.environ.get("PP_DECISION_STAGE5_ENABLED", "false").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+def pp_decision_stage5_start_ms() -> int:
+    try:
+        return int(os.environ.get("PP_DECISION_STAGE5_START_MS", "0") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
     ids: list[str] = []
     for policy_id in POLICIES:
@@ -347,6 +377,12 @@ def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
             if (
                 not pp_decision_stage3_enabled()
                 or int(opened_at_ms) <= pp_decision_stage3_start_ms()
+            ):
+                continue
+        if policy_id == "PP-DECISION-V1-FINAL":
+            if (
+                not pp_decision_stage5_enabled()
+                or int(opened_at_ms) <= pp_decision_stage5_start_ms()
             ):
                 continue
         ids.append(policy_id)
@@ -1571,6 +1607,16 @@ def stage6_summary() -> dict[str, Any]:
             "missing_evidence_safe": True,
             "closed_lane_idempotent": True,
             "action_severity_monotonic": True,
+        },
+        "pp_decision_stage5": {
+            "display_name": "PP-DECISION V1 / Stage 5 / Final Paper Shadow",
+            "enabled": pp_decision_stage5_enabled(),
+            "prospective_start_ms": pp_decision_stage5_start_ms(),
+            "lane_id": "PP-DECISION-V1-FINAL",
+            "logic_source": "PP-DECISION-V1 Stage 3 unified contract, frozen after Stage 4",
+            "authority": "PP-LEGACY V3",
+            "post_freeze_clean_cohort": True,
+            "policy_frozen": POLICIES["PP-DECISION-V1-FINAL"] == POLICIES["PP-DECISION-V1"],
         },
         "registered_trades": len(trades),
         "open_trades": sum(str(x["status"]) == "ACTIVE" for x in trades),
