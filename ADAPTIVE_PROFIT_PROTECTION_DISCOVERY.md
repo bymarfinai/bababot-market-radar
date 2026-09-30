@@ -2,7 +2,7 @@
 
 **Project:** BabaBot Market Radar / Market Detektor  
 **Research target:** Stage 12 profit protection after a position is already open  
-**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 READY  
+**Status:** Stage 1 COMPLETE / Stage 2 COMPLETE / Stage 3 COMPLETE / Stage 4 COMPLETE / Stage 5 COMPLETE / Stage 6 READY  
 **Frozen cohort cutoff:** 2026-09-29 20:11:58 WIB (1790687518406)  
 **V3 research start boundary:** 1790662958358  
 **Runtime at handoff:** PAUSE_ENTRIES; entries OFF; lifecycle exits ON. Always refresh runtime state before acting.
@@ -159,7 +159,7 @@ Test which features add stable information about continuation vs giveback:
 Discard features that do not add stable out-of-sample value.
 
 ### Stage 5 - Adaptive Lock Search
-**Status: NEXT**
+**Status: COMPLETE / QA PASS**
 
 Search constrained adaptive formulas or tables.
 
@@ -171,6 +171,7 @@ Goals:
 - avoid unstable parameter surfaces.
 
 ### Stage 6 - Walk-Forward Validation
+**Status: NEXT**
 
 Use chronological discovery / validation / untouched-test partitions. Never random-split the time series. Reject settings that work only in discovery.
 
@@ -1662,6 +1663,176 @@ Stage 5 must now search adaptive lock/action policies using only the promoted ca
 
 ---
 
+# 17D. Stage 5 formal completion record
+
+**Status: COMPLETE / QA PASS**
+
+Audit package:
+
+https://radar.43-153-193-103.sslip.io/audit/stage5_adaptive_lock_search_497trades.zip
+
+SHA256:
+
+`2850a4fb0a1846e267b0aebf93ac49f1ffc5b9b319e8b8f656015a063c56e8f0`
+
+Research branch:
+
+`research/adaptive-profit-protection-stage5`
+
+Research commits:
+
+- `b1242cec3ffbe13d007df2f7db52108bf1408c88` — Stage 5 search
+- `6cf8d38e89d75023b863285ba6b0d6871a7fdc36` — Stage 5 frontier finalization
+
+Search volume:
+
+```text
+Coarse policies:       576
+Refined policies:      3,456
+Local refinements:     810
+Formal Stage 5 candidates: 3
+```
+
+Selection contract:
+
+- DEV is the only ranking/selection partition.
+- OOS-MID and OOS-LATE are temporal pass/fail gates.
+- Full-cohort metrics are reporting only.
+- Full-cohort "super-winners" discovered after inspecting OOS are diagnostic-only and cannot be promoted.
+- Stage 6 must validate on later chronological cohorts outside the frozen 497 trades.
+
+Formal candidates:
+
+### S5-A — PRIMARY BALANCED
+
+Policy:
+
+`L_B0-25-50_T30+0_OI0.125_V0.025`
+
+Interpretation:
+
+```text
+Base lock:
+  0.5-2% peak  -> 0%
+  2-5% peak    -> 25%
+  >=5% peak    -> 50%
+
+If core evidence count >=2:
+  +30% lock tightening
+
+Adverse OI corroboration:
+  +12.5%
+
+Extreme rv15 modifier:
+  +2.5%
+
+Continuation bonus:
+  0%
+
+Action:
+  CLOSE_FIRST
+```
+
+Full frozen-cohort diagnostics:
+
+- total net PnL: **-73.61 USDT**
+- economic peak >=2 median capture: **65.48%**
+- persisted-MFE >=2 median capture: **52.06%**
+- economic peak >=2 premature CLOSE: **19.44%**
+- economic peak >=5 median capture: **73.84%**
+- economic peak >=5 premature CLOSE: **44.44%**
+- DEV balanced gate: PASS
+- OOS-MID balanced gate: PASS
+- OOS-LATE balanced gate: PASS
+
+S5-A is the formal primary candidate because it is the highest-DEV-net local policy that satisfies the predeclared DEV balanced gate and both OOS stability gates.
+
+### S5-B — RUNNER PRESERVING
+
+Policy:
+
+`R_B0-30-50_T10+20_OI10_V+0_CB0_CLOSE_FIRST`
+
+Full frozen-cohort diagnostics:
+
+- total net PnL: **-79.69 USDT**
+- economic peak >=2 median capture: **66.06%**
+- persisted-MFE >=2 median capture: **53.33%**
+- economic peak >=2 premature CLOSE: **16.67%**
+- economic peak >=5 median capture: **69.59%**
+- economic peak >=5 premature CLOSE: **33.33%**
+- DEV balanced gate: PASS
+- both temporal OOS gates: PASS
+
+S5-B is retained because it gives up some PnL while reducing big-runner premature-close risk.
+
+### S5-C — CAPTURE HEAVY
+
+Policy:
+
+`L_B0-30-50_T25+5_OI0.125_V0.000`
+
+Full frozen-cohort diagnostics:
+
+- total net PnL: **-77.20 USDT**
+- economic peak >=2 median capture: **67.03%**
+- persisted-MFE >=2 median capture: **53.33%**
+- economic peak >=2 premature CLOSE: **19.44%**
+- economic peak >=5 median capture: **72.25%**
+- economic peak >=5 premature CLOSE: **44.44%**
+- DEV balanced gate: PASS
+- both temporal OOS gates: PASS
+
+Static-frontier comparison:
+
+```text
+Stage 3 static-net:
+  PnL     = -74.06 USDT
+  capture = 57.51%
+  premC   = 8.33%
+
+Stage 3 static-balanced:
+  PnL     = -110.57 USDT
+  capture = 62.94%
+  premC   = 16.67%
+
+Stage 3 static-capture:
+  PnL     = -116.84 USDT
+  capture = 68.51%
+  premC   = 38.89%
+```
+
+All three formal Stage 5 candidates have:
+
+```text
+static policies dominating them on net + capture = 0
+static policies dominating them on net + capture + premature close = 0
+```
+
+Therefore Stage 5 expands the Stage 3 static Pareto frontier rather than merely retuning a static threshold.
+
+Primary-candidate surface check:
+
+```text
+local neighborhood policies = 324
+within primary -10 USDT PnL and -3pp capture = 108
+```
+
+This is evidence against a single-point parameter spike.
+
+Important limitations:
+
+1. the frozen 497 trades remain the discovery cohort;
+2. Stage 4 already inspected OOS-MID/OOS-LATE, so these are stability gates, not pristine unseen tests;
+3. economic-peak >=5 has only 9 trades, so big-runner premature-close estimates are noisy;
+4. no Stage 5 policy is approved for production;
+5. no Stage 5 policy is approved for V4 shadow authority yet;
+6. Stage 6 later-cohort chronological validation is mandatory.
+
+Stage 6 must carry **all three formal candidates** forward and must not tune them further against the frozen Stage 5 OOS windows.
+
+---
+
 # 18. Instructions for a new chat
 
 When continuing from a new chat:
@@ -1673,8 +1844,8 @@ When continuing from a new chat:
 5. Re-check runtime control state before touching production.
 6. Do not rebuild Stage 1 unless QA/data corruption requires it.
 7. Use the frozen 497-trade Stage 1 package and cutoff.
-8. Stages 2, 3, and 4 are COMPLETE / QA PASS. The next research stage is Stage 5 - Adaptive Lock Search.
-9. Stage 2 is locked as descriptive anatomy, Stage 3 as the static benchmark envelope, and Stage 4 as the feature-screen contract. None is an approved V4 production rule.
+8. Stages 2, 3, 4, and 5 are COMPLETE / QA PASS. The next research stage is Stage 6 - Walk-Forward Validation.
+9. Stage 2 is locked as descriptive anatomy, Stage 3 as the static benchmark envelope, Stage 4 as the feature-screen contract, and Stage 5 as the adaptive candidate frontier. None is approved for production.
 10. Do not blend later trades into the 497-trade discovery cohort.
 11. Do not claim continuous 15-second history where only 1m reconstruction exists.
 12. Do not enable live trading.
@@ -1693,8 +1864,8 @@ Stage 1: COMPLETE / QA PASS
 Stage 2: COMPLETE / QA PASS
 Stage 3: COMPLETE / QA PASS
 Stage 4: COMPLETE / QA PASS
-Stage 5: READY TO EXECUTE
-Stage 6: NOT STARTED
+Stage 5: COMPLETE / QA PASS
+Stage 6: READY TO EXECUTE
 Stage 7: NOT STARTED
 Stage 8: NOT STARTED
 ~~~
