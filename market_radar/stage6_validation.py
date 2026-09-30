@@ -92,6 +92,19 @@ POLICIES: dict[str, dict[str, Any]] = {
         "close_score": 4,
         "reduce_fraction": 0.50,
     },
+    "PP-DECISION-1P": {
+        "kind": "PP_DECISION_GE1",
+        "mode": "DECISION_GATE",
+        "arm_min_roi_pct": 1.00,
+        "watch_giveback_ratio": 0.25,
+        "decision_giveback_ratio": 0.35,
+        "force_reduce_giveback_ratio": 0.50,
+        "hard_close_giveback_ratio": 0.60,
+        "watch_reduce_score": 4,
+        "reduce_score": 2,
+        "close_score": 4,
+        "reduce_fraction": 0.50,
+    },
 }
 
 SQLITE_SCHEMA = """
@@ -275,11 +288,30 @@ def v5_0_start_ms() -> int:
         return 0
 
 
+def pp_decision_stage2_enabled() -> bool:
+    return os.environ.get("PP_DECISION_STAGE2_ENABLED", "false").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+def pp_decision_stage2_start_ms() -> int:
+    try:
+        return int(os.environ.get("PP_DECISION_STAGE2_START_MS", "0") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
     ids: list[str] = []
     for policy_id in POLICIES:
         if policy_id == "V5-0":
             if not v5_0_enabled() or int(opened_at_ms) <= v5_0_start_ms():
+                continue
+        if policy_id == "PP-DECISION-1P":
+            if (
+                not pp_decision_stage2_enabled()
+                or int(opened_at_ms) <= pp_decision_stage2_start_ms()
+            ):
                 continue
         ids.append(policy_id)
     return ids
@@ -738,6 +770,60 @@ def _v5_sub1_decision(
     return "HOLD", meta
 
 
+def _pp_decision_ge1(
+    policy: dict[str, Any],
+    *,
+    peak_roi: float,
+    economic: float,
+    peak: float,
+    evidence: dict[str, int],
+    status: str,
+) -> tuple[str, dict[str, Any]]:
+    giveback_ratio = (
+        max(0.0, (float(peak) - float(economic)) / float(peak))
+        if float(peak) > 0
+        else 0.0
+    )
+    danger_score = int(evidence.get("danger_score", 0))
+    meta: dict[str, Any] = {
+        "gate": "DISARMED",
+        "giveback_ratio": giveback_ratio,
+        "danger_score": danger_score,
+    }
+    if peak_roi < float(policy["arm_min_roi_pct"]):
+        return "HOLD", meta
+
+    watch = float(policy["watch_giveback_ratio"])
+    decision = float(policy["decision_giveback_ratio"])
+    force_reduce = float(policy["force_reduce_giveback_ratio"])
+    hard_close = float(policy["hard_close_giveback_ratio"])
+    meta["gate"] = "ARMED_GE1"
+
+    if giveback_ratio >= hard_close:
+        meta["gate"] = "HARD_CLOSE"
+        return "CLOSE", meta
+
+    if giveback_ratio >= force_reduce:
+        meta["gate"] = "FORCE_PROTECT"
+        if danger_score >= int(policy["close_score"]) or status == "REDUCED":
+            return "CLOSE", meta
+        return "REDUCE", meta
+
+    if giveback_ratio >= decision:
+        meta["gate"] = "MANDATORY_DECISION"
+        if danger_score >= int(policy["close_score"]):
+            return "CLOSE", meta
+        if danger_score >= int(policy["reduce_score"]):
+            return ("REDUCE" if status == "OPEN" else "CLOSE"), meta
+        return "HOLD", meta
+
+    if giveback_ratio >= watch:
+        meta["gate"] = "WATCH"
+        if danger_score >= int(policy["watch_reduce_score"]):
+            return ("REDUCE" if status == "OPEN" else "CLOSE"), meta
+    return "HOLD", meta
+
+
 def _evaluate_lane(
     *,
     trade: dict[str, Any],
@@ -787,6 +873,9 @@ def _evaluate_lane(
     if lock is not None and peak > 0:
         candidate = peak * lock
         floor = candidate if floor is None else max(floor, candidate)
+    if policy["kind"] == "PP_DECISION_GE1" and peak_roi >= float(policy["arm_min_roi_pct"]):
+        candidate = peak * (1.0 - float(policy["hard_close_giveback_ratio"]))
+        floor = candidate if floor is None else max(floor, candidate)
     breached = bool(floor is not None and economic <= floor + 1e-12)
     action = "HOLD"
     status = str(lane["status"])
@@ -807,6 +896,17 @@ def _evaluate_lane(
         )
         if action != "HOLD":
             trigger_count += 1
+    elif policy["kind"] == "PP_DECISION_GE1" and status in {"OPEN", "REDUCED"}:
+        action, decision_meta = _pp_decision_ge1(
+            policy,
+            peak_roi=peak_roi,
+            economic=economic,
+            peak=peak,
+            evidence=ev,
+            status=status,
+        )
+        if action != "HOLD":
+            trigger_count += 1
     elif breached and status in {"OPEN", "REDUCED"}:
         trigger_count += 1
         if policy["mode"] == "CLOSE_FIRST":
@@ -817,7 +917,7 @@ def _evaluate_lane(
     if action == "REDUCE":
         qty = remaining * (
             float(policy.get("reduce_fraction", 0.50))
-            if policy["kind"] == "V5_SUB1_DECISION"
+            if policy["kind"] in {"V5_SUB1_DECISION", "PP_DECISION_GE1"}
             else 0.50
         )
         allocated = entry_fee_total * (qty / initial_qty) if initial_qty > 0 else 0.0
@@ -849,6 +949,8 @@ def _evaluate_lane(
         close_reason = (
             "V5_SUB1_DECISION_GATE"
             if policy["kind"] == "V5_SUB1_DECISION"
+            else "PP_DECISION_GE1_GATE"
+            if policy["kind"] == "PP_DECISION_GE1"
             else "POLICY_FLOOR"
         )
 
@@ -1322,12 +1424,23 @@ def stage6_summary() -> dict[str, Any]:
         "discovery_cutoff_ms": DISCOVERY_CUTOFF_MS,
         "authority": "V3_CONTROL",
         "v5_0": {
+            "display_name": "PP-DECISION V1 / Stage 1 / Sub-1%",
             "enabled": v5_0_enabled(),
             "prospective_start_ms": v5_0_start_ms(),
             "scope": "economic MFE 0.50% to <1.00%",
             "watch_giveback_ratio": POLICIES["V5-0"]["watch_giveback_ratio"],
             "decision_giveback_ratio": POLICIES["V5-0"]["decision_giveback_ratio"],
             "hard_stop_giveback_ratio": POLICIES["V5-0"]["hard_stop_giveback_ratio"],
+        },
+        "pp_decision_stage2": {
+            "display_name": "PP-DECISION V1 / Stage 2 / MFE >=1%",
+            "enabled": pp_decision_stage2_enabled(),
+            "prospective_start_ms": pp_decision_stage2_start_ms(),
+            "scope": "economic MFE >=1.00%",
+            "watch_giveback_ratio": POLICIES["PP-DECISION-1P"]["watch_giveback_ratio"],
+            "decision_giveback_ratio": POLICIES["PP-DECISION-1P"]["decision_giveback_ratio"],
+            "force_reduce_giveback_ratio": POLICIES["PP-DECISION-1P"]["force_reduce_giveback_ratio"],
+            "hard_close_giveback_ratio": POLICIES["PP-DECISION-1P"]["hard_close_giveback_ratio"],
         },
         "registered_trades": len(trades),
         "open_trades": sum(str(x["status"]) == "ACTIVE" for x in trades),
