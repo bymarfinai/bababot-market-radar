@@ -1,3 +1,5 @@
+[Reading 408 lines from start (total: 408 lines, 0 remaining)]
+
 from __future__ import annotations
 
 import os
@@ -12,6 +14,7 @@ from market_radar.stage6_validation import (
     POLICIES,
     _adaptive_lock,
     _evaluate_lane,
+    _v5_sub1_decision,
     finalize_stage6_position,
     process_stage6_shadow_cycle,
     register_stage6_position,
@@ -68,6 +71,8 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
                 "STAGE6_VALIDATION_ENABLED": "true",
                 "STAGE6_START_MS": str(self.start),
                 "STAGE6_RUN_ID": "test-stage6",
+                "V5_0_SHADOW_ENABLED": "true",
+                "V5_0_START_MS": str(self.start),
                 "PAPER_FEE_RATE": "0.00075",
                 "PAPER_SLIPPAGE_BPS": "2",
             },
@@ -103,6 +108,10 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(POLICIES["STATIC_NET"]["arm_roi_pct"], 5.0)
         self.assertEqual(POLICIES["STATIC_BALANCED"]["lock_ratio"], 0.70)
         self.assertEqual(POLICIES["STATIC_CAPTURE"]["mode"], "REDUCE_THEN_CLOSE")
+        self.assertEqual(POLICIES["V5-0"]["arm_min_roi_pct"], 0.50)
+        self.assertEqual(POLICIES["V5-0"]["handoff_roi_pct"], 1.00)
+        self.assertEqual(POLICIES["V5-0"]["decision_giveback_ratio"], 0.50)
+        self.assertEqual(POLICIES["V5-0"]["close_score"], 4)
 
     def test_only_entries_strictly_after_stage6_start_are_registered(self):
         self.assertFalse(self._register(opened_at_ms=self.start))
@@ -197,6 +206,109 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(ev2["action"], "CLOSE")
         self.assertEqual(second["status"], "CLOSED")
         self.assertEqual(second["remaining_quantity"], 0.0)
+
+    def test_v5_sub1_decision_gate_contract(self):
+        policy = POLICIES["V5-0"]
+        base_ev = {"danger_score": 0}
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=0.80, economic=3.2, peak=4.0,
+            evidence=base_ev, status="OPEN",
+        )
+        self.assertEqual(action, "HOLD")
+        self.assertEqual(meta["gate"], "ARMED_SUB1")
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=0.80, economic=2.4, peak=4.0,
+            evidence={"danger_score": 4}, status="OPEN",
+        )
+        self.assertEqual(action, "REDUCE")
+        self.assertEqual(meta["gate"], "WATCH")
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=0.80, economic=1.8, peak=4.0,
+            evidence={"danger_score": 2}, status="OPEN",
+        )
+        self.assertEqual(action, "REDUCE")
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=0.80, economic=1.8, peak=4.0,
+            evidence={"danger_score": 4}, status="OPEN",
+        )
+        self.assertEqual(action, "CLOSE")
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=0.80, economic=0.0, peak=4.0,
+            evidence={"danger_score": 0}, status="OPEN",
+        )
+        self.assertEqual(action, "CLOSE")
+        self.assertEqual(meta["gate"], "HARD_STOP")
+
+        action, meta = _v5_sub1_decision(
+            policy, peak_roi=1.05, economic=3.0, peak=5.25,
+            evidence={"danger_score": 6}, status="OPEN",
+        )
+        self.assertEqual(action, "HOLD")
+        self.assertEqual(meta["gate"], "HANDOFF_GE1")
+
+    def test_v5_sub1_lane_executes_reduce_then_close(self):
+        trade = {
+            "side": "LONG",
+            "entry_price": 100.0,
+            "initial_quantity": 5.0,
+            "initial_notional": 500.0,
+            "entry_fee_total": 0.375,
+        }
+        lane = {
+            "policy_id": "V5-0",
+            "status": "OPEN",
+            "remaining_quantity": 5.0,
+            "realized_gross": 0.0,
+            "realized_net": 0.0,
+            "allocated_entry_fee": 0.0,
+            "exit_fees": 0.0,
+            "policy_peak_pnl": 0.0,
+            "policy_peak_at_ms": None,
+            "profit_floor": None,
+            "action_count": 0,
+            "trigger_count": 0,
+            "closed_at_ms": None,
+            "exit_price": None,
+            "close_reason": None,
+        }
+        peak, _ = _evaluate_lane(
+            trade=trade, lane=lane,
+            feature={
+                "candle_close_ms": 1_000_000, "close": 100.95,
+                "side_ret3": 0.20, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        reduced, ev = _evaluate_lane(
+            trade=trade, lane=peak,
+            feature={
+                "candle_close_ms": 1_060_000, "close": 100.65,
+                "side_ret3": -0.20, "taker_strength": -0.10,
+                "micro_against": True, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(ev["evidence"]["gate"], "WATCH")
+        self.assertEqual(ev["action"], "REDUCE")
+        self.assertEqual(reduced["status"], "REDUCED")
+        self.assertAlmostEqual(reduced["remaining_quantity"], 2.5)
+
+        closed, ev2 = _evaluate_lane(
+            trade=trade, lane=reduced,
+            feature={
+                "candle_close_ms": 1_120_000, "close": 100.20,
+                "side_ret3": -0.30, "taker_strength": -0.10,
+                "micro_against": True, "oi_change": 0.10, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(ev2["action"], "CLOSE")
+        self.assertEqual(closed["status"], "CLOSED")
+        self.assertEqual(closed["close_reason"], "V5_SUB1_DECISION_GATE")
 
     def test_closed_1m_shadow_cycle_and_v3_censor_are_persisted(self):
         self.assertTrue(self._register())
@@ -296,3 +408,5 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]

@@ -1,3 +1,5 @@
+[Reading 178 lines from start (total: 178 lines, 0 remaining)]
+
 # Stage 6 Prospective Paper Validation
 
 Status: **DEPLOYED / PROSPECTIVE COHORT RUNNING / ENTRIES ENABLED**
@@ -147,11 +149,34 @@ This lets the cohort accumulate without manual replay.
 
 Isolated Stage 6 tests:
 
-- 6 / 6 PASS
+- 8 / 8 PASS
 
 Existing regression suites:
 
 - Stage 12 / Stage 13 / Stage 14 / Stage 7 API: 43 / 43 PASS
-- full repository test suite with Stage 6 build on PYTHONPATH: 130 / 130 PASS
+- full repository test suite with V5-0 build: 138 / 138 PASS
 
 The code is ready for deployment, but deployment and entry resume are separate operational steps.
+
+
+## V5-0 sub-1% decision-gate add-on
+
+V5-0 is an optional prospective shadow lane layered onto the existing Stage 6 harness. It only receives positions opened strictly after V5_0_START_MS while V5_0_SHADOW_ENABLED=true.
+
+Frozen V5-0 contract:
+
+- scope: economic MFE >=0.50% and <1.00%
+- giveback <30%: HOLD
+- giveback 30-50%: WATCH; REDUCE 50% only when danger score >=4
+- giveback >=50%: mandatory decision gate
+- mandatory score 0-1: HOLD
+- mandatory score 2-3: REDUCE 50% (or CLOSE if already reduced)
+- mandatory score >=4: CLOSE
+- 100% economic giveback from a qualifying peak: hard CLOSE guard
+- peak >=1.00%: V5-0 stops intervening; this is the future V5-1 handoff zone
+
+Danger score uses closed 1m information only: adverse 3m momentum +2, micro-structure break +2, opposing taker flow +1, adverse OI confirmation +1.
+
+V5-0 is intentionally not tuned on the historical cohort. Synthetic/historical checks are safety and causality checks only; prospective paper-shadow data is the primary validation source.
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]

@@ -1,3 +1,5 @@
+[Reading 1344 lines from start (total: 1344 lines, 0 remaining)]
+
 from __future__ import annotations
 
 import json
@@ -78,6 +80,19 @@ POLICIES: dict[str, dict[str, Any]] = {
         "mode": "REDUCE_THEN_CLOSE",
         "arm_roi_pct": 2.0,
         "lock_ratio": 0.80,
+    },
+    "V5-0": {
+        "kind": "V5_SUB1_DECISION",
+        "mode": "DECISION_GATE",
+        "arm_min_roi_pct": 0.50,
+        "handoff_roi_pct": 1.00,
+        "watch_giveback_ratio": 0.30,
+        "decision_giveback_ratio": 0.50,
+        "hard_stop_giveback_ratio": 1.00,
+        "watch_reduce_score": 4,
+        "reduce_score": 2,
+        "close_score": 4,
+        "reduce_fraction": 0.50,
     },
 }
 
@@ -249,6 +264,29 @@ def stage6_run_id() -> str:
     return explicit or f"stage6-{stage6_start_ms()}"
 
 
+def v5_0_enabled() -> bool:
+    return os.environ.get("V5_0_SHADOW_ENABLED", "false").strip().lower() in {
+        "1", "true", "yes", "on"
+    }
+
+
+def v5_0_start_ms() -> int:
+    try:
+        return int(os.environ.get("V5_0_START_MS", "0") or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _policy_ids_for_entry(opened_at_ms: int) -> list[str]:
+    ids: list[str] = []
+    for policy_id in POLICIES:
+        if policy_id == "V5-0":
+            if not v5_0_enabled() or int(opened_at_ms) <= v5_0_start_ms():
+                continue
+        ids.append(policy_id)
+    return ids
+
+
 def _fee_rate() -> float:
     return max(0.0, min(float(os.environ.get("PAPER_FEE_RATE", "0.00075")), 0.01))
 
@@ -354,7 +392,7 @@ def register_stage6_position(
             )
             inserted = cur.rowcount > 0
             if inserted:
-                for policy_id in POLICIES:
+                for policy_id in _policy_ids_for_entry(int(opened_at_ms)):
                     conn.execute(
                         """
                         insert into stage6_validation_lanes (
@@ -389,7 +427,7 @@ def register_stage6_position(
             )
             inserted = cur.fetchone() is not None
             if inserted:
-                for policy_id in POLICIES:
+                for policy_id in _policy_ids_for_entry(int(opened_at_ms)):
                     cur.execute(
                         """
                         insert into stage6_validation_lanes (
@@ -586,10 +624,11 @@ def _feature_rows(
 def _evidence(feature: dict[str, Any], peak_age_min: float) -> dict[str, int]:
     stale = int(peak_age_min >= 3.0)
     side_ret3 = feature.get("side_ret3")
-    price_adverse = int(
-        bool(feature.get("micro_against"))
-        or (side_ret3 is not None and float(side_ret3) <= -0.10)
+    momentum_adverse = int(
+        side_ret3 is not None and float(side_ret3) <= -0.10
     )
+    structure_break = int(bool(feature.get("micro_against")))
+    price_adverse = int(bool(structure_break or momentum_adverse))
     taker = feature.get("taker_strength")
     taker_opposing = int(taker is not None and float(taker) <= -0.05)
     oi_change = feature.get("oi_change")
@@ -602,13 +641,22 @@ def _evidence(feature: dict[str, Any], peak_age_min: float) -> dict[str, int]:
     )
     rv15 = feature.get("rv15")
     vol_extreme = int(rv15 is not None and float(rv15) >= RV15_EXTREME_PCT)
+    danger_score = (
+        2 * momentum_adverse
+        + 2 * structure_break
+        + taker_opposing
+        + oi_adverse
+    )
     return {
         "stale": stale,
+        "momentum_adverse": momentum_adverse,
+        "structure_break": structure_break,
         "price_adverse": price_adverse,
         "taker_opposing": taker_opposing,
         "oi_adverse": oi_adverse,
         "vol_extreme": vol_extreme,
         "core_count": stale + price_adverse + taker_opposing,
+        "danger_score": danger_score,
     }
 
 
@@ -640,6 +688,56 @@ def _static_lock(policy: dict[str, Any], peak_roi: float) -> float | None:
     if peak_roi < float(policy["arm_roi_pct"]):
         return None
     return float(policy["lock_ratio"])
+
+
+def _v5_sub1_decision(
+    policy: dict[str, Any],
+    *,
+    peak_roi: float,
+    economic: float,
+    peak: float,
+    evidence: dict[str, int],
+    status: str,
+) -> tuple[str, dict[str, Any]]:
+    giveback_ratio = (
+        max(0.0, (float(peak) - float(economic)) / float(peak))
+        if float(peak) > 0
+        else 0.0
+    )
+    danger_score = int(evidence.get("danger_score", 0))
+    meta: dict[str, Any] = {
+        "gate": "DISARMED",
+        "giveback_ratio": giveback_ratio,
+        "danger_score": danger_score,
+    }
+    if peak_roi < float(policy["arm_min_roi_pct"]):
+        return "HOLD", meta
+    if peak_roi >= float(policy["handoff_roi_pct"]):
+        meta["gate"] = "HANDOFF_GE1"
+        return "HOLD", meta
+
+    watch = float(policy["watch_giveback_ratio"])
+    decision = float(policy["decision_giveback_ratio"])
+    hard_stop = float(policy["hard_stop_giveback_ratio"])
+    meta["gate"] = "ARMED_SUB1"
+
+    if giveback_ratio >= hard_stop:
+        meta["gate"] = "HARD_STOP"
+        return "CLOSE", meta
+
+    if giveback_ratio >= decision:
+        meta["gate"] = "MANDATORY_DECISION"
+        if danger_score >= int(policy["close_score"]):
+            return "CLOSE", meta
+        if danger_score >= int(policy["reduce_score"]):
+            return ("REDUCE" if status == "OPEN" else "CLOSE"), meta
+        return "HOLD", meta
+
+    if giveback_ratio >= watch:
+        meta["gate"] = "WATCH"
+        if danger_score >= int(policy["watch_reduce_score"]):
+            return ("REDUCE" if status == "OPEN" else "CLOSE"), meta
+    return "HOLD", meta
 
 
 def _evaluate_lane(
@@ -680,11 +778,13 @@ def _evaluate_lane(
     )
     ev = _evidence(feature, peak_age)
     peak_roi = 100.0 * peak / initial_notional if initial_notional > 0 else 0.0
-    lock = (
-        _adaptive_lock(policy, peak_roi, ev)
-        if policy["kind"] == "ADAPTIVE"
-        else _static_lock(policy, peak_roi)
-    )
+    decision_meta: dict[str, Any] = {}
+    if policy["kind"] == "ADAPTIVE":
+        lock = _adaptive_lock(policy, peak_roi, ev)
+    elif policy["kind"] == "STATIC":
+        lock = _static_lock(policy, peak_roi)
+    else:
+        lock = None
     floor = float(lane["profit_floor"]) if lane.get("profit_floor") is not None else None
     if lock is not None and peak > 0:
         candidate = peak * lock
@@ -698,7 +798,18 @@ def _evaluate_lane(
     exit_price = lane.get("exit_price")
     close_reason = lane.get("close_reason")
 
-    if breached and status in {"OPEN", "REDUCED"}:
+    if policy["kind"] == "V5_SUB1_DECISION" and status in {"OPEN", "REDUCED"}:
+        action, decision_meta = _v5_sub1_decision(
+            policy,
+            peak_roi=peak_roi,
+            economic=economic,
+            peak=peak,
+            evidence=ev,
+            status=status,
+        )
+        if action != "HOLD":
+            trigger_count += 1
+    elif breached and status in {"OPEN", "REDUCED"}:
         trigger_count += 1
         if policy["mode"] == "CLOSE_FIRST":
             action = "CLOSE"
@@ -706,7 +817,11 @@ def _evaluate_lane(
             action = "REDUCE" if status == "OPEN" else "CLOSE"
 
     if action == "REDUCE":
-        qty = remaining * 0.50
+        qty = remaining * (
+            float(policy.get("reduce_fraction", 0.50))
+            if policy["kind"] == "V5_SUB1_DECISION"
+            else 0.50
+        )
         allocated = entry_fee_total * (qty / initial_qty) if initial_qty > 0 else 0.0
         gross_inc = _gross(side, qty, entry, fill)
         exit_fee = qty * fill * _fee_rate()
@@ -733,7 +848,11 @@ def _evaluate_lane(
         action_count += 1
         closed_at = int(feature["candle_close_ms"])
         exit_price = fill
-        close_reason = "POLICY_FLOOR"
+        close_reason = (
+            "V5_SUB1_DECISION_GATE"
+            if policy["kind"] == "V5_SUB1_DECISION"
+            else "POLICY_FLOOR"
+        )
 
     updated = {
         **lane,
@@ -758,7 +877,7 @@ def _evaluate_lane(
         "profit_floor": floor,
         "lock_ratio": lock,
         "action": action,
-        "evidence": ev,
+        "evidence": {**ev, **decision_meta},
     }
     return updated, event
 
@@ -1204,6 +1323,14 @@ def stage6_summary() -> dict[str, Any]:
         "stage6_start_ms": stage6_start_ms(),
         "discovery_cutoff_ms": DISCOVERY_CUTOFF_MS,
         "authority": "V3_CONTROL",
+        "v5_0": {
+            "enabled": v5_0_enabled(),
+            "prospective_start_ms": v5_0_start_ms(),
+            "scope": "economic MFE 0.50% to <1.00%",
+            "watch_giveback_ratio": POLICIES["V5-0"]["watch_giveback_ratio"],
+            "decision_giveback_ratio": POLICIES["V5-0"]["decision_giveback_ratio"],
+            "hard_stop_giveback_ratio": POLICIES["V5-0"]["hard_stop_giveback_ratio"],
+        },
         "registered_trades": len(trades),
         "open_trades": sum(str(x["status"]) == "ACTIVE" for x in trades),
         "closed_trades": len(closed_trades),
@@ -1217,3 +1344,5 @@ def stage6_summary() -> dict[str, Any]:
         },
         "policies": policies,
     }
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
