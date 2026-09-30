@@ -2110,3 +2110,9 @@ Stage 3 combines the Stage 1 Sub-1% and Stage 2 >=1% rules into one stateful sha
 ## PP-DECISION V1 Stage 4 — Robustness
 
 Stage 4 validates the unified Stage 3 engine without parameter hunting. The robustness matrix covers LONG/SHORT symmetry, exact threshold boundaries, missing evidence, high-volatility noise, REDUCED/CLOSED state behavior, negative-current tails, action-severity monotonicity, and a deterministic 1,960-state sweep. All checks passed and Stage 3 thresholds were left unchanged. Stage 4 therefore hardens the same `PP-DECISION-V1` lane rather than creating another protector.
+
+
+## PP-DECISION V1 Stage 5 — Final Paper Shadow
+
+Stage 5 freezes PP-DECISION V1 and starts a separate clean prospective lane (`PP-DECISION-V1-FINAL`) only after Stage 4 robustness has passed. The final lane is byte-for-policy equivalent to the Stage 3 unified rules and exists to create a clean post-freeze promotion cohort, not to introduce another protector design. PP-LEGACY V3 remains actual paper authority.
+
