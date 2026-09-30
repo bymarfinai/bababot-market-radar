@@ -1573,4 +1573,3 @@ def stage6_summary() -> dict[str, Any]:
         },
         "policies": policies,
     }
-
