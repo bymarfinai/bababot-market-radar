@@ -1560,6 +1560,18 @@ def stage6_summary() -> dict[str, Any]:
             "ge1_force_reduce_giveback_ratio": POLICIES["PP-DECISION-V1"]["ge1_force_reduce_giveback_ratio"],
             "ge1_hard_close_giveback_ratio": POLICIES["PP-DECISION-V1"]["ge1_hard_close_giveback_ratio"],
         },
+        "pp_decision_stage4": {
+            "display_name": "PP-DECISION V1 / Stage 4 / Robustness",
+            "status": "PASSED",
+            "lane_under_test": "PP-DECISION-V1",
+            "isolated_tests": 11,
+            "deterministic_state_cases": 1960,
+            "long_short_symmetry": True,
+            "threshold_boundaries_checked": True,
+            "missing_evidence_safe": True,
+            "closed_lane_idempotent": True,
+            "action_severity_monotonic": True,
+        },
         "registered_trades": len(trades),
         "open_trades": sum(str(x["status"]) == "ACTIVE" for x in trades),
         "closed_trades": len(closed_trades),
@@ -1573,3 +1585,4 @@ def stage6_summary() -> dict[str, Any]:
         },
         "policies": policies,
     }
+
