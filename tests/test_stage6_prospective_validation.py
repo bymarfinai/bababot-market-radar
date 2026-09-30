@@ -14,6 +14,7 @@ from market_radar.stage6_validation import (
     _evaluate_lane,
     _v5_sub1_decision,
     _pp_decision_ge1,
+    _pp_decision_unified,
     finalize_stage6_position,
     process_stage6_shadow_cycle,
     register_stage6_position,
@@ -74,6 +75,8 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
                 "V5_0_START_MS": str(self.start),
                 "PP_DECISION_STAGE2_ENABLED": "true",
                 "PP_DECISION_STAGE2_START_MS": str(self.start),
+                "PP_DECISION_STAGE3_ENABLED": "true",
+                "PP_DECISION_STAGE3_START_MS": str(self.start),
                 "PAPER_FEE_RATE": "0.00075",
                 "PAPER_SLIPPAGE_BPS": "2",
             },
@@ -118,6 +121,11 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(POLICIES["PP-DECISION-1P"]["decision_giveback_ratio"], 0.35)
         self.assertEqual(POLICIES["PP-DECISION-1P"]["force_reduce_giveback_ratio"], 0.50)
         self.assertEqual(POLICIES["PP-DECISION-1P"]["hard_close_giveback_ratio"], 0.60)
+        self.assertEqual(POLICIES["PP-DECISION-V1"]["sub1_arm_min_roi_pct"], 0.50)
+        self.assertEqual(POLICIES["PP-DECISION-V1"]["handoff_roi_pct"], 1.00)
+        self.assertEqual(POLICIES["PP-DECISION-V1"]["sub1_decision_giveback_ratio"], 0.50)
+        self.assertEqual(POLICIES["PP-DECISION-V1"]["ge1_decision_giveback_ratio"], 0.35)
+        self.assertEqual(POLICIES["PP-DECISION-V1"]["ge1_hard_close_giveback_ratio"], 0.60)
 
     def test_only_entries_strictly_after_stage6_start_are_registered(self):
         self.assertFalse(self._register(opened_at_ms=self.start))
@@ -436,6 +444,164 @@ class Stage6ProspectiveValidationTests(unittest.TestCase):
         self.assertEqual(close_event["action"], "CLOSE")
         self.assertEqual(closed["status"], "CLOSED")
         self.assertEqual(closed["close_reason"], "PP_DECISION_GE1_GATE")
+
+    def test_pp_decision_stage3_unified_dispatches_by_peak_zone(self):
+        policy = POLICIES["PP-DECISION-V1"]
+
+        action, meta = _pp_decision_unified(
+            policy, peak_roi=0.80, economic=1.8, peak=4.0,
+            evidence={"danger_score": 2}, status="OPEN",
+        )
+        self.assertEqual(meta["zone"], "SUB1")
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+        self.assertEqual(action, "REDUCE")
+
+        action, meta = _pp_decision_unified(
+            policy, peak_roi=1.58, economic=5.0, peak=7.9,
+            evidence={"danger_score": 2}, status="OPEN",
+        )
+        self.assertEqual(meta["zone"], "GE1")
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+        self.assertEqual(action, "REDUCE")
+
+    def test_pp_decision_stage3_stateful_handoff_keeps_peak_and_actions(self):
+        trade = {
+            "side": "LONG",
+            "entry_price": 100.0,
+            "initial_quantity": 5.0,
+            "initial_notional": 500.0,
+            "entry_fee_total": 0.375,
+        }
+        lane = {
+            "policy_id": "PP-DECISION-V1",
+            "status": "OPEN",
+            "remaining_quantity": 5.0,
+            "realized_gross": 0.0,
+            "realized_net": 0.0,
+            "allocated_entry_fee": 0.0,
+            "exit_fees": 0.0,
+            "policy_peak_pnl": 0.0,
+            "policy_peak_at_ms": None,
+            "profit_floor": None,
+            "action_count": 0,
+            "trigger_count": 0,
+            "closed_at_ms": None,
+            "exit_price": None,
+            "close_reason": None,
+        }
+
+        sub1, ev1 = _evaluate_lane(
+            trade=trade, lane=lane,
+            feature={
+                "candle_close_ms": 1_000_000, "close": 101.00,
+                "side_ret3": 0.20, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(ev1["evidence"]["zone"], "SUB1")
+        self.assertEqual(ev1["action"], "HOLD")
+        self.assertGreater(sub1["policy_peak_pnl"], 0.0)
+        sub1_peak = sub1["policy_peak_pnl"]
+
+        ge1_peak, ev2 = _evaluate_lane(
+            trade=trade, lane=sub1,
+            feature={
+                "candle_close_ms": 1_060_000, "close": 101.80,
+                "side_ret3": 0.25, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(ev2["evidence"]["zone"], "GE1")
+        self.assertEqual(ev2["evidence"]["gate"], "ARMED_GE1")
+        self.assertGreater(ge1_peak["policy_peak_pnl"], sub1_peak)
+        self.assertIsNotNone(ge1_peak["profit_floor"])
+        peak_before_fade = ge1_peak["policy_peak_pnl"]
+
+        reduced, ev3 = _evaluate_lane(
+            trade=trade, lane=ge1_peak,
+            feature={
+                "candle_close_ms": 1_120_000, "close": 101.10,
+                "side_ret3": -0.20, "taker_strength": 0.00,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertEqual(ev3["evidence"]["zone"], "GE1")
+        self.assertEqual(ev3["evidence"]["gate"], "MANDATORY_DECISION")
+        self.assertEqual(ev3["action"], "REDUCE")
+        self.assertEqual(reduced["status"], "REDUCED")
+        self.assertEqual(reduced["action_count"], 1)
+        self.assertAlmostEqual(reduced["policy_peak_pnl"], peak_before_fade)
+
+    def test_pp_decision_stage3_sub1_reduce_carries_into_ge1(self):
+        policy = POLICIES["PP-DECISION-V1"]
+        action, meta = _pp_decision_unified(
+            policy, peak_roi=0.80, economic=1.8, peak=4.0,
+            evidence={"danger_score": 2}, status="OPEN",
+        )
+        self.assertEqual(action, "REDUCE")
+        self.assertEqual(meta["zone"], "SUB1")
+
+        action, meta = _pp_decision_unified(
+            policy, peak_roi=1.58, economic=5.0, peak=7.9,
+            evidence={"danger_score": 2}, status="REDUCED",
+        )
+        self.assertEqual(meta["zone"], "GE1")
+        self.assertEqual(meta["gate"], "MANDATORY_DECISION")
+        self.assertEqual(action, "CLOSE")
+
+    def test_pp_decision_stage3_ge1_floor_never_loosens(self):
+        trade = {
+            "side": "LONG",
+            "entry_price": 100.0,
+            "initial_quantity": 5.0,
+            "initial_notional": 500.0,
+            "entry_fee_total": 0.375,
+        }
+        lane = {
+            "policy_id": "PP-DECISION-V1",
+            "status": "OPEN",
+            "remaining_quantity": 5.0,
+            "realized_gross": 0.0,
+            "realized_net": 0.0,
+            "allocated_entry_fee": 0.0,
+            "exit_fees": 0.0,
+            "policy_peak_pnl": 0.0,
+            "policy_peak_at_ms": None,
+            "profit_floor": None,
+            "action_count": 0,
+            "trigger_count": 0,
+            "closed_at_ms": None,
+            "exit_price": None,
+            "close_reason": None,
+        }
+        first, _ = _evaluate_lane(
+            trade=trade, lane=lane,
+            feature={
+                "candle_close_ms": 1_000_000, "close": 101.80,
+                "side_ret3": 0.30, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        floor1 = first["profit_floor"]
+        higher, _ = _evaluate_lane(
+            trade=trade, lane=first,
+            feature={
+                "candle_close_ms": 1_060_000, "close": 102.40,
+                "side_ret3": 0.30, "taker_strength": 0.10,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertGreater(higher["profit_floor"], floor1)
+        floor2 = higher["profit_floor"]
+        faded, _ = _evaluate_lane(
+            trade=trade, lane=higher,
+            feature={
+                "candle_close_ms": 1_120_000, "close": 102.00,
+                "side_ret3": 0.00, "taker_strength": 0.00,
+                "micro_against": False, "oi_change": 0.0, "rv15": 0.05,
+            },
+        )
+        self.assertGreaterEqual(faded["profit_floor"], floor2)
 
     def test_closed_1m_shadow_cycle_and_v3_censor_are_persisted(self):
         self.assertTrue(self._register())

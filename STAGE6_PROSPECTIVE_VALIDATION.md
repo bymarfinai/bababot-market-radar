@@ -236,3 +236,44 @@ Stage 2 is a prospective paper-shadow lane only. It cannot submit paper or live 
 - entry control resumed to RUN after zero-state verification
 - live trading: disabled / disarmed
 - validation: 12/12 Stage 2 tests PASS; 142/142 full suite PASS
+
+
+## PP-DECISION V1 — Stage 3 Unified Protector
+
+Stage 3 creates the first single stateful `PP-DECISION V1` lane. Stage 1 and Stage 2 lanes remain as prospective comparators, but the Stage 3 lane is the candidate unified protector. Lane ID: `PP-DECISION-V1`.
+
+Unified state contract:
+
+- one lane from entry to censor/close
+- one running economic peak; crossing 1.00% does not reset MFE
+- one action history; a Sub-1% REDUCE remains REDUCED after handoff
+- one ratcheting profit floor once economic MFE reaches >=1.00%
+- no loosening of the >=1% floor after a higher peak
+
+Decision zones:
+
+**Sub-1% zone (economic MFE 0.50% to <1.00%)**
+
+- giveback <30%: HOLD
+- giveback 30-50%: WATCH; REDUCE only when danger score >=4
+- giveback >=50%: mandatory decision
+- danger 0-1: HOLD; 2-3: REDUCE; >=4: CLOSE
+- 100% giveback: hard CLOSE
+
+**>=1% zone**
+
+- giveback <25%: HOLD
+- giveback 25-35%: WATCH; REDUCE only when danger score >=4
+- giveback >=35%: mandatory decision
+- danger 0-1: HOLD; 2-3: REDUCE; >=4: CLOSE
+- giveback >=50%: at least REDUCE; CLOSE if danger >=4 or already reduced
+- giveback >=60%: hard CLOSE
+
+The same causal danger score is used across both zones: adverse 3m momentum +2, micro-structure break +2, opposing taker flow +1, adverse OI +1. PP-LEGACY V3 remains actual paper authority.
+
+
+### Stage 3 test record
+
+- Stage 3 isolated tests: 16 / 16 PASS
+- full repository suite with Stage 3 unified build: 146 / 146 PASS
+- includes stateful Sub-1% -> >=1% handoff, carried REDUCE state, and monotonic >=1% floor tests
