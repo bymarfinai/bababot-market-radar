@@ -91,3 +91,27 @@ Adaptive S5-B has the highest net PnL in this subset; V2 has the highest win rat
 ### Stage 2 conclusion
 
 Historical replay does not justify calling V2 superior yet. On trades that reached MFE >=0.50%, V2 is materially better than Legacy in aggregate but slightly behind S5-B; on MFE >=1%, V2 has the best WR but S5-B has better net PnL. Because the fast historical stream is sparse, Stage 2 should be treated as a sanity benchmark. The correct next validation is a prospective V2 shadow with every V2 fast-decay observation explicitly recorded so sensitivity, MFE capture, giveback-at-action, runner survival, and matched net PnL can be measured without reconstruction bias.
+
+## Stage 3 — Prospective Fast Shadow
+
+Stage 3 runs PP-DECISION V2 prospectively on the existing Stage 12 fast-monitor cadence (default 15 seconds) while PP-LEGACY V3 remains the actual paper authority.
+
+Stage 3 requirements:
+
+- strict clean-cohort boundary using `PP_DECISION_V2_STAGE3_START_MS`
+- only positions opened strictly after the boundary are evaluated by V2
+- every V2 fast observation is persisted to dedicated `pp_decision_v2_observations`
+- logging includes current PnL, MFE, previous PnL, elapsed time, giveback, decay velocity, danger score, V1 base action, V2 overlay action, final shadow action, and fast gate
+- V2 actions remain observation-only and cannot create paper/live orders
+- PP-DECISION V1 Final remains frozen as comparator
+- PP-ADAPTIVE V1 and PP-LEGACY V3 remain comparator/control families
+
+The dedicated observation stream fixes the main limitation discovered in Stage 2 historical replay: ordinary 15-second HOLD observations are now retained for V2 even though the Legacy fast-guard persistence continues to remain sparse by design.
+
+### Stage 3 pre-activation validation
+
+- targeted V2 Stage 3 tests: 13 / 13 PASS
+- never-relaxes-V1 deterministic sweep: 11,760 / 11,760 PASS
+- dedicated observation logging test: PASS
+- strict post-boundary gating test: PASS
+- full repository regression: 174 / 174 PASS
