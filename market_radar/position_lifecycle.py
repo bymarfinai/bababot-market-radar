@@ -18,7 +18,10 @@ from .persistence import (
     list_open_positions,
     save_position_evaluation,
 )
-from .profit_protection_v2 import evaluate_pp_decision_v2
+from .profit_protection_v2 import (
+    evaluate_pp_decision_v2,
+    save_pp_decision_v2_observation,
+)
 from .regime_context import classify_regime
 from .stage1_scanner import latest_closed_kline
 from .stage_classifier import classify_movement_stage
@@ -151,9 +154,16 @@ def _fast_poll_seconds() -> float:
 
 
 def _v2_fast_shadow_enabled() -> bool:
-    return os.environ.get("PP_DECISION_V2_STAGE1_ENABLED", "false").strip().lower() in {
+    return os.environ.get("PP_DECISION_V2_STAGE3_ENABLED", "false").strip().lower() in {
         "1", "true", "yes", "on"
     }
+
+
+def _v2_fast_shadow_start_ms() -> int:
+    try:
+        return int(os.environ.get("PP_DECISION_V2_STAGE3_START_MS", "0") or 0)
+    except (TypeError, ValueError):
+        return 0
 
 
 def _v2_fast_danger_score(snapshot: dict[str, Any]) -> int:
@@ -167,13 +177,17 @@ def _v2_fast_danger_score(snapshot: dict[str, Any]) -> int:
 def _v2_shadow_evaluation(
     *,
     position_id: str,
+    opened_at_ms: int,
     status: str,
+    current_price: float,
     mfe_pct: float,
     current_pnl_pct: float,
     snapshot: dict[str, Any],
     evaluated_at_ms: int,
 ) -> dict[str, Any] | None:
     if not _v2_fast_shadow_enabled():
+        return None
+    if int(opened_at_ms) <= _v2_fast_shadow_start_ms():
         return None
     with _v2_decay_lock:
         previous = _v2_decay_samples.get(str(position_id))
@@ -184,7 +198,7 @@ def _v2_shadow_evaluation(
         if previous is not None
         else None
     )
-    return evaluate_pp_decision_v2(
+    result = evaluate_pp_decision_v2(
         mfe_pct=float(mfe_pct),
         current_pnl_pct=float(current_pnl_pct),
         previous_pnl_pct=previous_pnl,
@@ -192,6 +206,22 @@ def _v2_shadow_evaluation(
         danger_score=_v2_fast_danger_score(snapshot),
         status=str(status).upper(),
     )
+    try:
+        save_pp_decision_v2_observation(
+            position_id=str(position_id),
+            opened_at_ms=int(opened_at_ms),
+            evaluated_at_ms=int(evaluated_at_ms),
+            current_price=float(current_price),
+            current_pnl_pct=float(current_pnl_pct),
+            mfe_pct=float(mfe_pct),
+            previous_pnl_pct=previous_pnl,
+            position_status=str(status).upper(),
+            result=result,
+            snapshot=snapshot,
+        )
+    except Exception as exc:
+        result["observation_logging_error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
+    return result
 
 
 def _early_window_minutes() -> float:
@@ -599,7 +629,9 @@ def evaluate_fast_position(
     evaluated_at = int(time.time() * 1000)
     v2_shadow = _v2_shadow_evaluation(
         position_id=str(position["position_id"]),
+        opened_at_ms=int(position.get("opened_at_ms") or evaluated_at),
         status=str(position.get("status") or "OPEN"),
+        current_price=current,
         mfe_pct=mfe,
         current_pnl_pct=pnl,
         snapshot=snapshot,
