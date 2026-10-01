@@ -21,29 +21,30 @@ be silently retried under a new name.
 | WD-5H Stage 1 | COMPLETE | Flat WIN-vs-all weak; pairwise class differences real | Collapsing all non-winner failure modes |
 | WD-5H Stage 2 | REJECTED | Static high-precision realized-WIN gate fails; nonlinear sensitivity does not rescue | Adding another static classifier to same target |
 | WD-5H Stage 3A | COMPLETE | Triple-barrier reset: 564 META_WIN / 1,327 META_LOSS / 284 TIMEOUT; RTF relabeling confirmed; overlap severe | Training on historical realized exit PnL or ignoring overlapping label windows |
+| WD-5H Stage 3B | COMPLETE / WEAK | Purged + uniqueness-weighted meta-model did not win outer validation; selected baseline final AUC 0.570/AP 0.285; weighted final diagnostic AUC 0.588/AP 0.303 | Treating the small final weighted uplift as validated or promoting any 3B model |
 
 ## Current Hypothesis
 
-### WD-5H Stage 3B — Purged Meta-Model + Overlap Uniqueness Weighting
+### WD-5H Stage 3C — High-Precision TAKE/ABSTAIN Frontier
 
-Stage 3A confirmed that the old realized-PnL target materially mixed entry
-quality with lifecycle quality.
+Stage 3B did not find a strong stable ranking model. The next and final static
+selectivity question is:
 
-The next question is:
+Can a very conservative threshold on a validation-frozen meta score produce a
+meaningfully higher META_WIN precision while retaining enough trades to be
+economically usable?
 
-Can causal pre-entry features distinguish META_WIN from META_LOSS when
-validation prevents label-window overlap leakage and training observations are
-weighted by event uniqueness?
-
-TIMEOUT must not be silently collapsed into META_LOSS.
+Stage 3C must not re-select architecture from the final test. The formal
+selected Stage 3B architecture remains the baseline model. Purged/weighted
+results may be shown as diagnostic sensitivity only.
 
 ## Planned Sequence
 
 1. Stage 3A — Triple-Barrier Meta-Label Reset — COMPLETE
-2. Stage 3B — Purged/embargoed meta-model with overlap uniqueness weighting
+2. Stage 3B — Purged/embargoed meta-model + uniqueness weighting — COMPLETE / WEAK
 3. Stage 3C — High-precision TAKE/ABSTAIN frontier
-4. Stage 3D — Full end-to-end replay
-5. Stage 3E — Fresh prospective shadow validation
+4. Stage 3D — Full end-to-end replay only if Stage 3C finds a usable gate
+5. Stage 3E — Fresh prospective shadow validation only after a Stage 3D pass
 
 ## Fallback Sequence
 
