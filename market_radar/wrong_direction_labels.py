@@ -20,6 +20,7 @@ from .persistence import (
 
 WD1_LABEL_VERSION = "wd1-outcome-taxonomy-v1"
 WD1_TARGET_GATE_VERSION = STAGE11C_VERSION
+WD1_DISCOVERY_CUTOFF_MS = 1790826404280
 
 TRUE_WRONG_DIRECTION = "TRUE_WRONG_DIRECTION"
 RECOVERED_DRAWDOWN = "RECOVERED_DRAWDOWN"
@@ -330,9 +331,10 @@ def _fetch_eligible_positions() -> list[dict[str, Any]]:
           and p.closed_at_ms is not null
           and c.cohort=?
           and c.fresh_gate_version=?
+          and p.closed_at_ms <= ?
         order by p.opened_at_ms asc, p.position_id asc
     """
-    params = (POST_COHORT, WD1_TARGET_GATE_VERSION)
+    params = (POST_COHORT, WD1_TARGET_GATE_VERSION, WD1_DISCOVERY_CUTOFF_MS)
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
             return [
@@ -491,6 +493,7 @@ def backfill_wd1_labels() -> dict[str, Any]:
     return {
         "version": WD1_LABEL_VERSION,
         "target_gate_version": WD1_TARGET_GATE_VERSION,
+        "discovery_cutoff_ms": WD1_DISCOVERY_CUTOFF_MS,
         "eligible_closed_positions": len(positions),
         "counts": counts,
     }
@@ -550,6 +553,7 @@ def wd1_summary() -> dict[str, Any]:
         "version": WD1_LABEL_VERSION,
         "authority": "RESEARCH_LABELS_ONLY",
         "target_gate_version": WD1_TARGET_GATE_VERSION,
+        "discovery_cutoff_ms": WD1_DISCOVERY_CUTOFF_MS,
         "thresholds": {
             "early_window_minutes": EARLY_WINDOW_MINUTES,
             "early_adverse_mae_pct": EARLY_ADVERSE_MAE_PCT,
@@ -562,3 +566,5 @@ def wd1_summary() -> dict[str, Any]:
         "insufficient_data_rows": insufficient,
         "by_label": by_label,
     }
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
