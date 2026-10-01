@@ -23,41 +23,39 @@ be silently retried under a new name.
 | WD-5H Stage 3A | COMPLETE | Triple-barrier reset: 564 META_WIN / 1,327 META_LOSS / 284 TIMEOUT; RTF relabeling confirmed; overlap severe | Training on historical realized exit PnL or ignoring overlapping label windows |
 | WD-5H Stage 3B | COMPLETE / WEAK | Purged + uniqueness-weighted meta-model did not win outer validation; selected baseline final AUC 0.570/AP 0.285; weighted final diagnostic AUC 0.588/AP 0.303 | Treating the small final weighted uplift as validated or promoting any 3B model |
 | WD-5H Stage 3C | REJECTED | No static high-precision pocket: best usable validation 54.5% on 11 trades, same threshold test 14.3%; weighted ultra-selective 62.5% val -> 12.5% test | Continuing static snapshot tuning or proceeding to Stage 3D without a validated gate |
+| WD-5H Stage 4A | COMPLETE | Reconstructed 330 causal temporal features at T+1/T+2/T+3 for all 2,175 trades with 0 causality violations; OI fresh-update coverage only 0/0/2.39% | Treating 5m OI as if it were a fresh 1-3m confirmation signal or using partially formed 1m candles |
 
 ## Current Hypothesis
 
-### WD-5H Stage 4 — Causal 1–3 Minute Confirmation Window
+### WD-5H Stage 4B — Temporal Confirmation Pattern Discovery
 
-The static pre-entry path is now closed.
+Stage 4A produced a causal feature matrix at T+1, T+2, and T+3.
 
-Stage 3C could not find a stable selective TAKE region even after fixing
-label semantics, controlling overlap, and testing abstention.
+Stage 4B should answer:
 
-The next question is:
+Which temporal changes separate META_WIN from META_LOSS, and at which delay
+does separation improve enough to justify a confirmation gate experiment?
 
-Can a bounded 1–3 minute post-candidate / pre-capital confirmation window
-separate META_WIN from META_LOSS using causal path development that was not
-available at the original entry snapshot?
+Primary families:
 
-Primary evidence families should include:
-
-- selected-side 1m/3m price path;
+- post-candidate price path;
 - microstructure;
 - taker flow;
-- OI / positioning;
-- market-relative movement;
-- thesis strengthening vs deterioration.
+- market-relative movement.
 
-The experiment must account for delayed-entry cost and runner retention.
+OI remains context only because historical 5m OI produces almost no new point
+inside the first three minutes.
+
+Stage 4B is feature/pattern discovery only. It should not choose a production
+threshold.
 
 ## Planned Sequence
 
-1. Stage 3A — Triple-Barrier Meta-Label Reset — COMPLETE
-2. Stage 3B — Purged meta-model + uniqueness weighting — COMPLETE / WEAK
-3. Stage 3C — High-precision TAKE/ABSTAIN frontier — REJECTED
-4. Stage 3D — SKIPPED: no validated gate to replay
-5. Stage 3E — NOT APPLICABLE
-6. Stage 4 — 1–3 minute causal confirmation research — NEXT
+1. Stage 4A — causal T+1/T+2/T+3 reconstruction — COMPLETE
+2. Stage 4B — temporal pattern discovery — NEXT
+3. Stage 4C — high-precision confirmation gate
+4. Stage 4D — delayed-entry replay with real entry degradation
+5. Stage 4E — fresh shadow validation if 4D passes
 
 ## Fallback Sequence
 
