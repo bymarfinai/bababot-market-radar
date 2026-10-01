@@ -157,5 +157,3 @@ WD-2 should compare causal entry/pre-entry features across at least:
 The central WD-2 question is:
 
 > Which information available at entry distinguishes true wrong direction from temporary adverse movement that later recovers?
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
