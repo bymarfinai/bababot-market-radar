@@ -566,5 +566,3 @@ def wd1_summary() -> dict[str, Any]:
         "insufficient_data_rows": insufficient,
         "by_label": by_label,
     }
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
