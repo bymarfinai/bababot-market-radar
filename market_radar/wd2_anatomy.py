@@ -659,6 +659,102 @@ def build_high_res_horizon_anatomy(
         result["horizons"][str(horizon)] = by_label
     return result
 
+
+def build_wrong_vs_recovered_signatures(
+    observations: list[dict[str, Any]],
+    entry_rows: list[dict[str, Any]],
+    tolerance_seconds: float = 45.0,
+) -> dict[str, Any]:
+    """Candidate dynamic signatures for WD-3, without changing authority."""
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    meta = {
+        str(row["position_id"]): {
+            "label": str(row["outcome_label"]),
+            "opened_at_ms": int(row["opened_at_ms"]),
+            "closed_at_ms": int(row["closed_at_ms"]),
+        }
+        for row in entry_rows
+        if str(row["outcome_label"]) in {WRONG, RECOVERED}
+    }
+    for row in observations:
+        pid = str(row["position_id"])
+        if pid in meta:
+            grouped[pid].append(row)
+
+    tolerance_ms = int(tolerance_seconds * 1000)
+    output: dict[str, Any] = {}
+    for horizon in (1, 3, 5):
+        matched: list[tuple[str, dict[str, Any]]] = []
+        for pid, info in meta.items():
+            target = info["opened_at_ms"] + horizon * 60_000
+            if info["closed_at_ms"] < target or pid not in grouped:
+                continue
+            chosen = min(
+                grouped[pid],
+                key=lambda row: abs(int(row["evaluated_at_ms"]) - target),
+            )
+            if abs(int(chosen["evaluated_at_ms"]) - target) > tolerance_ms:
+                continue
+            snap = _j(chosen.get("snapshot_json"))
+            ret3neg = (
+                _f(snap.get("side_ret_3m_pct")) is not None
+                and float(snap["side_ret_3m_pct"]) < 0
+            )
+            flow_opp = bool(snap.get("flow_opposite"))
+            pos_opp = bool(snap.get("positioning_opposite"))
+            micro_opp = bool(snap.get("opposite_micro_structure"))
+            danger = float(chosen.get("danger_score") or 0)
+            pnl = float(chosen.get("current_pnl_pct") or 0)
+            adverse_count = sum((ret3neg, flow_opp, pos_opp, micro_opp))
+            flags = {
+                "ret3neg_and_flow_opp": ret3neg and flow_opp,
+                "ret3neg_and_positioning_opp": ret3neg and pos_opp,
+                "ret3neg_and_micro_opp": ret3neg and micro_opp,
+                "adverse_families_ge_2": adverse_count >= 2,
+                "adverse_families_ge_3": adverse_count >= 3,
+                "danger_ge_2": danger >= 2,
+                "danger_ge_4": danger >= 4,
+                "pnl_le_minus_035": pnl <= -0.35,
+                "pnl_le_minus_035_and_adverse_ge_2": (
+                    pnl <= -0.35 and adverse_count >= 2
+                ),
+            }
+            matched.append((info["label"], flags))
+
+        label_n = Counter(label for label, _ in matched)
+        signatures: list[dict[str, Any]] = []
+        names = list(matched[0][1].keys()) if matched else []
+        for name in names:
+            tw = sum(1 for label, flags in matched if label == WRONG and flags[name])
+            recovered = sum(
+                1 for label, flags in matched
+                if label == RECOVERED and flags[name]
+            )
+            flagged = tw + recovered
+            signatures.append({
+                "signature": name,
+                "wrong_flagged_n": tw,
+                "wrong_matched_n": label_n[WRONG],
+                "wrong_flag_rate_pct": (
+                    100.0 * tw / label_n[WRONG] if label_n[WRONG] else None
+                ),
+                "recovered_flagged_n": recovered,
+                "recovered_matched_n": label_n[RECOVERED],
+                "recovered_flag_rate_pct": (
+                    100.0 * recovered / label_n[RECOVERED]
+                    if label_n[RECOVERED] else None
+                ),
+                "precision_wrong_within_two_class_pct": (
+                    100.0 * tw / flagged if flagged else None
+                ),
+            })
+        output[str(horizon)] = {
+            "wrong_matched_n": label_n[WRONG],
+            "recovered_matched_n": label_n[RECOVERED],
+            "signatures": signatures,
+        }
+    return output
+
 def run_wd2() -> dict[str, Any]:
     entry = _entry_rows()
     evaluations = _evaluation_rows()
@@ -675,6 +771,10 @@ def run_wd2() -> dict[str, Any]:
         "segments": segment_outcomes(entry),
         "event_driven_horizons": build_horizon_anatomy(evaluations),
         "high_res_horizons": build_high_res_horizon_anatomy(
+            pp_observations,
+            entry,
+        ),
+        "wrong_vs_recovered_signatures": build_wrong_vs_recovered_signatures(
             pp_observations,
             entry,
         ),
