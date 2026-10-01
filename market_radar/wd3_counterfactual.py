@@ -437,12 +437,21 @@ def chronological_robustness(
     horizon_min: int,
     signature: str,
 ) -> list[dict[str, Any]]:
-    ordered = sorted(positions, key=lambda row: int(row["opened_at_ms"]))
+    """Chronological thirds of the actually observable horizon cohort."""
+    observable = [
+        row for row in positions
+        if _match_observation(row, observations, horizon_min) is not None
+    ]
+    ordered = sorted(observable, key=lambda row: int(row["opened_at_ms"]))
     n = len(ordered)
+    if n == 0:
+        return []
     cuts = [0, n // 3, (2 * n) // 3, n]
     out: list[dict[str, Any]] = []
     for i in range(3):
         subset = ordered[cuts[i]:cuts[i + 1]]
+        if not subset:
+            continue
         if policy == "DYNAMIC_EXIT":
             result = simulate_dynamic_exit(
                 subset, observations, orders, horizon_min, signature
@@ -459,11 +468,115 @@ def chronological_robustness(
             "matched_n": result["matched_n"],
             "flagged_n": result["flagged_n"],
             "delta_net": result["delta_net"],
+            "delta_per_trade": result["delta_net"] / len(subset),
             "wrong_capture_pct_of_matched": result["wrong_capture_pct_of_matched"],
             "recovered_harm_pct_of_matched": result["recovered_harm_pct_of_matched"],
+            "runner_harm_pct_of_matched": result["runner_harm_pct_of_matched"],
         })
     return out
 
+
+
+def simulate_sequential_dynamic_exit(
+    positions: list[dict[str, Any]],
+    observations: dict[str, list[dict[str, Any]]],
+    orders: dict[str, list[dict[str, Any]]],
+    steps: tuple[tuple[int, str], ...],
+) -> dict[str, Any]:
+    """Apply the first matched/flagged dynamic-exit step in time order."""
+    steps = tuple(sorted(steps, key=lambda x: x[0]))
+    rows: list[dict[str, Any]] = []
+    matched_any = 0
+    step_trigger_counts = Counter()
+    for position in positions:
+        actual = float(position.get("realized_pnl") or 0.0)
+        policy_net = actual
+        matched = False
+        flagged = False
+        trigger_step = None
+        for horizon_min, signature in steps:
+            obs = _match_observation(position, observations, horizon_min)
+            if obs is None:
+                continue
+            matched = True
+            if observation_flags(obs).get(signature):
+                policy_net = dynamic_exit_net(
+                    position,
+                    orders.get(str(position["position_id"])) or [],
+                    obs,
+                )
+                flagged = True
+                trigger_step = f"{horizon_min}m:{signature}"
+                step_trigger_counts[trigger_step] += 1
+                break
+        matched_any += int(matched)
+        rows.append({
+            "position_id": position["position_id"],
+            "opened_at_ms": int(position["opened_at_ms"]),
+            "label": position["outcome_label"],
+            "actual_net": actual,
+            "policy_net": policy_net,
+            "matched": matched,
+            "flagged": flagged,
+            "trigger_step": trigger_step,
+        })
+
+    name = " -> ".join(f"{h}m:{s}" for h, s in steps)
+    result = _finalize_policy(
+        policy="SEQUENTIAL_DYNAMIC_EXIT",
+        horizon_min=int(steps[-1][0]),
+        signature=name,
+        per_trade=rows,
+    )
+    result["steps"] = [
+        {"horizon_min": h, "signature": s}
+        for h, s in steps
+    ]
+    result["step_trigger_counts"] = dict(step_trigger_counts)
+    result["matched_any_n"] = matched_any
+    return result
+
+
+def sequential_chronological_robustness(
+    positions: list[dict[str, Any]],
+    observations: dict[str, list[dict[str, Any]]],
+    orders: dict[str, list[dict[str, Any]]],
+    steps: tuple[tuple[int, str], ...],
+) -> list[dict[str, Any]]:
+    """Chronological thirds observable at at least one sequential step."""
+    observable = [
+        row for row in positions
+        if any(
+            _match_observation(row, observations, h) is not None
+            for h, _ in steps
+        )
+    ]
+    ordered = sorted(observable, key=lambda row: int(row["opened_at_ms"]))
+    n = len(ordered)
+    if n == 0:
+        return []
+    cuts = [0, n // 3, (2 * n) // 3, n]
+    out = []
+    for i in range(3):
+        subset = ordered[cuts[i]:cuts[i + 1]]
+        if not subset:
+            continue
+        result = simulate_sequential_dynamic_exit(
+            subset, observations, orders, steps
+        )
+        out.append({
+            "slice": i + 1,
+            "n": len(subset),
+            "opened_min_ms": min(int(x["opened_at_ms"]) for x in subset),
+            "opened_max_ms": max(int(x["opened_at_ms"]) for x in subset),
+            "delta_net": result["delta_net"],
+            "delta_per_trade": result["delta_net"] / len(subset),
+            "flagged_n": result["flagged_n"],
+            "wrong_capture_pct_of_matched": result["wrong_capture_pct_of_matched"],
+            "recovered_harm_pct_of_matched": result["recovered_harm_pct_of_matched"],
+            "runner_harm_pct_of_matched": result["runner_harm_pct_of_matched"],
+        })
+    return out
 
 def run_wd3() -> dict[str, Any]:
     positions = _load_positions()
@@ -491,6 +604,47 @@ def run_wd3() -> dict[str, Any]:
     )
     ranked_delay = sorted(
         [x for x in policies if x["policy"] == "DELAY_CONFIRM_FIXED_CENSOR"],
+        key=lambda x: x["delta_net"],
+        reverse=True,
+    )
+
+    sequential_specs = (
+        (
+            (1, "pnl_le_minus_035"),
+            (3, "adverse_families_ge_2"),
+        ),
+        (
+            (1, "pnl_le_minus_035_and_adverse_ge_2"),
+            (3, "adverse_families_ge_2"),
+        ),
+        (
+            (1, "ret3neg_and_flow_opp"),
+            (3, "adverse_families_ge_2"),
+        ),
+        (
+            (1, "pnl_le_minus_035"),
+            (3, "ret3neg_and_flow_opp"),
+        ),
+        (
+            (1, "pnl_le_minus_035"),
+            (3, "ret3neg_and_micro_opp"),
+        ),
+        (
+            (1, "ret3neg_and_flow_opp"),
+            (3, "ret3neg_and_micro_opp"),
+        ),
+    )
+    sequential = []
+    for steps in sequential_specs:
+        result = simulate_sequential_dynamic_exit(
+            positions, observations, orders, steps
+        )
+        result["chrono_thirds"] = sequential_chronological_robustness(
+            positions, observations, orders, steps
+        )
+        sequential.append(result)
+    ranked_sequential = sorted(
+        sequential,
         key=lambda x: x["delta_net"],
         reverse=True,
     )
@@ -531,5 +685,6 @@ def run_wd3() -> dict[str, Any]:
         },
         "ranked_dynamic_exit": ranked_dynamic,
         "ranked_delay_confirm": ranked_delay,
+        "ranked_sequential_dynamic_exit": ranked_sequential,
         "top_candidates_with_chrono_thirds": top_candidates,
     }
