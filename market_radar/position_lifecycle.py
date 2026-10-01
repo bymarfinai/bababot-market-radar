@@ -19,6 +19,7 @@ from .persistence import (
     save_position_evaluation,
 )
 from .profit_discriminator_v2 import evaluate_stage5_discriminator
+from .profit_discriminator_stage7 import evaluate_stage7_ambiguous
 from .profit_protection_v2 import (
     evaluate_pp_decision_v2,
     save_pp_decision_v2_observation,
@@ -233,6 +234,16 @@ def _v2_shadow_evaluation(
         )
         if discriminator is not None:
             result["stage5_discriminator"] = discriminator
+            try:
+                stage7 = evaluate_stage7_ambiguous(
+                    position_id=str(position_id),
+                    opened_at_ms=int(opened_at_ms),
+                    stage5_state=discriminator,
+                )
+                if stage7 is not None:
+                    result["stage7_ambiguous_gate"] = stage7
+            except Exception as exc:
+                result["stage7_ambiguous_gate_error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
     except Exception as exc:
         result["stage5_discriminator_error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
     return result

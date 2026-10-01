@@ -26,6 +26,7 @@ from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
 from .stage6_validation import stage6_summary
 from .profit_discriminator_stage6 import stage6_discriminator_summary
+from .profit_discriminator_stage7 import stage7_summary
 from .pipeline_cohort import cohort_summary, list_cohorts
 from .persistence import (
     entry_approval_summary,
@@ -1371,6 +1372,19 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     {
                         "error": "pp_decision_v2_stage6_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/pp-decision-v2/stage7/summary":
+            try:
+                self._json(HTTPStatus.OK, stage7_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "pp_decision_v2_stage7_summary_failed",
                         "detail": str(exc),
                     },
                 )
