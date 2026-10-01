@@ -17,7 +17,7 @@ from .persistence import (
 )
 
 
-COHORT_VERSION = "entry-rebuild-cohort-v1"
+COHORT_VERSION = "entry-rebuild-cohort-v2-wd0-integrity"
 PRE_COHORT = "PRE_ENTRY_REBUILD"
 POST_COHORT = "POST_ENTRY_REBUILD"
 
@@ -29,7 +29,7 @@ POST_STACK = {
     "persistence_version": "stage10-v3-entry-latency",
     "approval_version": "stage11-v3-fast-pool",
     "failover_version": "stage11b-v3-failover-only",
-    "fresh_gate_version": "stage11c-v1-fresh-direction",
+    "fresh_gate_version": "unknown",
     "paper_trading_version": "stage13-v2-event-driven",
 }
 
@@ -215,6 +215,49 @@ def label_signal_cohort(
     }
 
 
+
+def _latest_enter_gate_version(
+    signal_id: str,
+    opened_at_ms: int,
+) -> str | None:
+    """Return the last persisted ENTER gate version at/before the actual fill.
+
+    This is a WD-0 integrity fallback only. Position raw_json remains the
+    primary source because it is written from the exact Stage 11C payload
+    consumed by Stage 13. Older/malformed rows may lack that metadata, so the
+    persisted revalidation ledger is used when available.
+    """
+    query = """
+        select gate_version
+        from entry_revalidations
+        where signal_id=?
+          and verdict='ENTER'
+          and checked_at_ms <= ?
+        order by checked_at_ms desc
+        limit 1
+    """
+    try:
+        if persistence_backend() == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                row = conn.execute(
+                    query,
+                    (signal_id, int(opened_at_ms)),
+                ).fetchone()
+                return str(row["gate_version"]) if row and row["gate_version"] else None
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(
+                    query.replace("?", "%s"),
+                    (signal_id, int(opened_at_ms)),
+                )
+                row = cur.fetchone()
+                return str(row["gate_version"]) if row and row.get("gate_version") else None
+    except Exception:
+        # entry_revalidations may not exist in very old stores. Unknown is
+        # preferable to inventing a Stage 11C version.
+        return None
+
+
 def backfill_position_cohorts() -> dict[str, int]:
     """Classify every persisted position using its actual opened_at_ms."""
     _initialize()
@@ -234,10 +277,11 @@ def backfill_position_cohorts() -> dict[str, int]:
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute(
                     """
-                    select signal_id, min(opened_at_ms) as opened_at_ms
+                    select distinct on (signal_id)
+                        signal_id, opened_at_ms, raw_json
                     from positions
                     where signal_id is not null and opened_at_ms is not null
-                    group by signal_id
+                    order by signal_id, opened_at_ms asc
                     """
                 )
                 data = [dict(row) for row in cur.fetchall()]
@@ -254,13 +298,28 @@ def backfill_position_cohorts() -> dict[str, int]:
             position_meta = json.loads(row.get("raw_json") or "{}")
         except Exception:
             position_meta = {}
+        opened_at_ms = int(row["opened_at_ms"])
+        stage11c_version = position_meta.get("stage11c_version")
+        version_source = "position_raw_json" if stage11c_version else None
+        if not stage11c_version:
+            stage11c_version = _latest_enter_gate_version(
+                signal_id,
+                opened_at_ms,
+            )
+            if stage11c_version:
+                version_source = "entry_revalidation"
+
         result = label_signal_cohort(
             signal_id,
-            opened_at_ms=int(row["opened_at_ms"]),
+            opened_at_ms=opened_at_ms,
             metadata={
                 "source": "position_backfill",
-                "stage11c_version": position_meta.get("stage11c_version"),
-                "stage13_version": position_meta.get("paper_trading_version"),
+                "stage11c_version": stage11c_version,
+                "stage11c_version_source": version_source or "unknown",
+                "stage13_version": (
+                    position_meta.get("paper_trading_version")
+                    or position_meta.get("stage13_version")
+                ),
             },
         )
         counts[result["cohort"]] += 1
