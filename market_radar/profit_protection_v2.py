@@ -9,7 +9,7 @@ from .persistence import _postgres_connect, _sqlite_connect, database_path, pers
 from .stage6_validation import POLICIES, _pp_decision_unified
 
 
-PP_DECISION_V2_VERSION = "pp-decision-v2-stage3-prospective-fast-shadow"
+PP_DECISION_V2_VERSION = "pp-decision-v2-stage4-runner-preservation"
 _V2_STORE_LOCK = threading.Lock()
 _V2_STORE_READY: set[tuple[str, str]] = set()
 _ACTION_RANK = {"HOLD": 0, "REDUCE": 1, "CLOSE": 2}
@@ -29,6 +29,19 @@ V2_FAST_DECAY_POLICY: dict[str, float] = {
     "shock_max_seconds": 30.0,
     "reduce_score": 2.0,
     "close_score": 4.0,
+}
+
+# Stage 4 preserves the Stage 3 aggressive layer only below 1% MFE.
+# At/above 1%, frozen V1 becomes the primary runner controller and the fast
+# layer may escalate only on an extreme, rapid collapse.
+V2_RUNNER_POLICY: dict[str, float] = {
+    "handoff_mfe_pct": 1.00,
+    "emergency_giveback_ratio": 0.40,
+    "emergency_drop_pct_points": 0.50,
+    "emergency_max_seconds": 30.0,
+    "emergency_min_decay_ratio_per_min": 0.75,
+    "emergency_reduce_score": 2.0,
+    "emergency_close_score": 4.0,
 }
 
 
@@ -111,9 +124,15 @@ def evaluate_pp_decision_v2(
 
     mfe = float(mfe_pct)
     if mfe < V2_FAST_DECAY_POLICY["arm_mfe_pct"]:
+        result["protection_mode"] = "UNARMED"
         return result
     if metrics["drop_pct_points"] is None or metrics["decay_ratio_per_min"] is None:
         result["fast_gate"] = "COLD_START"
+        result["protection_mode"] = (
+            "RUNNER_PRESERVATION"
+            if mfe >= V2_RUNNER_POLICY["handoff_mfe_pct"]
+            else "AGGRESSIVE_PROTECTION"
+        )
         return result
 
     giveback = float(metrics["giveback_ratio"] or 0.0)
@@ -124,9 +143,36 @@ def evaluate_pp_decision_v2(
     danger = int(danger_score)
     overlay = "HOLD"
 
+    # Stage 4 handoff: once the trade has demonstrated >=1% MFE, preserve the
+    # runner by using frozen V1 as the normal controller. The fast overlay is
+    # allowed to intervene only on a large AND rapid collapse.
+    if mfe >= V2_RUNNER_POLICY["handoff_mfe_pct"]:
+        result["protection_mode"] = "RUNNER_PRESERVATION"
+        emergency = bool(
+            giveback >= V2_RUNNER_POLICY["emergency_giveback_ratio"]
+            and drop >= V2_RUNNER_POLICY["emergency_drop_pct_points"]
+            and elapsed <= V2_RUNNER_POLICY["emergency_max_seconds"]
+            and decay >= V2_RUNNER_POLICY["emergency_min_decay_ratio_per_min"]
+        )
+        if emergency:
+            result["fast_gate"] = "RUNNER_EMERGENCY"
+            if status_u == "REDUCED" or danger >= int(V2_RUNNER_POLICY["emergency_close_score"]):
+                overlay = "CLOSE"
+            elif danger >= int(V2_RUNNER_POLICY["emergency_reduce_score"]):
+                overlay = "REDUCE"
+            else:
+                # Even with low external danger, a >40% MFE collapse of at
+                # least 0.50pp inside 30s is itself sufficient to de-risk once.
+                overlay = "REDUCE"
+        else:
+            result["fast_gate"] = "RUNNER_PRESERVE"
+        result["overlay_action"] = overlay
+        result["final_action"] = _max_action(base_action, overlay)
+        return result
+
+    result["protection_mode"] = "AGGRESSIVE_PROTECTION"
     shock = bool(
-        mfe >= V2_FAST_DECAY_POLICY["shock_min_mfe_pct"]
-        and giveback >= V2_FAST_DECAY_POLICY["shock_giveback_ratio"]
+        giveback >= V2_FAST_DECAY_POLICY["shock_giveback_ratio"]
         and drop >= V2_FAST_DECAY_POLICY["shock_drop_pct_points"]
         and elapsed <= V2_FAST_DECAY_POLICY["shock_max_seconds"]
     )
