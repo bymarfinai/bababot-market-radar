@@ -297,6 +297,10 @@ def _finalize_policy(
     policy_total = sum(float(x["policy_net"]) for x in per_trade)
     matched = [x for x in per_trade if x["matched"]]
     flagged = [x for x in matched if x["flagged"]]
+    matched_actual_total = sum(float(x["actual_net"]) for x in matched)
+    matched_policy_total = sum(float(x["policy_net"]) for x in matched)
+    flagged_actual_total = sum(float(x["actual_net"]) for x in flagged)
+    flagged_policy_total = sum(float(x["policy_net"]) for x in flagged)
     by_label = _empty_label_metrics()
     for x in per_trade:
         rec = by_label[str(x["label"])]
@@ -322,7 +326,13 @@ def _finalize_policy(
         "signature": signature,
         "full_cohort_n": len(per_trade),
         "matched_n": len(matched),
+        "matched_actual_net": matched_actual_total,
+        "matched_policy_net": matched_policy_total,
+        "matched_delta_net": matched_policy_total - matched_actual_total,
         "flagged_n": len(flagged),
+        "flagged_actual_net": flagged_actual_total,
+        "flagged_policy_net": flagged_policy_total,
+        "flagged_delta_net": flagged_policy_total - flagged_actual_total,
         "flag_rate_of_matched_pct": (
             100.0 * len(flagged) / len(matched) if matched else None
         ),
@@ -388,6 +398,47 @@ def simulate_dynamic_exit(
         signature=signature,
         per_trade=rows,
     )
+
+
+def pure_delay_benchmark(
+    positions: list[dict[str, Any]],
+    observations: dict[str, list[dict[str, Any]]],
+    horizon_min: int,
+) -> dict[str, Any]:
+    """Delay every observable trade without any filtering."""
+    matched = []
+    by_label = {
+        label: {"n": 0, "actual_net": 0.0, "delay_net": 0.0}
+        for label in LABELS
+    }
+    for position in positions:
+        obs = _match_observation(position, observations, horizon_min)
+        if obs is None:
+            continue
+        actual = float(position.get("realized_pnl") or 0.0)
+        delayed = delayed_entry_censor_net(position, obs)
+        label = str(position["outcome_label"])
+        matched.append((actual, delayed))
+        rec = by_label[label]
+        rec["n"] += 1
+        rec["actual_net"] += actual
+        rec["delay_net"] += delayed
+    for rec in by_label.values():
+        rec["delta_net"] = rec["delay_net"] - rec["actual_net"]
+    actual_total = sum(x[0] for x in matched)
+    delay_total = sum(x[1] for x in matched)
+    return {
+        "horizon_min": horizon_min,
+        "matched_n": len(matched),
+        "actual_net": actual_total,
+        "delay_net": delay_total,
+        "delta_net": delay_total - actual_total,
+        "delta_per_matched_trade": (
+            (delay_total - actual_total) / len(matched)
+            if matched else None
+        ),
+        "by_label": by_label,
+    }
 
 
 def simulate_delay_confirm(
@@ -583,6 +634,11 @@ def run_wd3() -> dict[str, Any]:
     observations = _load_observations()
     orders = _load_orders()
 
+    pure_delay = [
+        pure_delay_benchmark(positions, observations, horizon)
+        for horizon in HORIZONS_MIN
+    ]
+
     policies: list[dict[str, Any]] = []
     for horizon in HORIZONS_MIN:
         for signature in SIGNATURES:
@@ -608,46 +664,31 @@ def run_wd3() -> dict[str, Any]:
         reverse=True,
     )
 
-    sequential_specs = (
-        (
-            (1, "pnl_le_minus_035"),
-            (3, "adverse_families_ge_2"),
-        ),
-        (
-            (1, "pnl_le_minus_035_and_adverse_ge_2"),
-            (3, "adverse_families_ge_2"),
-        ),
-        (
-            (1, "ret3neg_and_flow_opp"),
-            (3, "adverse_families_ge_2"),
-        ),
-        (
-            (1, "pnl_le_minus_035"),
-            (3, "ret3neg_and_flow_opp"),
-        ),
-        (
-            (1, "pnl_le_minus_035"),
-            (3, "ret3neg_and_micro_opp"),
-        ),
-        (
-            (1, "ret3neg_and_flow_opp"),
-            (3, "ret3neg_and_micro_opp"),
-        ),
-    )
     sequential = []
-    for steps in sequential_specs:
-        result = simulate_sequential_dynamic_exit(
-            positions, observations, orders, steps
-        )
-        result["chrono_thirds"] = sequential_chronological_robustness(
-            positions, observations, orders, steps
-        )
-        sequential.append(result)
+    for signature_1m in SIGNATURES:
+        for signature_3m in SIGNATURES:
+            steps = (
+                (1, signature_1m),
+                (3, signature_3m),
+            )
+            result = simulate_sequential_dynamic_exit(
+                positions, observations, orders, steps
+            )
+            sequential.append(result)
     ranked_sequential = sorted(
         sequential,
         key=lambda x: x["delta_net"],
         reverse=True,
     )
+    for result in ranked_sequential[:12]:
+        steps = tuple(
+            (int(step["horizon_min"]), str(step["signature"]))
+            for step in result["steps"]
+        )
+        result["chrono_thirds"] = sequential_chronological_robustness(
+            positions, observations, orders, steps
+        )
+
 
     top_candidates = []
     for result in (ranked_dynamic[:5] + ranked_delay[:5]):
@@ -683,8 +724,10 @@ def run_wd3() -> dict[str, Any]:
             "unmatched_policy": "UNCHANGED_ACTUAL_PNL_CONSERVATIVE",
             "horizon_tolerance_seconds": TOLERANCE_SECONDS,
         },
+        "pure_delay_benchmarks": pure_delay,
         "ranked_dynamic_exit": ranked_dynamic,
         "ranked_delay_confirm": ranked_delay,
         "ranked_sequential_dynamic_exit": ranked_sequential,
+        "sequential_grid_size": len(sequential),
         "top_candidates_with_chrono_thirds": top_candidates,
     }
