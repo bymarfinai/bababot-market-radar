@@ -6,6 +6,16 @@ Trading behavior changed: NO
 
 WD-1 converts the WD-0-clean paper-trading cohort into mutually exclusive outcome classes. It does not tune Stage 2/4/6/11C and does not change Stage 12 exits.
 
+## Frozen discovery snapshot
+
+WD-1 primary discovery is frozen at:
+
+- `closed_at_ms <= 1790826404280`
+- 2026-10-01 10:46:44.280 WIB
+- 2,175 eligible closed Stage 11C V2 paper trades
+
+Trades closing after this cutoff stay available for later prospective validation but are not added to the WD-1 discovery sample.
+
 ## Admission cohort
 
 Primary WD-1 input is deliberately narrow:
@@ -147,3 +157,5 @@ WD-2 should compare causal entry/pre-entry features across at least:
 The central WD-2 question is:
 
 > Which information available at entry distinguishes true wrong direction from temporary adverse movement that later recovers?
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
