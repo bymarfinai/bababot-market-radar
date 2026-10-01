@@ -116,19 +116,27 @@ def _load_orders() -> dict[str, list[dict[str, Any]]]:
     return out
 
 
+def _raw_float(
+    raw: dict[str, Any],
+    key: str,
+    default: float,
+) -> float:
+    value = raw.get(key)
+    return default if value is None else float(value)
+
+
 def _position_meta(position: dict[str, Any]) -> dict[str, float]:
     raw = _j(position.get("raw_json"))
+    final_market = raw.get("last_exit_market_price")
+    if final_market is None:
+        final_market = position.get("exit_price")
     return {
-        "initial_notional": float(raw.get("initial_notional_usdt") or 500.0),
-        "initial_quantity": float(raw.get("initial_quantity") or 0.0),
-        "entry_fee_total": float(raw.get("entry_fee_total") or 0.0),
-        "fee_rate": float(raw.get("fee_rate") or 0.00075),
-        "slippage_bps": float(raw.get("slippage_bps") or 2.0),
-        "final_market_price": float(
-            raw.get("last_exit_market_price")
-            or position.get("exit_price")
-            or 0.0
-        ),
+        "initial_notional": _raw_float(raw, "initial_notional_usdt", 500.0),
+        "initial_quantity": _raw_float(raw, "initial_quantity", 0.0),
+        "entry_fee_total": _raw_float(raw, "entry_fee_total", 0.0),
+        "fee_rate": _raw_float(raw, "fee_rate", 0.00075),
+        "slippage_bps": _raw_float(raw, "slippage_bps", 2.0),
+        "final_market_price": 0.0 if final_market is None else float(final_market),
     }
 
 
