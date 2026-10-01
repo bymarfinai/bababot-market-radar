@@ -35,5 +35,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
