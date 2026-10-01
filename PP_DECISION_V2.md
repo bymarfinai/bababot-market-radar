@@ -310,3 +310,21 @@ Read endpoint: `/pp-decision-v2/stage6/summary`.
 A recovery cycle finalizes any eligible closed case missed during a restart.
 
 Promotion criteria remain prospective: classifier precision must hold on unseen trades and any prediction-conditioned grace policy must improve economic PnL without degrading the strong 0.5%-<1% Stage 3 protection edge.
+
+
+## Stage 6 prospective activation record
+
+- status: RUNNING / prospective discriminator validation
+- code main commit: 653c896f208c80d741e7abc8bc1376ec0f7f598d
+- PP_DECISION_V2_STAGE6_START_MS: 1790823038032
+- strict cohort rule: only positions opened strictly after the boundary can become Stage 6 cases
+- activation zero-state: 0 post-boundary positions and 0 Stage 6 validation rows
+- validation table: pp_decision_v2_stage6_validation
+- summary endpoint: /pp-decision-v2/stage6/summary
+- active protector remains PP-DECISION V2 Stage 3 shadow
+- Stage 5 remains observation-only classifier
+- Stage 6 authority: NONE; Stage 3 / grace15 / grace30 are analytical replay lanes only
+- validation: 5/5 targeted Stage 6 tests PASS; 188/188 full repository regression PASS
+- GitHub transfer: 6/6 byte-for-byte MATCH
+- control resumed: RUN; lifecycle exits enabled
+- live trading: disabled / disarmed
