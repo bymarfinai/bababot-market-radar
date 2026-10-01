@@ -201,3 +201,65 @@ Validation of the experimental code path:
 - targeted Stage 4 tests: 15 / 15 PASS
 - full repository regression: 176 / 176 PASS
 - production deployment: NO
+
+## Stage 5 — Runner-vs-Failure Discriminator
+
+Status: built as an **observation-only shadow discriminator**. It does not change PP-DECISION V2 Stage 3 HOLD/REDUCE/CLOSE authority.
+
+### Research question
+
+Stage 4 showed that future runners are often trimmed before they reach 1% MFE. A simple >=1% handoff therefore arrives too late. Stage 5 asks a narrower causal question at the first actionable 0.5%-<1.0% profit-protection event:
+
+> Is this giveback transient and likely to continue into a runner, or is it persistent profit failure?
+
+### Historical prospective dataset
+
+Using the Stage 3 post-boundary observation stream:
+
+- 470 first actionable sub-1% trigger cases were initially labelled.
+- 112 later reached >=1% MFE (RUNNER).
+- 313 failed to reach 1% and later fell to <=0% / closed negative (FAILURE).
+- 45 were ambiguous and excluded from the primary binary analysis.
+
+A single trigger snapshot was only moderately informative. The best simple snapshot rules produced roughly 0.67-0.70 balanced accuracy. The causal 30-45 second follow-up was materially more informative.
+
+### Frozen Stage 5 discriminator
+
+The classifier starts WATCHING at the first actionable V2 event with 0.50% <= MFE < 1.00%.
+
+After a 30-second causal follow-up:
+
+- `FAILURE_LIKELY / HIGH` when current PnL < +0.15%.
+  - Historical precision for FAILURE across chronological DEV / VAL / TEST: 92.7% / 96.6% / 97.2%.
+- `TRANSIENT_LIKELY / MEDIUM_HIGH` when:
+  - initial MFE >= +0.70%,
+  - initial current PnL >= +0.45%,
+  - frozen V1 base action was HOLD,
+  - and follow-up current PnL remains >= +0.30%.
+  - Historical runner precision across chronological DEV / VAL / TEST: 70.8% / 63.6% / 66.7%.
+- `TRANSIENT_CONFIRMED / CONFIRMED` if MFE reaches >=1.00% while the watch is still active.
+- everything else becomes `AMBIGUOUS / LOW`.
+
+### Why this is shadow-only
+
+Temporal classification materially improves runner-vs-failure discrimination, especially on the failure side, but retrospective counterfactual tests did **not** yet justify changing irreversible actions:
+
+- broad 15-30 second grace harmed the strong Stage 3 0.5%-<1% edge;
+- selective high-precision grace reduced that damage but still failed to beat Stage 3 robustly on the chronological holdout;
+- a one-fast-tick selective skip was nearly neutral out-of-sample rather than meaningfully positive.
+
+Therefore Stage 5 records predictions prospectively but cannot alter Stage 3 actions. Promotion requires prospective evidence that prediction-conditioned action changes improve net PnL without degrading the 0.5%-<1% protection edge.
+
+### Stage 5 storage
+
+Dedicated table: `pp_decision_v2_discriminator`.
+
+One stateful row is stored per position with:
+- initial trigger MFE/current/giveback,
+- V1 base action and V2 final action,
+- watch start time,
+- final discriminator status,
+- 30-second follow-up MFE/current,
+- confidence and classifier version.
+
+Stage 5 uses a separate clean prospective boundary and is fail-open relative to the Stage 3 protector.
