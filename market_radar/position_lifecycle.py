@@ -18,6 +18,7 @@ from .persistence import (
     list_open_positions,
     save_position_evaluation,
 )
+from .profit_discriminator_v2 import evaluate_stage5_discriminator
 from .profit_protection_v2 import (
     evaluate_pp_decision_v2,
     save_pp_decision_v2_observation,
@@ -221,6 +222,19 @@ def _v2_shadow_evaluation(
         )
     except Exception as exc:
         result["observation_logging_error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
+    try:
+        discriminator = evaluate_stage5_discriminator(
+            position_id=str(position_id),
+            opened_at_ms=int(opened_at_ms),
+            evaluated_at_ms=int(evaluated_at_ms),
+            mfe_pct=float(mfe_pct),
+            current_pnl_pct=float(current_pnl_pct),
+            v2_result=result,
+        )
+        if discriminator is not None:
+            result["stage5_discriminator"] = discriminator
+    except Exception as exc:
+        result["stage5_discriminator_error"] = f"{type(exc).__name__}: {str(exc)[:180]}"
     return result
 
 
