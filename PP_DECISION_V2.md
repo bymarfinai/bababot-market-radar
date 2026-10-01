@@ -130,3 +130,74 @@ The dedicated observation stream fixes the main limitation discovered in Stage 2
 - V1 Final / Adaptive remain shadow comparators
 - live trading: disabled / disarmed
 - validation: 13/13 targeted Stage 3 tests PASS; 11,760/11,760 never-relaxes-V1 sweep PASS; 174/174 full suite PASS
+
+## Stage 4 — Runner Preservation Hybrid
+
+Status: **COMPLETED AS EXPERIMENT / FAIL PROMOTION GATE / NOT DEPLOYED**.
+
+Objective: keep Stage 3 fast protection in the 0.5%–<1.0% MFE zone while preserving runners after MFE reaches 1.0%.
+
+### What was tested
+
+1. Naive handoff: V2 below 1%; V1-style runner logic above 1%.
+2. True handoff: V2 fast below 1%; actual PP-DECISION V1 Final closed-1m events above 1%; V2 fast retained only as an emergency override.
+3. Softer pre-1% de-risk fractions.
+4. Separate pre-1% trim state vs runner reduction state.
+5. Two-/three-sample persistence confirmation.
+6. Causal continuation-grace candidates using only information available at decision time.
+
+The best balanced causal candidate used one fast-sample grace when:
+
+- PP-DECISION V1 base action was HOLD,
+- MFE > 0.65%,
+- current profit > 0.30%,
+- still below the 1.0% runner handoff.
+
+At/above 1.0% MFE, normal control handed off to the original V1 Final 1m decision stream; the fast layer only retained an extreme RUNNER_EMERGENCY override.
+
+### Latest matched cohort benchmark
+
+Cohort: 1,234 closed post-Stage-3 trades.
+
+All trades:
+- Legacy V3: -1466.16, WR 22.53%
+- Adaptive S5-B: -1470.52, WR 24.23%
+- Decision V1 Final: -1392.21, WR 25.85%
+- Decision V2 Stage 3: -1372.08, WR 33.87%
+- Stage 4 best candidate: -1354.82, WR 33.06%
+
+MFE 0.5%–<1.0% (361 trades):
+- Legacy V3: -320.48, WR 14.13%
+- Adaptive S5-B: -306.43, WR 17.17%
+- Decision V1 Final: -257.80, WR 21.33%
+- Decision V2 Stage 3: -25.77, WR 51.52%
+- Stage 4 best candidate: -61.60, WR 49.86%
+
+MFE >=1.0% (301 trades):
+- Legacy V3: +500.16, WR 74.42%
+- Adaptive S5-B: +652.31, WR 77.74%
+- Decision V1 Final: +681.99, WR 79.40%
+- Decision V2 Stage 3: +470.10, WR 76.08%
+- Stage 4 best candidate: +523.18, WR 74.75%
+
+MFE >=0.5% (662 trades):
+- Legacy V3: +179.67, WR 41.54%
+- Adaptive S5-B: +345.88, WR 44.71%
+- Decision V1 Final: +424.19, WR 47.73%
+- Decision V2 Stage 3: +444.33, WR 62.69%
+- Stage 4 best candidate: +461.58, WR 61.18%
+
+Stage 4 improved aggregate net versus Stage 3 by +17.25 and improved the >=1% runner subset by +53.08, but degraded the 0.5%–<1.0% zone by -35.83. Bootstrap confidence interval for Stage4-vs-Stage3 mean difference still crossed zero. Chronological thirds also showed inconsistent improvement: early/mid runner preservation improved, while the late cohort did not consistently improve.
+
+### Stage 4 conclusion
+
+The original intuition was directionally correct: Stage 3 is too aggressive on future runners, and a runner-preservation handoff materially recovers some lost upside. However, a simple handoff cannot fully solve the problem because irreversible pre-1% reductions already remove size before the trade proves itself as a runner.
+
+Stage 4 therefore does **not** pass promotion. No production rule is changed. PP-DECISION V2 Stage 3 remains the active prospective shadow.
+
+The next research problem is not merely a looser >=1% threshold; it is distinguishing transient pre-1% giveback from genuine profit failure before taking irreversible size off.
+
+Validation of the experimental code path:
+- targeted Stage 4 tests: 15 / 15 PASS
+- full repository regression: 176 / 176 PASS
+- production deployment: NO
