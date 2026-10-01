@@ -476,9 +476,193 @@ def build_horizon_anatomy(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return result
 
 
+
+def _pp_observation_rows() -> list[dict[str, Any]]:
+    query = """
+        select
+            w.position_id, w.outcome_label, w.side,
+            w.opened_at_ms, w.closed_at_ms,
+            o.evaluated_at_ms, o.current_pnl_pct,
+            o.mfe_pct, o.danger_score, o.fast_gate,
+            o.snapshot_json
+        from wd1_trade_labels w
+        join pp_decision_v2_observations o on o.position_id=w.position_id
+        where w.label_version=%s
+          and w.closed_at_ms <= %s
+          and o.evaluated_at_ms >= w.opened_at_ms
+          and o.evaluated_at_ms <= w.closed_at_ms
+        order by w.position_id, o.evaluated_at_ms
+    """
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(query, (WD2_LABEL_VERSION, WD2_CUTOFF_MS))
+            return [dict(row) for row in cur.fetchall()]
+
+
+def build_high_res_horizon_anatomy(
+    observations: list[dict[str, Any]],
+    entry_rows: list[dict[str, Any]],
+    tolerance_seconds: float = 45.0,
+) -> dict[str, Any]:
+    """Exact-near-target horizon lane from the 15s PP observation stream.
+
+    Only observations within +/- tolerance_seconds of the requested horizon
+    are accepted. Trades that already closed before a horizon are counted
+    separately instead of carrying a stale earlier snapshot forward.
+    """
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    meta: dict[str, dict[str, Any]] = {}
+    for row in observations:
+        pid = str(row["position_id"])
+        grouped[pid].append(row)
+        meta[pid] = {
+            "label": str(row["outcome_label"]),
+            "side": str(row["side"]).upper(),
+            "opened_at_ms": int(row["opened_at_ms"]),
+            "closed_at_ms": int(row["closed_at_ms"]),
+        }
+
+    all_meta = {
+        str(row["position_id"]): {
+            "label": str(row["outcome_label"]),
+            "side": str(row["side"]).upper(),
+            "opened_at_ms": int(row["opened_at_ms"]),
+            "closed_at_ms": int(row["closed_at_ms"]),
+        }
+        for row in entry_rows
+    }
+    full_counts = Counter(info["label"] for info in all_meta.values())
+    lane_counts = Counter(info["label"] for info in meta.values())
+
+    result: dict[str, Any] = {
+        "tolerance_seconds": tolerance_seconds,
+        "lane_coverage": {
+            label: {
+                "full_n": full_counts[label],
+                "observed_lane_n": lane_counts[label],
+                "observed_lane_coverage_pct": (
+                    100.0 * lane_counts[label] / full_counts[label]
+                    if full_counts[label] else None
+                ),
+            }
+            for label in LABELS
+        },
+        "horizons": {},
+    }
+
+    tolerance_ms = int(tolerance_seconds * 1000)
+    for horizon in HORIZONS_MIN:
+        horizon_data: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        alive_counts = Counter()
+        closed_before_counts = Counter()
+
+        for pid, info in all_meta.items():
+            target = info["opened_at_ms"] + horizon * 60_000
+            if info["closed_at_ms"] < target:
+                closed_before_counts[info["label"]] += 1
+            else:
+                alive_counts[info["label"]] += 1
+
+        for pid, evals in grouped.items():
+            info = meta[pid]
+            target = info["opened_at_ms"] + horizon * 60_000
+            if info["closed_at_ms"] < target:
+                continue
+            chosen = min(
+                evals,
+                key=lambda row: abs(int(row["evaluated_at_ms"]) - target),
+            )
+            distance_ms = abs(int(chosen["evaluated_at_ms"]) - target)
+            if distance_ms > tolerance_ms:
+                continue
+
+            snap = _j(chosen.get("snapshot_json"))
+            contradictions = snap.get("contradictions") or []
+            if not isinstance(contradictions, list):
+                contradictions = []
+            horizon_data[info["label"]].append({
+                "distance_s": distance_ms / 1000.0,
+                "pnl": _f(chosen.get("current_pnl_pct")),
+                "mfe": _f(chosen.get("mfe_pct")),
+                "danger_score": _f(chosen.get("danger_score")),
+                "side_ret_1m": _f(snap.get("side_ret_1m_pct")),
+                "side_ret_3m": _f(snap.get("side_ret_3m_pct")),
+                "flow_opposite": bool(snap.get("flow_opposite")),
+                "positioning_opposite": bool(snap.get("positioning_opposite")),
+                "micro_structure_opposite": bool(snap.get("opposite_micro_structure")),
+                "contradiction_count": float(len(contradictions)),
+            })
+
+        by_label: dict[str, Any] = {}
+        for label in LABELS:
+            items = horizon_data.get(label, [])
+            def vals(key: str) -> list[float]:
+                return [float(x[key]) for x in items if x.get(key) is not None]
+            pnls = vals("pnl")
+            mfes = vals("mfe")
+            ret3 = vals("side_ret_3m")
+            danger = vals("danger_score")
+            by_label[label] = {
+                "full_n": full_counts[label],
+                "alive_at_horizon_n": alive_counts[label],
+                "closed_before_horizon_n": closed_before_counts[label],
+                "closed_before_horizon_rate_pct": (
+                    100.0 * closed_before_counts[label] / full_counts[label]
+                    if full_counts[label] else None
+                ),
+                "matched_snapshot_n": len(items),
+                "matched_of_alive_pct": (
+                    100.0 * len(items) / alive_counts[label]
+                    if alive_counts[label] else None
+                ),
+                "median_distance_to_target_s": _median(vals("distance_s")),
+                "median_pnl_pct": _median(pnls),
+                "median_mfe_pct": _median(mfes),
+                "pnl_positive_rate_pct": (
+                    100.0 * sum(v > 0 for v in pnls) / len(pnls)
+                    if pnls else None
+                ),
+                "pnl_le_minus_035_rate_pct": (
+                    100.0 * sum(v <= -0.35 for v in pnls) / len(pnls)
+                    if pnls else None
+                ),
+                "mfe_ge_050_rate_pct": (
+                    100.0 * sum(v >= 0.50 for v in mfes) / len(mfes)
+                    if mfes else None
+                ),
+                "side_ret3_negative_rate_pct": (
+                    100.0 * sum(v < 0 for v in ret3) / len(ret3)
+                    if ret3 else None
+                ),
+                "flow_opposite_rate_pct": (
+                    100.0 * sum(bool(x["flow_opposite"]) for x in items) / len(items)
+                    if items else None
+                ),
+                "positioning_opposite_rate_pct": (
+                    100.0 * sum(bool(x["positioning_opposite"]) for x in items) / len(items)
+                    if items else None
+                ),
+                "micro_structure_opposite_rate_pct": (
+                    100.0 * sum(bool(x["micro_structure_opposite"]) for x in items) / len(items)
+                    if items else None
+                ),
+                "danger_ge_2_rate_pct": (
+                    100.0 * sum(v >= 2 for v in danger) / len(danger)
+                    if danger else None
+                ),
+                "danger_ge_4_rate_pct": (
+                    100.0 * sum(v >= 4 for v in danger) / len(danger)
+                    if danger else None
+                ),
+                "median_contradiction_count": _median(vals("contradiction_count")),
+            }
+        result["horizons"][str(horizon)] = by_label
+    return result
+
 def run_wd2() -> dict[str, Any]:
     entry = _entry_rows()
     evaluations = _evaluation_rows()
+    pp_observations = _pp_observation_rows()
     gate_missing = sum(1 for row in entry if not row.get("gate_snapshot_json"))
     return {
         "version": WD2_VERSION,
@@ -489,5 +673,9 @@ def run_wd2() -> dict[str, Any]:
         "numeric_entry": numeric_entry_anatomy(entry),
         "categorical_entry": categorical_entry_anatomy(entry),
         "segments": segment_outcomes(entry),
-        "horizons": build_horizon_anatomy(evaluations),
+        "event_driven_horizons": build_horizon_anatomy(evaluations),
+        "high_res_horizons": build_high_res_horizon_anatomy(
+            pp_observations,
+            entry,
+        ),
     }
