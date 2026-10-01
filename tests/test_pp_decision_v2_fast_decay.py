@@ -17,47 +17,49 @@ from market_radar.position_lifecycle import (
 
 
 class PPDecisionV2FastDecayTests(unittest.TestCase):
-    def test_158_to_131_in_30s_reduces_before_v1_gate(self):
+    def test_runner_mode_preserves_158_to_131_retrace(self):
         r = evaluate_pp_decision_v2(
             mfe_pct=1.58, current_pnl_pct=1.31, previous_pnl_pct=1.58,
             elapsed_seconds=30, danger_score=0, status="OPEN",
         )
         self.assertEqual(r["base_v1_action"], "HOLD")
-        self.assertEqual(r["fast_gate"], "SHOCK_DECAY")
-        self.assertEqual(r["final_action"], "REDUCE")
+        self.assertEqual(r["protection_mode"], "RUNNER_PRESERVATION")
+        self.assertEqual(r["fast_gate"], "RUNNER_PRESERVE")
+        self.assertEqual(r["final_action"], "HOLD")
 
-    def test_same_retrace_over_five_minutes_is_not_forced(self):
+    def test_runner_same_retrace_over_five_minutes_is_not_forced(self):
         r = evaluate_pp_decision_v2(
             mfe_pct=1.58, current_pnl_pct=1.31, previous_pnl_pct=1.58,
             elapsed_seconds=300, danger_score=0, status="OPEN",
         )
         self.assertEqual(r["base_v1_action"], "HOLD")
-        self.assertEqual(r["fast_gate"], "DISARMED")
+        self.assertEqual(r["fast_gate"], "RUNNER_PRESERVE")
         self.assertEqual(r["final_action"], "HOLD")
 
-    def test_fast_decision_uses_danger_score(self):
+    def test_runner_mode_does_not_escalate_moderate_fast_decay(self):
         r = evaluate_pp_decision_v2(
             mfe_pct=1.58, current_pnl_pct=1.20, previous_pnl_pct=1.58,
             elapsed_seconds=45, danger_score=2, status="OPEN",
         )
-        self.assertEqual(r["fast_gate"], "FAST_DECISION")
+        self.assertEqual(r["protection_mode"], "RUNNER_PRESERVATION")
+        self.assertEqual(r["fast_gate"], "RUNNER_PRESERVE")
+        self.assertEqual(r["final_action"], r["base_v1_action"])
+
+    def test_runner_emergency_reduces_extreme_fast_collapse(self):
+        r = evaluate_pp_decision_v2(
+            mfe_pct=2.00, current_pnl_pct=0.95, previous_pnl_pct=1.55,
+            elapsed_seconds=20, danger_score=0, status="OPEN",
+        )
+        self.assertEqual(r["protection_mode"], "RUNNER_PRESERVATION")
+        self.assertEqual(r["fast_gate"], "RUNNER_EMERGENCY")
         self.assertEqual(r["final_action"], "REDUCE")
 
-    def test_fast_force_protect_does_not_need_danger(self):
+    def test_runner_emergency_closes_already_reduced_lane(self):
         r = evaluate_pp_decision_v2(
-            mfe_pct=1.58, current_pnl_pct=1.10, previous_pnl_pct=1.58,
-            elapsed_seconds=30, danger_score=0, status="OPEN",
+            mfe_pct=2.00, current_pnl_pct=0.95, previous_pnl_pct=1.55,
+            elapsed_seconds=20, danger_score=0, status="REDUCED",
         )
-        self.assertEqual(r["base_v1_action"], "HOLD")
-        self.assertEqual(r["fast_gate"], "FAST_FORCE_PROTECT")
-        self.assertEqual(r["final_action"], "REDUCE")
-
-    def test_fast_force_closes_already_reduced_lane(self):
-        r = evaluate_pp_decision_v2(
-            mfe_pct=1.58, current_pnl_pct=1.10, previous_pnl_pct=1.58,
-            elapsed_seconds=30, danger_score=0, status="REDUCED",
-        )
-        self.assertEqual(r["fast_gate"], "FAST_FORCE_PROTECT")
+        self.assertEqual(r["fast_gate"], "RUNNER_EMERGENCY")
         self.assertEqual(r["final_action"], "CLOSE")
 
     def test_sub1_fast_decay_can_reduce_before_v1_sub1_gate(self):
@@ -69,12 +71,12 @@ class PPDecisionV2FastDecayTests(unittest.TestCase):
         self.assertEqual(r["fast_gate"], "FAST_DECISION")
         self.assertEqual(r["final_action"], "REDUCE")
 
-    def test_small_fast_noise_only_watches(self):
+    def test_runner_small_fast_noise_is_preserved(self):
         r = evaluate_pp_decision_v2(
             mfe_pct=1.58, current_pnl_pct=1.40, previous_pnl_pct=1.58,
-            elapsed_seconds=30, danger_score=6, status="OPEN",
+            elapsed_seconds=30, danger_score=0, status="OPEN",
         )
-        self.assertEqual(r["fast_gate"], "FAST_WATCH")
+        self.assertEqual(r["fast_gate"], "RUNNER_PRESERVE")
         self.assertEqual(r["overlay_action"], "HOLD")
         self.assertEqual(r["final_action"], "HOLD")
 
@@ -94,6 +96,23 @@ class PPDecisionV2FastDecayTests(unittest.TestCase):
         )
         self.assertEqual(r["fast_gate"], "COLD_START")
         self.assertEqual(r["overlay_action"], "HOLD")
+
+    def test_below_one_percent_keeps_stage3_aggression(self):
+        r = evaluate_pp_decision_v2(
+            mfe_pct=0.80, current_pnl_pct=0.62, previous_pnl_pct=0.80,
+            elapsed_seconds=30, danger_score=2, status="OPEN",
+        )
+        self.assertEqual(r["protection_mode"], "AGGRESSIVE_PROTECTION")
+        self.assertEqual(r["fast_gate"], "FAST_DECISION")
+        self.assertEqual(r["final_action"], "REDUCE")
+
+    def test_exact_one_percent_handoffs_to_runner_mode(self):
+        r = evaluate_pp_decision_v2(
+            mfe_pct=1.00, current_pnl_pct=0.78, previous_pnl_pct=1.00,
+            elapsed_seconds=15, danger_score=3, status="OPEN",
+        )
+        self.assertEqual(r["protection_mode"], "RUNNER_PRESERVATION")
+        self.assertEqual(r["fast_gate"], "RUNNER_PRESERVE")
 
     def test_runtime_shadow_flag_is_off_by_default(self):
         with patch.dict(os.environ, {"PP_DECISION_V2_STAGE3_ENABLED": "false"}, clear=False):
@@ -136,13 +155,13 @@ class PPDecisionV2FastDecayTests(unittest.TestCase):
             }
             with patch.dict(os.environ, env, clear=False):
                 first = _v2_shadow_evaluation(
-                    position_id="P2", opened_at_ms=900_001, status="OPEN", current_price=101.58,
-                    mfe_pct=1.58, current_pnl_pct=1.58,
+                    position_id="P2", opened_at_ms=900_001, status="OPEN", current_price=100.80,
+                    mfe_pct=0.80, current_pnl_pct=0.80,
                     snapshot=snapshot, evaluated_at_ms=1_000_000,
                 )
                 second = _v2_shadow_evaluation(
-                    position_id="P2", opened_at_ms=900_001, status="OPEN", current_price=101.31,
-                    mfe_pct=1.58, current_pnl_pct=1.31,
+                    position_id="P2", opened_at_ms=900_001, status="OPEN", current_price=100.62,
+                    mfe_pct=0.80, current_pnl_pct=0.62,
                     snapshot=snapshot, evaluated_at_ms=1_030_000,
                 )
                 with sqlite3.connect(db) as conn:
@@ -150,10 +169,10 @@ class PPDecisionV2FastDecayTests(unittest.TestCase):
                         "select fast_gate,final_action from pp_decision_v2_observations order by evaluated_at_ms"
                     ).fetchall()
         self.assertEqual(first["fast_gate"], "COLD_START")
-        self.assertEqual(second["fast_gate"], "SHOCK_DECAY")
-        self.assertEqual(second["final_action"], "REDUCE")
+        self.assertEqual(second["fast_gate"], "FAST_DECISION")
+        self.assertEqual(second["final_action"], "HOLD")
         self.assertAlmostEqual(second["elapsed_seconds"], 30.0)
-        self.assertEqual(rows, [("COLD_START", "HOLD"), ("SHOCK_DECAY", "REDUCE")])
+        self.assertEqual(rows, [("COLD_START", "HOLD"), ("FAST_DECISION", "HOLD")])
 
     def test_v2_never_relaxes_v1_action(self):
         severity = {"HOLD": 0, "REDUCE": 1, "CLOSE": 2}
