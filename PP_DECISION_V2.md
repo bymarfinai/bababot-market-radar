@@ -380,3 +380,20 @@ Stage 7 is shadow-only. It records the gate prospectively and later joins agains
 
 Dedicated table: `pp_decision_v2_stage7_ambiguous`.
 Read endpoint: `/pp-decision-v2/stage7/summary`.
+
+
+## Stage 7 prospective activation record
+
+- status: RUNNING / observation-only ambiguous recovery gate
+- code main commit: 33844a4dcd2e52c9f2c526eb148e7dbaf6090492
+- PP_DECISION_V2_STAGE7_START_MS: 1790848801393
+- strict cohort rule: only positions opened strictly after the boundary can enter Stage 7
+- activation zero-state: 0 post-boundary positions and 0 Stage 7 rows
+- frozen recovery threshold: +0.10 percentage point
+- decisions: GRACE_CANDIDATE / PROTECT_CANDIDATE
+- Stage 7 authority: NONE; it cannot modify Stage 3 HOLD / REDUCE / CLOSE actions
+- validation: 7/7 targeted Stage 7 tests PASS; 198/198 full repository regression PASS
+- GitHub transfer: 6/6 byte-for-byte MATCH
+- summary endpoint: /pp-decision-v2/stage7/summary
+- control resumed: RUN; lifecycle exits enabled
+- live trading: disabled / disarmed
