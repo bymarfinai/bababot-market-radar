@@ -4,71 +4,92 @@ Last frozen state: 2026-10-01
 
 ## Current Next Stage
 
-WD-5H Stage 4 — Causal 1–3 Minute Confirmation Window
+WD-5H Stage 4B — Temporal Confirmation Pattern Discovery
 
-The static pre-entry meta-label program is closed.
+Stage 4A is complete.
 
-Stage 3A fixed the target by replacing historical realized PnL with a
-triple-barrier entry-quality label.
+The static pre-entry path was closed after Stage 3C failed to produce a stable
+high-precision pocket.
 
-Stage 3B then showed only weak static ranking power.
+Stage 4A reconstructed exact causal temporal snapshots at:
 
-Stage 3C tested whether a very selective TAKE/ABSTAIN threshold could still
-extract a high-purity WIN pocket.
+- T+1 minute
+- T+2 minutes
+- T+3 minutes
 
-It could not.
+where T0 is the exact latest Stage11C ENTER decision timestamp.
 
-## Stage 3C Formal Result
+## Stage 4A Frozen Reconstruction
 
-Primary architecture:
-BASELINE_UNPURGED_UNWEIGHTED
+Coverage:
 
-Validation:
-- no usable threshold reached 60% precision with >=10 resolved TAKEs;
-- best usable threshold: 6 META_WIN / 11 resolved TAKEs = 54.55%.
+- rows: 2,175 / 2,175
+- exact Stage11C timestamp match: 2,175 / 2,175
+- causality violations: 0
+- pre-entry cache coverage: 2,175 / 2,175
+- post-entry 1m cache coverage: 2,175 / 2,175
+- OI cache coverage: 2,175 / 2,175
+- benchmark symbols: BTC, ETH, BNB, SOL
 
-Applying the same validation-frozen threshold to test:
-- 1 META_WIN / 7 resolved TAKEs = 14.29%.
+Temporal feature matrix:
 
-The 50% validation floor threshold:
-- validation: 9/18 = 50.0%;
-- same threshold test: 4/15 = 26.67%.
+- 351 output columns
+- 330 temporal feature columns
+- 110 temporal feature columns per horizon
 
-Purged+uniqueness sensitivity:
-- no usable >=60% threshold;
-- ultra-selective validation: 5/8 = 62.5%;
-- same threshold test: 1/8 = 12.5%.
+Each horizon contains:
 
-Formal status:
+- micro/path state;
+- market-relative state;
+- taker/flow state;
+- OI state;
+- direct confirmation-path features;
+- deltas versus T0.
 
-STATIC_HIGH_PRECISION_GATE_NOT_READY
+No model was trained and no threshold was selected in Stage 4A.
 
-## Decision
+## Important Stage 4A Findings
 
-Do not proceed to Stage 3D end-to-end replay.
-
-There is no validated static high-precision gate worth replaying.
-
-Do not add more static indicators to this same entry snapshot in an attempt to
-rescue the path.
-
-The preferred next hypothesis is the causal 1–3 minute confirmation window,
-because earlier WD-2/WD-3 research showed materially stronger separation after
-the candidate signal appears.
+1. T0 can be reconstructed exactly. The latest Stage11C ENTER checked_at_ms
+   equals stage11c_finished_at_ms for all 2,175 trades.
+2. Median Stage11C-to-fill latency is 200 ms; p90 is 389 ms.
+3. Strict closed-bar causality works cleanly:
+   - T+1: 2,173 trades have one new closed 1m bar; 2 have zero because their
+     exact target occurs milliseconds before the next candle close.
+   - T+2: 2,173 have two; the same 2 have one.
+   - T+3: 2,173 have three; the same 2 have two.
+   These are boundary effects, not missing exchange data.
+4. Historical OI has 5-minute resolution and contributes almost no fresh
+   information inside the 1-3 minute confirmation window:
+   - T+1: 0 trades receive a new OI point;
+   - T+2: 0;
+   - T+3: only 52 / 2,175 = 2.39%.
+   OI can remain context, but should not be treated as a primary temporal
+   confirmation signal at this horizon.
+5. Price path, taker flow, microstructure, and market-relative movement are
+   therefore the main temporal evidence families for Stage 4B.
 
 ## Production State
 
 UNCHANGED.
 
-No Stage 3A/3B/3C model or threshold has production authority.
+No Stage 4A feature or rule has production authority.
 
 ## Completed Current Program
 
 - WD-5H Stage 3A — COMPLETE: META_LABEL_RESET_COMPLETE
 - WD-5H Stage 3B — COMPLETE: META_RANKING_SIGNAL_WEAK
-- WD-5H Stage 3C — COMPLETE: STATIC_HIGH_PRECISION_GATE_NOT_READY
-- WD-5H Stage 3D — SKIPPED BY DESIGN: no usable gate to replay
+- WD-5H Stage 3C — REJECTED: STATIC_HIGH_PRECISION_GATE_NOT_READY
+- WD-5H Stage 3D — SKIPPED
 - WD-5H Stage 3E — NOT APPLICABLE
+- WD-5H Stage 4A — COMPLETE: TEMPORAL_FEATURE_RECONSTRUCTION_COMPLETE
+
+## Next Research Question
+
+Stage 4B must compare META_WIN versus META_LOSS separately at T+1, T+2, and
+T+3 to identify which temporal evidence actually strengthens discrimination.
+
+Do not select a production threshold in Stage 4B.
 
 ## Parked
 
