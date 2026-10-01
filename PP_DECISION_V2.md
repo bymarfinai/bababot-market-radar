@@ -263,3 +263,17 @@ One stateful row is stored per position with:
 - confidence and classifier version.
 
 Stage 5 uses a separate clean prospective boundary and is fail-open relative to the Stage 3 protector.
+
+
+## Stage 5 prospective activation record
+
+- status: RUNNING / observation-only discriminator shadow
+- code main commit: 722ad217c73e54968aaa870e32ec6c26b9d97ecf
+- PP_DECISION_V2_STAGE5_START_MS: 1790821977687
+- strict cohort rule: only positions opened strictly after the boundary can enter Stage 5
+- activation zero-state: 0 post-boundary positions and 0 discriminator rows before/at initial verification
+- active protector remains: pp-decision-v2-stage3-prospective-fast-shadow
+- Stage 5 authority: NONE; predictions cannot modify HOLD / REDUCE / CLOSE
+- validation: 9/9 targeted discriminator tests PASS; 183/183 full repository regression PASS
+- control resumed: RUN; lifecycle exits enabled
+- live trading: disabled / disarmed
