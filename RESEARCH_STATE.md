@@ -4,92 +4,130 @@ Last frozen state: 2026-10-01
 
 ## Current Next Stage
 
-WD-5H Stage 4B — Temporal Confirmation Pattern Discovery
+WD-5H Stage 4C — High-Precision Temporal Confirmation Gate
 
-Stage 4A is complete.
+Stage 4B is complete with a survivor guard that excludes any META_WIN or
+META_LOSS already barrier-resolved before the evaluated confirmation horizon.
 
-The static pre-entry path was closed after Stage 3C failed to produce a stable
-high-precision pocket.
+This guard is mandatory. Without it, a temporal feature could partly observe
+an outcome that had already occurred.
 
-Stage 4A reconstructed exact causal temporal snapshots at:
+## Stage 4B Main Result
 
-- T+1 minute
-- T+2 minutes
-- T+3 minutes
+Temporal confirmation materially improves discrimination versus the static
+pre-entry snapshot.
 
-where T0 is the exact latest Stage11C ENTER decision timestamp.
+Diagnostic ranking AUC on survivor cohorts:
 
-## Stage 4A Frozen Reconstruction
+| Horizon | Validation AUC | Test AUC |
+|---|---:|---:|
+| T+1 | 0.584 | 0.626 |
+| T+2 | 0.677 | 0.722 |
+| T+3 | **0.804** | **0.757** |
 
-Coverage:
+Descriptive best horizon: **T+3**.
 
-- rows: 2,175 / 2,175
-- exact Stage11C timestamp match: 2,175 / 2,175
-- causality violations: 0
-- pre-entry cache coverage: 2,175 / 2,175
-- post-entry 1m cache coverage: 2,175 / 2,175
-- OI cache coverage: 2,175 / 2,175
-- benchmark symbols: BTC, ETH, BNB, SOL
+No TAKE threshold has been selected yet.
 
-Temporal feature matrix:
+## Survivor / Early-Resolution Trade-off
 
-- 351 output columns
-- 330 temporal feature columns
-- 110 temporal feature columns per horizon
+Resolved Stage 3A population: 1,891.
 
-Each horizon contains:
+At T+1:
+- 152 already resolved (34 META_WIN, 118 META_LOSS);
+- 1,739 remain unresolved;
+- survivor META_WIN prevalence: 30.48%.
 
-- micro/path state;
-- market-relative state;
-- taker/flow state;
-- OI state;
-- direct confirmation-path features;
-- deltas versus T0.
+At T+2:
+- 335 already resolved (67 WIN, 268 LOSS);
+- 1,556 remain unresolved;
+- survivor WIN prevalence: 31.94%.
 
-No model was trained and no threshold was selected in Stage 4A.
+At T+3:
+- 535 already resolved (113 WIN, 422 LOSS);
+- 1,356 remain unresolved;
+- survivor WIN prevalence: 33.26%.
 
-## Important Stage 4A Findings
+Waiting therefore removes many early failures but also misses some early
+winners. Stage 4D must explicitly price this opportunity cost.
 
-1. T0 can be reconstructed exactly. The latest Stage11C ENTER checked_at_ms
-   equals stage11c_finished_at_ms for all 2,175 trades.
-2. Median Stage11C-to-fill latency is 200 ms; p90 is 389 ms.
-3. Strict closed-bar causality works cleanly:
-   - T+1: 2,173 trades have one new closed 1m bar; 2 have zero because their
-     exact target occurs milliseconds before the next candle close.
-   - T+2: 2,173 have two; the same 2 have one.
-   - T+3: 2,173 have three; the same 2 have two.
-   These are boundary effects, not missing exchange data.
-4. Historical OI has 5-minute resolution and contributes almost no fresh
-   information inside the 1-3 minute confirmation window:
-   - T+1: 0 trades receive a new OI point;
-   - T+2: 0;
-   - T+3: only 52 / 2,175 = 2.39%.
-   OI can remain context, but should not be treated as a primary temporal
-   confirmation signal at this horizon.
-5. Price path, taker flow, microstructure, and market-relative movement are
-   therefore the main temporal evidence families for Stage 4B.
+## Strongest Stable T+3 Patterns
+
+Among trades still unresolved at T+3:
+
+1. cumulative selected-side return from T0;
+2. selected-side 3m micro return;
+3. VWAP extension in the selected direction;
+4. selected-side short-horizon slope / momentum persistence;
+5. lower reversal-structure score;
+6. close-location / close-z strength;
+7. post-candidate MFE;
+8. coin relative strength versus market/BTC;
+9. selected-side taker participation.
+
+The strongest direct feature, T+3 cumulative side return, remains stable:
+
+- train AUC: 0.710
+- validation AUC: 0.790
+- test AUC: 0.787
+
+## Family Stability at T+3
+
+Robust features (stable direction in all chronological splits and minimum
+separation >= 0.05):
+
+- confirmation path: 7
+- delta versus T0: 12
+- flow: 4
+- market-relative: 7
+- micro: 25
+- OI-derived: 2
+- other structure features: 6
+
+Strong features (minimum separation >= 0.10):
+
+- confirmation path: 6
+- delta versus T0: 12
+- flow: 3
+- market-relative: 7
+- micro: 21
+- OI-derived: 2
+- other structure features: 6
+
+OI-derived temporal features must not be interpreted as fresh OI evidence:
+historical 5m OI provides a new observation to only 52/2,175 trades at T+3.
+Most apparent T+3 OI-derived signal is old OI context interacting with new
+price movement.
 
 ## Production State
 
 UNCHANGED.
 
-No Stage 4A feature or rule has production authority.
+Stage 4B has no production authority.
 
 ## Completed Current Program
 
-- WD-5H Stage 3A — COMPLETE: META_LABEL_RESET_COMPLETE
-- WD-5H Stage 3B — COMPLETE: META_RANKING_SIGNAL_WEAK
-- WD-5H Stage 3C — REJECTED: STATIC_HIGH_PRECISION_GATE_NOT_READY
+- WD-5H Stage 3A — COMPLETE
+- WD-5H Stage 3B — COMPLETE / WEAK
+- WD-5H Stage 3C — REJECTED
 - WD-5H Stage 3D — SKIPPED
 - WD-5H Stage 3E — NOT APPLICABLE
-- WD-5H Stage 4A — COMPLETE: TEMPORAL_FEATURE_RECONSTRUCTION_COMPLETE
+- WD-5H Stage 4A — COMPLETE
+- WD-5H Stage 4B — COMPLETE: TEMPORAL_PATTERN_DISCOVERY_COMPLETE_SURVIVOR_GUARDED
 
-## Next Research Question
+## Stage 4C Constraint
 
-Stage 4B must compare META_WIN versus META_LOSS separately at T+1, T+2, and
-T+3 to identify which temporal evidence actually strengthens discrimination.
+Stage 4C may test a high-precision temporal TAKE/ABSTAIN gate, but must:
 
-Do not select a production threshold in Stage 4B.
+- preserve the survivor guard;
+- select thresholds from validation only;
+- compare T+1/T+2/T+3 without post-hoc switching from test;
+- keep OI as context, not fresh temporal confirmation;
+- report selected count, coverage, precision, and implied trade/day.
+
+Because historical test behavior has now been inspected during discovery,
+Stage 4C/4D remain historical robustness research. Production promotion
+requires fresh prospective Stage 4E data.
 
 ## Parked
 
