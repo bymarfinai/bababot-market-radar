@@ -49,5 +49,3 @@ Pre-WD1 PostgreSQL backup:
 
 SHA256:
 `cbd0d01ce21c85c02bd23daf2bd4f64f49247fac75358dfe3c5b23f8e978af7b`
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
