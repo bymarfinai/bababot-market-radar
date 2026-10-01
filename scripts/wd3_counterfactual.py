@@ -20,6 +20,7 @@ def main() -> None:
         "actual_net": result["actual_net"],
         "top_dynamic": result["ranked_dynamic_exit"][0] if result["ranked_dynamic_exit"] else None,
         "top_delay": result["ranked_delay_confirm"][0] if result["ranked_delay_confirm"] else None,
+        "top_sequential": result["ranked_sequential_dynamic_exit"][0] if result["ranked_sequential_dynamic_exit"] else None,
         "output": str(output),
     }, indent=2, default=str))
 
