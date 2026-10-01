@@ -30,6 +30,10 @@ from .stage6_validation import (
     process_stage6_shadow_cycle,
     register_stage6_position,
 )
+from .profit_discriminator_stage6 import (
+    finalize_stage6_discriminator_position,
+    process_stage6_discriminator_cycle,
+)
 
 PAPER_TRADING_VERSION = "stage13-v2-event-driven"
 _loop_lock = threading.Lock()
@@ -687,6 +691,14 @@ def _execute_exit(
                 f"{type(exc).__name__}: {str(exc)[:240]}",
                 flush=True,
             )
+        try:
+            finalize_stage6_discriminator_position(str(position["position_id"]))
+        except Exception as exc:
+            print(
+                "PP-DECISION V2 Stage 6 finalize warning: "
+                f"{type(exc).__name__}: {str(exc)[:240]}",
+                flush=True,
+            )
     return {
         "status": "FILLED",
         "action": action,
@@ -765,6 +777,14 @@ def paper_cycle() -> dict[str, Any]:
             "processed_candles": 0,
             "errors": [f"{type(exc).__name__}: {str(exc)[:240]}"],
         }
+    try:
+        v2_stage6 = process_stage6_discriminator_cycle()
+    except Exception as exc:
+        v2_stage6 = {
+            "status": "ERROR",
+            "finalized": 0,
+            "errors": [f"{type(exc).__name__}: {str(exc)[:240]}"],
+        }
 
     lifecycle = sync_lifecycle_orders()
     exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
@@ -785,6 +805,7 @@ def paper_cycle() -> dict[str, Any]:
     return {
         "status": "COMPLETE",
         "stage6_validation": stage6,
+        "pp_decision_v2_stage6": v2_stage6,
         "lifecycle_queued": lifecycle["queued"],
         "exit_execution": exits,
         "entry_queued": entries["queued"],
