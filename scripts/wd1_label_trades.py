@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from market_radar.pipeline_cohort import backfill_position_cohorts
 from market_radar.wrong_direction_labels import (
@@ -31,3 +35,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
