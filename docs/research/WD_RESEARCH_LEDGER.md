@@ -24,37 +24,35 @@ be silently retried under a new name.
 | WD-5H Stage 3B | COMPLETE / WEAK | Purged + uniqueness-weighted meta-model did not win outer validation; selected baseline final AUC 0.570/AP 0.285; weighted final diagnostic AUC 0.588/AP 0.303 | Treating the small final weighted uplift as validated or promoting any 3B model |
 | WD-5H Stage 3C | REJECTED | No static high-precision pocket: best usable validation 54.5% on 11 trades, same threshold test 14.3%; weighted ultra-selective 62.5% val -> 12.5% test | Continuing static snapshot tuning or proceeding to Stage 3D without a validated gate |
 | WD-5H Stage 4A | COMPLETE | Reconstructed 330 causal temporal features at T+1/T+2/T+3 for all 2,175 trades with 0 causality violations; OI fresh-update coverage only 0/0/2.39% | Treating 5m OI as if it were a fresh 1-3m confirmation signal or using partially formed 1m candles |
+| WD-5H Stage 4B | COMPLETE / PROMISING | Survivor-guarded temporal discrimination strengthens sharply with delay; fixed diagnostic AUC T+1 0.584/0.626, T+2 0.677/0.722, T+3 0.804/0.757 val/test; T+3 strongest | Using already barrier-resolved trades in confirmation discovery, treating T+3 OI-derived signal as fresh OI, or choosing a TAKE threshold in discovery |
 
 ## Current Hypothesis
 
-### WD-5H Stage 4B — Temporal Confirmation Pattern Discovery
+### WD-5H Stage 4C — High-Precision Temporal Confirmation Gate
 
-Stage 4A produced a causal feature matrix at T+1, T+2, and T+3.
+Stage 4B found materially stronger temporal signal, with T+3 the descriptive
+best horizon after excluding events already resolved before the confirmation
+timestamp.
 
-Stage 4B should answer:
+Stage 4C should answer:
 
-Which temporal changes separate META_WIN from META_LOSS, and at which delay
-does separation improve enough to justify a confirmation gate experiment?
+Can the temporal signal be converted into a high-precision TAKE/ABSTAIN gate
+with useful trade coverage?
 
-Primary families:
+Rules:
 
-- post-candidate price path;
-- microstructure;
-- taker flow;
-- market-relative movement.
-
-OI remains context only because historical 5m OI produces almost no new point
-inside the first three minutes.
-
-Stage 4B is feature/pattern discovery only. It should not choose a production
-threshold.
+- survivor guard is mandatory;
+- threshold selection uses validation only;
+- T+1/T+2/T+3 must be compared using a frozen selection protocol;
+- fresh OI is not required because 1-3m OI update coverage is negligible;
+- no production promotion can occur from historical data alone.
 
 ## Planned Sequence
 
-1. Stage 4A — causal T+1/T+2/T+3 reconstruction — COMPLETE
-2. Stage 4B — temporal pattern discovery — NEXT
-3. Stage 4C — high-precision confirmation gate
-4. Stage 4D — delayed-entry replay with real entry degradation
+1. Stage 4A — causal temporal reconstruction — COMPLETE
+2. Stage 4B — survivor-guarded temporal pattern discovery — COMPLETE / PROMISING
+3. Stage 4C — high-precision confirmation gate — NEXT
+4. Stage 4D — delayed-entry replay using actual delayed entry price
 5. Stage 4E — fresh shadow validation if 4D passes
 
 ## Fallback Sequence
