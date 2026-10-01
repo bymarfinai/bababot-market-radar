@@ -20,24 +20,26 @@ be silently retried under a new name.
 | WD-5G | REJECTED | Health-only beats Health+Reversal; universal reversal damages runners | OVERHEATED equals TRUE_WRONG_DIRECTION |
 | WD-5H Stage 1 | COMPLETE | Flat WIN-vs-all weak; pairwise class differences real | Collapsing all non-winner failure modes |
 | WD-5H Stage 2 | REJECTED | Static high-precision realized-WIN gate fails; nonlinear sensitivity does not rescue | Adding another static classifier to same target |
+| WD-5H Stage 3A | COMPLETE | Triple-barrier reset: 564 META_WIN / 1,327 META_LOSS / 284 TIMEOUT; RTF relabeling confirmed; overlap severe | Training on historical realized exit PnL or ignoring overlapping label windows |
 
 ## Current Hypothesis
 
-### WD-5H Stage 3A — Triple-Barrier Meta-Label Reset
+### WD-5H Stage 3B — Purged Meta-Model + Overlap Uniqueness Weighting
 
-The primary direction model already produces LONG/SHORT candidates. The next
-research question is not whether historical exit PnL ended positive.
+Stage 3A confirmed that the old realized-PnL target materially mixed entry
+quality with lifecycle quality.
 
-It is:
+The next question is:
 
-Did the primary side generate a standardized tradeable favorable move before
-standardized invalidation?
+Can causal pre-entry features distinguish META_WIN from META_LOSS when
+validation prevents label-window overlap leakage and training observations are
+weighted by event uniqueness?
 
-This separates entry-thesis quality from lifecycle/profit-protection quality.
+TIMEOUT must not be silently collapsed into META_LOSS.
 
 ## Planned Sequence
 
-1. Stage 3A — Triple-Barrier Meta-Label Reset
+1. Stage 3A — Triple-Barrier Meta-Label Reset — COMPLETE
 2. Stage 3B — Purged/embargoed meta-model with overlap uniqueness weighting
 3. Stage 3C — High-precision TAKE/ABSTAIN frontier
 4. Stage 3D — Full end-to-end replay
