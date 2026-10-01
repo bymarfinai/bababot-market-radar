@@ -277,3 +277,36 @@ Stage 5 uses a separate clean prospective boundary and is fail-open relative to 
 - validation: 9/9 targeted discriminator tests PASS; 183/183 full repository regression PASS
 - control resumed: RUN; lifecycle exits enabled
 - live trading: disabled / disarmed
+
+## Stage 6 — Prospective Discriminator Validation
+
+Status: built as a clean prospective validation harness. Stage 6 has no trading authority.
+
+Purpose:
+- validate Stage 5 predictions on unseen post-boundary trades;
+- measure prospective classifier precision by label;
+- compute stateful counterfactual PnL for the active Stage 3 protector versus unconditional 15-second and 30-second grace windows;
+- preserve Stage 3 and Stage 5 behavior unchanged.
+
+A Stage 6 case exists only when a post-boundary position has a Stage 5 discriminator watch and later closes.
+
+At close Stage 6 stores:
+- Stage 5 classifier status/confidence;
+- predicted RUNNER / FAILURE / UNRESOLVED;
+- realized future outcome RUNNER / FAILURE / AMBIGUOUS;
+- prediction correctness when objectively scoreable;
+- max MFE and minimum PnL after the watch starts;
+- actual PP-LEGACY control net PnL;
+- stateful PP-DECISION V2 Stage 3 replay net PnL;
+- hypothetical 15-second grace net PnL;
+- hypothetical 30-second grace net PnL;
+- delta of each grace lane versus Stage 3;
+- action counts for all replay lanes.
+
+The grace lanes are analytical counterfactuals only. They do not submit or alter paper/live orders.
+
+Dedicated table: `pp_decision_v2_stage6_validation`.
+Read endpoint: `/pp-decision-v2/stage6/summary`.
+A recovery cycle finalizes any eligible closed case missed during a restart.
+
+Promotion criteria remain prospective: classifier precision must hold on unseen trades and any prediction-conditioned grace policy must improve economic PnL without degrading the strong 0.5%-<1% Stage 3 protection edge.
