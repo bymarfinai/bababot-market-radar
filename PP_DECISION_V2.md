@@ -328,3 +328,55 @@ Promotion criteria remain prospective: classifier precision must hold on unseen 
 - GitHub transfer: 6/6 byte-for-byte MATCH
 - control resumed: RUN; lifecycle exits enabled
 - live trading: disabled / disarmed
+
+## Stage 7 — Ambiguous Recovery Gate
+
+Status: built as an observation-only shadow gate. It has no trading authority.
+
+### Why Stage 7 exists
+
+Stage 6 prospective evidence showed that blanket grace is not useful for all Stage 5 labels:
+- FAILURE_LIKELY strongly favors immediate Stage 3 protection.
+- TRANSIENT_LIKELY did not justify grace.
+- AMBIGUOUS unexpectedly benefited from 30-second grace in aggregate.
+
+Stage 7 therefore studies only Stage 5 `AMBIGUOUS` cases and asks:
+
+> after the causal Stage 5 observation window has elapsed, did profit actually recover enough that this case resembles the AMBIGUOUS trades where grace was economically useful?
+
+### Research cohort
+
+Stage 6 AMBIGUOUS cohort at development time:
+- 87 finalized cases
+- 45 grace30 better than Stage 3
+- 38 grace30 worse than Stage 3
+- 4 ties
+- blanket grace30 delta vs Stage 3: +26.20
+
+The strongest simple causal separator was recovery in current profit over the Stage 5 watch window.
+
+Frozen Stage 7 rule:
+- `recovery_pp = followup_current_pnl_pct - initial_current_pnl_pct`
+- `GRACE_CANDIDATE` when `recovery_pp >= +0.10 percentage point`
+- otherwise `PROTECT_CANDIDATE`
+
+Historical prospective cohort result for the frozen +0.10pp threshold:
+- selected GRACE_CANDIDATE: 31 / 87
+- grace30 better / worse: 25 / 5, with 1 tie
+- selected grace30 delta vs Stage 3: +29.25
+- chronological split deltas remained positive:
+  - early: +13.33
+  - middle: +9.96
+  - late: +5.97
+- bootstrap 95% CI for selected mean grace30 delta: approximately +0.51 to +1.44 per trade.
+
+The threshold was deliberately rounded to +0.10pp. Nearby thresholds from roughly +0.08pp to +0.14pp formed a positive plateau, reducing sensitivity to a single fitted cut point.
+
+### Causality limitation
+
+The recovery signal only exists after the Stage 5 observation window has elapsed. Therefore Stage 7 cannot be used retrospectively to justify granting the first 30 seconds of grace. It is currently a diagnostic / continuation gate only.
+
+Stage 7 is shadow-only. It records the gate prospectively and later joins against Stage 6 finalized outcomes. It cannot modify Stage 3 HOLD / REDUCE / CLOSE actions.
+
+Dedicated table: `pp_decision_v2_stage7_ambiguous`.
+Read endpoint: `/pp-decision-v2/stage7/summary`.
