@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 import os
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from market_radar.fresh_entry_gate import save_revalidation
 from market_radar.persistence import _sqlite_connect, initialize_database
 from market_radar.pipeline_cohort import (
     DEFAULT_BOUNDARY_MS,
@@ -77,6 +79,7 @@ class PipelineCohortTests(unittest.TestCase):
             row["paper_trading_version"],
             "stage13-v2-event-driven",
         )
+        self.assertEqual(row["fresh_gate_version"], "unknown")
         rows = list_cohorts(cohort=POST_COHORT, limit=10)
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["signal_id"], "TEST:POST:LONG")
@@ -136,6 +139,116 @@ class PipelineCohortTests(unittest.TestCase):
         self.assertEqual(by_name[POST_COHORT]["closed"], 1)
         self.assertEqual(float(by_name[PRE_COHORT]["net_pnl"]), -5.0)
         self.assertEqual(float(by_name[POST_COHORT]["net_pnl"]), 5.0)
+
+
+    def test_backfill_uses_position_raw_json_stage11c_version(self):
+        signal_id = "TEST:RAW:LONG"
+        opened_at_ms = DEFAULT_BOUNDARY_MS + 10
+        with _sqlite_connect(self.db) as conn:
+            seed_signal(conn, signal_id, opened_at_ms)
+            conn.execute(
+                """
+                insert into positions (
+                    position_id, signal_id, symbol, side, status,
+                    opened_at_ms, realized_pnl, mode, raw_json
+                ) values (?,?,?,?,?,?,?,?,?)
+                """,
+                (
+                    "PAPER:RAW", signal_id, "TESTUSDT", "LONG",
+                    "CLOSED", opened_at_ms, 1.0, "PAPER",
+                    json.dumps(
+                        {
+                            "stage11c_version": "stage11c-v2-evidence-families",
+                            "paper_trading_version": "stage13-v2-event-driven",
+                        }
+                    ),
+                ),
+            )
+
+        backfill_position_cohorts()
+        rows = list_cohorts(cohort=POST_COHORT, limit=10)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(
+            rows[0]["fresh_gate_version"],
+            "stage11c-v2-evidence-families",
+        )
+        self.assertEqual(
+            rows[0]["metadata"]["stage11c_version_source"],
+            "position_raw_json",
+        )
+
+    def test_backfill_falls_back_to_causal_enter_revalidation(self):
+        signal_id = "TEST:REVALIDATION:LONG"
+        opened_at_ms = DEFAULT_BOUNDARY_MS + 20
+        with _sqlite_connect(self.db) as conn:
+            seed_signal(conn, signal_id, opened_at_ms)
+            conn.execute(
+                """
+                insert into positions (
+                    position_id, signal_id, symbol, side, status,
+                    opened_at_ms, realized_pnl, mode, raw_json
+                ) values (?,?,?,?,?,?,?,?,?)
+                """,
+                (
+                    "PAPER:REVALIDATION", signal_id, "TESTUSDT", "LONG",
+                    "CLOSED", opened_at_ms, -1.0, "PAPER", "{}",
+                ),
+            )
+
+        save_revalidation(
+            signal_id=signal_id,
+            checked_at_ms=opened_at_ms - 5,
+            verdict="ENTER",
+            reasons=[],
+            snapshot={},
+        )
+
+        backfill_position_cohorts()
+        rows = list_cohorts(cohort=POST_COHORT, limit=10)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(
+            rows[0]["fresh_gate_version"],
+            "stage11c-v2-evidence-families",
+        )
+        self.assertEqual(
+            rows[0]["metadata"]["stage11c_version_source"],
+            "entry_revalidation",
+        )
+
+    def test_backfill_never_uses_future_revalidation(self):
+        signal_id = "TEST:FUTURE:LONG"
+        opened_at_ms = DEFAULT_BOUNDARY_MS + 20
+        with _sqlite_connect(self.db) as conn:
+            seed_signal(conn, signal_id, opened_at_ms)
+            conn.execute(
+                """
+                insert into positions (
+                    position_id, signal_id, symbol, side, status,
+                    opened_at_ms, realized_pnl, mode, raw_json
+                ) values (?,?,?,?,?,?,?,?,?)
+                """,
+                (
+                    "PAPER:FUTURE", signal_id, "TESTUSDT", "LONG",
+                    "CLOSED", opened_at_ms, -1.0, "PAPER", "{}",
+                ),
+            )
+
+        save_revalidation(
+            signal_id=signal_id,
+            checked_at_ms=opened_at_ms + 1,
+            verdict="ENTER",
+            reasons=[],
+            snapshot={},
+        )
+
+        backfill_position_cohorts()
+        rows = list_cohorts(cohort=POST_COHORT, limit=10)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["fresh_gate_version"], "unknown")
+        self.assertEqual(
+            rows[0]["metadata"]["stage11c_version_source"],
+            "unknown",
+        )
 
 
 if __name__ == "__main__":
