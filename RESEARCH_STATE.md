@@ -4,85 +4,75 @@ Last frozen state: 2026-10-01
 
 ## Current Next Stage
 
-WD-5H Stage 3C — High-Precision TAKE/ABSTAIN Frontier
+WD-5H Stage 4 — Causal 1–3 Minute Confirmation Window
 
-Stage 3B is complete.
+The static pre-entry meta-label program is closed.
 
-The meta-label target remains:
+Stage 3A fixed the target by replacing historical realized PnL with a
+triple-barrier entry-quality label.
 
-- META_WIN: selected side reaches net +0.5% before net -0.5% within 30m;
-- META_LOSS: selected side reaches net -0.5% first;
-- TIMEOUT: neither barrier resolves inside 30m.
+Stage 3B then showed only weak static ranking power.
 
-Stage 3B tested three architectures:
+Stage 3C tested whether a very selective TAKE/ABSTAIN threshold could still
+extract a high-purity WIN pocket.
 
-1. baseline unpurged/unweighted;
-2. purged + 30m embargo, unweighted;
-3. purged + 30m embargo + Stage3A uniqueness weighting.
+It could not.
 
-Architecture selection was frozen using outer-validation average precision,
-then AUC, then top-10% precision.
+## Stage 3C Formal Result
 
-Outer validation selected the baseline architecture. Its untouched final test
-was weak:
+Primary architecture:
+BASELINE_UNPURGED_UNWEIGHTED
 
-- AUC: 0.5695
-- average precision: 0.2846
-- test META_WIN prevalence: 24.87%
-- top-10% precision: 28.95%
+Validation:
+- no usable threshold reached 60% precision with >=10 resolved TAKEs;
+- best usable threshold: 6 META_WIN / 11 resolved TAKEs = 54.55%.
 
-Purged+weighted was slightly better on the final test (AUC 0.5882, AP 0.3026,
-top-5% precision 36.84%), but it did not win outer validation and therefore
-cannot be promoted post-hoc.
+Applying the same validation-frozen threshold to test:
+- 1 META_WIN / 7 resolved TAKEs = 14.29%.
 
-Formal Stage 3B status:
+The 50% validation floor threshold:
+- validation: 9/18 = 50.0%;
+- same threshold test: 4/15 = 26.67%.
 
-META_RANKING_SIGNAL_WEAK
+Purged+uniqueness sensitivity:
+- no usable >=60% threshold;
+- ultra-selective validation: 5/8 = 62.5%;
+- same threshold test: 1/8 = 12.5%.
 
-No model has production authority.
+Formal status:
+
+STATIC_HIGH_PRECISION_GATE_NOT_READY
+
+## Decision
+
+Do not proceed to Stage 3D end-to-end replay.
+
+There is no validated static high-precision gate worth replaying.
+
+Do not add more static indicators to this same entry snapshot in an attempt to
+rescue the path.
+
+The preferred next hypothesis is the causal 1–3 minute confirmation window,
+because earlier WD-2/WD-3 research showed materially stronger separation after
+the candidate signal appears.
 
 ## Production State
 
 UNCHANGED.
 
-The production runtime does not import research code.
-
-## Supported Findings
-
-1. Triple-barrier relabeling materially improves target semantics.
-2. TRUE_WRONG_DIRECTION maps strongly to META_LOSS.
-3. RIGHT_THEN_FAILURE contains a meaningful META_WIN subset.
-4. Outcome windows overlap heavily; purging and uniqueness weighting remain
-   methodologically appropriate.
-5. Purging/weighting do not yet produce a stable strong pre-entry ranking
-   signal across chronological windows.
-6. The final test shows a small post-hoc advantage for purged/weighted, but
-   validation did not select it; this is diagnostic only.
-7. Static pre-entry features still appear insufficient for a confident
-   high-precision gate, but Stage 3C will formally test the selective
-   TAKE/ABSTAIN frontier before this path is closed.
-
-## Rejected / Not Production-Ready
-
-- WD-5B static reversal discriminator.
-- WD-5F universal reversal.
-- WD-5G Health + universal Reversal policy.
-- WD-5H Stage 2 historical-realized-WIN gate.
-- WD-5H Stage 3B current meta-ranking models for production use.
+No Stage 3A/3B/3C model or threshold has production authority.
 
 ## Completed Current Program
 
 - WD-5H Stage 3A — COMPLETE: META_LABEL_RESET_COMPLETE
 - WD-5H Stage 3B — COMPLETE: META_RANKING_SIGNAL_WEAK
+- WD-5H Stage 3C — COMPLETE: STATIC_HIGH_PRECISION_GATE_NOT_READY
+- WD-5H Stage 3D — SKIPPED BY DESIGN: no usable gate to replay
+- WD-5H Stage 3E — NOT APPLICABLE
 
 ## Parked
 
 - Wallet/on-chain fusion.
-- 1–3 minute delayed confirmation gate.
-
-If Stage 3C cannot find a stable usable high-precision pocket, the static
-pre-entry meta-label path should stop and the 1–3 minute confirmation path
-becomes the preferred next hypothesis.
 
 ## Source of Truth
 
