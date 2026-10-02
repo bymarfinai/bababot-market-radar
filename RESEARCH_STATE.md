@@ -4,104 +4,141 @@ Last frozen state: 2026-10-02
 
 ## Current Next Stage
 
-WD-5H Stage 4D — Delayed-Entry Economic Replay
+WD-5H Stage 5A — Anti-Chase / Earlier Confirmation Redesign
 
-Stage 4C is complete.
+Stage 4D is complete.
 
-The formal validation-only temporal gate selected:
+The exact frozen Stage 4C gate was replayed economically:
 
 - horizon: T+3 minutes
 - score threshold: 0.6028066188778062
-- validation precision floor: 80%
+- selected candidates: 62
+  - validation: 37
+  - historical test: 25
 
-Validation result:
+Delayed entry used the first actual Binance futures aggTrade at or after the
+exact T0+3m timestamp, then applied the historical fee and slippage assumptions.
 
-- TAKE: 37
-- resolved TAKE: 35
-- META_WIN: 28
-- META_LOSS: 7
+## Stage 4D Formal Result
+
+DELAYED_ENTRY_ECONOMICS_NOT_READY
+
+Overall delayed replay:
+
+- META_WIN: 15
+- META_LOSS: 45
 - TIMEOUT: 2
-- resolved precision: 80.0%
-- all-TAKE WIN rate including TIMEOUT: 75.68%
-- eligible coverage: 10.57%
+- resolved precision: 25.0%
+- all-TAKE WIN rate: 24.19%
+- actual-exit net PnL: -$94.59
+- standardized barrier net: -$75.09
 
-Same frozen rule on historical test:
+Historical test only:
 
-- TAKE: 25
-- resolved TAKE: 20
-- META_WIN: 13
-- META_LOSS: 7
-- TIMEOUT: 5
-- resolved precision: 65.0%
-- all-TAKE WIN rate including TIMEOUT: 52.0%
-- eligible coverage: 7.37%
+- META_WIN: 5
+- META_LOSS: 18
+- TIMEOUT: 2
+- resolved precision: 21.74%
+- all-TAKE WIN rate: 20.0%
+- actual-exit net PnL: -$39.72
+- standardized barrier net: -$32.59
 
-Formal Stage 4C status:
+## Main Mechanism Found
 
-TEMPORAL_HIGH_PRECISION_GATE_NOT_READY
+The T+3 classifier was accurately recognizing moves that were already in
+progress, but the economic entry arrived after most of the original edge had
+already been consumed.
 
-The rule missed the frozen promotion criterion because test all-TAKE WIN rate
-was below 55%, even though resolved precision reached 65%.
+Median selected-side move before delayed entry:
 
-## Why Stage 4D Still Matters
+- all selected: +0.414%
+- original META_WIN candidates: +0.450%
 
-Stage 4C is materially stronger than the static path.
+Relative to the original +0.5% Stage 3A META_WIN barrier:
 
-At T+3 the historical test survivor base rates were:
+- all selected had already consumed about 82.7% of the original barrier;
+- original META_WIN candidates had already consumed about 89.9%.
 
-- resolved META_WIN prevalence: 74 / 278 = 26.62%
-- all eligible WIN rate including TIMEOUT: 74 / 339 = 21.83%
+Original META_WIN transitions after delayed entry:
 
-The selected 4C rule lifts these to:
+- 15 remain META_WIN
+- 25 become META_LOSS
+- 1 becomes TIMEOUT
 
-- resolved precision: 65.0% (about 2.44x base)
-- all-TAKE WIN rate: 52.0% (about 2.38x base)
+Therefore the current temporal gate is primarily a late confirmation / chase
+detector rather than an economically usable entry trigger.
 
-This is strong enough to justify an economic replay, but not production
-promotion.
+## Costs Are Not the Main Cause
 
-Stage 4D must answer whether entering only after T+3 confirmation still has
-positive economics after:
+A zero-fee / zero-slippage replay still fails:
 
-- delayed market entry price;
-- historical fee/slippage assumptions;
-- missed early winners;
-- changed TP/SL reachability from the delayed entry;
-- runner loss / opportunity cost.
+- META_WIN: 22
+- META_LOSS: 33
+- TIMEOUT: 7
+- resolved precision: 40.0%
+- actual-exit net: -$36.38
+
+The failure therefore persists even without execution costs.
+
+## Runner Retention
+
+Using conservative 60-minute close-based MFE:
+
+- original >=1% runners: 36
+  - retained after delay: 28 = 77.78%
+- original >=2% runners: 19
+  - retained after delay: 13 = 68.42%
+
+The delay preserves some runners, but not enough to offset the large conversion
+of original META_WIN into delayed losses.
+
+## Early Resolution Trade-off
+
+Across the final 40% historical population before T+3:
+
+- early META_WIN: 39
+- early META_LOSS: 142
+
+Waiting three minutes does avoid many more fast failures than fast winners,
+but the surviving high-score entries are too late economically under the
+current gate.
+
+## Decision
+
+Do not proceed to Stage 4E fresh shadow with the current T+3 rule.
+
+Do not deploy the Stage 4C gate.
+
+Do not reinterpret the Stage 4C 65% historical resolved precision as a
+tradeable WR.
+
+The next research direction should preserve the temporal insight while
+removing chase dependence:
+
+- earlier confirmation;
+- anti-chase cap / remaining-edge constraint;
+- relative-strength / structure / flow evidence that does not require the
+  selected-side price move itself to already be near the barrier.
+
+Any redesigned rule will be research-only and will require fresh prospective
+validation before production.
 
 ## Production State
 
 UNCHANGED.
 
-Stage 4C has no production authority.
+No Stage 4A-4D research rule has production authority.
 
 ## Completed Current Program
 
 - WD-5H Stage 3A — COMPLETE
 - WD-5H Stage 3B — COMPLETE / WEAK
 - WD-5H Stage 3C — REJECTED
-- WD-5H Stage 3D — SKIPPED
-- WD-5H Stage 3E — NOT APPLICABLE
 - WD-5H Stage 4A — COMPLETE
 - WD-5H Stage 4B — COMPLETE / PROMISING
-- WD-5H Stage 4C — COMPLETE / PROMISING BUT NOT READY
-
-## Stage 4D Constraint
-
-Stage 4D must replay the exact frozen 4C rule.
-
-Do not retune:
-
-- horizon;
-- model features;
-- score threshold;
-- survivor definition.
-
-Stage 4D is allowed to compare economic accounting variants, but the gate
-itself is frozen.
-
-Fresh prospective Stage 4E data remains mandatory before any production
-promotion.
+- WD-5H Stage 4C — COMPLETE / PROMISING CLASSIFICATION ONLY
+- WD-5H Stage 4D — COMPLETE / ECONOMICALLY REJECTED
+- WD-5H Stage 4E — SKIPPED: current gate failed economic replay
 
 ## Parked
 
