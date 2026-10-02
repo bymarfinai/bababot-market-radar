@@ -1450,3 +1450,4 @@ def serve_read_api(
         {"scan_path": scan_path},
     )
     server = ThreadingHTTPServer((host, port), handler)
+    server.serve_forever()
