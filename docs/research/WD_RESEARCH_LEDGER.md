@@ -26,44 +26,41 @@ be silently retried under a new name.
 | WD-5H Stage 4A | COMPLETE | Reconstructed 330 causal temporal features at T+1/T+2/T+3 for all 2,175 trades with 0 causality violations; OI fresh-update coverage only 0/0/2.39% | Treating 5m OI as if it were a fresh 1-3m confirmation signal or using partially formed 1m candles |
 | WD-5H Stage 4B | COMPLETE / PROMISING | Survivor-guarded temporal discrimination strengthens sharply with delay; fixed diagnostic AUC T+1 0.584/0.626, T+2 0.677/0.722, T+3 0.804/0.757 val/test; T+3 strongest | Using already barrier-resolved trades in confirmation discovery, treating T+3 OI-derived signal as fresh OI, or choosing a TAKE threshold in discovery |
 | WD-5H Stage 4C | COMPLETE / PROMISING NOT READY | Validation-only selection chose T+3 threshold 0.6028066: 80% resolved precision on 35 validation trades; same rule historical test 65% on 20 resolved, 52% WIN including TIMEOUT; ~2.4x lift over T+3 base but misses promotion criterion | Switching to T+2 post-hoc because its tiny test pocket looked better, retuning threshold from test, or calling 52% all-TAKE WIN production-ready |
+| WD-5H Stage 4D | REJECTED ECONOMICALLY | Exact T+3 gate replay at first aggTrade after T+3 collapses to 15 WIN / 45 LOSS / 2 TIMEOUT overall; test 5/18/2, -$39.72; original WINs had already moved median +0.450% before entry (~90% of original 0.5% barrier) | Treating 4C classification precision as executable WR, blaming failure mainly on fees, or proceeding to Stage 4E with the same gate |
 
 ## Current Hypothesis
 
-### WD-5H Stage 4D — Delayed-Entry Economic Replay
+### WD-5H Stage 5A — Anti-Chase / Earlier Confirmation Redesign
 
-Stage 4C found a meaningful but not promotion-ready temporal gate.
+Stage 4D showed that the T+3 temporal classifier contains real information but
+uses too much already-realized price movement to produce an economical entry.
 
-The exact gate is frozen:
+The next research question is:
 
-- T+3
-- fixed Stage 4B top-12 temporal model
-- threshold 0.6028066188778062
-- survivor guard unchanged
+Can temporal confirmation retain the predictive value of thesis strengthening
+without requiring price to have already consumed most of the available move?
 
-Stage 4D should answer:
+Candidate design principles:
 
-Does the 4C confirmation improvement survive when the trade is actually entered
-at the T+3 market price rather than the original T0 entry price?
+- prefer T+1/T+2 or early evidence accumulation rather than fixed T+3;
+- explicitly penalize selected-side chase / excessive cumulative return;
+- emphasize market-relative strength, structure, taker flow, and low reversal
+  pressure;
+- measure remaining edge from the delayed entry itself;
+- never switch to T+2 merely because the already-inspected historical test
+  pocket looked attractive.
 
-The replay must include:
-
-- delayed entry market price;
-- fee + slippage;
-- symmetric barrier outcomes from delayed entry;
-- missed early WIN and early LOSS opportunity accounting;
-- coverage / trade count;
-- delayed-entry degradation versus original path;
-- runner retention.
-
-No gate retuning is allowed in Stage 4D.
+This is a new hypothesis. Historical test data has already been exposed, so
+future production promotion requires prospective data.
 
 ## Planned Sequence
 
-1. Stage 4A — causal temporal reconstruction — COMPLETE
-2. Stage 4B — temporal pattern discovery — COMPLETE / PROMISING
-3. Stage 4C — high-precision temporal gate — COMPLETE / PROMISING NOT READY
-4. Stage 4D — delayed-entry replay — NEXT
-5. Stage 4E — fresh shadow validation only if economics justify it
+1. Stage 4A — temporal reconstruction — COMPLETE
+2. Stage 4B — pattern discovery — COMPLETE
+3. Stage 4C — high-precision temporal gate — COMPLETE / classification promising
+4. Stage 4D — delayed-entry economic replay — REJECTED ECONOMICALLY
+5. Stage 4E — SKIPPED
+6. Stage 5A — anti-chase / earlier confirmation redesign — NEXT
 
 ## Fallback Sequence
 
