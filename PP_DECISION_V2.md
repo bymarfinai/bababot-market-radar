@@ -397,3 +397,12 @@ Read endpoint: `/pp-decision-v2/stage7/summary`.
 - summary endpoint: /pp-decision-v2/stage7/summary
 - control resumed: RUN; lifecycle exits enabled
 - live trading: disabled / disarmed
+
+
+## Runtime cleanup — legacy profit-protection harness retired
+
+The generic legacy Stage 6 shadow harness and its PP-ADAPTIVE V1 / S5-A/B/C, static-policy, and PP-DECISION V1 development lanes have been removed from the production runtime and archived under `research/archive/profit_protection/`.
+
+Current V2 no longer imports the legacy Stage 6 module. The frozen PP-DECISION V1 FINAL contract that V2 still uses as its base is isolated in `market_radar/profit_protection_v1.py` and was verified 1,960/1,960 state-for-state identical to the retired implementation.
+
+Historical database tables from the retired harness are intentionally retained for audit only; no new rows are written after retirement.
