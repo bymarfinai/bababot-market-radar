@@ -1,109 +1,79 @@
 # Market Detector Research State
 
-Last frozen state: 2026-10-01
+Last frozen state: 2026-10-02
 
 ## Current Next Stage
 
-WD-5H Stage 4C — High-Precision Temporal Confirmation Gate
+WD-5H Stage 4D — Delayed-Entry Economic Replay
 
-Stage 4B is complete with a survivor guard that excludes any META_WIN or
-META_LOSS already barrier-resolved before the evaluated confirmation horizon.
+Stage 4C is complete.
 
-This guard is mandatory. Without it, a temporal feature could partly observe
-an outcome that had already occurred.
+The formal validation-only temporal gate selected:
 
-## Stage 4B Main Result
+- horizon: T+3 minutes
+- score threshold: 0.6028066188778062
+- validation precision floor: 80%
 
-Temporal confirmation materially improves discrimination versus the static
-pre-entry snapshot.
+Validation result:
 
-Diagnostic ranking AUC on survivor cohorts:
+- TAKE: 37
+- resolved TAKE: 35
+- META_WIN: 28
+- META_LOSS: 7
+- TIMEOUT: 2
+- resolved precision: 80.0%
+- all-TAKE WIN rate including TIMEOUT: 75.68%
+- eligible coverage: 10.57%
 
-| Horizon | Validation AUC | Test AUC |
-|---|---:|---:|
-| T+1 | 0.584 | 0.626 |
-| T+2 | 0.677 | 0.722 |
-| T+3 | **0.804** | **0.757** |
+Same frozen rule on historical test:
 
-Descriptive best horizon: **T+3**.
+- TAKE: 25
+- resolved TAKE: 20
+- META_WIN: 13
+- META_LOSS: 7
+- TIMEOUT: 5
+- resolved precision: 65.0%
+- all-TAKE WIN rate including TIMEOUT: 52.0%
+- eligible coverage: 7.37%
 
-No TAKE threshold has been selected yet.
+Formal Stage 4C status:
 
-## Survivor / Early-Resolution Trade-off
+TEMPORAL_HIGH_PRECISION_GATE_NOT_READY
 
-Resolved Stage 3A population: 1,891.
+The rule missed the frozen promotion criterion because test all-TAKE WIN rate
+was below 55%, even though resolved precision reached 65%.
 
-At T+1:
-- 152 already resolved (34 META_WIN, 118 META_LOSS);
-- 1,739 remain unresolved;
-- survivor META_WIN prevalence: 30.48%.
+## Why Stage 4D Still Matters
 
-At T+2:
-- 335 already resolved (67 WIN, 268 LOSS);
-- 1,556 remain unresolved;
-- survivor WIN prevalence: 31.94%.
+Stage 4C is materially stronger than the static path.
 
-At T+3:
-- 535 already resolved (113 WIN, 422 LOSS);
-- 1,356 remain unresolved;
-- survivor WIN prevalence: 33.26%.
+At T+3 the historical test survivor base rates were:
 
-Waiting therefore removes many early failures but also misses some early
-winners. Stage 4D must explicitly price this opportunity cost.
+- resolved META_WIN prevalence: 74 / 278 = 26.62%
+- all eligible WIN rate including TIMEOUT: 74 / 339 = 21.83%
 
-## Strongest Stable T+3 Patterns
+The selected 4C rule lifts these to:
 
-Among trades still unresolved at T+3:
+- resolved precision: 65.0% (about 2.44x base)
+- all-TAKE WIN rate: 52.0% (about 2.38x base)
 
-1. cumulative selected-side return from T0;
-2. selected-side 3m micro return;
-3. VWAP extension in the selected direction;
-4. selected-side short-horizon slope / momentum persistence;
-5. lower reversal-structure score;
-6. close-location / close-z strength;
-7. post-candidate MFE;
-8. coin relative strength versus market/BTC;
-9. selected-side taker participation.
+This is strong enough to justify an economic replay, but not production
+promotion.
 
-The strongest direct feature, T+3 cumulative side return, remains stable:
+Stage 4D must answer whether entering only after T+3 confirmation still has
+positive economics after:
 
-- train AUC: 0.710
-- validation AUC: 0.790
-- test AUC: 0.787
-
-## Family Stability at T+3
-
-Robust features (stable direction in all chronological splits and minimum
-separation >= 0.05):
-
-- confirmation path: 7
-- delta versus T0: 12
-- flow: 4
-- market-relative: 7
-- micro: 25
-- OI-derived: 2
-- other structure features: 6
-
-Strong features (minimum separation >= 0.10):
-
-- confirmation path: 6
-- delta versus T0: 12
-- flow: 3
-- market-relative: 7
-- micro: 21
-- OI-derived: 2
-- other structure features: 6
-
-OI-derived temporal features must not be interpreted as fresh OI evidence:
-historical 5m OI provides a new observation to only 52/2,175 trades at T+3.
-Most apparent T+3 OI-derived signal is old OI context interacting with new
-price movement.
+- delayed market entry price;
+- historical fee/slippage assumptions;
+- missed early winners;
+- changed TP/SL reachability from the delayed entry;
+- runner loss / opportunity cost.
 
 ## Production State
 
 UNCHANGED.
 
-Stage 4B has no production authority.
+Stage 4C has no production authority.
 
 ## Completed Current Program
 
@@ -113,21 +83,25 @@ Stage 4B has no production authority.
 - WD-5H Stage 3D — SKIPPED
 - WD-5H Stage 3E — NOT APPLICABLE
 - WD-5H Stage 4A — COMPLETE
-- WD-5H Stage 4B — COMPLETE: TEMPORAL_PATTERN_DISCOVERY_COMPLETE_SURVIVOR_GUARDED
+- WD-5H Stage 4B — COMPLETE / PROMISING
+- WD-5H Stage 4C — COMPLETE / PROMISING BUT NOT READY
 
-## Stage 4C Constraint
+## Stage 4D Constraint
 
-Stage 4C may test a high-precision temporal TAKE/ABSTAIN gate, but must:
+Stage 4D must replay the exact frozen 4C rule.
 
-- preserve the survivor guard;
-- select thresholds from validation only;
-- compare T+1/T+2/T+3 without post-hoc switching from test;
-- keep OI as context, not fresh temporal confirmation;
-- report selected count, coverage, precision, and implied trade/day.
+Do not retune:
 
-Because historical test behavior has now been inspected during discovery,
-Stage 4C/4D remain historical robustness research. Production promotion
-requires fresh prospective Stage 4E data.
+- horizon;
+- model features;
+- score threshold;
+- survivor definition.
+
+Stage 4D is allowed to compare economic accounting variants, but the gate
+itself is frozen.
+
+Fresh prospective Stage 4E data remains mandatory before any production
+promotion.
 
 ## Parked
 
