@@ -25,11 +25,6 @@ from .paper_store import (
     mark_order,
     update_position_reduce,
 )
-from .stage6_validation import (
-    finalize_stage6_position,
-    process_stage6_shadow_cycle,
-    register_stage6_position,
-)
 from .profit_discriminator_stage6 import (
     finalize_stage6_discriminator_position,
     process_stage6_discriminator_cycle,
@@ -521,24 +516,6 @@ def _execute_open(
         fee=fee,
         reason="paper_market_entry",
     )
-    try:
-        register_stage6_position(
-            position_id=str(order["position_id"]),
-            signal_id=str(order["signal_id"]),
-            symbol=symbol,
-            side=str(order["side"]),
-            opened_at_ms=opened_at_ms,
-            entry_price=fill,
-            initial_quantity=quantity,
-            initial_notional=notional,
-            entry_fee_total=fee,
-        )
-    except Exception as exc:
-        print(
-            "Stage 6 register warning: "
-            f"{type(exc).__name__}: {str(exc)[:240]}",
-            flush=True,
-        )
     return {
         "status": "FILLED",
         "action": "OPEN",
@@ -677,21 +654,6 @@ def _execute_exit(
     )
     if action == "CLOSE":
         try:
-            finalize_stage6_position(
-                position_id=str(position["position_id"]),
-                closed_at_ms=executed_at,
-                actual_exit_price=fill,
-                actual_realized_pnl=realized_net,
-                actual_realized_pnl_pct=realized_pct,
-                actual_close_reason=str(order.get("reason") or "stage12_close"),
-            )
-        except Exception as exc:
-            print(
-                "Stage 6 finalize warning: "
-                f"{type(exc).__name__}: {str(exc)[:240]}",
-                flush=True,
-            )
-        try:
             finalize_stage6_discriminator_position(str(position["position_id"]))
         except Exception as exc:
             print(
@@ -769,15 +731,6 @@ def paper_cycle() -> dict[str, Any]:
         return {"status": "DISABLED"}
 
     try:
-        stage6 = process_stage6_shadow_cycle()
-    except Exception as exc:
-        stage6 = {
-            "status": "ERROR",
-            "processed_trades": 0,
-            "processed_candles": 0,
-            "errors": [f"{type(exc).__name__}: {str(exc)[:240]}"],
-        }
-    try:
         v2_stage6 = process_stage6_discriminator_cycle()
     except Exception as exc:
         v2_stage6 = {
@@ -804,7 +757,6 @@ def paper_cycle() -> dict[str, Any]:
             }
     return {
         "status": "COMPLETE",
-        "stage6_validation": stage6,
         "pp_decision_v2_stage6": v2_stage6,
         "lifecycle_queued": lifecycle["queued"],
         "exit_execution": exits,

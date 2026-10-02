@@ -6,7 +6,7 @@ import time
 from typing import Any
 
 from .persistence import _postgres_connect, _sqlite_connect, database_path, persistence_backend
-from .stage6_validation import POLICIES, _pp_decision_unified
+from .profit_protection_v1 import evaluate_pp_decision_v1
 
 
 PP_DECISION_V2_VERSION = "pp-decision-v2-stage3-prospective-fast-shadow"
@@ -82,13 +82,11 @@ def evaluate_pp_decision_v2(
     V1 Unified remains the base contract. The fast-decay layer can only escalate
     HOLD -> REDUCE -> CLOSE; it can never relax a V1 decision.
     """
-    v1_policy = POLICIES["PP-DECISION-V1-FINAL"]
-    base_action, base_meta = _pp_decision_unified(
-        v1_policy,
+    base_action, base_meta = evaluate_pp_decision_v1(
         peak_roi=float(mfe_pct),
         economic=float(current_pnl_pct),
         peak=max(0.0, float(mfe_pct)),
-        evidence={"danger_score": int(danger_score)},
+        danger_score=int(danger_score),
         status=str(status).upper(),
     )
     metrics = _decay_metrics(
