@@ -842,3 +842,4 @@ def start_paper_trading_loop() -> bool:
         name="stage13-paper-trading",
         daemon=True,
     ).start()
+    return True
