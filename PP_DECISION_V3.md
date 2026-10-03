@@ -62,11 +62,26 @@ Result:
 Full report:
 `docs/research/profit_protection_v3/PP_V3_STAGE2A_PEAK_CONTINUATION_ANATOMY.md`
 
-### Stage 2B — Causal Peak Detector Replay
-Build a stateful causal detector beginning at the first post-record-peak retracement. The primary objective is to distinguish recovery/continuation from persistent terminal decay before the 20% giveback boundary where possible. Future labels, future maxima, and true MFE are prohibited as inputs.
+### Stage 2B — Causal Peak Detector Replay ✅ COMPLETE — NO PROMOTION
+Replay stateful causal detectors from the first post-record-peak retracement and test whether recovery/continuation can be separated from terminal decay before the 20% giveback boundary.
 
-### Stage 2C — Partial Protect / Runner Frontier
-Only after Stage 2B establishes a causal terminal-peak signal, test partial-protection quantity and runner preservation. The split fraction is a research variable, not a fixed 50/50 assumption.
+Result:
+- 38.04% of terminal candidates are already beyond 20% giveback at the first post-peak poll;
+- 171 stateful causal configurations were tested;
+- the lowest continued false-exit rate in that grid was still 29.92%;
+- the configuration with maximum within-20 terminal recall reached only 37.37% while falsely exiting 52.46% of continued candidates;
+- chronological safe-window late-test AUC was 0.5867 with giveback included;
+- context-only safe-window late-test AUC was 0.5104;
+- no detector qualifies for promotion.
+
+Full report:
+`docs/research/profit_protection_v3/PP_V3_STAGE2B_CAUSAL_PEAK_DETECTOR.md`
+
+### Stage 2B.1 — Fast Peak Observation Lane
+Test whether earlier causal observations can remove the Stage 2B timing ceiling. This requires new prospective sub-15-second evidence (for example 5-second or event-driven price/microstate observations) because the frozen 15-second stream cannot honestly reconstruct observations that never existed.
+
+### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
+Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
 
 ### Stage 3 — Decay-Aware Protection
 Use causal decay/velocity/recovery evidence to distinguish a temporary retracement from genuine profit failure.
@@ -92,8 +107,13 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - frozen result JSON: `research/profit_protection_v3/results/stage2a_peak_continuation_anatomy_1791021852690.json`
 - unit tests: `tests/test_pp_v3_stage2a_peak_continuation_anatomy.py`
 
+### Stage 2B
+- causal replay: `research/profit_protection_v3/stage2b_causal_peak_detector.py`
+- frozen result JSON: `research/profit_protection_v3/results/stage2b_causal_peak_detector_1791021852690.json`
+- unit tests: `tests/test_pp_v3_stage2b_causal_peak_detector.py`
+
 Frozen dataset:
 - start: `1790848801393`
 - cutoff: `1791021852690`
 
-No Stage 1 or Stage 2A research code is imported by production runtime.
+No Stage 1, Stage 2A, or Stage 2B research code is imported by production runtime.
