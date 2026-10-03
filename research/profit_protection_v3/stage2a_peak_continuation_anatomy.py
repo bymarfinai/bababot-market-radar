@@ -48,29 +48,34 @@ def record_local_peak_candidates(
     """
     Retrospectively extract record-high observations followed by a lower next poll.
 
-    This is an offline anatomy labeler, not a live detector. The final such event
-    in a trade is labeled TERMINAL; earlier events are CONTINUED.
+    This is an offline anatomy labeler, not a live detector. A candidate is
+    TERMINAL only when no later observed current PnL exceeds that candidate.
+    Otherwise it is CONTINUED. Trades that end on a later rising record without
+    another retracement remain right-censored rather than being mislabeled.
     """
     running_peak = float("-inf")
-    raw: list[tuple[int, float]] = []
+    candidates: list[PeakCandidate] = []
     for index, obs in enumerate(stream[:-1]):
-        is_new_record = float(obs.current_pnl_pct) > running_peak
-        running_peak = max(running_peak, float(obs.current_pnl_pct))
-        if not is_new_record or float(obs.current_pnl_pct) < float(arm_pct):
+        peak = float(obs.current_pnl_pct)
+        is_new_record = peak > running_peak
+        running_peak = max(running_peak, peak)
+        if not is_new_record or peak < float(arm_pct):
             continue
-        if float(stream[index + 1].current_pnl_pct) >= float(obs.current_pnl_pct):
+        if float(stream[index + 1].current_pnl_pct) >= peak:
             continue
-        raw.append((index, float(obs.current_pnl_pct)))
-
-    return [
-        PeakCandidate(
-            position_id=str(position_id),
-            observation_index=index,
-            peak_pct=peak,
-            label="TERMINAL" if item_no == len(raw) - 1 else "CONTINUED",
+        future_max = max(
+            (float(item.current_pnl_pct) for item in stream[index + 1 :]),
+            default=float("-inf"),
         )
-        for item_no, (index, peak) in enumerate(raw)
-    ]
+        candidates.append(
+            PeakCandidate(
+                position_id=str(position_id),
+                observation_index=index,
+                peak_pct=peak,
+                label="CONTINUED" if future_max > peak else "TERMINAL",
+            )
+        )
+    return candidates
 
 
 def first_horizon_index(
@@ -285,6 +290,11 @@ def build_anatomy(
         "arm_pct": float(arm_pct),
         "observable_arm_trades": len(eligible),
         "trades_with_record_local_peak": len({item.position_id for item in candidates}),
+        "trades_with_terminal_peak": len({item.position_id for item in terminal}),
+        "right_censored_after_local_peak": (
+            len({item.position_id for item in candidates})
+            - len({item.position_id for item in terminal})
+        ),
         "censored_no_record_local_peak": len(eligible) - len({item.position_id for item in candidates}),
         "record_local_peak_candidates": len(candidates),
         "continued_candidates": sum(item.label == "CONTINUED" for item in candidates),
