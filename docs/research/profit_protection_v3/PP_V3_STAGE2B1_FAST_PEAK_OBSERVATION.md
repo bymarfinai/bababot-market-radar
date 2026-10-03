@@ -1,6 +1,6 @@
 # PP-DECISION V3 — Stage 2B.1 Fast Peak Observation Lane
 
-Status: **IMPLEMENTED — prospective shadow capture only, no exit authority**
+Status: **ACTIVE — prospective shadow capture only, no exit authority**
 
 ## Objective
 
@@ -15,6 +15,22 @@ Primary questions:
 
 - Does a 5-second current-price lane observe a materially higher fraction of true MFE than the existing ~15-second lane?
 - Does the 5s/10s/15s micro-path create usable causal separation between terminal decay and continuation while giveback is still <=20%?
+
+## Activation record
+
+- deployment commit: `84438021c84506cda204ef0791fe48da8264fd82`
+- prospective start boundary: `1791030303648`
+- first persisted observation: `1791030389337`
+- initial validation cohort: **6** newly opened positions
+- initial validation rows: **54**
+- observed sample-gap median: **4,997 ms**
+- observed sample-gap range: **4,878–5,082 ms**
+- Stage 12 fast guard remained **15 seconds**
+- Stage 2B.1 observer ran at **5 seconds**
+- control flow used: PAUSE_ENTRIES → deploy/verify → RUN
+- Postgres volume and historical tables verified intact after container recreation
+
+The activation boundary is frozen. Historical positions opened before this boundary are excluded from the Stage 2B.1 cohort.
 
 ## Runtime design
 
