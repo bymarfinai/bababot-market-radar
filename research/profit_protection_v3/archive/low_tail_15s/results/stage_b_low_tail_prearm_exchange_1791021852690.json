@@ -1,0 +1,1362 @@
+{
+  "arm_pct": 0.3,
+  "b1_prearm_detector": {
+    "checkpoints": {
+      "PRE_SPIKE_LAST_ORACLE_TIMED": {
+        "coverage_of_labeled_pct": 95.83828775267538,
+        "covered": 806,
+        "good": 531,
+        "low_tail": 275,
+        "models": {
+          "context_fpr10": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.7348717948717949,
+            "test_low_tail": 80,
+            "test_metrics": {
+              "false_positive_good_pct": 15.897435897435898,
+              "fired": 59,
+              "precision_pct": 47.45762711864407,
+              "recall_low_tail_pct": 35.0
+            },
+            "test_n": 275,
+            "threshold": 0.4892476643463313,
+            "train_auc": 0.7331654456654456,
+            "train_low_tail": 195,
+            "train_metrics": {
+              "false_positive_good_pct": 9.821428571428571,
+              "fired": 83,
+              "precision_pct": 60.24096385542169,
+              "recall_low_tail_pct": 25.641025641025642
+            },
+            "train_n": 531
+          },
+          "context_fpr20": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.7348717948717949,
+            "test_low_tail": 80,
+            "test_metrics": {
+              "false_positive_good_pct": 24.615384615384617,
+              "fired": 87,
+              "precision_pct": 44.827586206896555,
+              "recall_low_tail_pct": 48.75
+            },
+            "test_n": 275,
+            "threshold": 0.4418522300418576,
+            "train_auc": 0.7331654456654456,
+            "train_low_tail": 195,
+            "train_metrics": {
+              "false_positive_good_pct": 19.94047619047619,
+              "fired": 158,
+              "precision_pct": 57.59493670886076,
+              "recall_low_tail_pct": 46.666666666666664
+            },
+            "train_n": 531
+          },
+          "path_fpr10": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.8576923076923076,
+            "test_low_tail": 80,
+            "test_metrics": {
+              "false_positive_good_pct": 11.282051282051283,
+              "fired": 68,
+              "precision_pct": 67.6470588235294,
+              "recall_low_tail_pct": 57.5
+            },
+            "test_n": 275,
+            "threshold": 0.4866196710403169,
+            "train_auc": 0.8361721611721612,
+            "train_low_tail": 195,
+            "train_metrics": {
+              "false_positive_good_pct": 9.821428571428571,
+              "fired": 140,
+              "precision_pct": 76.42857142857143,
+              "recall_low_tail_pct": 54.87179487179487
+            },
+            "train_n": 531
+          },
+          "path_fpr20": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.8576923076923076,
+            "test_low_tail": 80,
+            "test_metrics": {
+              "false_positive_good_pct": 20.0,
+              "fired": 101,
+              "precision_pct": 61.386138613861384,
+              "recall_low_tail_pct": 77.5
+            },
+            "test_n": 275,
+            "threshold": 0.41275333652236984,
+            "train_auc": 0.8361721611721612,
+            "train_low_tail": 195,
+            "train_metrics": {
+              "false_positive_good_pct": 19.94047619047619,
+              "fired": 204,
+              "precision_pct": 67.15686274509804,
+              "recall_low_tail_pct": 70.25641025641026
+            },
+            "train_n": 531
+          }
+        },
+        "timing_note": "Retrospectively selected immediately before final MFE discovery; features are causal but checkpoint timing is oracle-selected and cannot be used as a production trigger."
+      },
+      "T+120s": {
+        "coverage_of_labeled_pct": 82.40190249702735,
+        "covered": 693,
+        "good": 506,
+        "low_tail": 187,
+        "models": {
+          "context_fpr10": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.597920997920998,
+            "test_low_tail": 52,
+            "test_metrics": {
+              "false_positive_good_pct": 10.27027027027027,
+              "fired": 29,
+              "precision_pct": 34.48275862068966,
+              "recall_low_tail_pct": 19.23076923076923
+            },
+            "test_n": 237,
+            "threshold": 0.36584873928740325,
+            "train_auc": 0.6091150340371524,
+            "train_low_tail": 135,
+            "train_metrics": {
+              "false_positive_good_pct": 9.968847352024921,
+              "fired": 59,
+              "precision_pct": 45.76271186440678,
+              "recall_low_tail_pct": 20.0
+            },
+            "train_n": 456
+          },
+          "context_fpr20": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.597920997920998,
+            "test_low_tail": 52,
+            "test_metrics": {
+              "false_positive_good_pct": 24.864864864864863,
+              "fired": 63,
+              "precision_pct": 26.984126984126984,
+              "recall_low_tail_pct": 32.69230769230769
+            },
+            "test_n": 237,
+            "threshold": 0.3375284207052028,
+            "train_auc": 0.6091150340371524,
+            "train_low_tail": 135,
+            "train_metrics": {
+              "false_positive_good_pct": 19.937694704049843,
+              "fired": 108,
+              "precision_pct": 40.74074074074074,
+              "recall_low_tail_pct": 32.592592592592595
+            },
+            "train_n": 456
+          },
+          "path_fpr10": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.5936590436590437,
+            "test_low_tail": 52,
+            "test_metrics": {
+              "false_positive_good_pct": 12.432432432432432,
+              "fired": 30,
+              "precision_pct": 23.333333333333332,
+              "recall_low_tail_pct": 13.461538461538462
+            },
+            "test_n": 237,
+            "threshold": 0.3807977882363204,
+            "train_auc": 0.64654436367832,
+            "train_low_tail": 135,
+            "train_metrics": {
+              "false_positive_good_pct": 9.968847352024921,
+              "fired": 63,
+              "precision_pct": 49.20634920634921,
+              "recall_low_tail_pct": 22.962962962962962
+            },
+            "train_n": 456
+          },
+          "path_fpr20": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.5936590436590437,
+            "test_low_tail": 52,
+            "test_metrics": {
+              "false_positive_good_pct": 21.08108108108108,
+              "fired": 57,
+              "precision_pct": 31.57894736842105,
+              "recall_low_tail_pct": 34.61538461538461
+            },
+            "test_n": 237,
+            "threshold": 0.34408034132420773,
+            "train_auc": 0.64654436367832,
+            "train_low_tail": 135,
+            "train_metrics": {
+              "false_positive_good_pct": 19.937694704049843,
+              "fired": 114,
+              "precision_pct": 43.85964912280702,
+              "recall_low_tail_pct": 37.03703703703704
+            },
+            "train_n": 456
+          }
+        },
+        "timing_note": "Fixed post-entry causal checkpoint; trades whose final MFE was already discovered before the checkpoint are excluded."
+      },
+      "T+30s": {
+        "coverage_of_labeled_pct": 95.60047562425683,
+        "covered": 804,
+        "good": 531,
+        "low_tail": 273,
+        "models": {
+          "context_fpr10": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.7105485232067511,
+            "test_low_tail": 79,
+            "test_metrics": {
+              "false_positive_good_pct": 6.153846153846154,
+              "fired": 32,
+              "precision_pct": 62.5,
+              "recall_low_tail_pct": 25.31645569620253
+            },
+            "test_n": 274,
+            "threshold": 0.45540425061812223,
+            "train_auc": 0.6276693667157585,
+            "train_low_tail": 194,
+            "train_metrics": {
+              "false_positive_good_pct": 9.821428571428571,
+              "fired": 68,
+              "precision_pct": 51.470588235294116,
+              "recall_low_tail_pct": 18.04123711340206
+            },
+            "train_n": 530
+          },
+          "context_fpr20": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.7105485232067511,
+            "test_low_tail": 79,
+            "test_metrics": {
+              "false_positive_good_pct": 16.41025641025641,
+              "fired": 68,
+              "precision_pct": 52.94117647058823,
+              "recall_low_tail_pct": 45.56962025316456
+            },
+            "test_n": 274,
+            "threshold": 0.4148121593546266,
+            "train_auc": 0.6276693667157585,
+            "train_low_tail": 194,
+            "train_metrics": {
+              "false_positive_good_pct": 19.94047619047619,
+              "fired": 133,
+              "precision_pct": 49.62406015037594,
+              "recall_low_tail_pct": 34.02061855670103
+            },
+            "train_n": 530
+          },
+          "path_fpr10": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.6994482310938007,
+            "test_low_tail": 79,
+            "test_metrics": {
+              "false_positive_good_pct": 5.641025641025641,
+              "fired": 30,
+              "precision_pct": 63.333333333333336,
+              "recall_low_tail_pct": 24.050632911392405
+            },
+            "test_n": 274,
+            "threshold": 0.4614565227562919,
+            "train_auc": 0.6306148748159057,
+            "train_low_tail": 194,
+            "train_metrics": {
+              "false_positive_good_pct": 9.821428571428571,
+              "fired": 75,
+              "precision_pct": 56.0,
+              "recall_low_tail_pct": 21.649484536082475
+            },
+            "train_n": 530
+          },
+          "path_fpr20": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.6994482310938007,
+            "test_low_tail": 79,
+            "test_metrics": {
+              "false_positive_good_pct": 15.897435897435898,
+              "fired": 67,
+              "precision_pct": 53.73134328358209,
+              "recall_low_tail_pct": 45.56962025316456
+            },
+            "test_n": 274,
+            "threshold": 0.41390084523935006,
+            "train_auc": 0.6306148748159057,
+            "train_low_tail": 194,
+            "train_metrics": {
+              "false_positive_good_pct": 19.94047619047619,
+              "fired": 138,
+              "precision_pct": 51.44927536231884,
+              "recall_low_tail_pct": 36.597938144329895
+            },
+            "train_n": 530
+          }
+        },
+        "timing_note": "Fixed post-entry causal checkpoint; trades whose final MFE was already discovered before the checkpoint are excluded."
+      },
+      "T+60s": {
+        "coverage_of_labeled_pct": 89.77407847800238,
+        "covered": 755,
+        "good": 518,
+        "low_tail": 237,
+        "models": {
+          "context_fpr10": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.5489682784108407,
+            "test_low_tail": 68,
+            "test_metrics": {
+              "false_positive_good_pct": 13.612565445026178,
+              "fired": 43,
+              "precision_pct": 39.53488372093023,
+              "recall_low_tail_pct": 25.0
+            },
+            "test_n": 259,
+            "threshold": 0.4227792160404347,
+            "train_auc": 0.6060293505600493,
+            "train_low_tail": 169,
+            "train_metrics": {
+              "false_positive_good_pct": 9.785932721712538,
+              "fired": 69,
+              "precision_pct": 53.6231884057971,
+              "recall_low_tail_pct": 21.893491124260354
+            },
+            "train_n": 496
+          },
+          "context_fpr20": {
+            "feature_set": "context_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.5489682784108407,
+            "test_low_tail": 68,
+            "test_metrics": {
+              "false_positive_good_pct": 21.465968586387433,
+              "fired": 61,
+              "precision_pct": 32.78688524590164,
+              "recall_low_tail_pct": 29.41176470588235
+            },
+            "test_n": 259,
+            "threshold": 0.3877900804858555,
+            "train_auc": 0.6060293505600493,
+            "train_low_tail": 169,
+            "train_metrics": {
+              "false_positive_good_pct": 19.877675840978593,
+              "fired": 123,
+              "precision_pct": 47.15447154471545,
+              "recall_low_tail_pct": 34.319526627218934
+            },
+            "train_n": 496
+          },
+          "path_fpr10": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.1,
+            "status": "COMPLETE",
+            "test_auc": 0.5507391438250693,
+            "test_low_tail": 68,
+            "test_metrics": {
+              "false_positive_good_pct": 10.471204188481675,
+              "fired": 36,
+              "precision_pct": 44.44444444444444,
+              "recall_low_tail_pct": 23.529411764705884
+            },
+            "test_n": 259,
+            "threshold": 0.44414428165800457,
+            "train_auc": 0.6248484519479579,
+            "train_low_tail": 169,
+            "train_metrics": {
+              "false_positive_good_pct": 9.785932721712538,
+              "fired": 69,
+              "precision_pct": 53.6231884057971,
+              "recall_low_tail_pct": 21.893491124260354
+            },
+            "train_n": 496
+          },
+          "path_fpr20": {
+            "feature_set": "path_features",
+            "max_train_fpr": 0.2,
+            "status": "COMPLETE",
+            "test_auc": 0.5507391438250693,
+            "test_low_tail": 68,
+            "test_metrics": {
+              "false_positive_good_pct": 23.56020942408377,
+              "fired": 69,
+              "precision_pct": 34.78260869565217,
+              "recall_low_tail_pct": 35.294117647058826
+            },
+            "test_n": 259,
+            "threshold": 0.3892451338927334,
+            "train_auc": 0.6248484519479579,
+            "train_low_tail": 169,
+            "train_metrics": {
+              "false_positive_good_pct": 19.877675840978593,
+              "fired": 129,
+              "precision_pct": 49.6124031007752,
+              "recall_low_tail_pct": 37.8698224852071
+            },
+            "train_n": 496
+          }
+        },
+        "timing_note": "Fixed post-entry causal checkpoint; trades whose final MFE was already discovered before the checkpoint are excluded."
+      }
+    },
+    "good_90_100": 534,
+    "labeled_trade_count": 841,
+    "low_tail_lt80": 307,
+    "test_position_count": 281,
+    "train_position_count": 560
+  },
+  "b2_exchange_side_replay": {
+    "bars_per_trade_median": 14.0,
+    "bars_per_trade_p10": 2.0,
+    "bars_per_trade_p90": 69.0,
+    "configs": {
+      "IDEAL_FRACTION_A0.30_R0.80": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 96.32107023411372,
+            "exit_before_final_mfe_discovery_pct": 76.89530685920577,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 100.0,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 40.40833495037526,
+            "median_capture_pct": 40.41049916336156,
+            "median_exit_roi_pct": 0.32626993345664657,
+            "n": 1196,
+            "p10_capture_pct": 10.21323260419921,
+            "p25_capture_pct": 22.936831721388902,
+            "triggered_share_pct": 92.64214046822742
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 96.32107023411372,
+            "exit_before_final_mfe_discovery_pct": 91.87554019014694,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 100.0,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 41.63719970033824,
+            "median_capture_pct": 40.33221694064575,
+            "median_exit_roi_pct": 0.32202028958869255,
+            "n": 1196,
+            "p10_capture_pct": 12.180795106594248,
+            "p25_capture_pct": 23.80524680216429,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.8
+      },
+      "IDEAL_FRACTION_A0.30_R0.85": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 96.57190635451505,
+            "exit_before_final_mfe_discovery_pct": 77.99819657348964,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 85.70234113712375,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 42.37621977887696,
+            "median_capture_pct": 42.098413522580515,
+            "median_exit_roi_pct": 0.34208845718492475,
+            "n": 1196,
+            "p10_capture_pct": 10.841723298003489,
+            "p25_capture_pct": 23.997456387373514,
+            "triggered_share_pct": 92.72575250836121
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 96.57190635451505,
+            "exit_before_final_mfe_discovery_pct": 91.87554019014694,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 84.78260869565217,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 44.39938796027684,
+            "median_capture_pct": 42.98908454440803,
+            "median_exit_roi_pct": 0.3424114040788351,
+            "n": 1196,
+            "p10_capture_pct": 12.891899428823178,
+            "p25_capture_pct": 25.38743899260189,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.85
+      },
+      "IDEAL_FRACTION_A0.30_R0.90": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 96.73913043478261,
+            "exit_before_final_mfe_discovery_pct": 78.4878487848785,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 82.85953177257525,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 44.47805780364765,
+            "median_capture_pct": 43.80987538488065,
+            "median_exit_roi_pct": 0.36048289423779023,
+            "n": 1196,
+            "p10_capture_pct": 11.308981650374253,
+            "p25_capture_pct": 25.14234138590045,
+            "triggered_share_pct": 92.89297658862876
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 96.73913043478261,
+            "exit_before_final_mfe_discovery_pct": 91.87554019014694,
+            "ge90_share_pct": 0.0,
+            "lt80_share_pct": 81.18729096989966,
+            "lt90_share_pct": 100.0,
+            "mean_capture_pct": 47.155131301307264,
+            "median_capture_pct": 45.58452727074304,
+            "median_exit_roi_pct": 0.363729721965822,
+            "n": 1196,
+            "p10_capture_pct": 13.658149235964679,
+            "p25_capture_pct": 26.81254156693082,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.9
+      },
+      "IDEAL_FRACTION_A0.30_R0.95": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 96.73913043478261,
+            "exit_before_final_mfe_discovery_pct": 78.77697841726619,
+            "ge90_share_pct": 13.210702341137123,
+            "lt80_share_pct": 81.10367892976589,
+            "lt90_share_pct": 86.78929765886288,
+            "mean_capture_pct": 46.751121549849415,
+            "median_capture_pct": 45.980034697893366,
+            "median_exit_roi_pct": 0.3788153649516568,
+            "n": 1196,
+            "p10_capture_pct": 11.6647734671682,
+            "p25_capture_pct": 26.36968912872504,
+            "triggered_share_pct": 92.97658862876254
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 96.73913043478261,
+            "exit_before_final_mfe_discovery_pct": 91.87554019014694,
+            "ge90_share_pct": 15.133779264214047,
+            "lt80_share_pct": 79.09698996655518,
+            "lt90_share_pct": 84.86622073578596,
+            "mean_capture_pct": 49.91696151019533,
+            "median_capture_pct": 48.28668232990367,
+            "median_exit_roi_pct": 0.38504803985282,
+            "n": 1196,
+            "p10_capture_pct": 14.46125832260346,
+            "p25_capture_pct": 28.199756606691096,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.95
+      },
+      "IDEAL_FRACTION_A0.50_R0.80": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 85.28428093645485,
+            "exit_before_final_mfe_discovery_pct": 64.58982346832813,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 99.91638795986623,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 28.983052474671698,
+            "median_capture_pct": 50.46982287458424,
+            "median_exit_roi_pct": 0.4710219852821884,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 22.479351630503537,
+            "triggered_share_pct": 80.51839464882943
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 85.28428093645485,
+            "exit_before_final_mfe_discovery_pct": 94.5578231292517,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 99.83277591973244,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 31.17343162429167,
+            "median_capture_pct": 51.898622879893274,
+            "median_exit_roi_pct": 0.46798688501856756,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 25.03935870157702,
+            "triggered_share_pct": 86.03678929765886
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.8
+      },
+      "IDEAL_FRACTION_A0.50_R0.85": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 85.8695652173913,
+            "exit_before_final_mfe_discovery_pct": 66.39004149377594,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 73.91304347826087,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 31.130216868687125,
+            "median_capture_pct": 51.61489172908236,
+            "median_exit_roi_pct": 0.49747707793493245,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 23.7231930418632,
+            "triggered_share_pct": 80.60200668896321
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 85.8695652173913,
+            "exit_before_final_mfe_discovery_pct": 94.75218658892128,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 71.15384615384616,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 34.09099101963925,
+            "median_capture_pct": 55.089146168507796,
+            "median_exit_roi_pct": 0.49663059701389733,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 26.104643884608375,
+            "triggered_share_pct": 86.03678929765886
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.85
+      },
+      "IDEAL_FRACTION_A0.50_R0.90": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 85.95317725752508,
+            "exit_before_final_mfe_discovery_pct": 67.66839378238342,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 71.57190635451505,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 33.197324869476624,
+            "median_capture_pct": 53.29869360008191,
+            "median_exit_roi_pct": 0.5231341309453741,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 23.657631546385304,
+            "triggered_share_pct": 80.68561872909699
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 85.95317725752508,
+            "exit_before_final_mfe_discovery_pct": 94.75218658892128,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 67.72575250836121,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 37.11679067676799,
+            "median_capture_pct": 58.45007071561151,
+            "median_exit_roi_pct": 0.526393732184488,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 27.22727742976655,
+            "triggered_share_pct": 86.03678929765886
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.9
+      },
+      "IDEAL_FRACTION_A0.50_R0.95": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 85.95317725752508,
+            "exit_before_final_mfe_discovery_pct": 68.18652849740933,
+            "ge90_share_pct": 24.163879598662206,
+            "lt80_share_pct": 68.81270903010034,
+            "lt90_share_pct": 75.8361204013378,
+            "mean_capture_pct": 35.65252902382842,
+            "median_capture_pct": 55.91993753453638,
+            "median_exit_roi_pct": 0.5500582801769349,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 24.800536220707738,
+            "triggered_share_pct": 80.68561872909699
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 85.95317725752508,
+            "exit_before_final_mfe_discovery_pct": 94.75218658892128,
+            "ge90_share_pct": 28.59531772575251,
+            "lt80_share_pct": 64.29765886287625,
+            "lt90_share_pct": 71.40468227424749,
+            "mean_capture_pct": 40.15698913596555,
+            "median_capture_pct": 61.810995262711984,
+            "median_exit_roi_pct": 0.5567489395280678,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 28.77530177834659,
+            "triggered_share_pct": 86.03678929765886
+          }
+        },
+        "trail_type": "IDEAL_FRACTION_OF_EXCURSION",
+        "trail_value": 0.95
+      },
+      "NATIVE_A0.30_CB0.10": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 95.48494983277592,
+            "exit_before_final_mfe_discovery_pct": 76.33242999096657,
+            "ge90_share_pct": 1.588628762541806,
+            "lt80_share_pct": 89.54849498327759,
+            "lt90_share_pct": 98.4113712374582,
+            "mean_capture_pct": 40.747877844590015,
+            "median_capture_pct": 38.511841143927086,
+            "median_exit_roi_pct": 0.3226891406689192,
+            "n": 1196,
+            "p10_capture_pct": 9.443275580843203,
+            "p25_capture_pct": 21.593881479464443,
+            "triggered_share_pct": 92.55852842809365
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 95.48494983277592,
+            "exit_before_final_mfe_discovery_pct": 91.70267934312878,
+            "ge90_share_pct": 2.25752508361204,
+            "lt80_share_pct": 89.96655518394648,
+            "lt90_share_pct": 97.74247491638796,
+            "mean_capture_pct": 41.48721342683731,
+            "median_capture_pct": 38.13062999830839,
+            "median_exit_roi_pct": 0.31061759794450694,
+            "n": 1196,
+            "p10_capture_pct": 11.64275798127298,
+            "p25_capture_pct": 21.616470358862415,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.1
+      },
+      "NATIVE_A0.30_CB0.20": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 88.29431438127091,
+            "exit_before_final_mfe_discovery_pct": 71.2079927338783,
+            "ge90_share_pct": 0.5852842809364549,
+            "lt80_share_pct": 97.07357859531773,
+            "lt90_share_pct": 99.41471571906355,
+            "mean_capture_pct": 34.47654146085904,
+            "median_capture_pct": 32.33388865490233,
+            "median_exit_roi_pct": 0.2703884417584401,
+            "n": 1196,
+            "p10_capture_pct": 7.005002643781247,
+            "p25_capture_pct": 15.617852504029614,
+            "triggered_share_pct": 92.05685618729098
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 88.29431438127091,
+            "exit_before_final_mfe_discovery_pct": 90.75194468452895,
+            "ge90_share_pct": 0.4180602006688963,
+            "lt80_share_pct": 96.98996655518394,
+            "lt90_share_pct": 99.58193979933111,
+            "mean_capture_pct": 31.39648066195964,
+            "median_capture_pct": 26.351129408203978,
+            "median_exit_roi_pct": 0.22474414104137752,
+            "n": 1196,
+            "p10_capture_pct": 7.005002643781247,
+            "p25_capture_pct": 14.139299087114676,
+            "triggered_share_pct": 96.73913043478261
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.2
+      },
+      "NATIVE_A0.30_CB0.30": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 76.25418060200668,
+            "exit_before_final_mfe_discovery_pct": 63.64468864468864,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 97.9933110367893,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 28.388103800678806,
+            "median_capture_pct": 27.229982335147866,
+            "median_exit_roi_pct": 0.23695915465827833,
+            "n": 1196,
+            "p10_capture_pct": 1.2154418602399646,
+            "p25_capture_pct": 8.74222946084313,
+            "triggered_share_pct": 91.30434782608695
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 76.25418060200668,
+            "exit_before_final_mfe_discovery_pct": 87.0995670995671,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 98.99665551839465,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 23.939633043174698,
+            "median_capture_pct": 18.910783272476234,
+            "median_exit_roi_pct": 0.1703612414202471,
+            "n": 1196,
+            "p10_capture_pct": 0.5362526372758962,
+            "p25_capture_pct": 5.878719575649839,
+            "triggered_share_pct": 96.57190635451505
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.3
+      },
+      "NATIVE_A0.30_CB0.50": {
+        "activation_roi_pct": 0.3,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 51.00334448160535,
+            "exit_before_final_mfe_discovery_pct": 46.702127659574465,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 98.66220735785953,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 17.71669472113779,
+            "median_capture_pct": 19.20468623929173,
+            "median_exit_roi_pct": 0.16579425026123085,
+            "n": 1196,
+            "p10_capture_pct": -22.466306310972534,
+            "p25_capture_pct": -5.703128085614424,
+            "triggered_share_pct": 78.59531772575251
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 51.00334448160535,
+            "exit_before_final_mfe_discovery_pct": 73.51816443594646,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 99.33110367892976,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 13.288725918038429,
+            "median_capture_pct": 12.413017902054827,
+            "median_exit_roi_pct": 0.11927527855269959,
+            "n": 1196,
+            "p10_capture_pct": -21.974681204335305,
+            "p25_capture_pct": -6.524293605135078,
+            "triggered_share_pct": 87.45819397993311
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.5
+      },
+      "NATIVE_A0.50_CB0.10": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 85.5351170568562,
+            "exit_before_final_mfe_discovery_pct": 66.42487046632124,
+            "ge90_share_pct": 2.1739130434782608,
+            "lt80_share_pct": 81.68896321070234,
+            "lt90_share_pct": 97.82608695652173,
+            "mean_capture_pct": 31.47186791994795,
+            "median_capture_pct": 52.678155711517874,
+            "median_exit_roi_pct": 0.49150884756469226,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 23.532606203382294,
+            "triggered_share_pct": 80.68561872909699
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 85.5351170568562,
+            "exit_before_final_mfe_discovery_pct": 94.75218658892128,
+            "ge90_share_pct": 3.260869565217391,
+            "lt80_share_pct": 79.68227424749163,
+            "lt90_share_pct": 96.73913043478261,
+            "mean_capture_pct": 34.3597278221283,
+            "median_capture_pct": 54.90368243891075,
+            "median_exit_roi_pct": 0.4882896210278931,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 26.212306643524897,
+            "triggered_share_pct": 86.03678929765886
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.1
+      },
+      "NATIVE_A0.50_CB0.20": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 81.0200668896321,
+            "exit_before_final_mfe_discovery_pct": 60.91476091476091,
+            "ge90_share_pct": 0.8361204013377926,
+            "lt80_share_pct": 95.90301003344482,
+            "lt90_share_pct": 99.1638795986622,
+            "mean_capture_pct": 25.89050203971232,
+            "median_capture_pct": 48.83167766987619,
+            "median_exit_roi_pct": 0.4288559108300172,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 21.29748931594792,
+            "triggered_share_pct": 80.43478260869566
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 81.0200668896321,
+            "exit_before_final_mfe_discovery_pct": 92.8988326848249,
+            "ge90_share_pct": 0.6688963210702341,
+            "lt80_share_pct": 95.65217391304348,
+            "lt90_share_pct": 99.33110367892976,
+            "mean_capture_pct": 25.991621352096768,
+            "median_capture_pct": 45.3152067444255,
+            "median_exit_roi_pct": 0.39744411236356525,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 22.00732001097519,
+            "triggered_share_pct": 85.95317725752508
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.2
+      },
+      "NATIVE_A0.50_CB0.30": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 72.82608695652173,
+            "exit_before_final_mfe_discovery_pct": 53.48101265822785,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 97.49163879598662,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 20.484827848479245,
+            "median_capture_pct": 40.45486009946625,
+            "median_exit_roi_pct": 0.3695251225795504,
+            "n": 1196,
+            "p10_capture_pct": -23.900696137115713,
+            "p25_capture_pct": 18.900597053058966,
+            "triggered_share_pct": 79.26421404682274
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 72.82608695652173,
+            "exit_before_final_mfe_discovery_pct": 88.050930460333,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 98.57859531772576,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 18.796377275541293,
+            "median_capture_pct": 37.245928509105276,
+            "median_exit_roi_pct": 0.33046639453024884,
+            "n": 1196,
+            "p10_capture_pct": -10.960989317538626,
+            "p25_capture_pct": 17.856755687945373,
+            "triggered_share_pct": 85.36789297658864
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.3
+      },
+      "NATIVE_A0.50_CB0.50": {
+        "activation_roi_pct": 0.5,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 51.25418060200669,
+            "exit_before_final_mfe_discovery_pct": 38.656527249683144,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 98.57859531772576,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 10.907757059211916,
+            "median_capture_pct": 27.053870675515356,
+            "median_exit_roi_pct": 0.2613578845282183,
+            "n": 1196,
+            "p10_capture_pct": -25.577497457617348,
+            "p25_capture_pct": 8.093328269833172,
+            "triggered_share_pct": 65.96989966555184
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 51.25418060200669,
+            "exit_before_final_mfe_discovery_pct": 74.33920704845815,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 99.33110367892976,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 7.3978353962405885,
+            "median_capture_pct": 20.20513980370121,
+            "median_exit_roi_pct": 0.21436745129662094,
+            "n": 1196,
+            "p10_capture_pct": -18.787178568330166,
+            "p25_capture_pct": 5.903677344607483,
+            "triggered_share_pct": 75.91973244147157
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.5
+      },
+      "NATIVE_A0.75_CB0.10": {
+        "activation_roi_pct": 0.75,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 59.280936454849495,
+            "exit_before_final_mfe_discovery_pct": 70.42682926829268,
+            "ge90_share_pct": 2.759197324414716,
+            "lt80_share_pct": 80.35117056856187,
+            "lt90_share_pct": 97.24080267558529,
+            "mean_capture_pct": 18.879523279257555,
+            "median_capture_pct": 32.19241975781863,
+            "median_exit_roi_pct": 0.6509777436020214,
+            "n": 1196,
+            "p10_capture_pct": -38.39821203604613,
+            "p25_capture_pct": 4.749468495270091,
+            "triggered_share_pct": 54.8494983277592
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 59.280936454849495,
+            "exit_before_final_mfe_discovery_pct": 97.19495091164096,
+            "ge90_share_pct": 4.013377926421405,
+            "lt80_share_pct": 77.09030100334448,
+            "lt90_share_pct": 95.9866220735786,
+            "mean_capture_pct": 21.66642428011018,
+            "median_capture_pct": 36.31648829773988,
+            "median_exit_roi_pct": 0.6592521544946717,
+            "n": 1196,
+            "p10_capture_pct": -37.11706570460876,
+            "p25_capture_pct": 6.896112322656268,
+            "triggered_share_pct": 59.61538461538461
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.1
+      },
+      "NATIVE_A0.75_CB0.20": {
+        "activation_roi_pct": 0.75,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 57.441471571906355,
+            "exit_before_final_mfe_discovery_pct": 66.5137614678899,
+            "ge90_share_pct": 0.919732441471572,
+            "lt80_share_pct": 94.81605351170569,
+            "lt90_share_pct": 99.08026755852843,
+            "mean_capture_pct": 16.12109946224473,
+            "median_capture_pct": 32.14482118700456,
+            "median_exit_roi_pct": 0.55460557763089,
+            "n": 1196,
+            "p10_capture_pct": -38.39821203604613,
+            "p25_capture_pct": 4.749468495270091,
+            "triggered_share_pct": 54.68227424749164
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 57.441471571906355,
+            "exit_before_final_mfe_discovery_pct": 96.4936886395512,
+            "ge90_share_pct": 0.7525083612040134,
+            "lt80_share_pct": 94.23076923076923,
+            "lt90_share_pct": 99.24749163879599,
+            "mean_capture_pct": 17.379921045038284,
+            "median_capture_pct": 33.555877240222934,
+            "median_exit_roi_pct": 0.5630368386821627,
+            "n": 1196,
+            "p10_capture_pct": -37.11706570460876,
+            "p25_capture_pct": 6.528669157794079,
+            "triggered_share_pct": 59.61538461538461
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.2
+      },
+      "NATIVE_A0.75_CB0.30": {
+        "activation_roi_pct": 0.75,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 53.09364548494983,
+            "exit_before_final_mfe_discovery_pct": 59.10493827160494,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 96.82274247491638,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 13.69902994075244,
+            "median_capture_pct": 31.202545362555213,
+            "median_exit_roi_pct": 0.4603336245010303,
+            "n": 1196,
+            "p10_capture_pct": -38.39821203604613,
+            "p25_capture_pct": 4.749468495270091,
+            "triggered_share_pct": 54.180602006688964
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 53.09364548494983,
+            "exit_before_final_mfe_discovery_pct": 93.40813464235625,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 98.16053511705685,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 13.510573829236046,
+            "median_capture_pct": 30.235124972320023,
+            "median_exit_roi_pct": 0.46967419380482545,
+            "n": 1196,
+            "p10_capture_pct": -37.11706570460876,
+            "p25_capture_pct": 6.507751630255759,
+            "triggered_share_pct": 59.61538461538461
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.3
+      },
+      "NATIVE_A0.75_CB0.50": {
+        "activation_roi_pct": 0.75,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 41.30434782608695,
+            "exit_before_final_mfe_discovery_pct": 42.00988467874794,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 98.32775919732441,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 9.602880438169864,
+            "median_capture_pct": 30.14932699883025,
+            "median_exit_roi_pct": 0.29925094400106156,
+            "n": 1196,
+            "p10_capture_pct": -38.39821203604613,
+            "p25_capture_pct": 4.4777414108481475,
+            "triggered_share_pct": 50.752508361204015
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 41.30434782608695,
+            "exit_before_final_mfe_discovery_pct": 79.01591895803183,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 99.24749163879599,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 7.300183820933447,
+            "median_capture_pct": 25.230435680729958,
+            "median_exit_roi_pct": 0.29435028551783593,
+            "n": 1196,
+            "p10_capture_pct": -37.11706570460876,
+            "p25_capture_pct": 5.8962741956960345,
+            "triggered_share_pct": 57.77591973244147
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.5
+      },
+      "NATIVE_A1.00_CB0.10": {
+        "activation_roi_pct": 1.0,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 42.80936454849498,
+            "exit_before_final_mfe_discovery_pct": 72.7069351230425,
+            "ge90_share_pct": 5.016722408026756,
+            "lt80_share_pct": 85.70234113712375,
+            "lt90_share_pct": 94.98327759197325,
+            "mean_capture_pct": 11.170876115648785,
+            "median_capture_pct": 20.497648246037112,
+            "median_exit_roi_pct": 0.16629252044909615,
+            "n": 1196,
+            "p10_capture_pct": -42.29684803317863,
+            "p25_capture_pct": -1.9624301650785352,
+            "triggered_share_pct": 37.374581939799334
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 42.80936454849498,
+            "exit_before_final_mfe_discovery_pct": 98.05068226120858,
+            "ge90_share_pct": 6.103678929765886,
+            "lt80_share_pct": 81.77257525083613,
+            "lt90_share_pct": 93.89632107023411,
+            "mean_capture_pct": 14.081372899703924,
+            "median_capture_pct": 20.94460176021448,
+            "median_exit_roi_pct": 0.17464273501029415,
+            "n": 1196,
+            "p10_capture_pct": -41.583858674433536,
+            "p25_capture_pct": -0.5940494407679653,
+            "triggered_share_pct": 42.89297658862876
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.1
+      },
+      "NATIVE_A1.00_CB0.20": {
+        "activation_roi_pct": 1.0,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 41.137123745819395,
+            "exit_before_final_mfe_discovery_pct": 69.5067264573991,
+            "ge90_share_pct": 0.919732441471572,
+            "lt80_share_pct": 91.1371237458194,
+            "lt90_share_pct": 99.08026755852843,
+            "mean_capture_pct": 9.562768209096829,
+            "median_capture_pct": 20.177317802280324,
+            "median_exit_roi_pct": 0.16629252044909615,
+            "n": 1196,
+            "p10_capture_pct": -42.29684803317863,
+            "p25_capture_pct": -1.9624301650785352,
+            "triggered_share_pct": 37.290969899665555
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 41.137123745819395,
+            "exit_before_final_mfe_discovery_pct": 96.875,
+            "ge90_share_pct": 0.8361204013377926,
+            "lt80_share_pct": 89.88294314381271,
+            "lt90_share_pct": 99.1638795986622,
+            "mean_capture_pct": 11.500248007983096,
+            "median_capture_pct": 20.800427584121373,
+            "median_exit_roi_pct": 0.17464273501029415,
+            "n": 1196,
+            "p10_capture_pct": -41.583858674433536,
+            "p25_capture_pct": -0.5940494407679653,
+            "triggered_share_pct": 42.80936454849498
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.2
+      },
+      "NATIVE_A1.00_CB0.30": {
+        "activation_roi_pct": 1.0,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 38.62876254180602,
+            "exit_before_final_mfe_discovery_pct": 62.753950338600454,
+            "ge90_share_pct": 0.2508361204013378,
+            "lt80_share_pct": 96.15384615384616,
+            "lt90_share_pct": 99.74916387959867,
+            "mean_capture_pct": 8.548006753146497,
+            "median_capture_pct": 20.02026842750761,
+            "median_exit_roi_pct": 0.16629252044909615,
+            "n": 1196,
+            "p10_capture_pct": -42.29684803317863,
+            "p25_capture_pct": -1.9624301650785352,
+            "triggered_share_pct": 37.04013377926422
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 38.62876254180602,
+            "exit_before_final_mfe_discovery_pct": 93.75,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 97.5752508361204,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 9.414579977713988,
+            "median_capture_pct": 20.497648246037112,
+            "median_exit_roi_pct": 0.17464273501029415,
+            "n": 1196,
+            "p10_capture_pct": -41.583858674433536,
+            "p25_capture_pct": -0.5940494407679653,
+            "triggered_share_pct": 42.80936454849498
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.3
+      },
+      "NATIVE_A1.00_CB0.50": {
+        "activation_roi_pct": 1.0,
+        "modes": {
+          "CONSERVATIVE_DEFINITE_ONLY": {
+            "ambiguous_event_trade_share_pct": 31.187290969899667,
+            "exit_before_final_mfe_discovery_pct": 46.65071770334928,
+            "ge90_share_pct": 0.16722408026755853,
+            "lt80_share_pct": 98.24414715719064,
+            "lt90_share_pct": 99.83277591973244,
+            "mean_capture_pct": 6.601904393292038,
+            "median_capture_pct": 20.293534140438037,
+            "median_exit_roi_pct": 0.16279970139663758,
+            "n": 1196,
+            "p10_capture_pct": -42.29684803317863,
+            "p25_capture_pct": -2.3685898308709104,
+            "triggered_share_pct": 34.94983277591973
+          },
+          "OPTIMISTIC_SAME_BAR_BOUND": {
+            "ambiguous_event_trade_share_pct": 31.187290969899667,
+            "exit_before_final_mfe_discovery_pct": 81.72690763052209,
+            "ge90_share_pct": 0.08361204013377926,
+            "lt80_share_pct": 99.1638795986622,
+            "lt90_share_pct": 99.91638795986623,
+            "mean_capture_pct": 5.822697288938902,
+            "median_capture_pct": 20.26623822173131,
+            "median_exit_roi_pct": 0.17464273501029415,
+            "n": 1196,
+            "p10_capture_pct": -41.583858674433536,
+            "p25_capture_pct": -0.5940494407679653,
+            "triggered_share_pct": 41.63879598662207
+          }
+        },
+        "trail_type": "BINANCE_NATIVE_PRICE_CALLBACK",
+        "trail_value": 0.5
+      }
+    },
+    "replay_guardrail": "Only fully post-entry closed 1m bars are used. Entry-straddling bars are excluded. Conservative mode never assumes favorable same-bar high/low ordering. Optimistic mode is an upper feasibility bound, not a production claim.",
+    "slippage_bps": 2.0,
+    "trade_count": 1196
+  },
+  "conclusion": {
+    "best_ideal_fractional_conservative": {
+      "ambiguous_event_trade_share_pct": 85.95317725752508,
+      "config": "IDEAL_FRACTION_A0.50_R0.95",
+      "exit_before_final_mfe_discovery_pct": 68.18652849740933,
+      "ge90_share_pct": 24.163879598662206,
+      "lt80_share_pct": 68.81270903010034,
+      "lt90_share_pct": 75.8361204013378,
+      "mean_capture_pct": 35.65252902382842,
+      "median_capture_pct": 55.91993753453638,
+      "median_exit_roi_pct": 0.5500582801769349,
+      "n": 1196,
+      "p10_capture_pct": -23.900696137115713,
+      "p25_capture_pct": 24.800536220707738,
+      "triggered_share_pct": 80.68561872909699
+    },
+    "best_native_conservative": {
+      "ambiguous_event_trade_share_pct": 42.80936454849498,
+      "config": "NATIVE_A1.00_CB0.10",
+      "exit_before_final_mfe_discovery_pct": 72.7069351230425,
+      "ge90_share_pct": 5.016722408026756,
+      "lt80_share_pct": 85.70234113712375,
+      "lt90_share_pct": 94.98327759197325,
+      "mean_capture_pct": 11.170876115648785,
+      "median_capture_pct": 20.497648246037112,
+      "median_exit_roi_pct": 0.16629252044909615,
+      "n": 1196,
+      "p10_capture_pct": -42.29684803317863,
+      "p25_capture_pct": -1.9624301650785352,
+      "triggered_share_pct": 37.374581939799334
+    },
+    "best_native_optimistic_bound": {
+      "ambiguous_event_trade_share_pct": 42.80936454849498,
+      "config": "NATIVE_A1.00_CB0.10",
+      "exit_before_final_mfe_discovery_pct": 98.05068226120858,
+      "ge90_share_pct": 6.103678929765886,
+      "lt80_share_pct": 81.77257525083613,
+      "lt90_share_pct": 93.89632107023411,
+      "mean_capture_pct": 14.081372899703924,
+      "median_capture_pct": 20.94460176021448,
+      "median_exit_roi_pct": 0.17464273501029415,
+      "n": 1196,
+      "p10_capture_pct": -41.583858674433536,
+      "p25_capture_pct": -0.5940494407679653,
+      "triggered_share_pct": 42.89297658862876
+    },
+    "fixed_checkpoint_test_auc": {
+      "T+120s": {
+        "context_fpr10": 0.597920997920998,
+        "context_fpr20": 0.597920997920998,
+        "path_fpr10": 0.5936590436590437,
+        "path_fpr20": 0.5936590436590437
+      },
+      "T+30s": {
+        "context_fpr10": 0.7105485232067511,
+        "context_fpr20": 0.7105485232067511,
+        "path_fpr10": 0.6994482310938007,
+        "path_fpr20": 0.6994482310938007
+      },
+      "T+60s": {
+        "context_fpr10": 0.5489682784108407,
+        "context_fpr20": 0.5489682784108407,
+        "path_fpr10": 0.5507391438250693,
+        "path_fpr20": 0.5507391438250693
+      }
+    },
+    "guardrail": "B1 final labels and B2 true MFE are offline research targets only. B2 optimistic same-bar outcomes are upper bounds. No runtime threshold or trading authority is changed.",
+    "production_promotion": false
+  },
+  "cutoff_ms": 1791021852690,
+  "stage": "PP-DECISION-V3-LOW-TAIL-STAGE-B",
+  "stage_a_baseline": {
+    "ge90_share_pct": 50.4180602006689,
+    "lt80_share_pct": 25.668896321070235,
+    "mean_capture_pct": 86.33436816413594,
+    "median_capture_pct": 90.16535300375202,
+    "terminal_trade_count": 1196
+  },
+  "start_ms": 1790848801393,
+  "status": "COMPLETE_RESEARCH_ONLY"
+}
