@@ -97,9 +97,11 @@ Read-only audit:
 Full contract:
 `docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
 
-### Low-Tail Compression Track — target distribution, not median only
+### Low-Tail Compression Track — 🔒 ARCHIVED / CLOSED / REJECTED
 
-The Stage 2A median of ~90% hides a material lower tail. A separate compression track now evaluates the full distribution.
+This 15-second Low-Tail track is frozen for audit/reproducibility and must not be continued by retuning the same selector/trailing mechanism. The Stage 2A median of ~90% hid a material lower tail; Stages A–C established that the 15s mechanism could not compress it without runner damage. Reopening requires a materially different information/execution mechanism.
+
+Archive manifest: `research/profit_protection_v3/archive/low_tail_15s/ARCHIVE.md`
 
 #### Stage A — Low-Tail Anatomy ✅ COMPLETE
 
@@ -122,7 +124,7 @@ the dominant low-tail mechanism is favorable excursion occurring between ~15-sec
 Stage B must test causal pre-arm evidence and conservative exchange-side trailing/conditional capture feasibility using the existing frozen data. Candle high/low may prove trigger-touch feasibility but may not be treated as an exact executable peak fill.
 
 Full report:
-`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
+`docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_A.md`
 
 #### Stage B — Pre-Arm Detector + Exchange-Side Replay ✅ COMPLETE — NO PROMOTION
 
@@ -146,7 +148,7 @@ Conclusion:
 the low-tail can be partially predicted early, but tight protection cannot be applied universally. Stage C must combine selective low-tail risk gating with runner preservation.
 
 Full report:
-`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
+`docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_B.md`
 
 #### Stage C — Selective Protection + Runner Preservation ✅ COMPLETE — REJECTED
 
@@ -184,7 +186,7 @@ with the frozen ~15-second observation path and conservative post-selection 1m e
 A materially different information/execution mechanism is required before reopening the track.
 
 Full report:
-`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_C.md`
+`docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_C.md`
 
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
 Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
@@ -226,23 +228,26 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - first persisted observation: `1791030389337`
 - initial cadence validation: median **4,997 ms** across 6 new positions; Stage 12 remained at 15 seconds
 
-### Low-Tail Stage A
-- anatomy script: `research/profit_protection_v3/stage_a_low_tail_anatomy.py`
-- frozen result: `research/profit_protection_v3/results/stage_a_low_tail_anatomy_1791021852690.json`
-- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
-- tests: `tests/test_pp_v3_low_tail_stage_a.py`
+### Low-Tail 15s Archive
+- manifest: `research/profit_protection_v3/archive/low_tail_15s/ARCHIVE.md`
 
-### Low-Tail Stage B
-- replay script: `research/profit_protection_v3/stage_b_low_tail_prearm_exchange.py`
-- frozen result: `research/profit_protection_v3/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
-- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
-- tests: `tests/test_pp_v3_low_tail_stage_b.py`
+### Low-Tail Stage A (archived)
+- anatomy script: `research/profit_protection_v3/archive/low_tail_15s/stage_a_low_tail_anatomy.py`
+- frozen result: `research/profit_protection_v3/archive/low_tail_15s/results/stage_a_low_tail_anatomy_1791021852690.json`
+- report: `docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_A.md`
+- tests: `research/profit_protection_v3/archive/low_tail_15s/tests/test_stage_a.py`
 
-### Low-Tail Stage C
-- replay script: `research/profit_protection_v3/stage_c_selective_protection.py`
-- frozen result: `research/profit_protection_v3/results/stage_c_selective_protection_1791021852690.json`
-- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_C.md`
-- tests: `tests/test_pp_v3_low_tail_stage_c.py`
+### Low-Tail Stage B (archived)
+- replay script: `research/profit_protection_v3/archive/low_tail_15s/stage_b_low_tail_prearm_exchange.py`
+- frozen result: `research/profit_protection_v3/archive/low_tail_15s/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
+- report: `docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_B.md`
+- tests: `research/profit_protection_v3/archive/low_tail_15s/tests/test_stage_b.py`
+
+### Low-Tail Stage C (archived)
+- replay script: `research/profit_protection_v3/archive/low_tail_15s/stage_c_selective_protection.py`
+- frozen result: `research/profit_protection_v3/archive/low_tail_15s/results/stage_c_selective_protection_1791021852690.json`
+- report: `docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_C.md`
+- tests: `research/profit_protection_v3/archive/low_tail_15s/tests/test_stage_c.py`
 
 Frozen dataset:
 - start: `1790848801393`
