@@ -47,8 +47,26 @@ Main blockers identified:
 Full report:
 `docs/research/profit_protection_v3/PP_V3_STAGE1_CAPTURE_FRONTIER.md`
 
-### Stage 2 — Dynamic Floor
-Engineer floor strength as a state-dependent function instead of one static percentage. Must explicitly protect runner continuation and cannot use future MFE.
+### Stage 2A — Peak / Continuation Anatomy ✅ COMPLETE
+Extract record-local observed peaks and retrospectively label them as CONTINUED versus TERMINAL without granting those labels any runtime authority.
+
+Result:
+- 5,033 record-local-peak candidates across the frozen observable-arm cohort;
+- 3,837 CONTINUED and 1,196 clean TERMINAL candidates;
+- terminal observed peak / true MFE: 90.17% median and 88.28% notional-weighted;
+- 74.33% of clean terminal observed peaks reached at least 80% of true MFE;
+- median terminal giveback: 18.78% at T+15s and 24.32% at T+30s;
+- simple giveback/flow rules do not have adequate precision/recall;
+- no production authority is granted.
+
+Full report:
+`docs/research/profit_protection_v3/PP_V3_STAGE2A_PEAK_CONTINUATION_ANATOMY.md`
+
+### Stage 2B — Causal Peak Detector Replay
+Build a stateful causal detector beginning at the first post-record-peak retracement. The primary objective is to distinguish recovery/continuation from persistent terminal decay before the 20% giveback boundary where possible. Future labels, future maxima, and true MFE are prohibited as inputs.
+
+### Stage 2C — Partial Protect / Runner Frontier
+Only after Stage 2B establishes a causal terminal-peak signal, test partial-protection quantity and runner preservation. The split fraction is a research variable, not a fixed 50/50 assumption.
 
 ### Stage 3 — Decay-Aware Protection
 Use causal decay/velocity/recovery evidence to distinguish a temporary retracement from genuine profit failure.
@@ -62,12 +80,20 @@ Evaluate the combined policy against full fast-observation streams with fees/sli
 ### Stage 6 — Prospective Shadow
 Run a clean new cohort as observation/shadow only. Promotion requires prospective evidence.
 
-## Stage 1 frozen artifacts
+## Frozen research artifacts
 
+### Stage 1
 - replay script: `research/profit_protection_v3/stage1_capture_frontier.py`
 - frozen result JSON: `research/profit_protection_v3/results/stage1_capture_frontier_1791021852690.json`
 - unit tests: `tests/test_pp_v3_stage1_capture_frontier.py`
-- dataset start: `1790848801393`
-- dataset cutoff: `1791021852690`
 
-No Stage 1 code is imported by production runtime.
+### Stage 2A
+- anatomy script: `research/profit_protection_v3/stage2a_peak_continuation_anatomy.py`
+- frozen result JSON: `research/profit_protection_v3/results/stage2a_peak_continuation_anatomy_1791021852690.json`
+- unit tests: `tests/test_pp_v3_stage2a_peak_continuation_anatomy.py`
+
+Frozen dataset:
+- start: `1790848801393`
+- cutoff: `1791021852690`
+
+No Stage 1 or Stage 2A research code is imported by production runtime.
