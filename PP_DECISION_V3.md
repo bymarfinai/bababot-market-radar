@@ -77,25 +77,22 @@ Result:
 Full report:
 `docs/research/profit_protection_v3/PP_V3_STAGE2B_CAUSAL_PEAK_DETECTOR.md`
 
-### Stage 2B.1 — Fast Peak Observation Lane 🟢 ACTIVE PROSPECTIVE CAPTURE
-A dedicated 5-second ticker-only shadow observer is implemented to test whether earlier causal observations remove the Stage 2B timing ceiling.
+### Stage 2B.1 — Fast Peak Observation Lane 🔒 RETIRED / ARCHIVED
+The dedicated 5-second ticker-only shadow observer ran prospectively and was retired on **2026-10-03** before opening the next research track.
 
-Contract:
-- no REDUCE/CLOSE authority;
-- no change to Stage 12 fast-guard cadence;
-- explicit prospective start boundary required;
-- only positions opened after that boundary are captured;
-- persist current PnL, running observed peak, giveback, peak timestamp, sample gap and PnL delta;
-- evaluate 5s vs existing ~15s observable peak only after positions close.
+Frozen retirement snapshot:
+- activation boundary: `1791030303648`
+- first persisted observation: `1791030389337`
+- final persisted observation: `1791043570111`
+- rows: **54,940**
+- distinct positions: **208**
+- threshold-crossed rows: **30,386**
+- Stage 12 fast guard remained **15 seconds** throughout.
 
-Runtime table:
-`pp_v3_fast_peak_observations`
+The historical table `pp_v3_fast_peak_observations` is preserved, but the Stage 2B.1 startup loop, read API endpoint, and runtime configuration have been removed from the active path.
 
-Read-only audit:
-`GET /pp-v3/stage2b1/summary`
-
-Full contract:
-`docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
+Archive manifest:
+`research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`
 
 ### Low-Tail Compression Track — 🔒 ARCHIVED / CLOSED / REJECTED
 
@@ -189,7 +186,7 @@ Full report:
 `docs/research/profit_protection_v3/archive/low_tail_15s/PP_V3_LOW_TAIL_STAGE_C.md`
 
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
-Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
+Partial-protection quantity and runner preservation remain blocked. Stage 2B.1 is retired; reopening requires a new causal information/execution mechanism that establishes materially better terminal-peak evidence. The split fraction remains a research variable, not a fixed 50/50 assumption.
 
 ### Stage 3 — Decay-Aware Protection
 Use causal decay/velocity/recovery evidence to distinguish a temporary retracement from genuine profit failure.
@@ -220,13 +217,15 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - frozen result JSON: `research/profit_protection_v3/results/stage2b_causal_peak_detector_1791021852690.json`
 - unit tests: `tests/test_pp_v3_stage2b_causal_peak_detector.py`
 
-### Stage 2B.1
-- prospective observer: `market_radar/profit_protection_v3_fast_observer.py`
-- contract: `docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
-- unit tests: `tests/test_pp_v3_stage2b1_fast_peak_observer.py`
-- activation boundary: `1791030303648` (frozen)
-- first persisted observation: `1791030389337`
-- initial cadence validation: median **4,997 ms** across 6 new positions; Stage 12 remained at 15 seconds
+### Stage 2B.1 (archived)
+- manifest: `research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`
+- observer: `research/profit_protection_v3/archive/stage2b1_5s_shadow/profit_protection_v3_fast_observer.py`
+- contract: `docs/research/profit_protection_v3/archive/stage2b1_5s_shadow/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
+- tests: `research/profit_protection_v3/archive/stage2b1_5s_shadow/tests/test_fast_peak_observer.py`
+- activation boundary: `1791030303648`
+- first observation: `1791030389337`
+- last observation: `1791043570111`
+- final rows: **54,940** across **208** positions
 
 ### Low-Tail 15s Archive
 - manifest: `research/profit_protection_v3/archive/low_tail_15s/ARCHIVE.md`
@@ -253,4 +252,4 @@ Frozen dataset:
 - start: `1790848801393`
 - cutoff: `1791021852690`
 
-Stage 1, Stage 2A, and Stage 2B replay code is not imported by production runtime. Stage 2B.1 is a runtime shadow-observation lane only and has no paper/live decision authority.
+Stage 1, Stage 2A, and Stage 2B replay code is not imported by production runtime. Stage 2B.1 is archived and no longer has active runtime wiring or trading authority.
