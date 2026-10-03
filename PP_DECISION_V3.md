@@ -253,3 +253,11 @@ Frozen dataset:
 - cutoff: `1791021852690`
 
 Stage 1, Stage 2A, and Stage 2B replay code is not imported by production runtime. Stage 2B.1 is archived and no longer has active runtime wiring or trading authority.
+
+## Successor track
+
+The next peak-capture research line is **PP-DECISION V4 — High-Frequency Peak Capture**.
+
+Source of truth: `PP_DECISION_V4.md`
+
+V4 is currently **contract-only / not active**. It must not reactivate V3 archived lanes or add runtime wiring until its V4-1 activation contract is explicitly frozen.
