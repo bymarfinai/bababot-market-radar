@@ -77,7 +77,7 @@ Result:
 Full report:
 `docs/research/profit_protection_v3/PP_V3_STAGE2B_CAUSAL_PEAK_DETECTOR.md`
 
-### Stage 2B.1 — Fast Peak Observation Lane 🚧 PROSPECTIVE CAPTURE
+### Stage 2B.1 — Fast Peak Observation Lane 🟢 ACTIVE PROSPECTIVE CAPTURE
 A dedicated 5-second ticker-only shadow observer is implemented to test whether earlier causal observations remove the Stage 2B timing ceiling.
 
 Contract:
@@ -133,7 +133,9 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - prospective observer: `market_radar/profit_protection_v3_fast_observer.py`
 - contract: `docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
 - unit tests: `tests/test_pp_v3_stage2b1_fast_peak_observer.py`
-- activation boundary: set explicitly at deployment and frozen after verification
+- activation boundary: `1791030303648` (frozen)
+- first persisted observation: `1791030389337`
+- initial cadence validation: median **4,997 ms** across 6 new positions; Stage 12 remained at 15 seconds
 
 Frozen dataset:
 - start: `1790848801393`
