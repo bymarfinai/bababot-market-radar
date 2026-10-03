@@ -40,7 +40,7 @@ Canonical caution from the Stage 3 LONG research: a `WIN_ONLY` slice may show a 
 
 ## Detector research target contract — MFE >= 1%
 
-For the current WIN-detector research, the economic target must be reported directly as **historical maximum favorable excursion (MFE) >= 1.00%**. Do not substitute META_WIN, first-touch labels, realized-positive-trade rate, or any other proxy when reporting this target.
+For the current high-quality WIN-detector research, the target is **META_WIN AND historical maximum favorable excursion (MFE) >= 1.00%**. Both conditions are mandatory. A META_LOSS trade that later rebounds to MFE >= 1.00% is not a target WIN and must remain a non-target for this detector.
 
 Frozen target counts:
 
@@ -53,13 +53,13 @@ Frozen target counts:
 
 Mandatory reporting for every MFE >= 1% detector result:
 
-- target definition: `historical_max_mfe_pct >= 1.00%`
+- target definition: `primary_meta_label == META_WIN AND historical_max_mfe_pct >= 1.00%`
 - exact universe denominator
 - exact target count in that universe
 - exact number of MFE >= 1% targets captured
 - target recall = captured MFE >= 1% / all MFE >= 1% targets
 - total trades selected by the detector
-- false-positive count = selected trades with MFE < 1%
+- false-positive count = selected trades that do not satisfy BOTH META_WIN and MFE >= 1%
 - detector precision for the MFE >= 1% target
 - realized historical PnL in USD for selected trades
 - average realized return per selected trade (%)
@@ -67,7 +67,7 @@ Mandatory reporting for every MFE >= 1% detector result:
 
 Non-negotiable interpretation rules:
 
-- Never call META_WIN rate the MFE >= 1% capture rate.
+- Never call META_WIN rate alone the high-quality WIN capture rate; the target requires META_WIN AND MFE >= 1%.
 - Never call a high selected-trade win rate a success if MFE >= 1% target recall is low.
 - Never quote a percentage without its numerator and denominator when discussing detector quality.
 - Never use a smaller favorable subset to imply performance over the full frozen universe.
