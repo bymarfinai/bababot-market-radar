@@ -675,8 +675,46 @@ def build_stage_c(
                             }
                         )
 
+    frontier = {
+        "candidate_count": len(tuning_candidates),
+        "improves_ge90_count": sum(
+            bool(item["qualification"]["improves_ge90"])
+            for item in tuning_candidates
+        ),
+        "reduces_lt80_count": sum(
+            bool(item["qualification"]["reduces_lt80"])
+            for item in tuning_candidates
+        ),
+        "improves_both_count": sum(
+            bool(item["qualification"]["improves_ge90"])
+            and bool(item["qualification"]["reduces_lt80"])
+            for item in tuning_candidates
+        ),
+        "passes_all_tuning_gates_count": sum(
+            all(bool(value) for value in item["qualification"].values())
+            for item in tuning_candidates
+        ),
+    }
+    frontier["best_ge90_delta"] = max(
+        tuning_candidates,
+        key=lambda item: float(item["policy"]["delta"]["ge90_share_pp"]),
+    )
+    frontier["best_lt80_delta"] = min(
+        tuning_candidates,
+        key=lambda item: float(item["policy"]["delta"]["lt80_share_pp"]),
+    )
+    frontier["best_low_tail_rescue80"] = max(
+        tuning_candidates,
+        key=lambda item: float(item["policy"]["low_tail_rescue_to_ge80_pct"]),
+    )
+
     tuning_candidates.sort(key=_candidate_sort_key, reverse=True)
-    best = tuning_candidates[0]
+    qualified = [
+        item
+        for item in tuning_candidates
+        if all(bool(value) for value in item["qualification"].values())
+    ]
+    best = qualified[0] if qualified else tuning_candidates[0]
 
     best_protection = next(
         config
@@ -792,6 +830,7 @@ def build_stage_c(
             "lt80_share_pct": float(stage_a["distribution"]["lt80_share_pct"]),
         },
         "tuning": {
+            "frontier": frontier,
             "best_candidate": best,
             "top_20": top_tuning,
         },
