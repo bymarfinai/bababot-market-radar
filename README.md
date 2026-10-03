@@ -38,6 +38,51 @@ Mandatory interpretation rules:
 Canonical caution from the Stage 3 LONG research: a `WIN_ONLY` slice may show a materially higher META_WIN rate while still producing only weak realized economics. Such a result must be reported as **higher META_WIN classification, not proven profitability**, until USD PnL and average realized return/trade are shown.
 
 
+## Detector research target contract — MFE >= 1%
+
+For the current WIN-detector research, the economic target must be reported directly as **historical maximum favorable excursion (MFE) >= 1.00%**. Do not substitute META_WIN, first-touch labels, realized-positive-trade rate, or any other proxy when reporting this target.
+
+Frozen target counts:
+
+- LONG universe: **1,236 resolved LONG trades**
+- LONG MFE >= 1.00% targets: **245 trades**
+- SHORT universe: **655 resolved SHORT trades**
+- SHORT MFE >= 1.00% targets: **99 trades**
+- Combined resolved universe: **1,891 trades**
+- Combined MFE >= 1.00% targets: **344 trades**
+
+Mandatory reporting for every MFE >= 1% detector result:
+
+- target definition: `historical_max_mfe_pct >= 1.00%`
+- exact universe denominator
+- exact target count in that universe
+- exact number of MFE >= 1% targets captured
+- target recall = captured MFE >= 1% / all MFE >= 1% targets
+- total trades selected by the detector
+- false-positive count = selected trades with MFE < 1%
+- detector precision for the MFE >= 1% target
+- realized historical PnL in USD for selected trades
+- average realized return per selected trade (%)
+- discovery / validation / sealed-reserve results separately
+
+Non-negotiable interpretation rules:
+
+- Never call META_WIN rate the MFE >= 1% capture rate.
+- Never call a high selected-trade win rate a success if MFE >= 1% target recall is low.
+- Never quote a percentage without its numerator and denominator when discussing detector quality.
+- Never use a smaller favorable subset to imply performance over the full frozen universe.
+- Never merge LONG and SHORT denominators unless the result is explicitly labeled combined.
+- If a detector captures only a small fraction of the 245 LONG or 99 SHORT MFE >= 1% targets, state that immediately even if precision is high.
+- If target recall is high but the detector selects most of the universe, state the false-positive burden immediately.
+- Paper trading validates the frozen logic; it does not replace these research checks.
+
+Development placement:
+
+- **Stage 3B — LONG MFE>=1% Capture Detector:** target the 245 MFE>=1% LONG trades inside the 1,236 LONG universe.
+- **Stage 5B — SHORT MFE>=1% Capture Detector:** target the 99 MFE>=1% SHORT trades inside the 655 SHORT universe.
+- **Stage 6 — Temporal Confirmation:** may improve separation, but must preserve the same MFE>=1% target accounting and may not relabel the target.
+
+
 ## Current development state
 
 **Stages 1–15 are implemented.**
