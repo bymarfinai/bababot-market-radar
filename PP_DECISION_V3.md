@@ -124,6 +124,30 @@ Stage B must test causal pre-arm evidence and conservative exchange-side trailin
 Full report:
 `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
 
+#### Stage B — Pre-Arm Detector + Exchange-Side Replay ✅ COMPLETE — NO PROMOTION
+
+B1 used chronological holdout on <80% LOW-TAIL versus 90–100% GOOD trades.
+
+Key fixed-checkpoint result:
+- T+30s context late-test AUC: **0.7105**
+- T+30s at stricter threshold: recall **25.32%**, good false-positive **6.15%**, precision **62.50%**
+- T+60s AUC ~0.55 and T+120s AUC ~0.60
+- oracle-timed last causal pre-spike path diagnostic reached AUC **0.8577**, showing useful local information exists but timing remains unresolved.
+
+B2 replayed fully post-entry 1m bars with conservative same-bar ordering and 2 bps slippage.
+
+Result:
+- universal native exchange trailing is rejected;
+- best conservative native grid result reached only **5.02%** of trades at >=90% capture;
+- even idealized 95%-of-excursion trailing reached only **24.16%** >=90% capture;
+- the reason is runner destruction: **68–73%** of triggered trades in the best conservative variants exited before final MFE discovery.
+
+Conclusion:
+the low-tail can be partially predicted early, but tight protection cannot be applied universally. Stage C must combine selective low-tail risk gating with runner preservation.
+
+Full report:
+`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
+
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
 Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
 
@@ -169,6 +193,12 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - frozen result: `research/profit_protection_v3/results/stage_a_low_tail_anatomy_1791021852690.json`
 - report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
 - tests: `tests/test_pp_v3_low_tail_stage_a.py`
+
+### Low-Tail Stage B
+- replay script: `research/profit_protection_v3/stage_b_low_tail_prearm_exchange.py`
+- frozen result: `research/profit_protection_v3/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
+- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
+- tests: `tests/test_pp_v3_low_tail_stage_b.py`
 
 Frozen dataset:
 - start: `1790848801393`
