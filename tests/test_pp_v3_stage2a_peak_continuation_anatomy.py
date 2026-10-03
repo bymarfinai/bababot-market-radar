@@ -43,6 +43,16 @@ class PPV3Stage2APeakContinuationAnatomyTests(unittest.TestCase):
         out = record_local_peak_candidates("P1", stream, arm_pct=0.30)
         self.assertEqual(out, [])
 
+    def test_last_local_peak_remains_continued_if_later_final_record_is_higher(self) -> None:
+        stream = [
+            obs(0, 0.40),
+            obs(15_000, 0.35),
+            obs(30_000, 0.50),
+        ]
+        out = record_local_peak_candidates("P1", stream, arm_pct=0.30)
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0].label, "CONTINUED")
+
     def test_first_horizon_index_uses_first_poll_at_or_after_target(self) -> None:
         stream = [
             obs(0, 0.50),
