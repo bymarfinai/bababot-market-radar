@@ -77,8 +77,25 @@ Result:
 Full report:
 `docs/research/profit_protection_v3/PP_V3_STAGE2B_CAUSAL_PEAK_DETECTOR.md`
 
-### Stage 2B.1 — Fast Peak Observation Lane
-Test whether earlier causal observations can remove the Stage 2B timing ceiling. This requires new prospective sub-15-second evidence (for example 5-second or event-driven price/microstate observations) because the frozen 15-second stream cannot honestly reconstruct observations that never existed.
+### Stage 2B.1 — Fast Peak Observation Lane 🚧 PROSPECTIVE CAPTURE
+A dedicated 5-second ticker-only shadow observer is implemented to test whether earlier causal observations remove the Stage 2B timing ceiling.
+
+Contract:
+- no REDUCE/CLOSE authority;
+- no change to Stage 12 fast-guard cadence;
+- explicit prospective start boundary required;
+- only positions opened after that boundary are captured;
+- persist current PnL, running observed peak, giveback, peak timestamp, sample gap and PnL delta;
+- evaluate 5s vs existing ~15s observable peak only after positions close.
+
+Runtime table:
+`pp_v3_fast_peak_observations`
+
+Read-only audit:
+`GET /pp-v3/stage2b1/summary`
+
+Full contract:
+`docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
 
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
 Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
@@ -112,8 +129,14 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - frozen result JSON: `research/profit_protection_v3/results/stage2b_causal_peak_detector_1791021852690.json`
 - unit tests: `tests/test_pp_v3_stage2b_causal_peak_detector.py`
 
+### Stage 2B.1
+- prospective observer: `market_radar/profit_protection_v3_fast_observer.py`
+- contract: `docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
+- unit tests: `tests/test_pp_v3_stage2b1_fast_peak_observer.py`
+- activation boundary: set explicitly at deployment and frozen after verification
+
 Frozen dataset:
 - start: `1790848801393`
 - cutoff: `1791021852690`
 
-No Stage 1, Stage 2A, or Stage 2B research code is imported by production runtime.
+Stage 1, Stage 2A, and Stage 2B replay code is not imported by production runtime. Stage 2B.1 is a runtime shadow-observation lane only and has no paper/live decision authority.
