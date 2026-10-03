@@ -707,6 +707,8 @@ observations are not written, so they cannot mask an unexecuted risk-reducing
 
 The former PP-DECISION V3 Stage 2B.1 5-second shadow observer was retired on 2026-10-03 before the next peak-capture track. Its historical table is preserved for research, but there is no active startup loop, endpoint, or runtime feature flag for that lane. See `research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`.
 
+The successor research namespace is **PP-DECISION V4 — High-Frequency Peak Capture** (`PP_DECISION_V4.md`). V4 is currently contract-only: no collector loop, endpoint, environment flag, database writer, paper authority, or live authority is active.
+
 The 5-minute Thesis Health path keeps AI supervision as a secondary layer.
 A deterministic CLOSE or hard-risk close cannot be upgraded back to HOLD.
 
