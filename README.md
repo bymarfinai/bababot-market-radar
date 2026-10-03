@@ -8,6 +8,36 @@ The frozen product contract and production-extension rules are documented in BLU
 
 Adaptive Stage 12 profit-protection research is documented in ADAPTIVE_PROFIT_PROTECTION_DISCOVERY.md. That file is the source-of-truth for the frozen 497-trade discovery cohort, Stage 1 reconstruction, and the Stage 2 Giveback Anatomy plan.
 
+## Research / backtest reporting integrity rule
+
+**Never present a detector's META_WIN rate, classification accuracy, or headline win rate by itself as evidence that the strategy is profitable.**
+
+Every research, replay, tuning, detector, gate, and paper-trading result must report the following together whenever the fields exist:
+
+- selected trade count and source-universe trade count
+- META_WIN / META_LOSS count and rate, explicitly labeled as **first-touch/path labels**
+- realized historical PnL in USD
+- average realized return per selected trade (%)
+- WIN recall / coverage: selected true WIN divided by all available WIN
+- LOSS recall / coverage for a loss detector or veto
+- false positives / false vetoes
+- discovery / validation / sealed-reserve results separately
+
+Mandatory interpretation rules:
+
+- **META_WIN is not the same as a realized profitable trade.**
+- **META_LOSS is not automatically the same as a realized losing trade.**
+- MFE >= a threshold is also a different metric from realized return.
+- Do not write "WR improved" unless the exact WR definition is stated and realized PnL plus average realized return/trade are shown beside it.
+- A high-purity result with tiny coverage must be labeled **low coverage**; never imply that it captures most winners.
+- A high-recall result with heavy WIN/LOSS overlap must be labeled **ambiguous capture**, not final classification.
+- If META_WIN rate rises while realized PnL is flat, weak, or negative, state that immediately and do not describe the detector as economically successful.
+- Paper trading is a validation layer, not permission to accept weak, overfit, misleading, or leakage-contaminated research.
+- If a metric is unavailable or has not been computed, say so explicitly instead of substituting another metric.
+
+Canonical caution from the Stage 3 LONG research: a `WIN_ONLY` slice may show a materially higher META_WIN rate while still producing only weak realized economics. Such a result must be reported as **higher META_WIN classification, not proven profitability**, until USD PnL and average realized return/trade are shown.
+
+
 ## Current development state
 
 **Stages 1–15 are implemented.**
