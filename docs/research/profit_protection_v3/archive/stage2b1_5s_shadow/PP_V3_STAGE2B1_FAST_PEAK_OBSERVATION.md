@@ -1,6 +1,6 @@
 # PP-DECISION V3 — Stage 2B.1 Fast Peak Observation Lane
 
-Status: **ACTIVE — prospective shadow capture only, no exit authority**
+Status: **RETIRED / ARCHIVED — capture stopped, no exit authority**
 
 ## Objective
 
@@ -32,7 +32,20 @@ Primary questions:
 
 The activation boundary is frozen. Historical positions opened before this boundary are excluded from the Stage 2B.1 cohort.
 
-## Runtime design
+## Retirement record
+
+- retired from active runtime: **2026-10-03**
+- final persisted rows: **54,940**
+- distinct captured positions: **208**
+- threshold-crossed observation rows: **30,386**
+- first observation: `1791030389337`
+- last observation: `1791043570111`
+- Stage 12 fast guard remained **15 seconds**
+- historical table `pp_v3_fast_peak_observations` is preserved; it is not dropped or rewritten.
+
+This lane was retired before the next research track so no parallel 5-second shadow collector remains active.
+
+## Runtime design (historical)
 
 Stage 2B.1 is a parallel **ticker-only shadow observer**.
 
@@ -139,7 +152,7 @@ No result may be backfilled from unobserved historical 5-second prices.
 
 ## Reproducibility / implementation
 
-- runtime observer: `market_radar/profit_protection_v3_fast_observer.py`
+- runtime observer: `research/profit_protection_v3/archive/stage2b1_5s_shadow/profit_protection_v3_fast_observer.py`
 - startup hook: `market_radar/__main__.py`
 - read-only endpoint: `GET /pp-v3/stage2b1/summary`
-- tests: `tests/test_pp_v3_stage2b1_fast_peak_observer.py`
+- tests: `research/profit_protection_v3/archive/stage2b1_5s_shadow/tests/test_fast_peak_observer.py`

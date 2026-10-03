@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from market_radar.profit_protection_v3_fast_observer import (
+from research.profit_protection_v3.archive.stage2b1_5s_shadow.profit_protection_v3_fast_observer import (
     PeakState,
     advance_peak_state,
     side_return_pct,

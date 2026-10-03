@@ -1,3 +1,4 @@
+# ARCHIVED SHADOW LANE: STAGE 2B.1 — RETIRED/OFF. NO RUNTIME AUTHORITY.
 from __future__ import annotations
 
 import os
@@ -7,8 +8,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from typing import Any
 
-from .binance import BinancePublicClient
-from .persistence import (
+from market_radar.binance import BinancePublicClient
+from market_radar.persistence import (
     _postgres_connect,
     _sqlite_connect,
     database_path,

@@ -630,19 +630,7 @@ Only deterministic REDUCE/CLOSE fast observations are persisted. HOLD
 observations are not written, so they cannot mask an unexecuted risk-reducing
 5m lifecycle action.
 
-PP-DECISION V3 Stage 2B.1 runs as a separate optional research-only lane:
-
-~~~text
-default poll = 5 seconds
-market input = current ticker only
-authority = none (observation/persistence only)
-table = pp_v3_fast_peak_observations
-audit = GET /pp-v3/stage2b1/summary
-~~~
-
-It is disabled by default and requires both `PP_V3_STAGE2B1_ENABLED=true`
-and an explicit positive `PP_V3_STAGE2B1_START_MS`. It never calls
-REDUCE/CLOSE and does not alter the Stage 12 fast-guard cadence.
+The former PP-DECISION V3 Stage 2B.1 5-second shadow observer was retired on 2026-10-03 before the next peak-capture track. Its historical table is preserved for research, but there is no active startup loop, endpoint, or runtime feature flag for that lane. See `research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`.
 
 The 5-minute Thesis Health path keeps AI supervision as a secondary layer.
 A deterministic CLOSE or hard-risk close cannot be upgraded back to HOLD.
@@ -842,7 +830,6 @@ GET /approval/models
 GET /approval/models/summary
 GET /positions/open
 GET /positions/evaluations
-GET /pp-v3/stage2b1/summary
 GET /paper/summary
 GET /paper/orders
 GET /live/preflight
