@@ -148,6 +148,44 @@ the low-tail can be partially predicted early, but tight protection cannot be ap
 Full report:
 `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
 
+#### Stage C — Selective Protection + Runner Preservation ✅ COMPLETE — REJECTED
+
+Stage C combined chronological low-tail selection with selective exchange-side protection.
+
+Method:
+- EARLY 398 train;
+- MID 398 tuning;
+- LATE 400 untouched test;
+- 1,536 selector × runner-escape × protection combinations.
+
+MID frontier:
+- only **5 / 1,536** increased >=90% share;
+- **0 / 1,536** reduced the <80% tail;
+- **0** did both;
+- **0** passed all distribution + runner-preservation gates.
+
+Safest candidate carried to untouched LATE:
+- T30/T45/T60 path selector;
+- 5% train FPR cap;
+- native activation +1.00%, callback 0.10%.
+
+LATE:
+- >=90% share: **56.75% → 56.25%**
+- <80% share: **22.25% → 23.00%**
+- mean capture: **87.06% → 86.68%**
+- P10: **67.18% → 65.42%**
+- P25: **83.06% → 82.25%**
+- low-tail rescued to >=80%: **0%**
+- baseline >=90% trades destroyed below90%: **1.32%**
+
+Conclusion:
+with the frozen ~15-second observation path and conservative post-selection 1m exchange replay, selective protection still cannot compress the lower tail. **Stage D is blocked** because Stage C produced no qualifying policy.
+
+A materially different information/execution mechanism is required before reopening the track.
+
+Full report:
+`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_C.md`
+
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
 Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
 
@@ -199,6 +237,12 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - frozen result: `research/profit_protection_v3/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
 - report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_B.md`
 - tests: `tests/test_pp_v3_low_tail_stage_b.py`
+
+### Low-Tail Stage C
+- replay script: `research/profit_protection_v3/stage_c_selective_protection.py`
+- frozen result: `research/profit_protection_v3/results/stage_c_selective_protection_1791021852690.json`
+- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_C.md`
+- tests: `tests/test_pp_v3_low_tail_stage_c.py`
 
 Frozen dataset:
 - start: `1790848801393`
