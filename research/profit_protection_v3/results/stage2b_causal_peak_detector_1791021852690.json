@@ -1,0 +1,264 @@
+{
+  "arm_pct": 0.3,
+  "chronological_first_poll": {
+    "EARLY": {
+      "candidates": 1393,
+      "terminal": 396,
+      "terminal_median_first_poll_giveback_pct": 15.077162432943142,
+      "terminal_rate_pct": 28.427853553481693,
+      "terminal_within20_pct": 60.85858585858586
+    },
+    "LATE": {
+      "candidates": 1928,
+      "terminal": 385,
+      "terminal_median_first_poll_giveback_pct": 11.721130854708122,
+      "terminal_rate_pct": 19.96887966804979,
+      "terminal_within20_pct": 65.71428571428571
+    },
+    "MID": {
+      "candidates": 1712,
+      "terminal": 415,
+      "terminal_median_first_poll_giveback_pct": 16.208418652648533,
+      "terminal_rate_pct": 24.240654205607477,
+      "terminal_within20_pct": 59.51807228915663
+    }
+  },
+  "chronological_holdout": {
+    "full_window": {
+      "all_features": {
+        "feature_set": "all_features",
+        "max_train_fpr": 0.1,
+        "test_auc": 0.6460933751925326,
+        "test_metrics": {
+          "continued_false_exit_pct": 5.314322747893714,
+          "fired": 157,
+          "terminal_median_giveback_pct": 52.996042962123525,
+          "terminal_precision_pct": 47.77070063694268,
+          "terminal_recall_pct": 19.48051948051948,
+          "terminal_within20_recall_pct": 0.2597402597402597
+        },
+        "test_n": 1928,
+        "test_terminal": 385,
+        "threshold": 0.3373623877720106,
+        "train_auc": 0.6479316116562049,
+        "train_metrics": {
+          "continued_false_exit_pct": 9.98256320836966,
+          "fired": 415,
+          "terminal_median_giveback_pct": 46.937948628741495,
+          "terminal_precision_pct": 44.81927710843374,
+          "terminal_recall_pct": 22.934648581997536,
+          "terminal_within20_recall_pct": 0.6165228113440198
+        },
+        "train_n": 3105,
+        "train_terminal": 811
+      },
+      "context_only": {
+        "feature_set": "context_features",
+        "max_train_fpr": 0.1,
+        "test_auc": 0.5424329397109695,
+        "test_metrics": {
+          "continued_false_exit_pct": 7.777057679844459,
+          "fired": 174,
+          "terminal_median_giveback_pct": 19.310574576954497,
+          "terminal_precision_pct": 31.03448275862069,
+          "terminal_recall_pct": 14.025974025974026,
+          "terminal_within20_recall_pct": 7.2727272727272725
+        },
+        "test_n": 1928,
+        "test_terminal": 385,
+        "threshold": 0.2920229830167735,
+        "train_auc": 0.577050301166287,
+        "train_metrics": {
+          "continued_false_exit_pct": 9.98256320836966,
+          "fired": 379,
+          "terminal_median_giveback_pct": 22.34250031135774,
+          "terminal_precision_pct": 39.577836411609496,
+          "terminal_recall_pct": 18.49568434032059,
+          "terminal_within20_recall_pct": 8.014796547472256
+        },
+        "train_n": 3105,
+        "train_terminal": 811
+      }
+    },
+    "safe_window_giveback_le_20": {
+      "all_features": {
+        "feature_set": "all_features",
+        "max_train_fpr": 0.1,
+        "test_auc": 0.5866699306210669,
+        "test_metrics": {
+          "continued_false_exit_pct": 7.401812688821752,
+          "fired": 132,
+          "terminal_median_giveback_pct": 17.78449480137298,
+          "terminal_precision_pct": 25.757575757575758,
+          "terminal_recall_pct": 13.438735177865613,
+          "terminal_within20_recall_pct": 13.438735177865613
+        },
+        "test_n": 1577,
+        "test_terminal": 253,
+        "threshold": 0.2885558425445934,
+        "train_auc": 0.6059189960379484,
+        "train_metrics": {
+          "continued_false_exit_pct": 9.977827050997783,
+          "fired": 269,
+          "terminal_median_giveback_pct": 17.160900604062274,
+          "terminal_precision_pct": 33.08550185873606,
+          "terminal_recall_pct": 18.237704918032787,
+          "terminal_within20_recall_pct": 18.237704918032787
+        },
+        "train_n": 2292,
+        "train_terminal": 488
+      },
+      "context_only": {
+        "feature_set": "context_features",
+        "max_train_fpr": 0.1,
+        "test_auc": 0.5104098252988309,
+        "test_metrics": {
+          "continued_false_exit_pct": 7.552870090634441,
+          "fired": 132,
+          "terminal_median_giveback_pct": 6.859859603916629,
+          "terminal_precision_pct": 24.242424242424242,
+          "terminal_recall_pct": 12.648221343873518,
+          "terminal_within20_recall_pct": 12.648221343873518
+        },
+        "test_n": 1577,
+        "test_terminal": 253,
+        "threshold": 0.23200735191391952,
+        "train_auc": 0.5555970793500782,
+        "train_metrics": {
+          "continued_false_exit_pct": 9.977827050997783,
+          "fired": 255,
+          "terminal_median_giveback_pct": 9.549319849693541,
+          "terminal_precision_pct": 29.41176470588235,
+          "terminal_recall_pct": 15.368852459016393,
+          "terminal_within20_recall_pct": 15.368852459016393
+        },
+        "train_n": 2292,
+        "train_terminal": 488
+      },
+      "test_rows": 1577,
+      "test_terminal": 253,
+      "train_rows": 2292,
+      "train_terminal": 488
+    },
+    "test_position_count": 462,
+    "train_position_count": 922
+  },
+  "conclusion": {
+    "next_required_research": "Improve peak observability/cadence and/or add richer sub-poll causal evidence before testing partial-protect quantity as a production candidate.",
+    "primary_findings": [
+      "A material share of terminal peaks are already beyond the 20% giveback boundary at the first post-peak poll.",
+      "Stateful recovery rules cannot keep continued false exits below 25% in the tested causal grid.",
+      "Within the <=20% safe window, context-only late-cohort discrimination is approximately random.",
+      "Adding giveback improves discrimination only modestly and still yields low recall at controlled false-exit rates."
+    ],
+    "production_promotion": false,
+    "stage2c_partial_protect_unblocked": false
+  },
+  "continued_candidates": 3837,
+  "cutoff_ms": 1791021852690,
+  "first_post_peak_poll": {
+    "candidates": 5033,
+    "continued": 3837,
+    "continued_median_giveback_pct": 7.7508431194886205,
+    "terminal": 1196,
+    "terminal_already_beyond20_pct": 38.04347826086956,
+    "terminal_median_giveback_pct": 14.535159672161013,
+    "terminal_within20_pct": 61.95652173913044
+  },
+  "observable_arm_trades": 1384,
+  "record_local_peak_candidates": 5033,
+  "stage": "PP-DECISION-V3-STAGE2B-CAUSAL-PEAK-DETECTOR-REPLAY",
+  "start_ms": 1790848801393,
+  "stateful_rule_frontier": {
+    "best_by_false_exit_cap": {
+      "10": null,
+      "15": null,
+      "20": null,
+      "25": null,
+      "30": {
+        "config": {
+          "hard_any": null,
+          "hard_first": null,
+          "recovery_max": 0.0,
+          "require_not_flow_aligned": true,
+          "soft_giveback": 0.15
+        },
+        "continued_false_exit_pct": 29.919207714360176,
+        "continued_fires": 1148,
+        "fired": 2215,
+        "reasons": {
+          "RECOVERY_FAIL": 2215
+        },
+        "terminal_fires": 1067,
+        "terminal_median_giveback_pct": 39.541669422823404,
+        "terminal_precision_pct": 48.17155756207675,
+        "terminal_recall_pct": 89.21404682274247,
+        "terminal_within20_recall_pct": 15.468227424749164
+      }
+    },
+    "configs_tested": 171,
+    "max_precision_config": {
+      "config": {
+        "hard_any": null,
+        "hard_first": null,
+        "recovery_max": 0.0,
+        "require_not_flow_aligned": true,
+        "soft_giveback": 0.15
+      },
+      "continued_false_exit_pct": 29.919207714360176,
+      "continued_fires": 1148,
+      "fired": 2215,
+      "reasons": {
+        "RECOVERY_FAIL": 2215
+      },
+      "terminal_fires": 1067,
+      "terminal_median_giveback_pct": 39.541669422823404,
+      "terminal_precision_pct": 48.17155756207675,
+      "terminal_recall_pct": 89.21404682274247,
+      "terminal_within20_recall_pct": 15.468227424749164
+    },
+    "max_within20_recall_config": {
+      "config": {
+        "hard_any": null,
+        "hard_first": null,
+        "recovery_max": 0.5,
+        "require_not_flow_aligned": false,
+        "soft_giveback": 0.1
+      },
+      "continued_false_exit_pct": 52.462861610633304,
+      "continued_fires": 2013,
+      "fired": 3192,
+      "reasons": {
+        "RECOVERY_FAIL": 3192
+      },
+      "terminal_fires": 1179,
+      "terminal_median_giveback_pct": 25.106493376069828,
+      "terminal_precision_pct": 36.93609022556391,
+      "terminal_recall_pct": 98.57859531772576,
+      "terminal_within20_recall_pct": 37.374581939799334
+    },
+    "min_continued_false_exit_pct": 29.919207714360176,
+    "minimum_false_exit_config": {
+      "config": {
+        "hard_any": null,
+        "hard_first": null,
+        "recovery_max": 0.0,
+        "require_not_flow_aligned": true,
+        "soft_giveback": 0.15
+      },
+      "continued_false_exit_pct": 29.919207714360176,
+      "continued_fires": 1148,
+      "fired": 2215,
+      "reasons": {
+        "RECOVERY_FAIL": 2215
+      },
+      "terminal_fires": 1067,
+      "terminal_median_giveback_pct": 39.541669422823404,
+      "terminal_precision_pct": 48.17155756207675,
+      "terminal_recall_pct": 89.21404682274247,
+      "terminal_within20_recall_pct": 15.468227424749164
+    }
+  },
+  "status": "COMPLETE_RESEARCH_NO_PROMOTION",
+  "terminal_candidates": 1196
+}
