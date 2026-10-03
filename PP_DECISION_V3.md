@@ -97,6 +97,33 @@ Read-only audit:
 Full contract:
 `docs/research/profit_protection_v3/PP_V3_STAGE2B1_FAST_PEAK_OBSERVATION.md`
 
+### Low-Tail Compression Track — target distribution, not median only
+
+The Stage 2A median of ~90% hides a material lower tail. A separate compression track now evaluates the full distribution.
+
+#### Stage A — Low-Tail Anatomy ✅ COMPLETE
+
+Frozen 1,196 clean terminal trades were split by terminal observed peak / true MFE.
+
+Result:
+- mean capture: **86.33%**
+- median capture: **90.17%**
+- <90%: **593 / 1,196 = 49.58%**
+- <80%: **307 / 1,196 = 25.67%**
+- **306 / 307 = 99.67%** of the <80% cohort are intrapoll-excursion dominant;
+- median fast cadence is effectively identical: 14.9975s low-tail vs 14.9970s good 90–100%;
+- low-tail hidden MFE gap is ~4.9x larger;
+- low-tail MFE jump is ~3.6x larger;
+- low-tail peak occurs much earlier (median 187s vs 884s for good 90–100%).
+
+Conclusion:
+the dominant low-tail mechanism is favorable excursion occurring between ~15-second current-price samples. A later current-ticker detector cannot recover a spike that has already disappeared.
+
+Stage B must test causal pre-arm evidence and conservative exchange-side trailing/conditional capture feasibility using the existing frozen data. Candle high/low may prove trigger-touch feasibility but may not be treated as an exact executable peak fill.
+
+Full report:
+`docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
+
 ### Stage 2C — Partial Protect / Runner Frontier ⛔ BLOCKED
 Partial-protection quantity and runner preservation remain blocked until Stage 2B.1 or another causal lane establishes a materially better terminal-peak signal. The split fraction remains a research variable, not a fixed 50/50 assumption.
 
@@ -136,6 +163,12 @@ Run a clean new cohort as observation/shadow only. Promotion requires prospectiv
 - activation boundary: `1791030303648` (frozen)
 - first persisted observation: `1791030389337`
 - initial cadence validation: median **4,997 ms** across 6 new positions; Stage 12 remained at 15 seconds
+
+### Low-Tail Stage A
+- anatomy script: `research/profit_protection_v3/stage_a_low_tail_anatomy.py`
+- frozen result: `research/profit_protection_v3/results/stage_a_low_tail_anatomy_1791021852690.json`
+- report: `docs/research/profit_protection_v3/PP_V3_LOW_TAIL_STAGE_A.md`
+- tests: `tests/test_pp_v3_low_tail_stage_a.py`
 
 Frozen dataset:
 - start: `1790848801393`
