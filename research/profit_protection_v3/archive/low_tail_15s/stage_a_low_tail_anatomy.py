@@ -1,4 +1,4 @@
-from __future__ import annotations
+# ARCHIVED TRACK: LOW_TAIL_15S — CLOSED/REJECTED. DO NOT PROMOTE OR RETUNE IN ACTIVE PATH.\nfrom __future__ import annotations
 
 import argparse
 import json

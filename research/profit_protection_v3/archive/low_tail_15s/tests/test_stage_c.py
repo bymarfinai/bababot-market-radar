@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import unittest
 
-from research.profit_protection_v3.stage_b_low_tail_prearm_exchange import (
+from research.profit_protection_v3.archive.low_tail_15s.stage_b_low_tail_prearm_exchange import (
     _fractional_excursion_stop,
 )
-from research.profit_protection_v3.stage_c_selective_protection import (
+from research.profit_protection_v3.archive.low_tail_15s.stage_c_selective_protection import (
     ProtectionConfig,
     _distribution,
     replay_exchange_trail_after_selection,

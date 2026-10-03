@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from research.profit_protection_v3.stage_a_low_tail_anatomy import (
+from research.profit_protection_v3.archive.low_tail_15s.stage_a_low_tail_anatomy import (
     analysis_group,
     classify_observability_mechanism,
     quantile,

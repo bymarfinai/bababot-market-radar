@@ -1,4 +1,4 @@
-# PP-DECISION V3 — Low-Tail Stage A Anatomy
+> **ARCHIVED / CLOSED / REJECTED TRACK** — retained for reproducibility. Do not continue tuning this 15s low-tail branch in the active research path.\n\n# PP-DECISION V3 — Low-Tail Stage A Anatomy
 
 Status: **COMPLETE — frozen historical anatomy, no production authority**
 
@@ -235,6 +235,6 @@ No production threshold or authority is changed by Stage A.
 
 ## Reproducibility
 
-- script: `research/profit_protection_v3/stage_a_low_tail_anatomy.py`
-- frozen result: `research/profit_protection_v3/results/stage_a_low_tail_anatomy_1791021852690.json`
-- tests: `tests/test_pp_v3_low_tail_stage_a.py`
+- script: `research/profit_protection_v3/archive/low_tail_15s/stage_a_low_tail_anatomy.py`
+- frozen result: `research/profit_protection_v3/archive/low_tail_15s/results/stage_a_low_tail_anatomy_1791021852690.json`
+- tests: `research/profit_protection_v3/archive/low_tail_15s/tests/test_stage_a.py`

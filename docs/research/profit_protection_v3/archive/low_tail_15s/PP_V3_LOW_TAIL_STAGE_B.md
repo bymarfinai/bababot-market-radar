@@ -1,4 +1,4 @@
-# PP-DECISION V3 — Low-Tail Stage B
+> **ARCHIVED / CLOSED / REJECTED TRACK** — retained for reproducibility. Do not continue tuning this 15s low-tail branch in the active research path.\n\n# PP-DECISION V3 — Low-Tail Stage B
 
 Status: **COMPLETE — research only, no production authority**
 
@@ -232,6 +232,6 @@ No production threshold or trading authority is changed by Stage B.
 
 ## Reproducibility
 
-- replay script: `research/profit_protection_v3/stage_b_low_tail_prearm_exchange.py`
-- frozen result: `research/profit_protection_v3/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
-- tests: `tests/test_pp_v3_low_tail_stage_b.py`
+- replay script: `research/profit_protection_v3/archive/low_tail_15s/stage_b_low_tail_prearm_exchange.py`
+- frozen result: `research/profit_protection_v3/archive/low_tail_15s/results/stage_b_low_tail_prearm_exchange_1791021852690.json`
+- tests: `research/profit_protection_v3/archive/low_tail_15s/tests/test_stage_b.py`

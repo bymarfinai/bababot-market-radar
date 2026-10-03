@@ -1,4 +1,4 @@
-from __future__ import annotations
+# ARCHIVED TRACK: LOW_TAIL_15S — CLOSED/REJECTED. DO NOT PROMOTE OR RETUNE IN ACTIVE PATH.\nfrom __future__ import annotations
 
 import argparse
 import json
@@ -8,7 +8,7 @@ from collections import defaultdict
 from typing import Any, Callable
 
 from market_radar.persistence import _postgres_connect
-from research.profit_protection_v3.stage_a_low_tail_anatomy import (
+from research.profit_protection_v3.archive.low_tail_15s.stage_a_low_tail_anatomy import (
     DEFAULT_ARM_PCT,
     DEFAULT_CUTOFF_MS,
     DEFAULT_START_MS,

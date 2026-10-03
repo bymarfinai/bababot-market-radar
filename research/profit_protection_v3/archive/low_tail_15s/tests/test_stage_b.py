@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from research.profit_protection_v3.stage_b_low_tail_prearm_exchange import (
+from research.profit_protection_v3.archive.low_tail_15s.stage_b_low_tail_prearm_exchange import (
     _bars_from_observations,
     _fractional_excursion_stop,
     _native_stop,
