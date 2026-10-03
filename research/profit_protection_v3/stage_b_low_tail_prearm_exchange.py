@@ -351,11 +351,15 @@ def _checkpoint_rows(
                 index = eligible[-1]
         else:
             target = int(trade["opened_at_ms"]) + int(checkpoint_seconds or 0) * 1000
+            # A fixed checkpoint is valid only when the final MFE excursion has
+            # not happened yet. Do not silently back off to an earlier
+            # pre-spike row and call it T+N.
+            if discovery_ms <= target:
+                continue
             eligible = [
                 i
                 for i, row in enumerate(rows)
-                if int(row["evaluated_at_ms"]) <= target
-                and int(row["evaluated_at_ms"]) < discovery_ms
+                if target - 30_000 <= int(row["evaluated_at_ms"]) <= target
             ]
             if eligible:
                 index = eligible[-1]
