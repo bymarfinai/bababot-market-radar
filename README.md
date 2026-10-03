@@ -82,6 +82,16 @@ Development placement:
 - **Stage 5B — SHORT MFE>=1% Capture Detector:** target the 99 MFE>=1% SHORT trades inside the 655 SHORT universe.
 - **Stage 6 — Temporal Confirmation:** may improve separation, but must preserve the same MFE>=1% target accounting and may not relabel the target.
 
+Stage 3B frozen result (LONG T0 only):
+
+- 245 high-quality LONG targets = META_WIN AND MFE >= 1% inside 1,236 LONG trades.
+- These 245 targets are economically meaningful in the frozen history: realized PnL **+$828.95**, average realized return/trade **+0.677%**.
+- T0-only discrimination is weak.
+- A validation-tuned ~95% recall operating point captures **36/38 reserve targets (94.7%)** but selects **227/248 reserve trades (91.5%)**.
+- A validation-tuned 100% recall operating point captures **38/38 reserve targets** but selects **242/248 reserve trades (97.6%)**.
+- Therefore Stage 3B is **FAIL as a practical T0 detector**: high recall can be forced only by selecting almost the entire universe.
+- Do not call the forced high-recall result a detector success. Stage 6 temporal confirmation must reduce false positives while preserving the frozen 245-target accounting.
+
 
 ## Current development state
 
