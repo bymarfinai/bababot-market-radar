@@ -15,7 +15,6 @@ from .execution_handoff import (
 )
 from .paper_trading import start_paper_trading_loop
 from .position_lifecycle import start_fast_lifecycle_loop, start_position_lifecycle_worker
-from .profit_protection_v3_fast_observer import start_stage2b1_fast_peak_loop
 from .persistence import (
     database_path,
     persistence_summary,
@@ -112,7 +111,6 @@ def main() -> int:
     start_pending_approval_worker()
     start_position_lifecycle_worker()
     start_fast_lifecycle_loop()
-    start_stage2b1_fast_peak_loop()
     start_paper_trading_loop()
     start_live_trading_loop()
 
