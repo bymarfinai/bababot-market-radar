@@ -56,3 +56,21 @@ Promotion remains blocked until prospective minimum:
 - >=98% position-start coverage.
 
 No exit authority is granted by Stage2D.
+
+
+## Stage2D production shadow activation
+
+- merged implementation commit: `8e3560b9b9789b925bd96b2b27a605daeffa7a73`
+- clean shadow boundary: `1791094561302`
+- control at boundary: `PAUSE_ENTRIES`
+- open positions at boundary: **0**
+- `PP_V4_STAGE2D_SHADOW_ENABLED=true`
+- shadow version: `pp-v4-stage2d-shadow-v1`
+- authority: **NONE**
+- app health after rebuild: **healthy**
+- shadow endpoint: **HTTP 200**
+- initial store: 0 positions / 0 actions / 0 duplicates / 0 out-of-order / 0 invariant errors
+- control resumed to `RUN` at `1791094640894`
+- live remained disabled/disarmed
+
+Any prospective Stage2D shadow evaluation must use positions opened strictly after `1791094561302`.
