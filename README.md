@@ -93,6 +93,25 @@ Stage 3B frozen result (LONG T0 only):
 - Do not call the forced high-recall result a detector success. Stage 6 temporal confirmation must reduce false positives while preserving the frozen 245-target accounting.
 
 
+## Stage 3C strong-parameter discovery status
+
+Frozen LONG target remains **245 / 1,236** trades satisfying BOTH `META_WIN` and historical MFE >= 1.00%.
+
+Current result:
+
+- exhaustive search across the existing pre-entry T0 feature families did **not** find a stable strong parameter
+- strongest stable T0 relationships remain weak; the best stable AUC floor is about 0.575 and point-biserial correlation remains around 0.13–0.14
+- derived interactions that look stronger on validation but deteriorate on sealed reserve are rejected as overfit / regime-specific
+- causal T+3 temporal features are materially more predictive, but they are **not pre-entry parameters** and must never be reported as such
+- a selected 5-feature T+3 composite reaches roughly AUC 0.801 on validation and 0.707 on sealed reserve, while reserve correlation remains only about r=0.281
+
+Stage 3C therefore records **NO STRONG PRE-ENTRY PARAMETER FOUND in the frozen existing feature set**.
+
+A research-only microstructure feature engine has been added on branch `research/stage3c-microstructure` to collect/test feature families not present in the frozen cohort, including multi-level order-book imbalance, microprice edge, sub-minute AggTrade CVD, large-trade imbalance, CVD acceleration/persistence, flow-price efficiency and absorption proxies.
+
+Historical L2/order-book values must never be fabricated for the frozen cohort. If the historical raw stream is unavailable, those features require forward causal collection.
+
+
 ## Current development state
 
 **Stages 1–15 are implemented.**
