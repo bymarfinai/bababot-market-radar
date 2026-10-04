@@ -1,6 +1,6 @@
 # PP-DECISION V4 — High-Frequency Peak Capture
 
-Status: **V4-1 IMPLEMENTED / PRE-ACTIVATION — NO TRADING AUTHORITY**
+Status: **V4-1 IMPLEMENTED / ACTIVATION BOUNDARY FROZEN — NO TRADING AUTHORITY**
 
 PP-DECISION V4 is the successor research track to the retired V3 low-tail and Stage 2B.1 shadow paths.
 
@@ -105,11 +105,11 @@ Artifacts:
 - `docs/research/profit_protection_v4/PP_V4_HIGH_FREQUENCY_PEAK_CAPTURE_CONTRACT.md`
 - `research/profit_protection_v4/README.md`
 
-### V4-1 — High-Frequency Observability Benchmark 🟡 IMPLEMENTED / PRE-ACTIVATION
+### V4-1 — High-Frequency Observability Benchmark 🟡 READY FOR ACTIVATION
 
 Implementation frozen before prospective activation:
 
-- canonical source: **Binance USD-M Futures REST all-symbol ticker-price snapshot**;
+- prospective start boundary: `1791079128949` (Binance server time; frozen while entries were paused and open positions = 0);\n- canonical source: **Binance USD-M Futures REST all-symbol ticker-price snapshot**;
 - source mode: **PRIMARY**;
 - fallback: **NONE / FAIL-CLOSED**;
 - target cadence: **5 seconds**;
