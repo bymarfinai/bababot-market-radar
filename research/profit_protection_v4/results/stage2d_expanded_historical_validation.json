@@ -1,0 +1,56 @@
+{
+  "clean_mfe_ge030": {
+    "actual_usdt": -10.02066320441511,
+    "actual_win_n": 36,
+    "actual_win_rate": 0.36363636363636365,
+    "delta_usdt": 88.7480817318598,
+    "harmed_n": 13,
+    "helped_n": 49,
+    "median_delta_usdt": 0.0,
+    "n": 99,
+    "runner_close_n": 19,
+    "sim_usdt": 78.72741852744468,
+    "sim_win_n": 45,
+    "sim_win_rate": 0.45454545454545453,
+    "small_reduce_n": 49
+  },
+  "clean_mfe_lt030": {
+    "actual_usdt": -232.10472830269333,
+    "actual_win_n": 1,
+    "actual_win_rate": 0.011111111111111112,
+    "delta_usdt": 0.0,
+    "harmed_n": 0,
+    "helped_n": 0,
+    "median_delta_usdt": 0.0,
+    "n": 90,
+    "runner_close_n": 0,
+    "sim_usdt": -232.10472830269333,
+    "sim_win_n": 1,
+    "sim_win_rate": 0.011111111111111112,
+    "small_reduce_n": 0
+  },
+  "diagnostic": {
+    "conclusion": "Protection materially improves trades that develop observable profit, but cannot repair the 90 strict trades that never reach clean MFE +0.30%.",
+    "loss_reduction_pct": 36.653769015900295,
+    "low_mfe_policy_actions": 0,
+    "low_mfe_share_of_absolute_actual_net_loss_pct": 95.86137449606522
+  },
+  "policy": "small 0.50/60/3 reduce25; runner1.50 90/2",
+  "stage": "PP-V4-2D-HISTORICAL-EXPANDED",
+  "status": "COMPLETE",
+  "strict_all": {
+    "actual_usdt": -242.12539150710845,
+    "actual_win_n": 37,
+    "actual_win_rate": 0.19576719576719576,
+    "delta_usdt": 88.7480817318598,
+    "harmed_n": 13,
+    "helped_n": 49,
+    "median_delta_usdt": 0.0,
+    "n": 189,
+    "runner_close_n": 19,
+    "sim_usdt": -153.37730977524865,
+    "sim_win_n": 46,
+    "sim_win_rate": 0.24338624338624337,
+    "small_reduce_n": 49
+  }
+}
