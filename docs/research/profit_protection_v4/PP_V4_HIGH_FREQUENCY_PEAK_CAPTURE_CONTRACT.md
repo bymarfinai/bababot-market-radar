@@ -1,6 +1,6 @@
 # PP V4 — High-Frequency Peak Capture Contract
 
-Status: **FROZEN DESIGN CONTRACT — NOT ACTIVE**
+Status: **V4-1 IMPLEMENTATION FROZEN — PRE-ACTIVATION**
 
 Canonical source of truth: `PP_DECISION_V4.md`
 
@@ -151,3 +151,60 @@ V3 references:
 - `research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`
 
 These are comparison evidence only.
+
+
+## V4-1 frozen implementation
+
+The first prospective V4 mechanism is now fixed as:
+
+- primary source: Binance USD-M Futures REST all-symbol ticker-price endpoint;
+- fallback: none; fail closed and audit the error cycle;
+- cadence target: 5 seconds;
+- one batch price snapshot per cycle;
+- local receive time is the canonical observation timestamp;
+- provider event time is null because this endpoint does not supply one;
+- PAPER positions only;
+- only positions opened after the explicit V4-1 start boundary qualify;
+- no AI calls;
+- no trading authority.
+
+Persistence:
+
+- `pp_v4_observation_cycles`
+- `pp_v4_peak_observations`
+
+Audit:
+
+- `GET /pp-v4/stage1/summary`
+
+Offline evaluator:
+
+- `research/profit_protection_v4/stage1_observability_benchmark.py`
+
+## Preregistered gates
+
+Cohort:
+- >=100 closed matched trades;
+- >=50 matched trades with true MFE >= +0.30%.
+
+Data quality:
+- cycle error rate <=2%;
+- missing-position sample rate <=2%;
+- duplicate observation attempts = 0;
+- median per-position sample gap <=5.75s;
+- P90 sample gap <=7.5s;
+- max sample gap <=20s.
+
+V4-2 observability:
+- median capture uplift >= +3.0 pp;
+- aggregate capture uplift >= +3.0 pp.
+
+V4-3 lower-tail:
+- >=90% share uplift >= +5.0 pp;
+- <80% share reduction >=5.0 pp;
+- P10 uplift >= +5.0 pp;
+- P25 uplift >= +3.0 pp;
+- late chronological third cannot lose >=90% share;
+- late chronological third cannot increase <80% share.
+
+These thresholds are frozen before prospective V4-1 results are available.
