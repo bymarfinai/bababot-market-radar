@@ -51,10 +51,19 @@ class PPV4Stage3C3MultiCycleVolNormTests(unittest.TestCase):
     def test_failed_reclaim_can_emit_when_z_gate_passes(self):
         path = [
             obs(0, 1.50),
-            obs(5000, 2.00),
-            obs(10000, 1.70),
-            obs(15000, 1.85),
-            obs(20000, 1.69),
+            obs(5000, 1.55),
+            obs(10000, 1.60),
+            obs(15000, 1.65),
+            obs(20000, 1.70),
+            obs(25000, 1.75),
+            obs(30000, 1.80),
+            obs(35000, 1.85),
+            obs(40000, 1.90),
+            obs(45000, 1.95),
+            obs(50000, 2.00),
+            obs(55000, 1.79),
+            obs(60000, 1.86),
+            obs(65000, 1.78),
         ]
         signal = multicycle_signal(
             path,
