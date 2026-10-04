@@ -621,6 +621,52 @@ Decision:
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE3B_GIVEBACK_WINDOW_ANATOMY.md`
 
+### V4-3C — Temporal Reversal Detector ⚠️ NO PASS
+
+Runner-capable population:
+- observed peak >=1.50%: **19 trades**
+- DEV: 12
+- LATE chronology check: 7
+
+Frozen candidate space:
+- **144** causal candidates
+- floor: 90/85/80%
+- min age: 10/20/30/60s
+- min downward velocity: 0/.02/.03/.04 pp/s
+- reclaim wait: 0/5/10s
+
+DEV result:
+- eligible all-gate candidates: **0 / 144**
+- coverage gate passed: 144/144
+- precision gate passed: 2/144
+- premature-share gate passed: 2/144
+- retention gate passed: 74/144
+
+Closest candidate:
+- floor80, age60s, velocity0.03 pp/s, wait5s
+- precision 60%, premature 40%, coverage 83.33%
+- **median correct retention only 62.98%**
+- fails retention gate
+
+V4.2 runner baseline:
+- 19 signals
+- 10 correct final-reversal closes
+- 9 premature false-reversal closes
+- precision **52.63%**
+- median correct retention **85.60%**
+- correct closes >=80% final observed peak: **80%**
+
+Conclusion:
+- V4.2 already retains runner profit well when reversal identification is correct.
+- simple age + velocity + short wait cannot reduce false reversals without sacrificing too much retention.
+- **do not proceed to V4-3D with this detector**.
+- next work requires a new preregistered causal-feature family focused on partial reclaim / reversal structure.
+
+No runtime change. No paper/prospective shadow. V4.2 baseline remains unchanged.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3C_TEMPORAL_REVERSAL.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
