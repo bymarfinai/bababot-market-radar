@@ -1,0 +1,109 @@
+{
+  "benchmark_integrity": {
+    "active_code_path": "Stage12 fast lifecycle MFE uses rolling_1m_high/low from closed bars via _build_fast_snapshot -> _mfe_mae.",
+    "benchmark_contamination_dominant_n": 4,
+    "entry_boundary_problem": "The rolling closed-bar window is not clipped to the position opened_at_ms, so newly opened positions can inherit favorable extrema that occurred before entry.",
+    "false_mfe_eligibility_n": 25,
+    "false_mfe_eligibility_share_of_apparent_low_tail_pct": 47.16981132075472,
+    "lifecycle_mfe_gt_actual_post_entry_mfe_10pct_n": 29,
+    "lifecycle_mfe_gt_actual_post_entry_mfe_25pct_n": 27,
+    "lifecycle_mfe_gt_actual_post_entry_mfe_2x_n": 25,
+    "mixed_contamination_plus_true_5s_miss_n": 4,
+    "positive_actual_post_entry_mfe_n": 49
+  },
+  "corrected_apparent_low_tail": {
+    "corrected_capture_median_pct": 61.52213389584512,
+    "corrected_capture_p10_pct": 18.291051583145318,
+    "corrected_capture_p25_pct": 43.57479445954197,
+    "corrected_ge80_n": 4,
+    "corrected_ge90_n": 2,
+    "corrected_lt80_n": 24,
+    "eligible_n": 28,
+    "old_capture_median_pct": 16.77571645215779
+  },
+  "decision": {
+    "after_clean_mfe": "RERUN_5S_VS_15S_AND_THEN_TEST_SUB5S_EVENT_DRIVEN_IF_RESIDUAL_PERSISTS",
+    "immediate_next_priority": "FIX_STAGE12_MFE_ENTRY_BOUNDARY_AND_REBUILD_CLEAN_MFE_LABELS",
+    "keep_v4_5s_prospective_observer": true,
+    "promote_protection_logic": false,
+    "stage1h_gate_status": "PARTIALLY_SUPERSEDED_FOR_MFE_BASED_PROMOTION",
+    "why": "The apparent 5s lower tail is a mixture of invalid MFE eligibility caused by pre-entry rolling candles and genuine flash excursions. Cadence should not be tuned against a contaminated benchmark."
+  },
+  "evidence_files": {
+    "post_entry_tick_extrema": "research/profit_protection_v4/results/stage1i_low_tail_post_entry_tick_evidence.json",
+    "residual_peak_persistence": "research/profit_protection_v4/results/stage1i_residual_peak_persistence_evidence.json"
+  },
+  "failure_categories": {
+    "BENCHMARK_CONTAMINATION_DOMINANT": {
+      "n": 4,
+      "share_of_apparent_low_tail_pct": 7.547169811320755
+    },
+    "FALSE_MFE_ELIGIBILITY_POST_ENTRY_LT_030": {
+      "n": 25,
+      "share_of_apparent_low_tail_pct": 47.16981132075472
+    },
+    "MIXED_CONTAMINATION_PLUS_TRUE_5S_MISS": {
+      "n": 4,
+      "share_of_apparent_low_tail_pct": 7.547169811320755
+    },
+    "TRUE_POST_ENTRY_5S_MISS": {
+      "n": 20,
+      "share_of_apparent_low_tail_pct": 37.735849056603776
+    }
+  },
+  "genuine_residual_5s_miss": {
+    "interpretation": "Every genuine residual had <5 seconds of consecutive time at >=90% of actual post-entry MFE; 20/24 were <=1 second. This supports sub-5s/event-driven observability after the MFE entry-boundary bug is corrected.",
+    "n": 24,
+    "near_peak_persistence": {
+      "80": {
+        "distinct_seconds_median": 1.0,
+        "longest_run_median_s": 1.0,
+        "longest_run_p90_s": 3.6999999999999993,
+        "n": 24,
+        "run_le2s_n": 20,
+        "run_lt5s_n": 24
+      },
+      "90": {
+        "distinct_seconds_median": 1.0,
+        "longest_run_median_s": 1.0,
+        "longest_run_p90_s": 2.0,
+        "n": 24,
+        "run_le2s_n": 23,
+        "run_lt5s_n": 24
+      },
+      "95": {
+        "distinct_seconds_median": 1.0,
+        "longest_run_median_s": 1.0,
+        "longest_run_p90_s": 1.0,
+        "n": 24,
+        "run_le2s_n": 24,
+        "run_lt5s_n": 24
+      }
+    },
+    "nearest_5s_after_true_peak_gap_median_ms": 2191,
+    "nearest_5s_before_true_peak_gap_median_ms": 2824.5,
+    "persistence_classes": {
+      "FLASH_<=1S": {
+        "n": 20,
+        "share_pct": 83.33333333333333
+      },
+      "SHORT_2S": {
+        "n": 3,
+        "share_pct": 12.5
+      },
+      "SUB5S_3_4S": {
+        "n": 1,
+        "share_pct": 4.166666666666667
+      }
+    }
+  },
+  "population": {
+    "genuine_corrected_5s_lt80": 24,
+    "post_entry_mfe_ge_0_30_after_correction": 28,
+    "residual_peak_persistence_rows": 24,
+    "stage1h_apparent_5s_lt80_trades": 53
+  },
+  "question": "Why do trades remain below 80% capture under the archived ~5-second current-price observer?",
+  "stage": "PP-V4-1I",
+  "status": "COMPLETE_RESEARCH_ONLY"
+}

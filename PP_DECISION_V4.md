@@ -225,6 +225,43 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage1h_historical_matched_benchmark_1791043570111.json`
 
+### V4-1I — 5s Failure Anatomy ✅ COMPLETE
+
+Stage1H's apparent 5s lower tail was decomposed with actual post-entry Binance traded-price evidence.
+
+Critical benchmark finding:
+- Stage12 fast MFE uses rolling closed 1m highs/lows that are **not clipped to the position entry timestamp**;
+- newly opened positions can inherit favorable extrema that occurred before entry;
+- historical lifecycle MFE can therefore create false post-entry profit opportunities.
+
+Among the **53** Stage1H apparent 5s `<80%` failures:
+- **25 (47.17%)** actually had post-entry MFE < +0.30% and were false MFE-eligible cases;
+- **4 (7.55%)** were benchmark-contamination dominant and moved above 80% after correction;
+- **4 (7.55%)** had both contamination and a genuine 5s miss;
+- **20 (37.74%)** were clean genuine post-entry 5s misses.
+
+Thus **29 / 53 = 54.72%** of apparent failures were invalidated or resolved primarily by benchmark correction.
+
+For the **24 genuine residual 5s misses**:
+- every trade spent <5 consecutive seconds at >=90% of actual post-entry MFE;
+- **20 / 24** spent <=1 second;
+- **3 / 24** spent about 2 seconds;
+- **1 / 24** spent 3–4 seconds;
+- **0 / 24** persisted >=5 seconds.
+
+Decision:
+- Stage1H remains directional evidence that 5s improves visibility versus ~15s;
+- Stage1H MFE-based promotion gates are **partially superseded** until clean post-entry MFE labels exist;
+- no protection formula may be tuned against the contaminated MFE benchmark;
+- next priority: **V4-1J — fix Stage12 MFE entry-boundary handling and rebuild clean MFE labels**;
+- only then rerun 5s vs 15s and decide whether sub-5s/event-driven observation is required.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE1I_5S_FAILURE_ANATOMY.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage1i_5s_failure_anatomy.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
