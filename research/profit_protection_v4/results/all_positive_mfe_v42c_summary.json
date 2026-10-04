@@ -1,0 +1,86 @@
+{
+  "n": 170,
+  "actual_total_usdt": -188.89574516352124,
+  "protected_total_usdt": -100.14766343166144,
+  "delta_usdt": 88.7480817318598,
+  "actual_win_n": 37,
+  "actual_win_rate": 0.21764705882352942,
+  "protected_win_n": 46,
+  "protected_win_rate": 0.27058823529411763,
+  "helped_n": 49,
+  "harmed_n": 13,
+  "same_n": 108,
+  "triggered_n": 62,
+  "no_action_n": 108,
+  "small_reduce_n": 49,
+  "runner_close_n": 19,
+  "positive_observed_net_peak_n": 92,
+  "median_retention_all_positive_observed_net_peak": -0.013470857451689404,
+  "retention_ge80_n": 10,
+  "retention_ge70_n": 15,
+  "retention_ge50_n": 21,
+  "mfe_0_030_n": 71,
+  "mfe_ge030_n": 99,
+  "buckets": {
+    "0-0.1": {
+      "n": 36,
+      "actual_usdt": -97.2986526448276,
+      "protected_usdt": -97.2986526448276,
+      "delta_usdt": 0.0,
+      "triggered_n": 0,
+      "actual_win_n": 0,
+      "protected_win_n": 0,
+      "median_retention": null
+    },
+    "0.1-0.3": {
+      "n": 35,
+      "actual_usdt": -81.57642931427854,
+      "protected_usdt": -81.57642931427854,
+      "delta_usdt": 0.0,
+      "triggered_n": 0,
+      "actual_win_n": 1,
+      "protected_win_n": 1,
+      "median_retention": -16.830206293579334
+    },
+    "0.3-0.5": {
+      "n": 24,
+      "actual_usdt": -49.73269830652927,
+      "protected_usdt": -49.73269830652927,
+      "delta_usdt": 0.0,
+      "triggered_n": 0,
+      "actual_win_n": 0,
+      "protected_win_n": 0,
+      "median_retention": -2.2469881721760196
+    },
+    "0.5-1": {
+      "n": 43,
+      "actual_usdt": -44.394043475489354,
+      "protected_usdt": -37.50497310016912,
+      "delta_usdt": 6.88907037532024,
+      "triggered_n": 31,
+      "actual_win_n": 8,
+      "protected_win_n": 16,
+      "median_retention": -0.014078279250483404
+    },
+    "1-2": {
+      "n": 19,
+      "actual_usdt": 23.396677338067562,
+      "protected_usdt": 45.70055610610931,
+      "delta_usdt": 22.30387876804175,
+      "triggered_n": 18,
+      "actual_win_n": 16,
+      "protected_win_n": 16,
+      "median_retention": 0.5553433619916417
+    },
+    "2+": {
+      "n": 13,
+      "actual_usdt": 60.70940123953596,
+      "protected_usdt": 120.26453382803376,
+      "delta_usdt": 59.555132588497806,
+      "triggered_n": 13,
+      "actual_win_n": 12,
+      "protected_win_n": 13,
+      "median_retention": 0.7136934401705874
+    }
+  }
+}
