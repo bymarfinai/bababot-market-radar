@@ -533,6 +533,39 @@ Prospective activation requires a fresh zero-open-position boundary. Minimum eva
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE2D_FULL_REPLAY_SHADOW.md`
 
+### V4-3A — Low-Retention Failure Anatomy ✅ COMPLETE
+
+Primary active-protector failure population:
+- **56** trades where V4-2C protection fired but final retention remained <75% of true clean MFE.
+
+Primary causes:
+- PARTIAL_REDUCE_DRAG: **37 / 56 = 66.07%**
+- RUNNER_TRIGGER_DELAY: **9 / 56 = 16.07%**
+- OBSERVATION_MISS: **8 / 56 = 14.29%**
+- EXECUTION_ACCOUNTING_DRAG: **2 / 56 = 3.57%**
+
+Key result:
+- **48 / 56 = 85.71%** of active failures had an archived 5s observed peak >=80% of true clean MFE.
+- therefore most active failures are **not primarily peak-observation failures**.
+
+By MFE band:
+- 0.5–1.0%: 28/31 failures = partial-reduce drag
+- 1.0–1.5%: 7/9 = partial-reduce drag
+- >3.0%: 4/5 = runner-trigger delay
+
+Secondary low-retention population:
+- **108** positive-MFE trades had NO_ACTION;
+- **108 / 108** had archived observed peak <+0.50%, so they never entered the current protection arm.
+
+Decision:
+- proceed to **V4-3B — 80% Feasibility Ceiling**;
+- no runtime change;
+- no paper/prospective validation;
+- no protection authority.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3A_LOW_RETENTION_ANATOMY.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
