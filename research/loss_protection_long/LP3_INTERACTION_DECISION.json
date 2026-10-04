@@ -1,0 +1,107 @@
+{
+  "stage": "LP-3",
+  "status": "PASS_INTERACTION_TEST_WITH_ARCHITECTURE_DECISION",
+  "universe": 1236,
+  "side": "LONG",
+  "purpose": "winner-harm and protector interaction test for LP-2A + LP-2B",
+  "precedence_if_both_fire": "LP-2A_WRONG_DIRECTION_PRIMARY",
+  "economic_note": "Both candidates act at T+3, so precedence is classification-only in discovery scoring; the same T+3 normalized close is used.",
+  "raw_union": {
+    "definition": "LP-2A OR LP-2B",
+    "full_universe": {
+      "fires": 310,
+      "actual_nonpositive_n": 290,
+      "actual_nonpositive_precision": 0.9354838709677419,
+      "wrong_direction_caught": 233,
+      "wrong_direction_recall": 0.4198198198198198,
+      "sub05_failures_caught": 248,
+      "sub05_failure_recall": 0.3961661341853035,
+      "recovered_winner_harmed": 17,
+      "recovered_winner_harm_rate": 0.07456140350877193,
+      "all_realized_positive_harmed": 20,
+      "all_realized_positive_harm_rate": 0.06578947368421052,
+      "historical_pnl_on_fired": -795.9539394485496,
+      "t3_normalized_close_pnl": -563.2125736092263,
+      "normalized_loss_saved_on_nonpositive": 311.494178774013,
+      "normalized_winner_harm": -78.7528129346898,
+      "normalized_net_delta": 232.7413658393232
+    },
+    "development": {
+      "fires": 189,
+      "actual_nonpositive_precision": 0.9365079365079365,
+      "wrong_direction_recall": 0.4241486068111455,
+      "sub05_failure_recall": 0.40336134453781514,
+      "recovered_winner_harm_rate": 0.06206896551724138,
+      "all_realized_positive_harm_rate": 0.05970149253731343,
+      "normalized_net_delta": 121.32728672655765
+    },
+    "validation": {
+      "fires": 61,
+      "actual_nonpositive_precision": 0.9672131147540983,
+      "wrong_direction_recall": 0.44545454545454544,
+      "sub05_failure_recall": 0.3880597014925373,
+      "recovered_winner_harm_rate": 0.05128205128205128,
+      "all_realized_positive_harm_rate": 0.038461538461538464,
+      "normalized_net_delta": 58.918525529785256
+    },
+    "reserve": {
+      "fires": 60,
+      "actual_nonpositive_precision": 0.9,
+      "wrong_direction_recall": 0.38524590163934425,
+      "sub05_failure_recall": 0.3851851851851852,
+      "recovered_winner_harm_rate": 0.13636363636363635,
+      "all_realized_positive_harm_rate": 0.11764705882352941,
+      "normalized_net_delta": 52.49555358298029,
+      "winner_preservation_gate": "FAIL"
+    }
+  },
+  "overlap": {
+    "both_fire_n": 105,
+    "lp2a_only_n": 149,
+    "lp2b_only_n": 56,
+    "lp2b_only_actual_nonpositive_n": 51,
+    "lp2b_only_realized_positive_n": 5,
+    "lp2b_only_full_normalized_net_delta": 33.58550428203886,
+    "lp2b_only_reserve": {
+      "fires": 11,
+      "actual_nonpositive_n": 9,
+      "realized_positive_n": 2,
+      "actual_nonpositive_precision": 0.8181818181818182,
+      "normalized_loss_saved": 10.210075624269514,
+      "normalized_winner_harm": -9.205234833192387,
+      "normalized_net_delta": 1.0048407910771266
+    }
+  },
+  "supplement_rescue_test": {
+    "protocol": "single-feature gate searched on Development and screened on Validation within LP-2B-only; Reserve opened only for the preselected top candidate",
+    "selected_feature": "temporal__t3_f_f_taker_accel_5m",
+    "operator": "<=",
+    "threshold": 0.01488543670397045,
+    "development": {
+      "fires": 20,
+      "precision": 1.0,
+      "winners_harmed": 0,
+      "normalized_net_delta": 18.57562033726519
+    },
+    "validation": {
+      "fires": 9,
+      "precision": 1.0,
+      "winners_harmed": 0,
+      "normalized_net_delta": 11.676711196545726
+    },
+    "reserve": {
+      "fires": 7,
+      "precision": 0.7142857142857143,
+      "winners_harmed": 2,
+      "normalized_net_delta": -2.553608914086753,
+      "status": "FAIL"
+    },
+    "note": "No post-Reserve threshold cherry-picking is allowed."
+  },
+  "architecture_decision": {
+    "selected_for_next_execution_validation": "LP-2A_ONLY",
+    "lp2b_status": "HOLD_RESEARCH_ONLY_NOT_ALLOWED_AS_INDEPENDENT_SUPPLEMENT",
+    "reason": "Raw union breaches Reserve recovered-winner harm guardrail; LP-2B-only incremental Reserve benefit is nearly zero and unstable; D/V-selected rescue gate fails Reserve."
+  },
+  "important_caveat": "All dollar deltas are T+3 normalized discovery estimates using side return x $5. They are not execution-realistic PnL."
+}
