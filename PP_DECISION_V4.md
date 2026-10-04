@@ -225,7 +225,7 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage1h_historical_matched_benchmark_1791043570111.json`
 
-### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
+false### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
 
