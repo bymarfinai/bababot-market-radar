@@ -998,3 +998,419 @@ Only approximately **3 / 454** trades never had positive MFE.
 If those three historical losses are left unchanged at approximately **-$9.95**, the simple hypothetical net becomes:
 
 > approximately **+$2,160.93**
+The corresponding hypothetical profitable-trade count would be:
+
+> **451 / 454 ≈ 99.34%**
+
+However, this must be labelled correctly.
+
+This is:
+
+> **an 80%-of-historical-peak scenario**
+
+It is **not** a causal Profit Protector backtest.
+
+Historical peak is known only after the fact.
+
+Therefore these figures are useful as:
+
+- economic ceiling;
+- opportunity sizing;
+- Track B target comparison;
+
+but not as proof of achievable trading performance.
+
+---
+
+# 18. What must NOT be copied mechanically into SHORT
+
+When SHORT work begins, do **not** reuse the following as assumptions:
+
+- LONG strong-winner prevalence;
+- LONG archetype count;
+- LONG archetype proportions;
+- LONG threshold +0.158514%;
+- LONG T+1/T+2/T+3 hierarchy;
+- LONG Counterflow veto thresholds;
+- LONG router weights;
+- LONG feature directions;
+- LONG MFE distribution;
+- LONG entries-per-winner efficiency;
+- LONG 80% capture implication.
+
+SHORT must independently earn every rule.
+
+---
+
+# 19. SHORT replication protocol
+
+The development sequence for SHORT should follow this order.
+
+# SHORT-S1 — Freeze SHORT universe
+
+Current known universe reference:
+
+- **655 resolved SHORT**
+- **163 META_WIN**
+- **492 META_LOSS**
+- **99 strong WIN** using the same conceptual target:
+  `META_WIN AND MFE >=1%`
+
+Before any modeling, verify and freeze:
+
+- exact row count;
+- target definition;
+- historical realized PnL;
+- MFE availability;
+- temporal coverage;
+- split assignment.
+
+---
+
+# SHORT-S2 — Single-feature T0 scan
+
+Repeat the exhaustive T0 scan.
+
+Questions:
+
+1. Is SHORT easier than LONG at T0?
+2. Are there any stable single-feature rules?
+3. Do signs reverse relative to LONG?
+4. Does Reserve support the Discovery pattern?
+
+Do not proceed from a strong Discovery-only rule.
+
+---
+
+# SHORT-S3 — Winner anatomy
+
+Analyze only the strong SHORT winners.
+
+Goals:
+
+- determine whether there are multiple winner archetypes;
+- identify opposite feature directions;
+- test clustering stability;
+- measure archetype composition;
+- identify cancellation effects.
+
+Do not assume “Counterflow” and “Flow-Aligned” are the correct SHORT labels until the data supports them.
+
+---
+
+# SHORT-S4 — Loss anatomy
+
+Cluster / characterize SHORT losses independently.
+
+Compare:
+
+- winner archetype vs matching failure archetype.
+
+The purpose is to answer:
+
+> what separates successful SHORT continuation from failed SHORT continuation?
+
+and:
+
+> what separates successful SHORT reversal from failed SHORT reversal?
+
+---
+
+# SHORT-S5 — Archetype-specific T0 combinations
+
+For each SHORT archetype:
+
+- 2-feature combinations;
+- 3-feature combinations;
+- 4-feature combinations;
+- simple vetoes if supported;
+- logistic / linear scoring if appropriate.
+
+Evaluate D/V/R separately.
+
+---
+
+# SHORT-S6 — Temporal confirmation
+
+If any lane remains weak at T0:
+
+- T+1
+- T+2
+- T+3
+- later horizons if justified
+
+Use strict causal censoring.
+
+Determine:
+
+- earliest useful temporal horizon;
+- best simple observable;
+- whether a fixed threshold exists;
+- whether delayed entry still leaves meaningful MFE.
+
+---
+
+# SHORT-S7 — Execution-realistic delayed replay
+
+For temporal rules:
+
+- decision timestamp;
+- next executable 1m bar;
+- recompute delayed-entry MFE / MAE;
+- eliminate trades no longer executable;
+- distinguish classification success from executable opportunity.
+
+---
+
+# SHORT-S8 — Unified full-universe replay
+
+Build an outcome-blind runtime router if archetypes are used.
+
+Then replay all frozen SHORT candidates.
+
+Required output:
+
+> candidates → OPEN → strong WIN → non-target → profitable non-target → realized-positive trades → historical WR → peak MFE opportunity.
+
+This becomes the first SHORT baseline.
+
+---
+
+# SHORT-S9 — Missed winner anatomy
+
+Take all strong SHORT winners still missed.
+
+Classify reasons.
+
+Possible categories:
+
+- router error;
+- veto rejection;
+- temporal threshold fail;
+- resolved before confirmation;
+- early signal existed;
+- late bloomer;
+- no distinguishable signal.
+
+Do not immediately lower thresholds.
+
+First determine **why** the winners were lost.
+
+---
+
+# SHORT-S10 — Recovery layers
+
+Test recovery one layer at a time.
+
+Possible examples:
+
+- early same-threshold confirmation;
+- veto relaxation only for a clearly defined subgroup;
+- router correction;
+- adaptive threshold lane;
+- late-bloomer lane;
+- second temporal regime.
+
+After every experiment:
+
+> replay the entire SHORT universe.
+
+---
+
+# SHORT-S11 — Build the SHORT efficient frontier
+
+Maintain a table of accepted stages:
+
+| Stage | OPEN | Strong WIN | Recall | Non-target | Profitable spillover | Peak MFE | Entries/+WIN |
+|---|---:|---:|---:|---:|---:|---:|---:|
+
+Select the operating point based on marginal economics and stability.
+
+---
+
+# 20. Required result wording for future research
+
+To avoid ambiguous reporting, every future result should begin with the trading funnel.
+
+Example:
+
+> **655 SHORT candidates → 180 OPEN → 55 strong WIN → 125 non-target**
+
+Then immediately report:
+
+- strong-WIN capture = `55 / 99`;
+- strong-WIN rate = `55 / 180`;
+- profitable non-target count;
+- historical realized-positive count;
+- historical WR;
+- peak-MFE opportunity;
+- delta from prior accepted baseline.
+
+Only after that should AUC, correlation, feature importance, or classifier metrics be discussed.
+
+---
+
+# 21. Failure patterns to avoid
+
+## Failure 1 — “AUC improved, therefore detector improved”
+
+False.
+
+The only accepted proof is full-universe replay.
+
+---
+
+## Failure 2 — Lowering thresholds before missed-winner anatomy
+
+This can produce huge entry inflation.
+
+Always diagnose the miss reason first.
+
+---
+
+## Failure 3 — Treating every non-target as garbage
+
+LONG proved this is wrong.
+
+Most selected non-targets had positive MFE.
+
+Always inspect excursion distribution.
+
+---
+
+## Failure 4 — Treating MFE-positive as realized winner
+
+Also wrong.
+
+MFE is opportunity.
+
+Realized outcome depends on exit.
+
+---
+
+## Failure 5 — Mixing Track A and Track B
+
+Entry discovery and peak capture must be independently evaluated.
+
+---
+
+## Failure 6 — Using outcome-informed archetype labels as live routing
+
+Outcome-derived anatomy can be used diagnostically.
+
+Runtime routing must be outcome-blind.
+
+---
+
+## Failure 7 — Claiming delayed-entry PnL using original-entry historical fills
+
+Invalid.
+
+Delayed-entry policies require delayed-entry replay.
+
+---
+
+# 22. Current LONG baseline to preserve before further Track A work
+
+After Stage 3C.7A, the accepted LONG Track A baseline is:
+
+> **1,236 candidates**
+> → **454 OPEN**
+> → **150 strong winners captured**
+> → **95 strong winners missed**
+> → **304 non-targets**
+> → **39 profitable non-targets**
+> → **176 historical realized-positive trades**
+> → **historical WR ≈ 38.77%**
+> → **historical realized PnL ≈ +$62.53**
+> → **total peak-MFE opportunity ≈ $2,713.60**
+
+Strong-winner recall:
+
+> **150 / 245 = 61.2%**
+
+Strong-winner rate among OPEN:
+
+> **150 / 454 ≈ 33.0%**
+
+Non-target MFE-positive rate:
+
+> **301 / 304 ≈ 99.0%**
+
+This is the comparison point for the next LONG recovery stage.
+
+---
+
+# 23. Current unresolved LONG opportunity
+
+Strong winners still missed:
+
+> **95**
+
+The next LONG development must continue from the 454 / 150 baseline.
+
+It must not revert to the earlier 345 / 114 baseline.
+
+Any proposed recovery layer must report:
+
+- how many of the remaining 95 strong winners it recovers;
+- how many additional entries it requires;
+- how many additional non-targets are introduced;
+- how much additional MFE opportunity is created;
+- whether Discovery / Validation / Reserve remain directionally consistent.
+
+---
+
+# 24. Final methodology principle
+
+The central lesson from LONG development is:
+
+> **Profit discovery should not be engineered as a binary “winner vs loser” classifier only.**
+
+The detector is better understood as a system for identifying:
+
+1. **strong target opportunities**, and
+2. **positive-excursion spillover** that may still be economically useful under a competent Profit Protector.
+
+Therefore the complete Market Detector architecture is:
+
+> **candidate universe**
+> → **archetype / regime understanding**
+> → **T0 filtering where possible**
+> → **temporal confirmation where needed**
+> → **recovery layers for missed winners**
+> → **full-universe replay**
+> → **efficient-frontier selection**
+> → **Profit Protector / Track B**
+> → **execution-realistic final strategy**
+
+This sequence—not any single threshold—is the reusable intellectual property that should be carried from LONG into SHORT.
+
+---
+
+# 25. Files associated with the current LONG methodology
+
+Key current artifacts include:
+
+- `D4_STAGE3C1_EXHAUSTIVE_SINGLE_PARAMETER_TUNING_2026-10-04.xlsx`
+- `D4_STAGE3C1B_WINNER_ANATOMY_2026-10-04.xlsx`
+- `D4_STAGE3C1C_LONG_LOSS_ANATOMY_2026-10-04.xlsx`
+- `D4_STAGE3C2_ARCHETYPE_COMBINATION_2026-10-04.xlsx`
+- `D4_STAGE3C3_FLOW_ALIGNED_TEMPORAL_CONFIRMATION_2026-10-04.xlsx`
+- `D4_STAGE3C4_EXECUTION_REALISTIC_TEMPORAL_REPLAY_2026-10-04.xlsx`
+- `D4_STAGE3C5_UNIFIED_LONG_1236_TEST_2026-10-04.xlsx`
+- `D4_STAGE3C6_MISSED_WINNER_ANATOMY_2026-10-04.xlsx`
+- `D4_STAGE3C7A_EARLY_RECOVERY_FULL_1236_2026-10-04.xlsx`
+- `D4_STAGE3C7A_FULL_1236_DECISIONS.csv`
+
+This MD file should remain separate from stage-specific research notes.
+
+---
+
+# 26. Use this file when SHORT development starts
+
+The correct instruction for a future development session is:
+
+> Read `MARKET_DETECTOR_PROFIT_DISCOVERY_PLAYBOOK_LONG_TO_SHORT.md` first.  
+> Do not copy LONG thresholds mechanically.  
+> Reproduce the methodology from the SHORT frozen universe, and report every accepted experiment using the full-universe Track A ledger.
