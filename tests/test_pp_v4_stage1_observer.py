@@ -13,6 +13,10 @@ from market_radar.profit_protection_v4_observer import (
     process_pp_v4_cycle,
     side_return_pct,
 )
+from research.profit_protection_v4.stage1_observability_benchmark import (
+    capture_distribution,
+    evaluate_rows,
+)
 
 
 class FakeClient:
@@ -261,6 +265,41 @@ class PPV4Stage1ObserverTests(unittest.TestCase):
             self.assertEqual(summary["positions"], 1)
             self.assertEqual(summary["cycles"], 1)
             self.assertEqual(summary["duplicate_observation_attempts"], 0)
+
+    def test_observability_evaluator_detects_distribution_uplift(self) -> None:
+        rows = []
+        for index in range(60):
+            true_mfe = 1.0
+            old_peak = 0.70 if index < 30 else 0.90
+            v4_peak = 0.85 if index < 30 else 0.97
+            rows.append(
+                {
+                    "position_id": f"P{index}",
+                    "opened_at_ms": 1_000 + index,
+                    "true_mfe_pct": true_mfe,
+                    "old15_peak_pct": old_peak,
+                    "v4_peak_pct": v4_peak,
+                }
+            )
+        quality = {
+            "cycle_error_rate_pct": 0.0,
+            "missing_position_rate_pct": 0.0,
+            "duplicate_observation_attempts": 0,
+            "sample_gap_ms": {
+                "median": 5_000,
+                "p90": 5_200,
+                "max": 6_000,
+            },
+        }
+        result = evaluate_rows(rows, data_quality=quality)
+        self.assertGreater(result["delta"]["ge90_share_uplift_pp"], 0.0)
+        self.assertGreater(result["delta"]["lt80_share_reduction_pp"], 0.0)
+        self.assertGreater(result["delta"]["p10_uplift_pp"], 0.0)
+
+    def test_capture_distribution_reports_tail(self) -> None:
+        result = capture_distribution([0.50, 0.80, 0.90, 1.00])
+        self.assertAlmostEqual(result["lt80_share_pct"], 25.0)
+        self.assertAlmostEqual(result["ge90_share_pct"], 50.0)
 
 
 if __name__ == "__main__":
