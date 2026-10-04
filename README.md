@@ -97,17 +97,51 @@ Stage 3B frozen result (LONG T0 only):
 
 Frozen LONG target remains **245 / 1,236** trades satisfying BOTH `META_WIN` and historical MFE >= 1.00%.
 
-Current result:
+### Stage 3C.1 — exhaustive single-parameter tuning
 
-- exhaustive search across the existing pre-entry T0 feature families did **not** find a stable strong parameter
-- strongest stable T0 relationships remain weak; the best stable AUC floor is about 0.575 and point-biserial correlation remains around 0.13–0.14
-- derived interactions that look stronger on validation but deteriorate on sealed reserve are rejected as overfit / regime-specific
-- causal T+3 temporal features are materially more predictive, but they are **not pre-entry parameters** and must never be reported as such
-- a selected 5-feature T+3 composite reaches roughly AUC 0.801 on validation and 0.707 on sealed reserve, while reserve correlation remains only about r=0.281
+Stage 3C.1 explicitly tests the concern that a weak raw correlation may hide a nonlinear sweet spot such as volume 2.5–3.0x or OI inside a narrow band.
 
-Stage 3C therefore records **NO STRONG PRE-ENTRY PARAMETER FOUND in the frozen existing feature set**.
+The frozen T0 set contains **224 parameters** after excluding seven time / infrastructure-latency fields:
 
-A research-only microstructure feature engine has been added on branch `research/stage3c-microstructure` to collect/test feature families not present in the frozen cohort, including multi-level order-book imbalance, microprice edge, sub-minute AggTrade CVD, large-trade imbalance, CVD acceleration/persistence, flow-price efficiency and absorption proxies.
+- 210 numeric
+- 14 categorical
+
+Every numeric feature is tuned independently using exact Discovery-observed boundaries for:
+
+- `x <= threshold`
+- `x >= threshold`
+- contiguous `low <= x <= high` bands
+
+Categorical states are also tested. Candidate generation occurs on Discovery; per-feature thresholds are selected for positive stability across Discovery + Validation; the rule is then frozen before sealed Reserve evaluation.
+
+Total search size:
+
+- **32,275,307 numeric candidate rules**
+- **72 categorical candidate rules**
+- **32,275,379 total candidate rules**
+
+Result: **NO STRONG SINGLE-PARAMETER RULE FOUND.**
+
+Important examples:
+
+- best Discovery-only pocket: `f_f_market_dispersion_15m`, r ≈ **0.214**, but it collapses in Validation
+- tuned `f_f_coin_minus_market_30m` band ≈ **2.919–4.426** gives r ≈ **0.110 / 0.167 / 0.106** across Discovery / Validation / Reserve; Reserve selects 17 trades, captures 5/38 targets, and realizes about **-$2.83**
+- tuned `f_new_oi_per_price` band ≈ **1.375–2.807** gives r ≈ **0.115 / 0.116 / 0.084**
+- tuned `f_micro_volume_ratio_last_vs_prev10` band ≈ **1.654–3.111x** gives r ≈ **0.083 / 0.085 / 0.027**
+- narrow timing/operational pockets may show higher precision but tiny coverage and must not be treated as market detectors
+
+Therefore the weak T0 result is **not merely a bad default-threshold problem**. One-by-one nonlinear threshold tuning still does not produce a stable strong parameter. Preferred STRONG status remains `|r| >= 0.50` consistently; no feature passes.
+
+Full methodology and result contract:
+`research/strong_parameter_tuning/STAGE3C1_EXHAUSTIVE_SINGLE_PARAMETER_TUNING.md`
+
+### Temporal / new-data follow-up
+
+Causal T+3 temporal features are materially more predictive than T0, but they are **not pre-entry parameters** and must never be reported as such. A selected 5-feature T+3 composite previously reached roughly AUC 0.801 on Validation and 0.707 on sealed Reserve, while Reserve correlation remained about r=0.281.
+
+Stage 3C.2 may combine only the stable sweet spots from Stage 3C.1 to test whether interactions create materially stronger separation.
+
+A research-only microstructure feature engine also exists on branch `research/stage3c-microstructure` for feature families not present in the frozen cohort, including multi-level order-book imbalance, microprice edge, sub-minute AggTrade CVD, large-trade imbalance, CVD acceleration/persistence, flow-price efficiency and absorption proxies.
 
 Historical L2/order-book values must never be fabricated for the frozen cohort. If the historical raw stream is unavailable, those features require forward causal collection.
 
