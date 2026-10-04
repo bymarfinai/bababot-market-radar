@@ -589,7 +589,13 @@ def process_pp_v4_cycle(
             if inserted:
                 with _STATE_LOCK:
                     _STATE[pid] = state
-                row["stage2d_shadow"] = process_stage2d_shadow_observation(row)
+                try:
+                    row["stage2d_shadow"] = process_stage2d_shadow_observation(row)
+                except Exception as shadow_exc:
+                    row["stage2d_shadow"] = {
+                        "status": "ERROR_FAIL_ISOLATED",
+                        "error": f"{type(shadow_exc).__name__}: {str(shadow_exc)[:300]}",
+                    }
                 observed += 1
             else:
                 row["stage2d_shadow"] = {"status": "SKIPPED_DUPLICATE_V4_OBSERVATION"}
