@@ -178,6 +178,53 @@ No exit authority.
 - entries resumed in **RUN** after validation;
 - live trading remained disarmed.
 
+### V4-1H — Historical Matched 5s vs 15s Benchmark ✅ COMPLETE
+
+A retrospective same-trade benchmark was run against the archived Stage 2B.1 5s observations, existing ~15s PP-V2 observations, and lifecycle true MFE.
+
+Raw matched closed PAPER positions: **208**.
+
+For a strict apple-to-apple cohort, observations were restricted to the position lifetime and required:
+- true MFE >= +0.30%;
+- first 5s observation <= 6s after entry;
+- final 5s observation <= 6s before close;
+- first 15s observation <= 20s after entry;
+- final 15s observation <= 20s before close.
+
+Strict cohort: **124 trades**.
+
+Main result:
+- median capture: **82.00% -> 87.03%** (**+5.03 pp**);
+- aggregate peak / true MFE: **68.37% -> 72.31%** (**+3.94 pp**);
+- >=90% share: **34.68% -> 43.55%** (**+8.87 pp**);
+- <80% share: **48.39% -> 42.74%** (**5.65 pp reduction**);
+- P10: **1.98% -> 5.96%** (**+3.97 pp**);
+- P25: **19.92% -> 23.23%** (**+3.30 pp**).
+
+Per trade:
+- improved: **66**
+- tied: **52**
+- worsened: **6**.
+
+Chronological EARLY/MID/LATE all showed positive aggregate and >=90% share uplift; the LATE cohort did not collapse.
+
+Diagnostic against the already-frozen V4 thresholds:
+- V4-2 median uplift: PASS;
+- V4-2 aggregate uplift: PASS;
+- V4-3 >=90 share uplift: PASS;
+- V4-3 <80 reduction: PASS;
+- V4-3 P25: PASS;
+- V4-3 **P10: FAIL** (+3.97 pp vs +5 pp target).
+
+Interpretation:
+5s resolution is materially better than ~15s and supports the V4 direction, especially for early favorable excursions. However, 5s alone does not yet establish that the low tail is solved. This result is **retrospective diagnostic only** and grants no protection/trading authority.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE1H_HISTORICAL_MATCHED_BENCHMARK.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage1h_historical_matched_benchmark_1791043570111.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
