@@ -185,3 +185,13 @@ This playbook is the authoritative methodology reference for winner anatomy, tem
 - High-retention shape kept median 83.58% but precision stayed 50%.
 - Persistent false-reversal names include AVAAI, STX, COMP, FLOW.
 - Decision: no Stage3D integration. Next research must be separately preregistered around multi-cycle failed reclaim / volatility-normalized structure. V4.2/runtime/shadow unchanged.
+
+## PP V4-3C3 Multi-Cycle Reclaim — COMPLETE / NO PASS
+
+- Same 19 runner-capable trades, DEV 12 / LATE 7.
+- Frozen 32-candidate family tested failed-reclaim cycles plus local-volatility-normalized drawdown.
+- 0/32 passed all gates; 0/32 reached precision >=65% or premature <=35%.
+- Highest precision was only 50%, although median correct retention stayed 80.99%.
+- Requiring 2 failed reclaim cycles reduced precision to 44.44% and median retention to 72.32%.
+- Persistent premature cases: AVAAI, STX, COMP, API3, FLOW; several had 4–11.5 noise-unit drawdowns and still later continued higher.
+- Decision: no Stage3D integration. Next research must be separately preregistered around path topology / market-state context. V4.2/runtime/shadow unchanged.
