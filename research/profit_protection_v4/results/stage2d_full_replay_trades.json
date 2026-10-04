@@ -1,0 +1,3064 @@
+[
+  {
+    "actions": [
+      {
+        "at_ms": 1791032014376,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09345271516578181,
+        "fill": 6.1422282,
+        "net_usdt": 0.2091770637918054,
+        "peak_pct": 0.7265350522643987,
+        "pnl_pct": 0.33703641588289646,
+        "qty": 20.286387311536622,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791035079475,
+        "peak_pct": 1.5055323250274033,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791035169467,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.27793850998010733,
+        "fill": 6.0892176,
+        "net_usdt": 3.8561315165435057,
+        "peak_pct": 1.5055323250274033,
+        "pnl_pct": 1.1971792378920432,
+        "qty": 60.859161934609865,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 2.5829952234971314,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.9308345581172188,
+    "opened_at_ms": 1791030387672,
+    "position_id": "PAPER:PROMUSDT:1791030299999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 0.8130617160670622,
+    "sim_usdt": 4.065308580335311,
+    "small_fired": true,
+    "symbol": "PROMUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791031886343,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18571919770542603,
+        "net_usdt": 2.001183861726548,
+        "qty": 45813.48662550392,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791032619399,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04660163436131712,
+        "fill": 0.0054250847999999996,
+        "net_usdt": 0.2710108838825349,
+        "peak_pct": 1.189472046113138,
+        "pnl_pct": 0.603059417306695,
+        "qty": 11453.37165637598,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032772715,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.13983067832419546,
+        "fill": 0.005426085,
+        "net_usdt": 0.7786398894152321,
+        "qty": 34360.11496912794,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 3.0393703809468575,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.9105303838341883,
+    "opened_at_ms": 1791030387836,
+    "position_id": "PAPER:TUSDT:1791030299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.610166927004863,
+    "sim_usdt": 3.050834635024315,
+    "small_fired": true,
+    "symbol": "TUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031245168,
+        "net_usdt": -0.33561030806532705,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.33561030806532705,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.05579388437539902,
+    "opened_at_ms": 1791030388004,
+    "position_id": "PAPER:C98USDT:1791030299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.06712206161306541,
+    "sim_usdt": -0.33561030806532705,
+    "small_fired": false,
+    "symbol": "C98USDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033362713,
+        "net_usdt": -4.294281797041444,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -4.294281797041444,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.15881861870237474,
+    "opened_at_ms": 1791030388167,
+    "position_id": "PAPER:RAYSOLUSDT:1791030299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.8588563594082889,
+    "sim_usdt": -4.294281797041444,
+    "small_fired": false,
+    "symbol": "RAYSOLUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791031067424,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18732906874207006,
+        "net_usdt": -0.1469207248354809,
+        "qty": 10928.759178409107,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791031184346,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04672978957679648,
+        "fill": 0.02280456,
+        "net_usdt": 0.10000910802790021,
+        "peak_pct": 0.6357215499043889,
+        "pnl_pct": 0.32971629290893256,
+        "qty": 2732.189794602277,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032551044,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.1403738284260873,
+        "fill": 0.022834566,
+        "net_usdt": 0.05389660345750247,
+        "qty": 8196.569383806831,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.07505858689214429,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.20377114540041902,
+    "opened_at_ms": 1791030388748,
+    "position_id": "PAPER:CHRUSDT:1791030299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.0013969973299843535,
+    "sim_usdt": 0.006984986649921768,
+    "small_fired": true,
+    "symbol": "CHRUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031907261,
+        "net_usdt": -0.6904478264892522,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.6904478264892522,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.24632890774917376,
+    "opened_at_ms": 1791030431096,
+    "position_id": "PAPER:MASKUSDT:1791030299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.13808956529785044,
+    "sim_usdt": -0.6904478264892522,
+    "small_fired": false,
+    "symbol": "MASKUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035444366,
+        "net_usdt": -3.082995430845726,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -3.082995430845726,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.2822674299945154,
+    "opened_at_ms": 1791030654313,
+    "position_id": "PAPER:SPXUSDT:1791030599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.6165990861691453,
+    "sim_usdt": -3.082995430845726,
+    "small_fired": false,
+    "symbol": "SPXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791031383792,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18708727118961144,
+        "net_usdt": 0.17571780932846548,
+        "qty": 250075.01750375077,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791034494441,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04664050215533655,
+        "fill": 0.0009946989,
+        "net_usdt": 0.21914829072925868,
+        "peak_pct": 0.9302810657140892,
+        "pnl_pct": 0.520158037007945,
+        "qty": 62518.75437593769,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791034909494,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.1403295229252871,
+        "fill": 0.00099759948,
+        "net_usdt": 0.11301491002519043,
+        "qty": 187556.26312781306,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.3264043560287193,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.41571854800003394,
+    "opened_at_ms": 1791030656329,
+    "position_id": "PAPER:BOMEUSDT:1791030599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.1015762020165829,
+    "sim_usdt": 0.5078810100829145,
+    "small_fired": true,
+    "symbol": "BOMEUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791030681878,
+        "net_usdt": 0.020857857313486106,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": 0.020857857313486106,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.12530148124678128,
+    "opened_at_ms": 1791030661032,
+    "position_id": "PAPER:CLOUSDT:1791030599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.0041715714626972215,
+    "sim_usdt": 0.020857857313486106,
+    "small_fired": false,
+    "symbol": "CLOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032815608,
+        "net_usdt": -0.9881699462047233,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.9881699462047233,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.10620527633599249,
+    "opened_at_ms": 1791030666899,
+    "position_id": "PAPER:RONINUSDT:1791030599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.19763398924094466,
+    "sim_usdt": -0.9881699462047233,
+    "small_fired": false,
+    "symbol": "RONINUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031019716,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09409211527934759,
+        "fill": 0.37172564,
+        "net_usdt": 0.2683115905174417,
+        "peak_pct": 0.7899959300605497,
+        "pnl_pct": 0.38499996463035036,
+        "qty": 337.49663785849367,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791031088788,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28144120872017875,
+        "fill": 0.37062586,
+        "net_usdt": -0.3077462484819043,
+        "qty": 1012.4899135754811,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.1291533753740671,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6192605524263799,
+    "opened_at_ms": 1791030690888,
+    "position_id": "PAPER:STXUSDT:1791030599999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.007886931592892521,
+    "sim_usdt": -0.039434657964462605,
+    "small_fired": true,
+    "symbol": "STXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791031171459,
+        "entry_fee": 0.18750000000000003,
+        "exit_fee": 0.1870781745508122,
+        "net_usdt": 0.1878557576996235,
+        "qty": 236.54338284173724,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791032514589,
+        "entry_fee": 0.04687500000000001,
+        "exit_fee": 0.04675623541130515,
+        "fill": 1.0542108000000001,
+        "net_usdt": 0.06472154951516633,
+        "peak_pct": 0.5193149120789942,
+        "pnl_pct": 0.2733097939235707,
+        "qty": 59.13584571043431,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032603793,
+        "entry_fee": 0.14062499999999997,
+        "exit_fee": 0.14061472012026097,
+        "fill": 1.05681132,
+        "net_usdt": -0.26753321380152184,
+        "qty": 177.40753713130294,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.16885519403573898,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.21246782111128434,
+    "opened_at_ms": 1791030691365,
+    "position_id": "PAPER:FILUSDT:1791030599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.002991181317346403,
+    "sim_usdt": -0.014955906586732015,
+    "small_fired": true,
+    "symbol": "FILUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791030952628,
+        "net_usdt": -0.2194233372221207,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.2194233372221207,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.04388466744442414,
+    "opened_at_ms": 1791030933629,
+    "position_id": "PAPER:LYNUSDT:1791030899999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.04388466744442414,
+    "sim_usdt": -0.2194233372221207,
+    "small_fired": false,
+    "symbol": "LYNUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031088630,
+        "net_usdt": -4.734098707132696,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -4.734098707132696,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.05877333373495036,
+    "opened_at_ms": 1791030948559,
+    "position_id": "PAPER:CUSDT:1791030899999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.9468197414265391,
+    "sim_usdt": -4.734098707132696,
+    "small_fired": false,
+    "symbol": "CUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031654653,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09401114994297362,
+        "fill": 4.6249248,
+        "net_usdt": -0.5359610739078006,
+        "peak_pct": 0.5003688793253969,
+        "pnl_pct": -0.2585082375243575,
+        "qty": 27.102754173206197,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791031687637,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2824604035808246,
+        "fill": 4.6319262000000005,
+        "net_usdt": -2.177581844680239,
+        "qty": 81.3082625196186,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -2.903442459573652,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.3308293048160937,
+    "opened_at_ms": 1791030957511,
+    "position_id": "PAPER:ARUSDT:1791030899999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.542708583717608,
+    "sim_usdt": -2.7135429185880398,
+    "small_fired": true,
+    "symbol": "ARUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031383932,
+        "net_usdt": -0.8170548040842363,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.8170548040842363,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.2083036941256194,
+    "opened_at_ms": 1791031231329,
+    "position_id": "PAPER:SOONUSDT:1791031199999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.16341096081684725,
+    "sim_usdt": -0.8170548040842363,
+    "small_fired": false,
+    "symbol": "SOONUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031819680,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09341196216060915,
+        "fill": 0.47269452,
+        "net_usdt": 0.26355515702718035,
+        "peak_pct": 0.738841129659018,
+        "pnl_pct": 0.38049759583106413,
+        "qty": 263.48789252054837,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032476992,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2808881494423226,
+        "fill": 0.47379474,
+        "net_usdt": -0.07967073920581547,
+        "qty": 790.4636775616451,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.053480003166106654,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5695281395583615,
+    "opened_at_ms": 1791031246685,
+    "position_id": "PAPER:EDGEUSDT:1791031199999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.03677688356427298,
+    "sim_usdt": 0.1838844178213649,
+    "small_fired": true,
+    "symbol": "EDGEUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791031529847,
+        "peak_pct": 1.753215383925688,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791031569695,
+        "entry_fee": 0.375,
+        "exit_fee": 0.36771666826847477,
+        "fill": 0.0094008798,
+        "net_usdt": 8.96839230709849,
+        "peak_pct": 2.2956119016065313,
+        "pnl_pct": 1.961829429187556,
+        "qty": 52153.511315465716,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 6.984675838077299,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 3.94444473835847,
+    "opened_at_ms": 1791031259140,
+    "position_id": "PAPER:AVAAIUSDT:1791031199999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 1.7936784614196981,
+    "sim_usdt": 8.96839230709849,
+    "small_fired": false,
+    "symbol": "AVAAIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032857635,
+        "net_usdt": -5.699480266072115,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -5.699480266072115,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.24927133849448024,
+    "opened_at_ms": 1791031268885,
+    "position_id": "PAPER:BLUAIUSDT:1791031199999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -1.1398960532144229,
+    "sim_usdt": -5.699480266072115,
+    "small_fired": false,
+    "symbol": "BLUAIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034888091,
+        "net_usdt": -4.903833487188899,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -4.903833487188899,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.16139696565904454,
+    "opened_at_ms": 1791031322344,
+    "position_id": "PAPER:LDOUSDT:1791031199999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.9807666974377798,
+    "sim_usdt": -4.903833487188899,
+    "small_fired": false,
+    "symbol": "LDOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032459883,
+        "peak_pct": 1.5921513359246964,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791032689695,
+        "entry_fee": 0.375,
+        "exit_fee": 0.38321137170039793,
+        "fill": 0.38032392000000004,
+        "net_usdt": 10.19028422883017,
+        "peak_pct": 2.5594397379594236,
+        "pnl_pct": 2.210141148335776,
+        "qty": 1343.4561139371158,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 5.157109108277773,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 2.4675544560531657,
+    "opened_at_ms": 1791031545728,
+    "position_id": "PAPER:STXUSDT:1791031499999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 2.0380568457660337,
+    "sim_usdt": 10.19028422883017,
+    "small_fired": false,
+    "symbol": "STXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032325050,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09399631279074289,
+        "fill": 0.099340128,
+        "net_usdt": 0.14067074153311176,
+        "peak_pct": 0.5552977835686645,
+        "pnl_pct": 0.2827902014993944,
+        "qty": 1261.6091762467213,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032498102,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28267007107361086,
+        "fill": 0.09958008,
+        "net_usdt": 1.329508027074219,
+        "qty": 3784.827528740164,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 1.7474691526968857,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5461179210756011,
+    "opened_at_ms": 1791032148307,
+    "position_id": "PAPER:CUSDT:1791032099999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.2940357537214662,
+    "sim_usdt": 1.4701787686073309,
+    "small_fired": true,
+    "symbol": "CUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032674695,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09396183934410873,
+        "fill": 2.0722854600000002,
+        "net_usdt": 0.09474061946754114,
+        "peak_pct": 0.7006416054250453,
+        "pnl_pct": 0.2460111692831779,
+        "qty": 60.45617501886619,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791032709145,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.27979113052921534,
+        "fill": 2.05688854,
+        "net_usdt": -2.5062004249087364,
+        "qty": 181.36852505659857,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -3.3416005665449813,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5299911009961243,
+    "opened_at_ms": 1791032434238,
+    "position_id": "PAPER:ZROUSDT:1791032399999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.4822919610882391,
+    "sim_usdt": -2.4114598054411953,
+    "small_fired": true,
+    "symbol": "ZROUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791032899529,
+        "net_usdt": -1.4344200088454728,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.4344200088454728,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.25310996575289757,
+    "opened_at_ms": 1791032436022,
+    "position_id": "PAPER:ATHUSDT:1791032399999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.28688400176909457,
+    "sim_usdt": -1.4344200088454728,
+    "small_fired": false,
+    "symbol": "ATHUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033319674,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09307613693784157,
+        "fill": 0.180596112,
+        "net_usdt": 0.7116579459400655,
+        "peak_pct": 1.2993760673647214,
+        "pnl_pct": 0.7386395383946476,
+        "qty": 687.1771188358811,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791033719701,
+        "peak_pct": 1.5577546640470175,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791033774627,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.27755823644667377,
+        "fill": 0.179515896,
+        "net_usdt": 4.363543167988297,
+        "peak_pct": 1.5907391657511427,
+        "pnl_pct": 1.3323605690688467,
+        "qty": 2061.531356507643,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 2.7916053805463,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.4222356065694775,
+    "opened_at_ms": 1791032721859,
+    "position_id": "PAPER:SYNUSDT:1791032699999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 1.0150402227856725,
+    "sim_usdt": 5.075201113928363,
+    "small_fired": true,
+    "symbol": "SYNUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791034920403,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.1869609321481188,
+        "net_usdt": -1.0932180679896888,
+        "qty": 171.9169200068783,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791039849577,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04699483404440234,
+        "fill": 1.45790836,
+        "net_usdt": 0.06590889182539024,
+        "peak_pct": 0.5851515576243527,
+        "pnl_pct": 0.27570110161199146,
+        "qty": 42.97923000171958,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039918582,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.1408684814209866,
+        "fill": 1.4567086,
+        "net_usdt": 0.04314841322780269,
+        "qty": 128.93769000515874,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -1.0356868503526186,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.011338237889261337,
+    "opened_at_ms": 1791032750060,
+    "position_id": "PAPER:BTWUSDT:1791032699999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.19683215258729916,
+    "sim_usdt": -0.9841607629364958,
+    "small_fired": true,
+    "symbol": "BTWUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791036350294,
+        "net_usdt": -1.5533450107561027,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.5533450107561027,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.23251247333615008,
+    "opened_at_ms": 1791032753668,
+    "position_id": "PAPER:FLUIDUSDT:1791032699999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.3106690021512205,
+    "sim_usdt": -1.5533450107561027,
+    "small_fired": false,
+    "symbol": "FLUIDUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791033790395,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.185381012971498,
+        "net_usdt": -3.198197050974155,
+        "qty": 332.424537834819,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791034764643,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04703074172703696,
+        "fill": 0.7545490600000001,
+        "net_usdt": 0.1137498943222466,
+        "peak_pct": 0.7113379824367438,
+        "pnl_pct": 0.35231948157516957,
+        "qty": 83.10613445870474,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791035265978,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14092396891681647,
+        "fill": 0.75364924,
+        "net_usdt": 0.11707625350511253,
+        "qty": 249.31840337611425,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -3.042095379634005,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.25638376447599276,
+    "opened_at_ms": 1791033023132,
+    "position_id": "PAPER:GRASSUSDT:1791032999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.5934741806293591,
+    "sim_usdt": -2.967370903146796,
+    "small_fired": true,
+    "symbol": "GRASSUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033204750,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09355953246177405,
+        "fill": 0.030573884,
+        "net_usdt": -0.44126625009637543,
+        "peak_pct": 0.6981104595274124,
+        "pnl_pct": -0.18320201451058615,
+        "qty": 4080.1503427685343,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791033204822,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2809539524514294,
+        "fill": 0.030603877999999998,
+        "net_usdt": -0.9569340172122539,
+        "qty": 12240.451028305602,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -1.2759120229496719,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5274623593074383,
+    "opened_at_ms": 1791033030683,
+    "position_id": "PAPER:CTSIUSDT:1791032999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.2796400534617259,
+    "sim_usdt": -1.3982002673086293,
+    "small_fired": true,
+    "symbol": "CTSIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033224817,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09407022383327973,
+        "fill": 0.010253948799999999,
+        "net_usdt": 0.23914488720635052,
+        "peak_pct": 0.6747852739327875,
+        "pnl_pct": 0.3616444177152456,
+        "qty": 12232.064695996887,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791033602355,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.282953620810535,
+        "fill": 0.0102809434,
+        "net_usdt": 1.7072907932360923,
+        "qty": 36696.19408799066,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 2.423033077146902,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.2471624501565397,
+    "opened_at_ms": 1791033033442,
+    "position_id": "PAPER:MOVEUSDT:1791032999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.3892871360884886,
+    "sim_usdt": 1.946435680442443,
+    "small_fired": true,
+    "symbol": "MOVEUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033121124,
+        "net_usdt": -5.389497416018015,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -5.389497416018015,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.15887057210353822,
+    "opened_at_ms": 1791033038762,
+    "position_id": "PAPER:GTCUSDT:1791032999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -1.077899483203603,
+    "sim_usdt": -5.389497416018015,
+    "small_fired": false,
+    "symbol": "GTCUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034569665,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09403876957602587,
+        "fill": 0.0037462506,
+        "net_usdt": 0.1972373317918027,
+        "peak_pct": 0.6493934207266738,
+        "pnl_pct": 0.32808649839395354,
+        "qty": 33469.47107632571,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791034657210,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28166456123611916,
+        "fill": 0.0037402518000000003,
+        "net_usdt": -0.010166246410573287,
+        "qty": 100408.41322897712,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.08043035541257879,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.47879159438600033,
+    "opened_at_ms": 1791033050026,
+    "position_id": "PAPER:SOPHUSDT:1791032999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.037414217076245884,
+    "sim_usdt": 0.1870710853812294,
+    "small_fired": true,
+    "symbol": "SOPHUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791033560573,
+        "entry_fee": 0.18750000000000003,
+        "exit_fee": 0.18869330457216826,
+        "net_usdt": 1.2148794583188587,
+        "qty": 46.9830845860903,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791033574732,
+        "entry_fee": 0.04687500000000001,
+        "exit_fee": 0.04714690344355941,
+        "fill": 5.3519293999999995,
+        "net_usdt": 0.26851602130231506,
+        "peak_pct": 1.0324250939286017,
+        "pnl_pct": 0.6001807157365535,
+        "qty": 11.745771146522575,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791033664902,
+        "entry_fee": 0.14062499999999997,
+        "exit_fee": 0.14157282382809155,
+        "fill": 5.3569284,
+        "net_usdt": 0.9815672802939537,
+        "qty": 35.23731343956773,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 2.52363583204413,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.8614594449531278,
+    "opened_at_ms": 1791033344239,
+    "position_id": "PAPER:KSMUSDT:1791033299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.4929925519830254,
+    "sim_usdt": 2.464962759915127,
+    "small_fired": true,
+    "symbol": "KSMUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791033829788,
+        "peak_pct": 1.620859205945191,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791034099754,
+        "entry_fee": 0.375,
+        "exit_fee": 0.364296632911488,
+        "fill": 0.5482296240000001,
+        "net_usdt": 13.531859485104473,
+        "peak_pct": 3.4336054915828584,
+        "pnl_pct": 2.8736564923047325,
+        "qty": 885.995252022324,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 4.1757282867681695,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 3.2668529318406767,
+    "opened_at_ms": 1791033627506,
+    "position_id": "PAPER:BRUSDT:1791033599999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 2.7063718970208948,
+    "sim_usdt": 13.531859485104473,
+    "small_fired": false,
+    "symbol": "BRUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034304852,
+        "peak_pct": 1.5459558690671615,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791034399732,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3802695484999386,
+        "fill": 25.254948000000002,
+        "net_usdt": 6.270795118084898,
+        "peak_pct": 1.6262610931629062,
+        "pnl_pct": 1.4254980329235556,
+        "qty": 20.076306023935775,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 8.27651877255073,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.9160478295907204,
+    "opened_at_ms": 1791033629137,
+    "position_id": "PAPER:COMPUSDT:1791033599999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.2541590236169795,
+    "sim_usdt": 6.270795118084898,
+    "small_fired": false,
+    "symbol": "COMPUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034049893,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.0940762713908235,
+        "fill": 5.4299138000000005,
+        "net_usdt": 0.2472022497071765,
+        "peak_pct": 0.9594753877320672,
+        "pnl_pct": 0.3680964361656214,
+        "qty": 23.100740295563806,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791034103744,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2822288141724705,
+        "fill": 5.4299138000000005,
+        "net_usdt": 0.7416067491215295,
+        "qty": 69.30222088669142,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 1.0811241910582614,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.7885790300350265,
+    "opened_at_ms": 1791033915666,
+    "position_id": "PAPER:KSMUSDT:1791033899999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.19776179976574118,
+    "sim_usdt": 0.988808998828706,
+    "small_fired": true,
+    "symbol": "KSMUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035423312,
+        "net_usdt": -1.1427683363038064,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.1427683363038064,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.010298262525031942,
+    "opened_at_ms": 1791033938147,
+    "position_id": "PAPER:LITUSDT:1791033899999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.22855366726076126,
+    "sim_usdt": -1.1427683363038064,
+    "small_fired": false,
+    "symbol": "LITUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039950398,
+        "net_usdt": -1.5272247018917282,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.5272247018917282,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.2411742747797078,
+    "opened_at_ms": 1791033940442,
+    "position_id": "PAPER:GLMUSDT:1791033899999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.30544494037834563,
+    "sim_usdt": -1.5272247018917282,
+    "small_fired": false,
+    "symbol": "GLMUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034994888,
+        "peak_pct": 1.5097898475388227,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791035049652,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3799482962978979,
+        "fill": 0.29804038,
+        "net_usdt": 5.842780100899246,
+        "peak_pct": 1.5777803296872062,
+        "pnl_pct": 1.3398136421678641,
+        "qty": 1699.7620537096254,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 1.9370407710365736,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.5421484778189065,
+    "opened_at_ms": 1791034216017,
+    "position_id": "PAPER:API3USDT:1791034199999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.168556020179849,
+    "sim_usdt": 5.842780100899246,
+    "small_fired": false,
+    "symbol": "API3USDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791036391641,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18759555641192052,
+        "net_usdt": -0.2476870071845416,
+        "qty": 7581.134667819242,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791040339604,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.047282607286549976,
+        "fill": 0.033263346,
+        "net_usdt": 0.4493187747800782,
+        "peak_pct": 1.4962309327640089,
+        "pnl_pct": 0.8897401593384702,
+        "qty": 1895.2836669548105,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791040823958,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14150673902981006,
+        "fill": 0.033183362,
+        "net_usdt": 0.8935203007169438,
+        "qty": 5685.851000864432,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.9436733937713835,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6128749674693533,
+    "opened_at_ms": 1791034240680,
+    "position_id": "PAPER:MAVIAUSDT:1791034199999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.2190304136624961,
+    "sim_usdt": 1.0951520683124805,
+    "small_fired": true,
+    "symbol": "MAVIAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791036100248,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18765067722241505,
+        "net_usdt": -0.1742477140023401,
+        "qty": 3343.812842782614,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791038569636,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04711325795041661,
+        "fill": 0.075144968,
+        "net_usdt": 0.2236890092717324,
+        "peak_pct": 0.929646846550436,
+        "pnl_pct": 0.5283893054165212,
+        "qty": 835.9532106956535,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791038912880,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14088844940042092,
+        "fill": 0.074905016,
+        "net_usdt": 0.06975241782749161,
+        "qty": 2507.85963208696,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.0812444902323512,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.34453986794615077,
+    "opened_at_ms": 1791034522067,
+    "position_id": "PAPER:FLUXUSDT:1791034499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.023838742619376786,
+    "sim_usdt": 0.11919371309688392,
+    "small_fired": true,
+    "symbol": "FLUXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034724854,
+        "peak_pct": 1.565844004955319,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791034804835,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3810660002101959,
+        "fill": 0.28194359999999996,
+        "net_usdt": 7.331934280050956,
+        "peak_pct": 1.9262621880814956,
+        "pnl_pct": 1.63792764158055,
+        "qty": 1802.090915630861,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 3.551137960944211,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.862470279916632,
+    "opened_at_ms": 1791034527159,
+    "position_id": "PAPER:AVAUSDT:1791034499999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.4663868560101911,
+    "sim_usdt": 7.331934280050956,
+    "small_fired": false,
+    "symbol": "AVAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035298059,
+        "net_usdt": -1.7301618973079922,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.7301618973079922,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.12618054053453048,
+    "opened_at_ms": 1791034529523,
+    "position_id": "PAPER:SYRUPUSDT:1791034499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.3460323794615984,
+    "sim_usdt": -1.7301618973079922,
+    "small_fired": false,
+    "symbol": "SYRUPUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035794599,
+        "entry_fee": 0.09375000000000001,
+        "exit_fee": 0.09407826382224894,
+        "fill": 0.131153764,
+        "net_usdt": 0.2498568325096619,
+        "peak_pct": 0.6609728792742908,
+        "pnl_pct": 0.37022212148980493,
+        "qty": 956.4169663962668,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791036350137,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2814602486635144,
+        "fill": 0.130793836,
+        "net_usdt": -0.28237869731103526,
+        "qty": 2869.2508991888008,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.18540322699984788,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5056481904047633,
+    "opened_at_ms": 1791034563079,
+    "position_id": "PAPER:ALGOUSDT:1791034499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.0065043729602746745,
+    "sim_usdt": -0.03252186480137337,
+    "small_fired": true,
+    "symbol": "ALGOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791034929796,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.0933094063587569,
+        "fill": 1.1712342,
+        "net_usdt": 0.40039878196540396,
+        "peak_pct": 1.3396562065174256,
+        "pnl_pct": 0.4898685769439415,
+        "qty": 106.22345369668666,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791034941570,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2825577753613594,
+        "fill": 1.1822363999999999,
+        "net_usdt": -2.3075082571738874,
+        "qty": 318.67036109006,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -3.0766776762318497,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.1709140808620613,
+    "opened_at_ms": 1791034816115,
+    "position_id": "PAPER:RIVERUSDT:1791034799999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.3814218950416967,
+    "sim_usdt": -1.9071094752084834,
+    "small_fired": true,
+    "symbol": "RIVERUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791036134766,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09399891491750552,
+        "fill": 0.032813436,
+        "net_usdt": 0.14413764175650917,
+        "peak_pct": 0.5300162461395308,
+        "pnl_pct": 0.2855663586109447,
+        "qty": 3819.529492634481,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791036318822,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28173897807541187,
+        "fill": 0.032783442,
+        "net_usdt": 0.08898178914041394,
+        "qty": 11458.588477903442,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.2629477657340894,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.35952781020813973,
+    "opened_at_ms": 1791034843275,
+    "position_id": "PAPER:FLOWUSDT:1791034799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.04662388617938462,
+    "sim_usdt": 0.2331194308969231,
+    "small_fired": true,
+    "symbol": "FLOWUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035184769,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09405637917566456,
+        "fill": 0.062897418,
+        "net_usdt": 0.22069918837707303,
+        "peak_pct": 0.6180384854745702,
+        "pnl_pct": 0.3468738288079365,
+        "qty": 1993.8577696075338,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791035402269,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28154119794260685,
+        "fill": 0.06275744600000001,
+        "net_usdt": -0.17452727446684063,
+        "qty": 5981.573308822602,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.1131851983941837,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.4474664416191602,
+    "opened_at_ms": 1791034856487,
+    "position_id": "PAPER:MUBARAKUSDT:1791034799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.009234382782046479,
+    "sim_usdt": 0.0461719139102324,
+    "small_fired": true,
+    "symbol": "MUBARAKUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038776401,
+        "net_usdt": -4.076179984123353,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -4.076179984123353,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.22676065188057618,
+    "opened_at_ms": 1791034864020,
+    "position_id": "PAPER:HANAUSDT:1791034799999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.8152359968246706,
+    "sim_usdt": -4.076179984123353,
+    "small_fired": false,
+    "symbol": "HANAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035604766,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09416351303475984,
+        "fill": 0.029224154,
+        "net_usdt": 0.36343719997835994,
+        "peak_pct": 0.9423416107428251,
+        "pnl_pct": 0.46117280497148805,
+        "qty": 4296.150051529742,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791035649759,
+        "peak_pct": 1.5609872181631124,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791035664752,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2825871831477637,
+        "fill": 0.029234152,
+        "net_usdt": 1.2190736805371871,
+        "peak_pct": 1.870310021873256,
+        "pnl_pct": 0.49554200538373117,
+        "qty": 12888.450154589227,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 1.2820660257773269,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.9431443016999955,
+    "opened_at_ms": 1791035416546,
+    "position_id": "PAPER:PARTIUSDT:1791035399999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 0.3165021761031094,
+    "sim_usdt": 1.582510880515547,
+    "small_fired": true,
+    "symbol": "PARTIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791035734970,
+        "net_usdt": -0.4391503345547632,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.4391503345547632,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.12187404714013055,
+    "opened_at_ms": 1791035724341,
+    "position_id": "PAPER:PARTIUSDT:1791035699999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.08783006691095264,
+    "sim_usdt": -0.4391503345547632,
+    "small_fired": false,
+    "symbol": "PARTIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791036394716,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09372754903094258,
+        "fill": 0.0024920015,
+        "net_usdt": -0.21741217444084265,
+        "peak_pct": 0.6860944732525409,
+        "pnl_pct": -0.003948490025929008,
+        "qty": 50148.47116849251,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791036443724,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28169029881275465,
+        "fill": 0.0024965006000000002,
+        "net_usdt": 0.02412478486008285,
+        "qty": 150445.41350547754,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.03216637981344378,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5154577864171157,
+    "opened_at_ms": 1791036320729,
+    "position_id": "PAPER:ONEUSDT:1791036299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.03865747791615196,
+    "sim_usdt": -0.1932873895807598,
+    "small_fired": true,
+    "symbol": "ONEUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038807983,
+        "net_usdt": -2.9359691162288346,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.9359691162288346,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.2230040406684966,
+    "opened_at_ms": 1791036340920,
+    "position_id": "PAPER:MTLUSDT:1791036299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.5871938232457669,
+    "sim_usdt": -2.9359691162288346,
+    "small_fired": false,
+    "symbol": "MTLUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791036484805,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09341749760892096,
+        "fill": 1.86867366,
+        "net_usdt": 0.25616902382981377,
+        "peak_pct": 0.9984862036116704,
+        "pnl_pct": 0.37459429829133084,
+        "qty": 66.65511808977993,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791036588199,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2790074595395702,
+        "fill": 1.8603720000000001,
+        "net_usdt": 2.4297964877002167,
+        "qty": 199.9653542693398,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 1.8786722610822304,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6159208738372922,
+    "opened_at_ms": 1791036346414,
+    "position_id": "PAPER:MOVRUSDT:1791036299999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.537193102306006,
+    "sim_usdt": 2.6859655115300303,
+    "small_fired": true,
+    "symbol": "MOVRUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791037644015,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.1881092996644903,
+        "net_usdt": -1.1880088523182168,
+        "qty": 27393.734662795836,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791038904701,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04674990788034908,
+        "fill": 0.00910182,
+        "net_usdt": 0.07316458498755563,
+        "peak_pct": 0.5388281863208833,
+        "pnl_pct": 0.2868058274231533,
+        "qty": 6848.433665698959,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791038964706,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14088161800030907,
+        "fill": 0.0091428282,
+        "net_usdt": -0.6236639517457342,
+        "qty": 20545.300997096878,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -2.019560787979196,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.05293919350258789,
+    "opened_at_ms": 1791036629250,
+    "position_id": "PAPER:AVAAIUSDT:1791036599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.3477016438152791,
+    "sim_usdt": -1.7385082190763956,
+    "small_fired": true,
+    "symbol": "AVAAIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791036729799,
+        "peak_pct": 1.6486076081786205,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791037009783,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3947671296803309,
+        "fill": 0.30913816,
+        "net_usdt": 25.58640577742754,
+        "peak_pct": 6.381993356097171,
+        "pnl_pct": 5.292293040029583,
+        "qty": 1702.6567438555883,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 8.320855102651091,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 6.205946419707882,
+    "opened_at_ms": 1791036632243,
+    "position_id": "PAPER:UAIUSDT:1791036599999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 5.117281155485508,
+    "sim_usdt": 25.58640577742754,
+    "small_fired": false,
+    "symbol": "UAIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038118024,
+        "net_usdt": -2.4871455712255535,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.4871455712255535,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.13283879710978838,
+    "opened_at_ms": 1791036961886,
+    "position_id": "PAPER:ZECUSDT:1791036899999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.49742911424511066,
+    "sim_usdt": -2.4871455712255535,
+    "small_fired": false,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039264677,
+        "entry_fee": 0.09374999999999999,
+        "exit_fee": 0.09400535908443311,
+        "fill": 0.070605876,
+        "net_usdt": 0.1527234201597075,
+        "peak_pct": 0.5764756139680971,
+        "pnl_pct": 0.29244151169764976,
+        "qty": 1775.2131391903436,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039364203,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28017909912335714,
+        "fill": 0.070145968,
+        "net_usdt": -1.9892969346471658,
+        "qty": 5325.63941757103,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -2.652395912862888,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.405943048606178,
+    "opened_at_ms": 1791037213435,
+    "position_id": "PAPER:AIAUSDT:1791037199999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.36731470289749163,
+    "sim_usdt": -1.8365735144874584,
+    "small_fired": true,
+    "symbol": "AIAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039584783,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.0944713132272331,
+        "fill": 0.14937012,
+        "net_usdt": 0.7735296564168942,
+        "peak_pct": 1.3292618129545408,
+        "pnl_pct": 0.7895586874528071,
+        "qty": 843.2861335964926,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039678746,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2830345368173329,
+        "fill": 0.14917016,
+        "net_usdt": 1.8150978862931875,
+        "qty": 2529.858400789478,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 2.0831364597525863,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.1580142136215101,
+    "opened_at_ms": 1791037561918,
+    "position_id": "PAPER:DYDXUSDT:1791037499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.5177255085420163,
+    "sim_usdt": 2.5886275427100816,
+    "small_fired": true,
+    "symbol": "DYDXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791038840121,
+        "entry_fee": 0.18750000000000003,
+        "exit_fee": 0.18831964514018437,
+        "net_usdt": 0.7170405417723086,
+        "qty": 6628.215592627961,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791039514682,
+        "entry_fee": 0.04687500000000001,
+        "exit_fee": 0.04725386714622072,
+        "fill": 0.038022394,
+        "net_usdt": 0.4110273278147363,
+        "peak_pct": 1.4116985672077975,
+        "pnl_pct": 0.828415595056553,
+        "qty": 1657.0538981569903,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039636425,
+        "entry_fee": 0.14062499999999997,
+        "exit_fee": 0.14150066764690022,
+        "fill": 0.037952408,
+        "net_usdt": 0.8854311948867202,
+        "qty": 4971.161694470971,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 1.8976154682879351,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.7635944410163324,
+    "opened_at_ms": 1791037847572,
+    "position_id": "PAPER:AIOUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.402699812894753,
+    "sim_usdt": 2.013499064473765,
+    "small_fired": true,
+    "symbol": "AIOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038034914,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09389501218709284,
+        "fill": 0.128594276,
+        "net_usdt": 0.005704570603360187,
+        "peak_pct": 0.5174052826733,
+        "pnl_pct": 0.1747146091541918,
+        "qty": 973.5530497701969,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791038065916,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28177263881180287,
+        "fill": 0.128634268,
+        "net_usdt": 0.13382911025875238,
+        "qty": 2920.6591493105907,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.15225481525964787,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.3469288252655666,
+    "opened_at_ms": 1791037871477,
+    "position_id": "PAPER:GTCUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.02790673617242251,
+    "sim_usdt": 0.13953368086211257,
+    "small_fired": true,
+    "symbol": "GTCUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039139742,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09413795078407632,
+        "fill": 0.81853626,
+        "net_usdt": 0.32937976131768193,
+        "peak_pct": 0.789658019316386,
+        "pnl_pct": 0.4339009498713686,
+        "qty": 153.34356441595116,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039511313,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.281516971912366,
+        "fill": 0.81593678,
+        "net_usdt": -0.20680442209101563,
+        "qty": 460.0306932478535,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.1838204828359135,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6189229626467383,
+    "opened_at_ms": 1791037894104,
+    "position_id": "PAPER:APTUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.02451506784533326,
+    "sim_usdt": 0.1225753392266663,
+    "small_fired": true,
+    "symbol": "APTUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791038861336,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18810855980710625,
+        "net_usdt": 0.4358045163345362,
+        "qty": 19816.856417822917,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791039174779,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04700113552965298,
+        "fill": 0.012649469600000001,
+        "net_usdt": 0.07430457067432011,
+        "peak_pct": 0.5903631768691131,
+        "pnl_pct": 0.28914695931820944,
+        "qty": 4954.214104455729,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039458266,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14069135352347595,
+        "fill": 0.0126214752,
+        "net_usdt": -0.19284498888890989,
+        "qty": 14862.642313367189,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.17867786448265638,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.29706961346969313,
+    "opened_at_ms": 1791037916668,
+    "position_id": "PAPER:ZKUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.06345281962398928,
+    "sim_usdt": 0.3172640981199464,
+    "small_fired": true,
+    "symbol": "ZKUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039274775,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09408487507796455,
+        "fill": 0.22735452,
+        "net_usdt": 0.2586652288747545,
+        "peak_pct": 0.7745470773395047,
+        "pnl_pct": 0.37727553826982785,
+        "qty": 551.7660264856521,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039604717,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2816340126014532,
+        "fill": 0.22685462,
+        "net_usdt": -0.05086721066382455,
+        "qty": 1655.2980794569562,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.042425438753312394,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6038263737980859,
+    "opened_at_ms": 1791037928016,
+    "position_id": "PAPER:THETAUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.04155960364218599,
+    "sim_usdt": 0.20779801821092997,
+    "small_fired": true,
+    "symbol": "THETAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038284860,
+        "peak_pct": 1.5024317303169887,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791038299857,
+        "entry_fee": 0.375,
+        "exit_fee": 0.379905653631075,
+        "fill": 0.0046580682,
+        "net_usdt": 5.7859658544688415,
+        "peak_pct": 1.5024317303169887,
+        "pnl_pct": 1.3284399896179133,
+        "qty": 108744.83793691556,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 1.548945535017452,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.5265744295126173,
+    "opened_at_ms": 1791037928186,
+    "position_id": "PAPER:MANTRAUSDT:1791037799999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.1571931708937682,
+    "sim_usdt": 5.7859658544688415,
+    "small_fired": false,
+    "symbol": "MANTRAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041462084,
+        "net_usdt": -2.7963146550767375,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.7963146550767375,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.20082379946366186,
+    "opened_at_ms": 1791037928358,
+    "position_id": "PAPER:ORDIUSDT:1791037799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.5592629310153475,
+    "sim_usdt": -2.7963146550767375,
+    "small_fired": false,
+    "symbol": "ORDIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791038345571,
+        "net_usdt": -3.4602375064787063,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -3.4602375064787063,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.26716060606620556,
+    "opened_at_ms": 1791038130851,
+    "position_id": "PAPER:SUPERUSDT:1791038099999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.6920475012957413,
+    "sim_usdt": -3.4602375064787063,
+    "small_fired": false,
+    "symbol": "SUPERUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039484797,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09411007571213029,
+        "fill": 0.16566686,
+        "net_usdt": 0.29224087379492736,
+        "peak_pct": 0.707131301012498,
+        "pnl_pct": 0.4041615919240238,
+        "qty": 757.4242727212132,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039805183,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2814782952500409,
+        "fill": 0.16516696000000003,
+        "net_usdt": -0.25833462852880273,
+        "qty": 2272.27281816364,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 0.1095767285936802,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5364746323462479,
+    "opened_at_ms": 1791038459659,
+    "position_id": "PAPER:CYSUSDT:1791038399999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.006781249053224925,
+    "sim_usdt": 0.033906245266124624,
+    "small_fired": true,
+    "symbol": "CYSUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039784761,
+        "peak_pct": 1.517230470095332,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791039799744,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3798224150768279,
+        "fill": 0.033603278,
+        "net_usdt": 5.675064354027052,
+        "peak_pct": 1.517230470095332,
+        "pnl_pct": 1.3062386015410876,
+        "qty": 15070.847753874008,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 6.8043043072121705,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 2.7611184033919898,
+    "opened_at_ms": 1791038462405,
+    "position_id": "PAPER:FLOWUSDT:1791038399999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.1350128708054104,
+    "sim_usdt": 5.675064354027052,
+    "small_fired": false,
+    "symbol": "FLOWUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791039206726,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18809799530219629,
+        "net_usdt": 0.42172907429287154,
+        "qty": 149.58109515140657,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791039414847,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04699645797949925,
+        "fill": 1.6756648,
+        "net_usdt": 0.06807251468617381,
+        "peak_pct": 0.5184959417452228,
+        "pnl_pct": 0.27916618950296623,
+        "qty": 37.39527378785164,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039752174,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14056876124775045,
+        "fill": 1.6706658,
+        "net_usdt": -0.35617876424713957,
+        "qty": 112.18582136355494,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.053175944703314604,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.25835503904605434,
+    "opened_at_ms": 1791038462630,
+    "position_id": "PAPER:FLUIDUSDT:1791038399999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.026724564946381157,
+    "sim_usdt": 0.1336228247319058,
+    "small_fired": true,
+    "symbol": "FLUIDUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791040300762,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18680645059106993,
+        "net_usdt": -1.2990389958311832,
+        "qty": 1649.835049491752,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791042149857,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.0469799666304363,
+        "fill": 0.15186962,
+        "net_usdt": 0.04610054061796215,
+        "peak_pct": 0.5079512150375276,
+        "pnl_pct": 0.24397760711885041,
+        "qty": 412.458762372938,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791042379696,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.1407543305695297,
+        "fill": 0.15166966,
+        "net_usdt": -0.10893857119661118,
+        "qty": 1237.3762871188142,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -1.4442904240933314,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.09106593037827734,
+    "opened_at_ms": 1791038473066,
+    "position_id": "PAPER:CFGUSDT:1791038399999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.2723754052819664,
+    "sim_usdt": -1.361877026409832,
+    "small_fired": true,
+    "symbol": "CFGUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039039928,
+        "peak_pct": 1.5013911403102487,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791039094964,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3804992439949351,
+        "fill": 0.13872225000000002,
+        "net_usdt": 6.576826082585171,
+        "peak_pct": 1.6623070879276503,
+        "pnl_pct": 1.4867624177995697,
+        "qty": 3657.180627668453,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 2.7404338852034136,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.4907431455401898,
+    "opened_at_ms": 1791038490704,
+    "position_id": "PAPER:OPUSDT:1791038399999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.3153652165170342,
+    "sim_usdt": 6.576826082585171,
+    "small_fired": false,
+    "symbol": "OPUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791043273789,
+        "net_usdt": -0.838231577321695,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.838231577321695,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.21172045081599214,
+    "opened_at_ms": 1791038739342,
+    "position_id": "PAPER:1000CATUSDT:1791038699999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.16764631546433897,
+    "sim_usdt": -0.838231577321695,
+    "small_fired": false,
+    "symbol": "1000CATUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039016855,
+        "net_usdt": -0.7002546247073798,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.7002546247073798,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.2780228573062332,
+    "opened_at_ms": 1791038740027,
+    "position_id": "PAPER:USUSDT:1791038699999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.14005092494147595,
+    "sim_usdt": -0.7002546247073798,
+    "small_fired": false,
+    "symbol": "USUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042682116,
+        "net_usdt": -1.4191267554642937,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.4191267554642937,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.1566103376115247,
+    "opened_at_ms": 1791038744125,
+    "position_id": "PAPER:XMRUSDT:1791038699999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.2838253510928587,
+    "sim_usdt": -1.4191267554642937,
+    "small_fired": false,
+    "symbol": "XMRUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041514701,
+        "net_usdt": -2.564063511265951,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.564063511265951,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.06578866350051421,
+    "opened_at_ms": 1791039112578,
+    "position_id": "PAPER:RENDERUSDT:1791038999999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.5128127022531902,
+    "sim_usdt": -2.564063511265951,
+    "small_fired": false,
+    "symbol": "RENDERUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039549955,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09402733115191071,
+        "fill": 2687.4624,
+        "net_usdt": 0.18199753806236607,
+        "peak_pct": 0.726401938723864,
+        "pnl_pct": 0.315883071985823,
+        "qty": 0.0466498712202315,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039668261,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2815572873667148,
+        "fill": 2682.4634,
+        "net_usdt": -0.15309079841366785,
+        "qty": 0.1399496136606945,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.017698821191335867,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5557269658423626,
+    "opened_at_ms": 1791039327774,
+    "position_id": "PAPER:YFIUSDT:1791039299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.005781347929739644,
+    "sim_usdt": 0.02890673964869822,
+    "small_fired": true,
+    "symbol": "YFIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791040111640,
+        "net_usdt": -2.7469840170223327,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.7469840170223327,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.15055516737561248,
+    "opened_at_ms": 1791039365137,
+    "position_id": "PAPER:AEVOUSDT:1791039299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.5493968034044666,
+    "sim_usdt": -2.7469840170223327,
+    "small_fired": false,
+    "symbol": "AEVOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039709898,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09378696523527011,
+        "fill": 0.0062967404,
+        "net_usdt": -0.13824998487510975,
+        "peak_pct": 0.5360663128775922,
+        "pnl_pct": 0.05944147258265531,
+        "qty": 19859.36834562215,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791039783784,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2814055703478723,
+        "fill": 0.0062977402,
+        "net_usdt": -0.3552284398515283,
+        "qty": 59578.10503686646,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.43395690995280256,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.3655721302903066,
+    "opened_at_ms": 1791039365311,
+    "position_id": "PAPER:ACHUSDT:1791039299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.09869568494532761,
+    "sim_usdt": -0.49347842472663805,
+    "small_fired": true,
+    "symbol": "ACHUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039647330,
+        "net_usdt": -0.4752610152011104,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.4752610152011104,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -6.639847893757933e-05,
+    "opened_at_ms": 1791039618779,
+    "position_id": "PAPER:ONUSDT:1791039599999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.09505220304022208,
+    "sim_usdt": -0.4752610152011104,
+    "small_fired": false,
+    "symbol": "ONUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791039974906,
+        "peak_pct": 1.8963704310500873,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791040029810,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3663034559749091,
+        "fill": 0.1325265,
+        "net_usdt": 10.854088577479635,
+        "peak_pct": 2.6334375202232696,
+        "pnl_pct": 2.338610684553988,
+        "qty": 3685.3354458658873,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 4.5830655630019335,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 2.465924680883107,
+    "opened_at_ms": 1791039928875,
+    "position_id": "PAPER:ATUSDT:1791039899999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 2.170817715495927,
+    "sim_usdt": 10.854088577479635,
+    "small_fired": false,
+    "symbol": "ATUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041185533,
+        "net_usdt": -4.815485513170761,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -4.815485513170761,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.0995955679189661,
+    "opened_at_ms": 1791039931361,
+    "position_id": "PAPER:CUSDT:1791039899999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.9630971026341522,
+    "sim_usdt": -4.815485513170761,
+    "small_fired": false,
+    "symbol": "CUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791040224869,
+        "net_usdt": -1.3147750271102738,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.3147750271102738,
+    "invariant_errors": [],
+    "observable_net_peak_pct": -0.058787411524542026,
+    "opened_at_ms": 1791039995640,
+    "position_id": "PAPER:PHAUSDT:1791039899999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.26295500542205474,
+    "sim_usdt": -1.3147750271102738,
+    "small_fired": false,
+    "symbol": "PHAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791041546236,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.1871997148529346,
+        "net_usdt": 0.025680481234281488,
+        "qty": 10006.002801200497,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791042154836,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.046724868683220434,
+        "fill": 0.024904979999999997,
+        "net_usdt": 0.10657522035620237,
+        "peak_pct": 0.5803561672718671,
+        "pnl_pct": 0.340212100043058,
+        "qty": 2501.500700300124,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791043158315,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14056867120723063,
+        "fill": 0.024974993999999997,
+        "net_usdt": -0.20608861418140229,
+        "qty": 7504.502100900372,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.2491043376742549,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.21058239258895234,
+    "opened_at_ms": 1791040269228,
+    "position_id": "PAPER:SPKUSDT:1791040199999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.014766582518183686,
+    "sim_usdt": -0.07383291259091843,
+    "small_fired": true,
+    "symbol": "SPKUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791040477185,
+        "net_usdt": -0.07597016259568207,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.07597016259568207,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.159573942560207,
+    "opened_at_ms": 1791040269399,
+    "position_id": "PAPER:MEGAUSDT:1791040199999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.015194032519136414,
+    "sim_usdt": -0.07597016259568207,
+    "small_fired": false,
+    "symbol": "MEGAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791040539825,
+        "net_usdt": 1.3474539452734347,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": 1.3474539452734347,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.19072745248559247,
+    "opened_at_ms": 1791040517046,
+    "position_id": "PAPER:SANDUSDT:1791040499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": 0.26949078905468693,
+    "sim_usdt": 1.3474539452734347,
+    "small_fired": false,
+    "symbol": "SANDUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791040550615,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18762455769589403,
+        "net_usdt": -0.2090476298371679,
+        "qty": 2419.183217169961,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791040594909,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.04705579644814359,
+        "fill": 0.103739248,
+        "net_usdt": 0.14713113440997883,
+        "peak_pct": 0.6864054986137846,
+        "pnl_pct": 0.4057802454220827,
+        "qty": 604.7958042924903,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791040802850,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14028305238342575,
+        "fill": 0.103089378,
+        "net_usdt": -0.73683820781576,
+        "qty": 1814.387412877471,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -1.1914985735915145,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.26441243932785824,
+    "opened_at_ms": 1791040537141,
+    "position_id": "PAPER:MANAUSDT:1791040499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.15975094064858986,
+    "sim_usdt": -0.7987547032429492,
+    "small_fired": true,
+    "symbol": "MANAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791040635168,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09351565965366987,
+        "fill": 0.10322064,
+        "net_usdt": 0.1251881354531702,
+        "peak_pct": 0.6564597943743311,
+        "pnl_pct": 0.26990905427461964,
+        "qty": 1207.971062811596,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791041409933,
+        "peak_pct": 1.9127496996983795,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791041454921,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2770129569392139,
+        "fill": 0.10192038,
+        "net_usdt": 5.091127790775515,
+        "peak_pct": 2.0093873847233157,
+        "pnl_pct": 1.5261989595986791,
+        "qty": 3623.913188434788,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 5.82087533448722,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 2.228199625432325,
+    "opened_at_ms": 1791040551366,
+    "position_id": "PAPER:ONUSDT:1791040499999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 1.0432631852457368,
+    "sim_usdt": 5.216315926228685,
+    "small_fired": true,
+    "symbol": "ONUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041312975,
+        "net_usdt": -2.695113121192824,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -2.695113121192824,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.07854615904777276,
+    "opened_at_ms": 1791040841782,
+    "position_id": "PAPER:BMTUSDT:1791040799999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.5390226242385647,
+    "sim_usdt": -2.695113121192824,
+    "small_fired": false,
+    "symbol": "BMTUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791041056676,
+        "entry_fee": 0.18750000000000003,
+        "exit_fee": 0.1865365374112885,
+        "net_usdt": 0.9105802475373684,
+        "qty": 11536.332641384102,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791041125015,
+        "entry_fee": 0.04687500000000001,
+        "exit_fee": 0.046569229503340116,
+        "fill": 0.021529305,
+        "net_usdt": 0.31424976604317434,
+        "peak_pct": 1.1382437963948,
+        "pnl_pct": 0.6721759576828856,
+        "qty": 2884.0831603460256,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791041280108,
+        "peak_pct": 1.6273843003894783,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791041434938,
+        "entry_fee": 0.14062499999999997,
+        "exit_fee": 0.13302897949832185,
+        "fill": 0.0205000992,
+        "net_usdt": 9.854373356072589,
+        "peak_pct": 6.048106968567868,
+        "pnl_pct": 5.420530472876573,
+        "qty": 8652.249481038078,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": -1.4813655568484334,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 3.8261108065903713,
+    "opened_at_ms": 1791040867961,
+    "position_id": "PAPER:USUSDT:1791040799999:SHORT",
+    "runner_closed": true,
+    "side": "SHORT",
+    "sim_pct": 2.2158406739306264,
+    "sim_usdt": 11.079203369653133,
+    "small_fired": true,
+    "symbol": "USUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041175209,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09374666817752837,
+        "fill": 0.045919181999999996,
+        "net_usdt": -0.18305423821537273,
+        "peak_pct": 0.676847757968746,
+        "pnl_pct": 0.02354923412288823,
+        "qty": 2722.077182691056,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791041227947,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2828939971534476,
+        "fill": 0.046189235999999995,
+        "net_usdt": -2.7561402017503216,
+        "qty": 8166.231548073168,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -3.674853602333762,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.5074758648659825,
+    "opened_at_ms": 1791041125180,
+    "position_id": "PAPER:\u9f99\u867eUSDT:1791041099999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.5878388879931389,
+    "sim_usdt": -2.939194439965694,
+    "small_fired": true,
+    "symbol": "\u9f99\u867eUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041359929,
+        "peak_pct": 1.6086713537172947,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791041479936,
+        "entry_fee": 0.375,
+        "exit_fee": 0.3822447924015048,
+        "fill": 2.72875414,
+        "net_usdt": 8.902478409604822,
+        "peak_pct": 2.2324957762043685,
+        "pnl_pct": 1.9523351074227424,
+        "qty": 186.77377918774548,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 4.442825116090164,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 2.060390240091343,
+    "opened_at_ms": 1791041138930,
+    "position_id": "PAPER:MORPHOUSDT:1791041099999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.7804956819209643,
+    "sim_usdt": 8.902478409604822,
+    "small_fired": false,
+    "symbol": "MORPHOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791041679945,
+        "entry_fee": 0.09375000000000001,
+        "exit_fee": 0.0934789959636664,
+        "fill": 0.27275454,
+        "net_usdt": 0.17410971914778242,
+        "peak_pct": 0.5283512842919391,
+        "pnl_pct": 0.30900917025510344,
+        "qty": 456.9627375767551,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791041701660,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.2821852199387246,
+        "fill": 0.27445487999999996,
+        "net_usdt": -1.8103951382381123,
+        "qty": 1370.8882127302654,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -2.4138601843174827,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.3588382972647138,
+    "opened_at_ms": 1791041163590,
+    "position_id": "PAPER:ARXUSDT:1791041099999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": -0.32725708381806595,
+    "sim_usdt": -1.6362854190903298,
+    "small_fired": true,
+    "symbol": "ARXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "action": "REDUCE",
+        "at_ms": 1791041408430,
+        "entry_fee": 0.1875,
+        "exit_fee": 0.18616679416964474,
+        "net_usdt": 1.403940979637402,
+        "qty": 1877.252327342345,
+        "type": "PRESERVE"
+      },
+      {
+        "at_ms": 1791041410032,
+        "entry_fee": 0.046875,
+        "exit_fee": 0.046647315104912865,
+        "fill": 0.1325265,
+        "net_usdt": 0.21005754501126706,
+        "peak_pct": 1.106347395605256,
+        "pnl_pct": 0.5056266508557061,
+        "qty": 469.3130818355863,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791041419306,
+        "entry_fee": 0.140625,
+        "exit_fee": 0.14015317843974198,
+        "fill": 0.13272654,
+        "net_usdt": 0.34831723523760827,
+        "qty": 1407.9392455067587,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": 1.868363959954213,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.9373835915831972,
+    "opened_at_ms": 1791041174771,
+    "position_id": "PAPER:ATUSDT:1791041099999:SHORT",
+    "runner_closed": false,
+    "side": "SHORT",
+    "sim_pct": 0.39246315197725545,
+    "sim_usdt": 1.9623157598862773,
+    "small_fired": true,
+    "symbol": "ATUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042825074,
+        "entry_fee": 0.09375,
+        "exit_fee": 0.09424778905907924,
+        "fill": 0.049290139999999996,
+        "net_usdt": 0.4757209563799015,
+        "peak_pct": 0.9386046087396016,
+        "pnl_pct": 0.5510852133938648,
+        "qty": 2549.4697062219543,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791043394939,
+        "peak_pct": 1.632060368831989,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791043424959,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28532418898717193,
+        "fill": 0.04974005,
+        "net_usdt": 4.865677793908765,
+        "peak_pct": 1.672851884131532,
+        "pnl_pct": 1.4688943076337724,
+        "qty": 7648.4091186658625,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 2.3613524821555236,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.5012779257693896,
+    "opened_at_ms": 1791041431203,
+    "position_id": "PAPER:MEGAUSDT:1791041399999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.0682797500577332,
+    "sim_usdt": 5.341398750288667,
+    "small_fired": true,
+    "symbol": "MEGAUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042315094,
+        "peak_pct": 1.5448206218736216,
+        "type": "RUNNER_QUALIFY"
+      },
+      {
+        "at_ms": 1791042334963,
+        "entry_fee": 0.375,
+        "exit_fee": 0.38002298564184844,
+        "fill": 0.060227952,
+        "net_usdt": 5.942291203489392,
+        "peak_pct": 1.5448206218736216,
+        "pnl_pct": 1.3597347847831953,
+        "qty": 8412.992595018526,
+        "type": "SHADOW_CLOSE_REMAINDER"
+      }
+    ],
+    "actual_usdt": 1.907890476768364,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 1.373368274005932,
+    "opened_at_ms": 1791041766877,
+    "position_id": "PAPER:AIOTUSDT:1791041699999:LONG",
+    "runner_closed": true,
+    "side": "LONG",
+    "sim_pct": 1.1884582406978783,
+    "sim_usdt": 5.942291203489392,
+    "small_fired": false,
+    "symbol": "AIOTUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042485090,
+        "net_usdt": -1.8501523740850172,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -1.8501523740850172,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.27609755461423097,
+    "opened_at_ms": 1791042316746,
+    "position_id": "PAPER:AVAAIUSDT:1791042299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.37003047481700346,
+    "sim_usdt": -1.8501523740850172,
+    "small_fired": false,
+    "symbol": "AVAAIUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042474989,
+        "entry_fee": 0.09375000000000001,
+        "exit_fee": 0.09396196404019994,
+        "fill": 0.5648869999999999,
+        "net_usdt": 0.09490675622638353,
+        "peak_pct": 0.5477697716889551,
+        "pnl_pct": 0.24614420505428836,
+        "qty": 221.7835048784387,
+        "type": "SHADOW_REDUCE_25"
+      },
+      {
+        "at_ms": 1791042817435,
+        "entry_fee": 0.28125,
+        "exit_fee": 0.28143687034554055,
+        "fill": 0.56398718,
+        "net_usdt": -0.31352640962486356,
+        "qty": 665.3505146353161,
+        "type": "FALLBACK_CLOSE"
+      }
+    ],
+    "actual_usdt": -0.0635186627270744,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.6608777126562345,
+    "opened_at_ms": 1791042327553,
+    "position_id": "PAPER:JTOUSDT:1791042299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.043723930679696,
+    "sim_usdt": -0.21861965339848002,
+    "small_fired": true,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791042786298,
+        "net_usdt": -0.949810037992343,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.949810037992343,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.3241399644693505,
+    "opened_at_ms": 1791042330179,
+    "position_id": "PAPER:INXUSDT:1791042299999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.1899620075984686,
+    "sim_usdt": -0.949810037992343,
+    "small_fired": false,
+    "symbol": "INXUSDT"
+  },
+  {
+    "actions": [
+      {
+        "at_ms": 1791043567184,
+        "net_usdt": -0.05248551804010343,
+        "type": "KEEP_ACTUAL"
+      }
+    ],
+    "actual_usdt": -0.05248551804010343,
+    "invariant_errors": [],
+    "observable_net_peak_pct": 0.16896780038243647,
+    "opened_at_ms": 1791043546193,
+    "position_id": "PAPER:AIOUSDT:1791043499999:LONG",
+    "runner_closed": false,
+    "side": "LONG",
+    "sim_pct": -0.010497103608020685,
+    "sim_usdt": -0.05248551804010343,
+    "small_fired": false,
+    "symbol": "AIOUSDT"
+  }
+]

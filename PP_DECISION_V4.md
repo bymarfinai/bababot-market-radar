@@ -510,6 +510,29 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage2c_runner_preservation.json`
 
+### V4-2D — Full Replay + Prospective Shadow ✅ COMPLETE
+
+Historical audit:
+- 99/99 trades replayed;
+- Stage2C metrics exact;
+- invariant failures: **0**;
+- selected hybrid total: **+$78.73**;
+- win rate: **45.45%**;
+- small REDUCE count: **49**;
+- runner CLOSE count: **19**.
+
+Prospective shadow implementation:
+- persistent two-regime state machine;
+- canonical V4 5s observations only;
+- action authority: **NONE**;
+- fail-isolated from the canonical observer;
+- endpoint: `GET /pp-v4/stage2d/shadow/summary`.
+
+Prospective activation requires a fresh zero-open-position boundary. Minimum evaluation is 100 closed matched positions and 50 positions reaching >=+0.50% running observed peak. No runtime exit authority is granted.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE2D_FULL_REPLAY_SHADOW.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.

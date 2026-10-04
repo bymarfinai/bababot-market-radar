@@ -1,0 +1,43 @@
+{
+  "action_counts": {
+    "FALLBACK_CLOSE": 43,
+    "KEEP_ACTUAL": 37,
+    "PRESERVE": 18,
+    "RUNNER_QUALIFY": 19,
+    "SHADOW_CLOSE_REMAINDER": 19,
+    "SHADOW_REDUCE_25": 49
+  },
+  "invariant_failure_count": 0,
+  "invariant_failures": [],
+  "metrics": {
+    "median_retention": 0.011521803683226034,
+    "n": 99,
+    "runner_close_n": 19,
+    "runner_ge1": {
+      "median_retention": 0.7357194541272722,
+      "n": 20,
+      "total_usdt": 150.79923868719357
+    },
+    "runner_ge2": {
+      "median_retention": 0.8245770764689235,
+      "n": 9,
+      "total_usdt": 100.004092435454
+    },
+    "small_reduce_n": 49,
+    "total_usdt": 78.72741852744468,
+    "win_rate": 0.45454545454545453
+  },
+  "prospective_shadow_activation_allowed": true,
+  "runtime_authority": "NONE",
+  "stage": "PP-V4-2D",
+  "stage2c_exact_checks": {
+    "runner1_ret": true,
+    "runner2_ret": true,
+    "runner_close_n": true,
+    "small_reduce_n": true,
+    "total_usdt": true,
+    "win_rate": true
+  },
+  "status": "PASS",
+  "trade_count": 99
+}
