@@ -646,3 +646,21 @@ At that point V4-1 may be designed, but it is still not active.
 - live trading remained disabled/disarmed
 
 Any prospective clean-MFE runtime cohort must use positions opened **after `1791088148534`**. Because there were zero open positions at the freeze, no pre-fix position state crosses the boundary.
+
+
+## Stage2D production shadow activation
+
+- merged implementation commit: `8e3560b9b9789b925bd96b2b27a605daeffa7a73`
+- clean shadow boundary: `1791094561302`
+- control at boundary: `PAUSE_ENTRIES`
+- open positions at boundary: **0**
+- `PP_V4_STAGE2D_SHADOW_ENABLED=true`
+- shadow version: `pp-v4-stage2d-shadow-v1`
+- authority: **NONE**
+- app health after rebuild: **healthy**
+- shadow endpoint: **HTTP 200**
+- initial store: 0 positions / 0 actions / 0 duplicates / 0 out-of-order / 0 invariant errors
+- control resumed to `RUN` at `1791094640894`
+- live remained disabled/disarmed
+
+Any prospective Stage2D shadow evaluation must use positions opened strictly after `1791094561302`.
