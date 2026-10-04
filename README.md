@@ -135,6 +135,36 @@ Therefore the weak T0 result is **not merely a bad default-threshold problem**. 
 Full methodology and result contract:
 `research/strong_parameter_tuning/STAGE3C1_EXHAUSTIVE_SINGLE_PARAMETER_TUNING.md`
 
+
+### Stage 3C.1B — winner anatomy & clustering
+
+Stage 3C.1B tests whether weak aggregate correlation is caused by mixing different winner archetypes.
+
+Frozen contrasts:
+- all META_WIN (401) vs META_LOSS (835): best stable single-feature AUC floor ≈ **0.557**
+- strong WIN (245) vs weak WIN (156): best stable AUC floor ≈ **0.531**
+- strong WIN (245) vs META_LOSS (835): best stable AUC floor ≈ **0.549**
+
+Therefore weak-WIN contamination is not the sole explanation; strong and weak WINs are themselves nearly indistinguishable at T0.
+
+Unsupervised anatomy was fit only on the 162 Discovery strong winners and frozen before assigning Validation / Reserve winners. The best broad structure is **k=2**:
+
+- **COUNTERFLOW_REVERSAL**: 65/245 strong winners (42 Discovery / 16 Validation / 7 Reserve), realized PnL **+$195.27**, average realized return **+0.601%**
+- **FLOW_ALIGNED_CONTINUATION**: 180/245 strong winners (120 / 29 / 31), realized PnL **+$633.68**, average realized return **+0.704%**
+
+The central finding is **signal cancellation**. Several parameters look random when all 245 strong winners are merged because the two archetypes use opposite directions:
+
+- taker share: aggregate raw AUC ≈ **0.490**, counterflow ≈ **0.187** (LOW), continuation ≈ **0.599** (HIGH)
+- 1m side return: aggregate ≈ **0.517**, counterflow ≈ **0.272** (LOW), continuation ≈ **0.605** (HIGH)
+- flow support: aggregate ≈ **0.502**, counterflow ≈ **0.196** (LOW), continuation ≈ **0.612** (HIGH)
+
+This confirms **winner heterogeneity**. It does not grant entry authority to either subtype. Counterflow has only 7 sealed-reserve targets, so its high subtype-specific AUC values are explicitly low-support evidence.
+
+Stage 3C.2 should tune separate multi-parameter combinations for these two frozen archetypes instead of forcing one universal LONG winner rule.
+
+Detailed research note:
+`research/winner_anatomy/STAGE3C1B_WINNER_ANATOMY.md`
+
 ### Temporal / new-data follow-up
 
 Causal T+3 temporal features are materially more predictive than T0, but they are **not pre-entry parameters** and must never be reported as such. A selected 5-feature T+3 composite previously reached roughly AUC 0.801 on Validation and 0.707 on sealed Reserve, while Reserve correlation remained about r=0.281.
