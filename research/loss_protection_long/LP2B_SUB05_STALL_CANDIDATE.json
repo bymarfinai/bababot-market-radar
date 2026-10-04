@@ -1,0 +1,83 @@
+{
+  "stage": "LP-2B",
+  "status": "RESEARCH_CANDIDATE_FROZEN_NOT_PRODUCTION",
+  "universe": 1236,
+  "side": "LONG",
+  "lanes": {
+    "direct_be_arming_while_green": {
+      "status": "FAIL",
+      "eligibility": {
+        "running_mfe_min_pct": 0.18,
+        "running_mfe_max_exclusive_pct": 0.5,
+        "current_side_return_min_pct": 0.18
+      },
+      "practical_gate": {
+        "precision_min_each_DVR": 0.70,
+        "bad_recall_min_each_DVR": 0.10,
+        "reserve_min_fires": 5
+      },
+      "result": "NO_CANDIDATE_PASSED",
+      "relaxed_check": "Even precision >= 0.60 each D/V/R with recall >= 0.10 and Reserve fires >= 5 produced zero candidates."
+    },
+    "sub05_stall_cut": {
+      "status": "PASS_RESEARCH_CANDIDATE",
+      "decision_snapshot": "T+3",
+      "median_decision_latency_min": 2.61,
+      "all_conditions_required": true,
+      "conditions": [
+        {
+          "feature": "temporal__t3_confirm_mfe_pct",
+          "operator": "<=",
+          "threshold": 0.1400560224089408
+        },
+        {
+          "feature": "temporal__t3_confirm_side_return_pct",
+          "operator": "<=",
+          "threshold": -0.1893491124260404
+        },
+        {
+          "feature": "temporal__t3_f_micro_selected_vwap_extension_20",
+          "operator": "<=",
+          "threshold": 0.5167883992450273
+        }
+      ],
+      "results": {
+        "development": {
+          "precision": 0.8265306122448979,
+          "bad_recall": 0.226890756302521,
+          "future_reacher_harm": 0.044270833333333336,
+          "recovered_winner_harm": 0.027586206896551724,
+          "normalized_net_delta_usd": 37.6270986159986
+        },
+        "validation": {
+          "precision": 0.9655172413793104,
+          "bad_recall": 0.208955223880597,
+          "future_reacher_harm": 0.008849557522123894,
+          "recovered_winner_harm": 0.02564102564102564,
+          "normalized_net_delta_usd": 22.87009825667439
+        },
+        "reserve": {
+          "precision": 0.8823529411764706,
+          "bad_recall": 0.2222222222222222,
+          "future_reacher_harm": 0.036036036036036036,
+          "recovered_winner_harm": 0.06818181818181818,
+          "normalized_net_delta_usd": 9.708137226769022
+        },
+        "full_universe_descriptive": {
+          "fires": 161,
+          "sub05_failures_caught": 139,
+          "sub05_failure_recall": 0.2220447284345048,
+          "future_ge05_harmed": 22,
+          "future_ge05_harm_rate": 0.03618421052631579,
+          "recovered_winner_harmed": 8,
+          "recovered_winner_harm_rate": 0.03508771929824561,
+          "all_realized_positive_harmed": 9,
+          "all_realized_positive_harm_rate": 0.029605263157894735,
+          "precision": 0.8633540372670807,
+          "normalized_net_delta_usd": 70.20533409944201
+        }
+      },
+      "important_caveat": "This is a stall-cut candidate, not a break-even rule. By T+3 the current side return condition is already <= -0.1893%, so +0.18% can no longer be guaranteed. Dollar deltas use T+3 side-return x $5 normalization and are not execution-realistic backtest PnL."
+    }
+  }
+}
