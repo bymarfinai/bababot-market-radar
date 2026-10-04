@@ -29,7 +29,7 @@ from .stage1_scanner import latest_closed_kline
 from .stage_classifier import classify_movement_stage
 
 
-POSITION_LIFECYCLE_VERSION = "stage12-v3-three-layer"
+POSITION_LIFECYCLE_VERSION = "stage12-v3.1-entry-boundary"
 _processing_lock = threading.Lock()
 _fast_loop_lock = threading.Lock()
 _fast_loop_started = False
@@ -83,6 +83,52 @@ def _mfe_mae(
     mfe = max(previous_mfe or 0.0, favorable)
     mae = min(previous_mae or 0.0, adverse)
     return round(mfe, 6), round(mae, 6)
+
+
+def _post_entry_closed_excursion(
+    rows: list[list[Any]],
+    *,
+    opened_at_ms: int,
+    now_ms: int,
+    current_price: float,
+) -> dict[str, Any]:
+    """Return excursion bounds that cannot include pre-entry candle prices.
+
+    Only fully closed candles whose open timestamp is at or after the position
+    entry are eligible. A candle that straddles entry is intentionally excluded
+    because its high/low cannot be split causally without tick-level history.
+    Current price remains eligible immediately after entry.
+    """
+    current = float(current_price)
+    eligible: list[list[Any]] = []
+    for row in rows:
+        if len(row) <= 6:
+            continue
+        try:
+            open_ms = int(row[0])
+            close_ms = int(row[6])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if close_ms >= int(now_ms):
+            continue
+        if open_ms < int(opened_at_ms):
+            continue
+        eligible.append(row)
+
+    high = current
+    low = current
+    if eligible:
+        high = max(current, *(float(row[2]) for row in eligible))
+        low = min(current, *(float(row[3]) for row in eligible))
+
+    return {
+        "high": high,
+        "low": low,
+        "full_closed_bar_count": len(eligible),
+        "first_full_bar_open_ms": int(eligible[0][0]) if eligible else None,
+        "last_full_bar_close_ms": int(eligible[-1][6]) if eligible else None,
+        "entry_boundary_clipped": True,
+    }
 
 
 def _position_memory_penalties(
@@ -499,6 +545,12 @@ def _build_fast_snapshot(
         raise RuntimeError("insufficient closed 1m bars for Stage 12 V3 fast guard")
 
     current_price = float(client.ticker_price(symbol))
+    excursion = _post_entry_closed_excursion(
+        rows,
+        opened_at_ms=int(position.get("opened_at_ms") or now_ms),
+        now_ms=now_ms,
+        current_price=current_price,
+    )
     try:
         oi_rows = client.open_interest_hist(symbol, period="5m", limit=3)
     except Exception:
@@ -562,8 +614,16 @@ def _build_fast_snapshot(
         "latest_1m_high": float(latest[2]),
         "latest_1m_low": float(latest[3]),
         "latest_1m_close": latest_close,
+        # Market-context rolling bounds may include pre-entry candles and are
+        # intentionally kept separate from position-path excursion accounting.
         "rolling_1m_high": max(float(row[2]) for row in closed[-5:]),
         "rolling_1m_low": min(float(row[3]) for row in closed[-5:]),
+        "position_excursion_high": float(excursion["high"]),
+        "position_excursion_low": float(excursion["low"]),
+        "position_excursion_full_closed_bar_count": int(excursion["full_closed_bar_count"]),
+        "position_excursion_first_full_bar_open_ms": excursion["first_full_bar_open_ms"],
+        "position_excursion_last_full_bar_close_ms": excursion["last_full_bar_close_ms"],
+        "position_excursion_entry_boundary_clipped": True,
         "ret_1m_pct": ret1,
         "ret_3m_pct": ret3,
         "side_ret_1m_pct": side_ret1,
@@ -602,13 +662,11 @@ def evaluate_fast_position(
         else None
     )
 
-    # Reconstruct the excursion over the rolling fast window, not just the
-    # latest minute. This prevents an earlier intrawindow MFE peak from being
-    # forgotten after price retraces before the next 5m thesis evaluation.
-    fast_high = float(snapshot.get("rolling_1m_high") or snapshot["latest_1m_high"])
-    fast_low = float(snapshot.get("rolling_1m_low") or snapshot["latest_1m_low"])
-    high = max(fast_high, current)
-    low = min(fast_low, current)
+    # Position excursion bounds are entry-clipped. Market-context rolling
+    # highs/lows remain available in the snapshot but must never feed MFE/MAE
+    # or hard-stop decisions because they can contain pre-entry prices.
+    high = float(snapshot.get("position_excursion_high") or current)
+    low = float(snapshot.get("position_excursion_low") or current)
     mfe, mae = _mfe_mae(
         side=side,
         entry=entry,
@@ -975,6 +1033,22 @@ def _build_snapshot(
         now_ms=now_ms,
     )
 
+    opened_at_ms = int(position.get("opened_at_ms") or now_ms)
+    latest_open_ms = int(latest[0])
+    ticker_last = float(ticker.get("lastPrice") or latest[4])
+    # If the latest closed 5m candle started before entry, its close is not a
+    # valid position-path price. Use current ticker until a full post-entry 5m
+    # candle exists; afterwards keep thesis PnL on the closed-candle cadence.
+    position_price = (
+        float(latest[4]) if latest_open_ms >= opened_at_ms else ticker_last
+    )
+    excursion = _post_entry_closed_excursion(
+        rows,
+        opened_at_ms=opened_at_ms,
+        now_ms=now_ms,
+        current_price=position_price,
+    )
+
     return {
         "symbol": symbol,
         "candle_close_time_ms": int(latest[6]),
@@ -982,6 +1056,13 @@ def _build_snapshot(
         "high": float(latest[2]),
         "low": float(latest[3]),
         "close": float(latest[4]),
+        "position_price": position_price,
+        "position_excursion_high": float(excursion["high"]),
+        "position_excursion_low": float(excursion["low"]),
+        "position_excursion_full_closed_bar_count": int(excursion["full_closed_bar_count"]),
+        "position_excursion_first_full_bar_open_ms": excursion["first_full_bar_open_ms"],
+        "position_excursion_last_full_bar_close_ms": excursion["last_full_bar_close_ms"],
+        "position_excursion_entry_boundary_clipped": True,
         "movement_state": movement.movement_state,
         "stage": movement.stage,
         "ret_5m_pct": movement.ret_5m_pct,
@@ -1065,17 +1146,19 @@ def evaluate_position(
     snapshot = _build_snapshot(client, position)
     side = str(position["side"]).upper()
     entry = float(position["entry_price"])
-    price = float(snapshot["close"])
+    price = float(snapshot.get("position_price") or snapshot["close"])
     pnl = _side_return(side, entry, price)
 
     previous = latest_position_evaluation(str(position["position_id"]))
     prev_mfe = float(previous["mfe_pct"]) if previous and previous.get("mfe_pct") is not None else None
     prev_mae = float(previous["mae_pct"]) if previous and previous.get("mae_pct") is not None else None
+    excursion_high = float(snapshot.get("position_excursion_high") or price)
+    excursion_low = float(snapshot.get("position_excursion_low") or price)
     mfe, mae = _mfe_mae(
         side=side,
         entry=entry,
-        high=float(snapshot["high"]),
-        low=float(snapshot["low"]),
+        high=excursion_high,
+        low=excursion_low,
         previous_mfe=prev_mfe,
         previous_mae=prev_mae,
     )
@@ -1085,10 +1168,10 @@ def evaluate_position(
     stop = position.get("stop_loss")
     if stop is not None:
         stop = float(stop)
-        if side == "LONG" and float(snapshot["low"]) <= stop:
+        if side == "LONG" and excursion_low <= stop:
             hard_risk = True
             hard_reasons.append("hard_stop_crossed")
-        elif side == "SHORT" and float(snapshot["high"]) >= stop:
+        elif side == "SHORT" and excursion_high >= stop:
             hard_risk = True
             hard_reasons.append("hard_stop_crossed")
 
