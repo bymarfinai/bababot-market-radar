@@ -173,20 +173,22 @@ def evaluate_rows(rows: list[dict[str, Any]], *, data_quality: dict[str, Any]) -
         and float(data_quality.get("missing_position_rate_pct") or 0.0)
         <= float(qgate["missing_position_rate_max_pct"])
         and (
-            data_quality.get("cycle_gap_ms", {}).get("median") is None
-            or float(data_quality["cycle_gap_ms"]["median"])
-            <= float(qgate["median_cycle_gap_max_ms"])
+            data_quality.get("sample_gap_ms", {}).get("median") is None
+            or float(data_quality["sample_gap_ms"]["median"])
+            <= float(qgate["median_sample_gap_max_ms"])
         )
         and (
-            data_quality.get("cycle_gap_ms", {}).get("p90") is None
-            or float(data_quality["cycle_gap_ms"]["p90"])
-            <= float(qgate["p90_cycle_gap_max_ms"])
+            data_quality.get("sample_gap_ms", {}).get("p90") is None
+            or float(data_quality["sample_gap_ms"]["p90"])
+            <= float(qgate["p90_sample_gap_max_ms"])
         )
         and (
-            data_quality.get("cycle_gap_ms", {}).get("max") is None
-            or float(data_quality["cycle_gap_ms"]["max"])
-            <= float(qgate["max_cycle_gap_ms"])
+            data_quality.get("sample_gap_ms", {}).get("max") is None
+            or float(data_quality["sample_gap_ms"]["max"])
+            <= float(qgate["max_sample_gap_ms"])
         )
+        and int(data_quality.get("duplicate_observation_attempts") or 0)
+        <= int(qgate["duplicate_observation_ids_allowed"])
     )
 
     v42 = PREREGISTERED_GATES["v4_2_observability"]
