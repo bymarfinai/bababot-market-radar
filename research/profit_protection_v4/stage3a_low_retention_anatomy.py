@@ -113,7 +113,7 @@ def main():
     rows,summary=build()
     fields=list(rows[0].keys())
     with open(a.csv_output,"w",newline="",encoding="utf-8") as f:
-        w=csv.DictWriter(f,fieldnames=fields,lineterminator="\\n");w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=fields,lineterminator="\n");w.writeheader();w.writerows(rows)
     Path(a.json_output).write_text(json.dumps(summary,indent=2,sort_keys=True,allow_nan=False)+"\n",encoding="utf-8")
     print(json.dumps(summary,sort_keys=True))
 if __name__=="__main__":main()
