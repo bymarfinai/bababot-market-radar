@@ -1,6 +1,6 @@
 # PP-DECISION V4 — High-Frequency Peak Capture
 
-Status: **PLANNED / CONTRACT FROZEN / NOT ACTIVE**
+Status: **V4-1 IMPLEMENTED / PRE-ACTIVATION — NO TRADING AUTHORITY**
 
 PP-DECISION V4 is the successor research track to the retired V3 low-tail and Stage 2B.1 shadow paths.
 
@@ -105,23 +105,62 @@ Artifacts:
 - `docs/research/profit_protection_v4/PP_V4_HIGH_FREQUENCY_PEAK_CAPTURE_CONTRACT.md`
 - `research/profit_protection_v4/README.md`
 
-### V4-1 — High-Frequency Observability Benchmark ⏳ NOT STARTED
+### V4-1 — High-Frequency Observability Benchmark 🟡 IMPLEMENTED / PRE-ACTIVATION
 
-First active experiment.
+Implementation frozen before prospective activation:
 
-Goal:
-- collect one canonical higher-frequency executable-price path;
-- initial target cadence begins at approximately **5 seconds** unless the implementation contract selects an event-driven mechanism;
-- compare the new observed peak against the existing historical 15-second benchmark and offline true MFE.
+- canonical source: **Binance USD-M Futures REST all-symbol ticker-price snapshot**;
+- source mode: **PRIMARY**;
+- fallback: **NONE / FAIL-CLOSED**;
+- target cadence: **5 seconds**;
+- one batch request per active cycle, not one request per symbol;
+- canonical observed timestamp: local receive timestamp;
+- provider event timestamp: unavailable/null for this REST endpoint;
+- duplicate key: position + V4 cycle/observation timestamp; duplicate attempts are audited;
+- position scope: PAPER positions opened strictly after the prospective start boundary;
+- persistence: `pp_v4_observation_cycles` + `pp_v4_peak_observations`;
+- audit endpoint: `GET /pp-v4/stage1/summary`;
+- evaluator: `research/profit_protection_v4/stage1_observability_benchmark.py`.
 
-Required output:
-- actual cadence distribution;
-- data gaps/error rate;
-- observable peak / true MFE distribution;
-- >=80%, >=90%, >=95% shares;
-- P10/P25;
-- chronology by early/mid/late cohort;
-- per-side and volatility diagnostics.
+No AI calls. No REDUCE/CLOSE. No paper/live order submission. Stage 12 remains 15 seconds.
+
+Matched evaluation after close compares the same position across:
+1. V4 high-frequency current-price peak;
+2. existing ~15s PP-V2 current-price peak;
+3. offline true MFE.
+
+#### Preregistered cohort gate
+
+Before V4-2/V4-3 decisions:
+- >= **100** closed matched trades;
+- >= **50** matched trades with true MFE >= +0.30%.
+
+#### Preregistered data-quality gate
+
+- cycle error rate <= **2%**;
+- missing-position sample rate <= **2%**;
+- duplicate observation attempts = **0**;
+- median per-position sample gap <= **5.75s**;
+- P90 per-position sample gap <= **7.5s**;
+- max per-position sample gap <= **20s**.
+
+#### Preregistered V4-2 observability gate
+
+Against the same-trade ~15s comparator:
+- median capture uplift >= **+3.0 percentage points**;
+- aggregate favorable-peak / true-MFE capture uplift >= **+3.0 pp**.
+
+#### Preregistered V4-3 lower-tail gate
+
+All must pass:
+- >=90% capture share uplift >= **+5.0 pp**;
+- <80% capture share reduction >= **5.0 pp**;
+- P10 uplift >= **+5.0 pp**;
+- P25 uplift >= **+3.0 pp**;
+- LATE chronological third must not lose >=90% share;
+- LATE chronological third must not increase <80% share.
+
+These thresholds are frozen before prospective results are available.
 
 No exit authority.
 
