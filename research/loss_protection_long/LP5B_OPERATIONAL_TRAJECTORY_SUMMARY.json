@@ -1,0 +1,106 @@
+{
+  "stage": "LP-5B",
+  "status": "PASS_OPERATIONAL_TRAJECTORY_ANATOMY",
+  "universe": 454,
+  "actual_winners": 176,
+  "actual_nonpositive": 278,
+  "methodology": {
+    "comparison": "winner vs loss subtypes inside current operational 454 cohort",
+    "snapshots": ["T+1","T+2","T+3"],
+    "causal_filter": "only trades still open at each snapshot are included",
+    "split": "chronological discovery/validation/reserve",
+    "multivariate_score": "logistic model using current side return + running MFE + running MAE, trained on discovery only and evaluated unchanged on validation/reserve"
+  },
+  "alive_counts": {
+    "winner": {"N":176,"T1":168,"T2":161,"T3":156},
+    "all_loss": {"N":278,"T1":216,"T2":181,"T3":161},
+    "pre05_loss": {"N":120,"T1":107,"T2":89,"T3":77},
+    "wrong_direction": {"N":96,"T1":83,"T2":65,"T3":53},
+    "stall_loss": {"N":24,"T1":24,"T2":24,"T3":24},
+    "right_then_failure": {"N":158,"T1":109,"T2":92,"T3":84}
+  },
+  "core_trio_auc_DVR": {
+    "all_loss_vs_win": {
+      "T1": [0.5836,0.4930,0.4501],
+      "T2": [0.6119,0.5920,0.6733],
+      "T3": [0.6858,0.7726,0.7077]
+    },
+    "pre05_loss_vs_win": {
+      "T1": [0.6499,0.5874,0.5893],
+      "T2": [0.7292,0.7554,0.7905],
+      "T3": [0.8021,0.8460,0.8709]
+    },
+    "wrong_direction_vs_win": {
+      "T1": [0.6653,0.5914,0.5819],
+      "T2": [0.7757,0.8250,0.8240],
+      "T3": [0.8554,0.8494,0.8750]
+    },
+    "stall_loss_vs_win": {
+      "T1": [0.6888,0.5310,0.3214],
+      "T2": [0.6873,0.5920,0.3929],
+      "T3": [0.7241,0.6667,0.5000],
+      "caveat": "Reserve contains only one stall loss, so stable inference is not possible."
+    },
+    "right_then_failure_vs_win": {
+      "T1": [0.5785,0.5436,0.4321],
+      "T2": [0.5415,0.4429,0.5948],
+      "T3": [0.6348,0.6181,0.6271]
+    }
+  },
+  "strongest_stable_single_features": {
+    "pre05_T2": {
+      "feature": "temporal__t2_confirm_mfe_pct",
+      "direction": "lower_is_bad",
+      "auc_DVR": [0.7037,0.7431,0.7381]
+    },
+    "pre05_T3": {
+      "feature": "temporal__t3_confirm_mfe_pct",
+      "direction": "lower_is_bad",
+      "auc_DVR": [0.7910,0.7826,0.8269]
+    },
+    "wrong_direction_T2": {
+      "feature": "temporal__t2_confirm_side_return_pct",
+      "direction": "lower_is_bad",
+      "auc_DVR": [0.7735,0.7625,0.8163]
+    },
+    "wrong_direction_T3": {
+      "feature": "temporal__t3_confirm_mfe_pct",
+      "direction": "lower_is_bad",
+      "auc_DVR": [0.8355,0.8397,0.8482]
+    },
+    "right_then_failure_T3": {
+      "feature": "temporal__t3_confirm_side_return_pct",
+      "direction": "lower_is_bad",
+      "auc_DVR": [0.6127,0.6840,0.6471]
+    }
+  },
+  "trajectory_medians_alive_only": {
+    "winner": {
+      "T1": {"side_return_pct":0.08618,"mfe_pct":0.22857,"mae_pct":-0.12902},
+      "T2": {"side_return_pct":0.22321,"mfe_pct":0.35975,"mae_pct":-0.14872},
+      "T3": {"side_return_pct":0.31874,"mfe_pct":0.47583,"mae_pct":-0.15168}
+    },
+    "pre05_loss": {
+      "T1": {"side_return_pct":0.02952,"mfe_pct":0.16878,"mae_pct":-0.11007},
+      "T2": {"side_return_pct":0.09525,"mfe_pct":0.24441,"mae_pct":-0.16307},
+      "T3": {"side_return_pct":0.10433,"mfe_pct":0.30161,"mae_pct":-0.17212}
+    },
+    "wrong_direction": {
+      "T1": {"side_return_pct":0.01265,"mfe_pct":0.16611,"mae_pct":-0.11852},
+      "T2": {"side_return_pct":0.04303,"mfe_pct":0.22814,"mae_pct":-0.18371},
+      "T3": {"side_return_pct":0.07042,"mfe_pct":0.26799,"mae_pct":-0.19462}
+    },
+    "right_then_failure": {
+      "T1": {"side_return_pct":0.09005,"mfe_pct":0.28686,"mae_pct":-0.14572},
+      "T2": {"side_return_pct":0.20969,"mfe_pct":0.40192,"mae_pct":-0.16201},
+      "T3": {"side_return_pct":0.23642,"mfe_pct":0.45993,"mae_pct":-0.16201}
+    }
+  },
+  "decision": {
+    "priority_lane": "wrong_direction_and_pre05_failure",
+    "best_early_operational_window": "between T+1 and T+2",
+    "reason": "T+2 already separates wrong-direction/pre-0.5 losses strongly, while waiting to T+3 improves AUC but too many losses have already closed.",
+    "deprioritize": "right_then_failure",
+    "next_stage": "LP-5C raw 5-second temporal anatomy between 1 and 2 minutes, then extend later only if needed"
+  }
+}
