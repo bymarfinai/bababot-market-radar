@@ -667,6 +667,51 @@ No runtime change. No paper/prospective shadow. V4.2 baseline remains unchanged.
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE3C_TEMPORAL_REVERSAL.md`
 
+### V4-3C2 — Reclaim Structure / False-Reversal Discriminator ⚠️ NO PASS
+
+Population:
+- runner-capable historical trades: **19**
+- DEV 12 / LATE 7
+
+Frozen candidate family:
+- **81** candidates
+- floor: 90/85/80%
+- probe window: 5/10/15s
+- reclaim threshold: 25/50/75%
+- rebound velocity: 0/.01/.02 pp/s
+
+DEV:
+- eligible all-gate candidates: **0 / 81**
+- coverage gate: 81/81
+- precision >=65%: **0/81**
+- premature <=35%: **0/81**
+- median correct retention >=80%: 34/81
+- correct-retention >=80% share >=50%: 37/81
+
+Highest-precision candidate:
+- floor80 / 15s / reclaim25% / velocity0
+- precision **63.64%**
+- premature **36.36%**
+- median correct retention **68.11%**
+- >=80 retention share **14.29%**
+
+Representative high-retention candidate:
+- floor85 / 5s / reclaim75% / velocity0
+- precision **50%**
+- median correct retention **83.58%**
+- >=80 retention share **83.33%**
+
+Conclusion:
+- one bounded reclaim probe improves the frontier slightly versus Stage3C, but still cannot reduce false reversals enough while retaining >=80% of runner peak.
+- repeated problem cases include AVAAI, STX, COMP, FLOW.
+- **do not proceed to Stage3D** with Stage3C2.
+- next work requires a new preregistered family around multi-cycle failed reclaim / volatility-normalized structure.
+
+No runtime change. No paper/prospective shadow. V4.2 remains baseline.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3C2_RECLAIM_STRUCTURE.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
