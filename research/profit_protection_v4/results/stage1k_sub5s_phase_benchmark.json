@@ -1,0 +1,219 @@
+{
+  "by_side": {
+    "LONG": {
+      "1000": {
+        "expected_rescues_ge80": 6.0,
+        "expected_rescues_ge90": 2.8,
+        "expected_rescues_ge95": 1.8,
+        "n": 13,
+        "projected_overall_lt80_pct": null,
+        "residual_rescue_rate_ge80_pct": 46.15384615384615,
+        "trade_phase_probability_ge80_median": 0.2,
+        "trade_phase_probability_ge90_median": 0.1,
+        "trade_phase_probability_ge95_median": 0.0,
+        "trades_ge80_probability_100pct": 3,
+        "trades_ge80_probability_ge50pct": 6,
+        "trades_ge80_probability_ge80pct": 5,
+        "trades_ge80_probability_zero": 4
+      },
+      "2000": {
+        "expected_rescues_ge80": 3.9,
+        "expected_rescues_ge90": 1.4,
+        "expected_rescues_ge95": 0.9,
+        "n": 13,
+        "projected_overall_lt80_pct": null,
+        "residual_rescue_rate_ge80_pct": 30.0,
+        "trade_phase_probability_ge80_median": 0.1,
+        "trade_phase_probability_ge90_median": 0.05,
+        "trade_phase_probability_ge95_median": 0.0,
+        "trades_ge80_probability_100pct": 1,
+        "trades_ge80_probability_ge50pct": 4,
+        "trades_ge80_probability_ge80pct": 1,
+        "trades_ge80_probability_zero": 4
+      }
+    },
+    "SHORT": {
+      "1000": {
+        "expected_rescues_ge80": 2.3,
+        "expected_rescues_ge90": 0.5,
+        "expected_rescues_ge95": 0.30000000000000004,
+        "n": 11,
+        "projected_overall_lt80_pct": null,
+        "residual_rescue_rate_ge80_pct": 20.909090909090907,
+        "trade_phase_probability_ge80_median": 0.1,
+        "trade_phase_probability_ge90_median": 0.0,
+        "trade_phase_probability_ge95_median": 0.0,
+        "trades_ge80_probability_100pct": 1,
+        "trades_ge80_probability_ge50pct": 1,
+        "trades_ge80_probability_ge80pct": 1,
+        "trades_ge80_probability_zero": 4
+      },
+      "2000": {
+        "expected_rescues_ge80": 1.7,
+        "expected_rescues_ge90": 0.25,
+        "expected_rescues_ge95": 0.15000000000000002,
+        "n": 11,
+        "projected_overall_lt80_pct": null,
+        "residual_rescue_rate_ge80_pct": 15.454545454545455,
+        "trade_phase_probability_ge80_median": 0.05,
+        "trade_phase_probability_ge90_median": 0.0,
+        "trade_phase_probability_ge95_median": 0.0,
+        "trades_ge80_probability_100pct": 1,
+        "trades_ge80_probability_ge50pct": 1,
+        "trades_ge80_probability_ge80pct": 1,
+        "trades_ge80_probability_zero": 4
+      }
+    }
+  },
+  "cadences": {
+    "1000": {
+      "expected_rescues_ge80": 8.3,
+      "expected_rescues_ge90": 3.3,
+      "expected_rescues_ge95": 2.1,
+      "n": 24,
+      "projected_overall_lt80_pct": 15.858585858585858,
+      "residual_rescue_rate_ge80_pct": 34.583333333333336,
+      "trade_phase_probability_ge80_median": 0.2,
+      "trade_phase_probability_ge90_median": 0.0,
+      "trade_phase_probability_ge95_median": 0.0,
+      "trades_ge80_probability_100pct": 4,
+      "trades_ge80_probability_ge50pct": 7,
+      "trades_ge80_probability_ge80pct": 6,
+      "trades_ge80_probability_zero": 8
+    },
+    "2000": {
+      "expected_rescues_ge80": 5.6,
+      "expected_rescues_ge90": 1.65,
+      "expected_rescues_ge95": 1.05,
+      "n": 24,
+      "projected_overall_lt80_pct": 18.585858585858585,
+      "residual_rescue_rate_ge80_pct": 23.333333333333332,
+      "trade_phase_probability_ge80_median": 0.1,
+      "trade_phase_probability_ge90_median": 0.0,
+      "trade_phase_probability_ge95_median": 0.0,
+      "trades_ge80_probability_100pct": 2,
+      "trades_ge80_probability_ge50pct": 5,
+      "trades_ge80_probability_ge80pct": 2,
+      "trades_ge80_probability_zero": 8
+    },
+    "5000": {
+      "expected_rescues_ge80": 2.68,
+      "expected_rescues_ge90": 0.66,
+      "expected_rescues_ge95": 0.42,
+      "n": 24,
+      "projected_overall_lt80_pct": 21.535353535353536,
+      "residual_rescue_rate_ge80_pct": 11.166666666666666,
+      "trade_phase_probability_ge80_median": 0.04,
+      "trade_phase_probability_ge90_median": 0.0,
+      "trade_phase_probability_ge95_median": 0.0,
+      "trades_ge80_probability_100pct": 0,
+      "trades_ge80_probability_ge50pct": 1,
+      "trades_ge80_probability_ge80pct": 0,
+      "trades_ge80_probability_zero": 8
+    }
+  },
+  "decision": {
+    "one_second_periodic": "FAIL",
+    "protection_authority": "NONE",
+    "reason": "Neither 2s nor 1s periodic polling rescues the preregistered minimum 15/24 clean residual trades in phase-averaged expectation. The next information-layer experiment should therefore be event-driven/tick observation, not protection tuning.",
+    "runtime_change_authority": "NONE",
+    "selected_next_research_path": "EVENT_DRIVEN_NEXT_RESEARCH_CANDIDATE",
+    "two_second_periodic": "FAIL"
+  },
+  "decision_target": {
+    "baseline_lt80_pct": 24.242424242424242,
+    "required_residual_rescues_ge80": 15,
+    "target_overall_lt80_max_pct": 10.0
+  },
+  "event_driven": {
+    "execution_claim": false,
+    "expected_rescues_ge80": 24.0,
+    "expected_rescues_ge90": 24.0,
+    "expected_rescues_ge95": 24.0,
+    "observability_upper_bound_only": true,
+    "projected_overall_lt80_pct": 0.0
+  },
+  "method": {
+    "cadences_ms": [
+      5000,
+      2000,
+      1000
+    ],
+    "decision_samples_are_independent_of_archived_5s_floor": true,
+    "event_driven_is_observability_upper_bound_only": true,
+    "phase_grid_ms": 100,
+    "price_source": "Binance USD-M Futures aggregate trades"
+  },
+  "one_second_zero_probability_ge80": {
+    "n": 8,
+    "trades": [
+      {
+        "actual_5s_capture_pct": 42.35779668442007,
+        "clean_mfe_pct": 0.5325927063865858,
+        "position_id": "PAPER:C98USDT:1791030299999:SHORT",
+        "side": "SHORT",
+        "symbol": "C98USDT"
+      },
+      {
+        "actual_5s_capture_pct": 65.78993882100607,
+        "clean_mfe_pct": 0.7605553193881889,
+        "position_id": "PAPER:ARUSDT:1791030899999:SHORT",
+        "side": "SHORT",
+        "symbol": "ARUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 51.08575243060795,
+        "clean_mfe_pct": 1.4030991500064705,
+        "position_id": "PAPER:CUSDT:1791032099999:LONG",
+        "side": "LONG",
+        "symbol": "CUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 69.12883188374036,
+        "clean_mfe_pct": 0.8464652760348246,
+        "position_id": "PAPER:BTWUSDT:1791032699999:LONG",
+        "side": "LONG",
+        "symbol": "BTWUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 68.14008168882934,
+        "clean_mfe_pct": 1.024522486948909,
+        "position_id": "PAPER:CTSIUSDT:1791032999999:LONG",
+        "side": "LONG",
+        "symbol": "CTSIUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 47.2184102185134,
+        "clean_mfe_pct": 0.359578557077644,
+        "position_id": "PAPER:ONUSDT:1791039599999:SHORT",
+        "side": "SHORT",
+        "symbol": "ONUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 6.203322880019476,
+        "clean_mfe_pct": 1.1357841017241022,
+        "position_id": "PAPER:CUSDT:1791039899999:LONG",
+        "side": "LONG",
+        "symbol": "CUSDT"
+      },
+      {
+        "actual_5s_capture_pct": 20.823436262867844,
+        "clean_mfe_pct": 0.5336391386070395,
+        "position_id": "PAPER:PHAUSDT:1791039899999:SHORT",
+        "side": "SHORT",
+        "symbol": "PHAUSDT"
+      }
+    ]
+  },
+  "population": {
+    "baseline_clean_lt80_n": 24,
+    "baseline_clean_lt80_pct": 24.242424242424242,
+    "clean_eligible_total": 99,
+    "extra_in_evidence": [],
+    "missing_from_evidence": [],
+    "phase_benchmark_rows": 24,
+    "stage1j_residual_ids_match_exactly": true
+  },
+  "stage": "PP-V4-1K",
+  "status": "COMPLETE_OFFLINE_SUB5S_BENCHMARK"
+}

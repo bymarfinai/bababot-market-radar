@@ -306,6 +306,47 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage1j_clean_mfe_rebuild.json`
 
+### V4-1K — Clean Residual Sub-5s Benchmark ✅ COMPLETE
+
+Stage1K tested the **24 / 99 (24.24%)** clean Stage1J residual trades whose archived actual 5s capture remained below80%.
+
+The Stage1K population matches the 24 genuine residual Stage1I trades exactly.
+
+Offline counterfactual:
+- Binance USD-M aggregate trades;
+- 100ms polling-phase grid;
+- 2s and 1s decisions use only their own scheduled samples;
+- no archived 5s floor is allowed to rescue a failing phase;
+- event-driven/tick is an observability upper bound only.
+
+Preregistered objective:
+- compress overall clean <80% share from 24.24% to <=10%;
+- requires at least **15 / 24** residual trades rescued to >=80%.
+
+Results:
+- 2s expected >=80 rescue: **5.6 / 24** -> projected overall <80 **18.59%** -> **FAIL**;
+- 1s expected >=80 rescue: **8.3 / 24** -> projected overall <80 **15.86%** -> **FAIL**;
+- event-driven/tick historical upper bound: 24 / 24 observable, but this is **not** an execution claim.
+
+At 1s:
+- median phase probability of >=80 capture: **20%**;
+- only **4 / 24** trades hit >=80 in every tested phase;
+- **8 / 24** have zero >=80 hit probability across the tested 1s phases;
+- LONG expected >=80 rescue: **6.0 / 13 (46.15%)**;
+- SHORT expected >=80 rescue: **2.3 / 11 (20.91%)**.
+
+Decision:
+- do **not** deploy 2s or 1s periodic polling as the low-tail solution;
+- do **not** tune protection formulas;
+- next information-layer research candidate is **V4-1L — Event-Driven Observability Benchmark**;
+- no runtime or trading authority is granted by Stage1K.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE1K_SUB5S_BENCHMARK.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage1k_sub5s_phase_benchmark.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
