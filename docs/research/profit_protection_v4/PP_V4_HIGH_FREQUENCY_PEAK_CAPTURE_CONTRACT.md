@@ -1,6 +1,6 @@
 # PP V4 — High-Frequency Peak Capture Contract
 
-Status: **V4-1 IMPLEMENTATION FROZEN — PRE-ACTIVATION**
+Status: **V4-1 IMPLEMENTATION + ACTIVATION BOUNDARY FROZEN**
 
 Canonical source of truth: `PP_DECISION_V4.md`
 
@@ -157,7 +157,7 @@ These are comparison evidence only.
 
 The first prospective V4 mechanism is now fixed as:
 
-- primary source: Binance USD-M Futures REST all-symbol ticker-price endpoint;
+- prospective start boundary: `1791079128949`;\n- primary source: Binance USD-M Futures REST all-symbol ticker-price endpoint;
 - fallback: none; fail closed and audit the error cycle;
 - cadence target: 5 seconds;
 - one batch price snapshot per cycle;
