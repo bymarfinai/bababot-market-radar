@@ -38,7 +38,20 @@ create table if not exists pp_v4_stage2d_shadow_actions(
  source_observation_id text not null,authority text not null,params_json text not null,created_at_ms integer not null);
 create index if not exists idx_pp_v4_s2d_action_position_time on pp_v4_stage2d_shadow_actions(position_id,observed_at_ms);
 """
-POSTGRES_SCHEMA=SQLITE_SCHEMA.replace(" integer not null"," bigint not null",2).replace("runner_qualified bigint","runner_qualified boolean").replace("small_fired integer","small_fired boolean").replace("shadow_closed integer","shadow_closed boolean")
+POSTGRES_SCHEMA="""
+create table if not exists pp_v4_stage2d_shadow_state(
+ position_id text primary key,opened_at_ms bigint not null,runner_qualified boolean not null,
+ small_fired boolean not null,small_consecutive integer not null,runner_consecutive integer not null,
+ remaining_fraction double precision not null,shadow_closed boolean not null,last_observed_at_ms bigint not null,
+ duplicate_count integer not null,out_of_order_count integer not null,invariant_error_count integer not null,
+ updated_at_ms bigint not null);
+create table if not exists pp_v4_stage2d_shadow_actions(
+ action_id text primary key,position_id text not null,observed_at_ms bigint not null,
+ action_type text not null,current_pnl_pct double precision not null,running_peak_pct double precision not null,
+ action_fraction_of_remaining double precision not null,remaining_before double precision not null,remaining_after double precision not null,
+ source_observation_id text not null,authority text not null,params_json text not null,created_at_ms bigint not null);
+create index if not exists idx_pp_v4_s2d_action_position_time on pp_v4_stage2d_shadow_actions(position_id,observed_at_ms);
+"""
 
 def enabled()->bool:
     return os.environ.get("PP_V4_STAGE2D_SHADOW_ENABLED","false").strip().lower() in {"1","true","yes","on"}
