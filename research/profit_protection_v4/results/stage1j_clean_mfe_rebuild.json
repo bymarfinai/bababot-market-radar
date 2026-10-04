@@ -1,0 +1,303 @@
+{
+  "by_side": {
+    "LONG": {
+      "delta": {
+        "aggregate_capture_pp": 4.126647999186275,
+        "ge80_share_pp": 12.5,
+        "ge90_share_pp": 15.625,
+        "ge95_share_pp": 18.75,
+        "lt80_reduction_pp": 12.5,
+        "mean_capture_pp": 6.872404029866814,
+        "median_capture_pp": 5.245296530652141,
+        "p10_capture_pp": 6.957377051025766,
+        "p25_capture_pp": 11.648703791784584
+      },
+      "fast5": {
+        "aggregate_capture_pct": 88.21324245374616,
+        "ge80_share_pct": 79.6875,
+        "ge90_share_pct": 59.375,
+        "ge95_share_pct": 45.3125,
+        "gt100_share_pct": 0.0,
+        "lt80_share_pct": 20.3125,
+        "mean_pct": 85.63494051882033,
+        "median_pct": 93.57835156888864,
+        "n": 64,
+        "p10_pct": 55.35926639784394,
+        "p25_pct": 84.18835470672607
+      },
+      "n": 64,
+      "old15": {
+        "aggregate_capture_pct": 84.08659445455989,
+        "ge80_share_pct": 67.1875,
+        "ge90_share_pct": 43.75,
+        "ge95_share_pct": 26.5625,
+        "gt100_share_pct": 0.0,
+        "lt80_share_pct": 32.8125,
+        "mean_pct": 78.76253648895351,
+        "median_pct": 88.3330550382365,
+        "n": 64,
+        "p10_pct": 48.40188934681817,
+        "p25_pct": 72.53965091494149
+      }
+    },
+    "SHORT": {
+      "delta": {
+        "aggregate_capture_pp": 3.918152330417456,
+        "ge80_share_pp": 2.857142857142861,
+        "ge90_share_pp": 8.571428571428577,
+        "ge95_share_pp": 22.857142857142858,
+        "lt80_reduction_pp": 2.8571428571428577,
+        "mean_capture_pp": 4.595405817017365,
+        "median_capture_pp": 6.247761166658606,
+        "p10_capture_pp": 2.332654266456416,
+        "p25_capture_pp": 9.597792145188151
+      },
+      "fast5": {
+        "aggregate_capture_pct": 87.29787244479908,
+        "ge80_share_pct": 68.57142857142857,
+        "ge90_share_pct": 51.42857142857143,
+        "ge95_share_pct": 45.714285714285715,
+        "gt100_share_pct": 8.571428571428571,
+        "lt80_share_pct": 31.428571428571427,
+        "mean_pct": 81.2732924631875,
+        "median_pct": 92.4948730601571,
+        "n": 35,
+        "p10_pct": 44.302042098057406,
+        "p25_pct": 78.3750328702315
+      },
+      "n": 35,
+      "old15": {
+        "aggregate_capture_pct": 83.37972011438163,
+        "ge80_share_pct": 65.71428571428571,
+        "ge90_share_pct": 42.857142857142854,
+        "ge95_share_pct": 22.857142857142858,
+        "gt100_share_pct": 2.857142857142857,
+        "lt80_share_pct": 34.285714285714285,
+        "mean_pct": 76.67788664617014,
+        "median_pct": 86.2471118934985,
+        "n": 35,
+        "p10_pct": 41.96938783160099,
+        "p25_pct": 68.77724072504334
+      }
+    }
+  },
+  "chronological_thirds": {
+    "EARLY": {
+      "delta": {
+        "aggregate_capture_pp": 3.1447379900782835,
+        "ge80_share_pp": 6.060606060606055,
+        "ge90_share_pp": 12.121212121212118,
+        "ge95_share_pp": 21.212121212121207,
+        "lt80_reduction_pp": 6.060606060606055,
+        "mean_capture_pp": 3.7369776788184765,
+        "median_capture_pp": 2.723833629212649,
+        "p10_capture_pp": 5.380810414007527,
+        "p25_capture_pp": 2.3501428678232656
+      },
+      "fast5": {
+        "aggregate_capture_pct": 82.73682847400107,
+        "ge80_share_pct": 63.63636363636363,
+        "ge90_share_pct": 42.42424242424242,
+        "ge95_share_pct": 39.39393939393939,
+        "gt100_share_pct": 6.0606060606060606,
+        "lt80_share_pct": 36.36363636363637,
+        "mean_pct": 78.45739517872954,
+        "median_pct": 87.69048967231669,
+        "n": 33,
+        "p10_pct": 42.93255661476439,
+        "p25_pct": 68.14008168882934
+      },
+      "n": 33,
+      "old15": {
+        "aggregate_capture_pct": 79.59209048392279,
+        "ge80_share_pct": 57.57575757575758,
+        "ge90_share_pct": 30.303030303030305,
+        "ge95_share_pct": 18.181818181818183,
+        "gt100_share_pct": 0.0,
+        "lt80_share_pct": 42.42424242424242,
+        "mean_pct": 74.72041749991106,
+        "median_pct": 84.96665604310404,
+        "n": 33,
+        "p10_pct": 37.55174620075686,
+        "p25_pct": 65.78993882100607
+      }
+    },
+    "LATE": {
+      "delta": {
+        "aggregate_capture_pp": 5.172963181337977,
+        "ge80_share_pp": 15.151515151515142,
+        "ge90_share_pp": 12.121212121212125,
+        "ge95_share_pp": 21.212121212121215,
+        "lt80_reduction_pp": 15.151515151515149,
+        "mean_capture_pp": 8.674878608168541,
+        "median_capture_pp": 5.8722832366018025,
+        "p10_capture_pp": 19.376437157903467,
+        "p25_capture_pp": 14.322393316930146
+      },
+      "fast5": {
+        "aggregate_capture_pct": 85.82316539453217,
+        "ge80_share_pct": 75.75757575757575,
+        "ge90_share_pct": 54.54545454545455,
+        "ge95_share_pct": 36.36363636363637,
+        "gt100_share_pct": 0.0,
+        "lt80_share_pct": 24.242424242424242,
+        "mean_pct": 82.59145016603215,
+        "median_pct": 93.29094488415424,
+        "n": 33,
+        "p10_pct": 48.81798236725686,
+        "p25_pct": 80.18499290622978
+      },
+      "n": 33,
+      "old15": {
+        "aggregate_capture_pct": 80.65020221319419,
+        "ge80_share_pct": 60.60606060606061,
+        "ge90_share_pct": 42.42424242424242,
+        "ge95_share_pct": 15.151515151515152,
+        "gt100_share_pct": 0.0,
+        "lt80_share_pct": 39.39393939393939,
+        "mean_pct": 73.9165715578636,
+        "median_pct": 87.41866164755244,
+        "n": 33,
+        "p10_pct": 29.441545209353393,
+        "p25_pct": 65.86259958929963
+      }
+    },
+    "MID": {
+      "delta": {
+        "aggregate_capture_pp": 3.6301737887751244,
+        "ge80_share_pp": 6.060606060606062,
+        "ge90_share_pp": 15.151515151515156,
+        "ge95_share_pp": 18.181818181818187,
+        "lt80_reduction_pp": 6.060606060606062,
+        "mean_capture_pp": 5.79035769807615,
+        "median_capture_pp": 5.661726260784704,
+        "p10_capture_pp": 22.25389610335904,
+        "p25_capture_pp": 5.148408254263543
+      },
+      "fast5": {
+        "aggregate_capture_pct": 93.88015802140913,
+        "ge80_share_pct": 87.87878787878788,
+        "ge90_share_pct": 72.72727272727273,
+        "ge95_share_pct": 60.60606060606061,
+        "gt100_share_pct": 3.0303030303030303,
+        "lt80_share_pct": 12.121212121212121,
+        "mean_pct": 91.2299858496645,
+        "median_pct": 97.07741631912383,
+        "n": 33,
+        "p10_pct": 77.98825740094537,
+        "p25_pct": 89.67768573714208
+      },
+      "n": 33,
+      "old15": {
+        "aggregate_capture_pct": 90.249984232634,
+        "ge80_share_pct": 81.81818181818181,
+        "ge90_share_pct": 57.57575757575758,
+        "ge95_share_pct": 42.42424242424242,
+        "gt100_share_pct": 3.0303030303030303,
+        "lt80_share_pct": 18.181818181818183,
+        "mean_pct": 85.43962815158835,
+        "median_pct": 91.41569005833912,
+        "n": 33,
+        "p10_pct": 55.73436129758633,
+        "p25_pct": 84.52927748287854
+      }
+    }
+  },
+  "decision": {
+    "clean_label_observability_direction": "PASS",
+    "next_research_question": "Quantify the remaining clean 5s low tail and test sub-5s/event-driven observation before protection engineering.",
+    "protection_authority": "NONE",
+    "v4_2_clean_label_gate": "PASS",
+    "v4_3_clean_label_distribution_gate": "PASS"
+  },
+  "label_contract": {
+    "clean_mfe_arm_pct": 0.3,
+    "entry_price_included_as_zero_excursion_baseline": true,
+    "full_in_lifecycle_minutes": "Binance USD-M 1m klines",
+    "mfe_definition": "maximum favorable traded-price excursion strictly after opened_at_ms",
+    "partial_boundary_minutes": "Binance USD-M aggregate trades"
+  },
+  "overall": {
+    "delta": {
+      "aggregate_capture_pp": 4.045316927609747,
+      "ge80_share_pp": 9.09090909090908,
+      "ge90_share_pp": 13.131313131313135,
+      "ge95_share_pp": 20.2020202020202,
+      "lt80_reduction_pp": 9.090909090909093,
+      "mean_capture_pp": 6.067404661687718,
+      "median_capture_pp": 5.273511960852488,
+      "p10_capture_pp": 8.083956921375332,
+      "p25_capture_pp": 10.491301008739583
+    },
+    "fast5": {
+      "aggregate_capture_pct": 87.85617017422918,
+      "ge80_share_pct": 75.75757575757575,
+      "ge90_share_pct": 56.56565656565657,
+      "ge95_share_pct": 45.45454545454545,
+      "gt100_share_pct": 3.0303030303030303,
+      "lt80_share_pct": 24.242424242424242,
+      "mean_pct": 84.09294373147539,
+      "median_pct": 93.29094488415424,
+      "n": 99,
+      "p10_pct": 50.312283988189044,
+      "p25_pct": 80.9016578810033
+    },
+    "n": 99,
+    "old15": {
+      "aggregate_capture_pct": 83.81085324661943,
+      "ge80_share_pct": 66.66666666666667,
+      "ge90_share_pct": 43.43434343434343,
+      "ge95_share_pct": 25.252525252525253,
+      "gt100_share_pct": 1.0101010101010102,
+      "lt80_share_pct": 33.333333333333336,
+      "mean_pct": 78.02553906978767,
+      "median_pct": 88.01743292330175,
+      "n": 99,
+      "p10_pct": 42.22832706681371,
+      "p25_pct": 70.41035687226372
+    }
+  },
+  "per_trade_delta": {
+    "equal": 39,
+    "improved": 55,
+    "median_pp": 1.280727863258846,
+    "p90_pp": 15.58624895273216,
+    "worse": 5
+  },
+  "population": {
+    "clean_mfe_ge_0_30": 99,
+    "old_mfe_ge_0_30_but_clean_lt_0_30": 25,
+    "old_mfe_lt_0_30_but_clean_ge_0_30": 0,
+    "strict_matched_5s_15s_rows": 189
+  },
+  "preregistered_gate_diagnostic": {
+    "cohort": {
+      "all_pass": true,
+      "closed_matched_pass": true,
+      "true_mfe_ge_0_30_pass": true
+    },
+    "v4_2": {
+      "aggregate_capture_pass": true,
+      "all_pass": true,
+      "median_capture_pass": true
+    },
+    "v4_3": {
+      "all_pass": true,
+      "ge90_share_pass": true,
+      "late_ge90_non_decrease_pass": true,
+      "late_lt80_non_increase_pass": true,
+      "lt80_reduction_pass": true,
+      "p10_pass": true,
+      "p25_pass": true
+    }
+  },
+  "rescue": {
+    "old15_ge90_to_5s_lt90": 1,
+    "old15_lt80": 33,
+    "old15_lt80_to_5s_ge80": 9,
+    "old15_lt90": 56,
+    "old15_lt90_to_5s_ge90": 14
+  },
+  "stage": "PP-V4-1J",
+  "status": "COMPLETE_CLEAN_LABEL_REBUILD"
+}

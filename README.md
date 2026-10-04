@@ -738,7 +738,7 @@ within the configured fill-freshness window.
 Current version:
 
 ~~~text
-stage12-v3-three-layer
+stage12-v3.1-entry-boundary
 ~~~
 
 Stage 12 V3 separates three different questions that V2 previously blended
@@ -828,6 +828,9 @@ observations are not written, so they cannot mask an unexecuted risk-reducing
 The former PP-DECISION V3 Stage 2B.1 5-second shadow observer was retired on 2026-10-03 before the next peak-capture track. Its historical table is preserved for research, but there is no active startup loop, endpoint, or runtime feature flag for that lane. See `research/profit_protection_v3/archive/stage2b1_5s_shadow/ARCHIVE.md`.
 
 The successor research line is **PP-DECISION V4 — High-Frequency Peak Capture** (`PP_DECISION_V4.md`). V4-1 uses one research-only 5-second Binance batch-ticker observer with no AI or trading authority. It persists `pp_v4_observation_cycles` / `pp_v4_peak_observations` and exposes `GET /pp-v4/stage1/summary` for audit. Stage 12 remains on its independent 15-second fast guard.
+
+
+Stage12 v3.1 separates **market context** from **position-path excursion**. MFE/MAE and hard-stop excursion bounds only admit fully closed candles whose open timestamp is at or after the position entry timestamp, plus the current price. A candle that straddles entry is never allowed to contribute its full high/low to the position path. This prevents pre-entry price extrema from contaminating MFE/MAE while leaving market-context indicators unchanged.
 
 The 5-minute Thesis Health path keeps AI supervision as a secondary layer.
 A deterministic CLOSE or hard-risk close cannot be upgraded back to HOLD.

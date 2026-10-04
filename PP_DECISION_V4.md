@@ -262,6 +262,50 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage1i_5s_failure_anatomy.json`
 
+### V4-1J — Clean Post-Entry MFE Rebuild ✅ COMPLETE
+
+Stage1J corrected the MFE entry-boundary defect discovered in Stage1I and rebuilt the historical benchmark without using old MFE eligibility as a selection filter.
+
+Runtime:
+- Stage12 lifecycle version: `stage12-v3.1-entry-boundary`;
+- MFE/MAE and hard-stop position-path bounds use only fully closed candles whose open timestamp is at/after `opened_at_ms`, plus current price;
+- candles that straddle entry are excluded from position excursion accounting;
+- market-context rolling candles remain unchanged and cannot feed position MFE/MAE.
+
+Historical clean-label cohort:
+- strict matched 5s + 15s trades: **189**;
+- clean post-entry MFE >= +0.30%: **99**;
+- old MFE >= +0.30% but clean MFE < +0.30%: **25**;
+- old MFE < +0.30% but clean MFE >= +0.30%: **0**.
+
+Clean same-trade benchmark:
+- median capture: **88.02% -> 93.29%** (**+5.27 pp**);
+- aggregate capture: **83.81% -> 87.86%** (**+4.05 pp**);
+- >=90% share: **43.43% -> 56.57%** (**+13.13 pp**);
+- <80% share: **33.33% -> 24.24%** (**9.09 pp reduction**);
+- P10: **42.23% -> 50.31%** (**+8.08 pp**);
+- P25: **70.41% -> 80.90%** (**+10.49 pp**).
+
+Chronological LATE third:
+- aggregate uplift **+5.17 pp**;
+- >=90 share uplift **+12.12 pp**;
+- <80 share reduction **15.15 pp**.
+
+Clean-label diagnostic:
+- cohort gate: **PASS**;
+- V4-2 median/aggregate observability gates: **PASS**;
+- V4-3 >=90 / <80 / P10 / P25 / LATE stability gates: **PASS**.
+
+This supersedes Stage1H's contaminated-MFE gate interpretation. Stage1H remains useful only as historical directional evidence.
+
+No protection/trading authority is granted. The remaining clean 5s lower tail is **24.24%**, with SHORT still weaker than LONG. The next research question is whether sub-5s/event-driven observation compresses that residual tail before any protection formula is engineered.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE1J_CLEAN_MFE_REBUILD.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage1j_clean_mfe_rebuild.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.

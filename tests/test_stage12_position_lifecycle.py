@@ -17,6 +17,7 @@ from market_radar.position_lifecycle import (
     _should_persist_fast_evaluation,
     _mfe_mae,
     _position_memory_penalties,
+    _post_entry_closed_excursion,
     _side_return,
 )
 
@@ -158,6 +159,50 @@ class Stage12LifecycleTests(unittest.TestCase):
         )
         self.assertEqual(mfe, 5.0)
         self.assertEqual(mae, -2.0)
+
+    def test_entry_boundary_excludes_straddling_pre_entry_candle(self):
+        rows = [
+            [0, 100, 110, 90, 101, 0, 59_999],
+            [60_000, 101, 103, 98, 102, 0, 119_999],
+        ]
+        result = _post_entry_closed_excursion(
+            rows,
+            opened_at_ms=30_000,
+            now_ms=120_001,
+            current_price=101.5,
+        )
+        self.assertEqual(result["high"], 103.0)
+        self.assertEqual(result["low"], 98.0)
+        self.assertEqual(result["full_closed_bar_count"], 1)
+        self.assertEqual(result["first_full_bar_open_ms"], 60_000)
+
+    def test_entry_boundary_uses_current_price_before_first_full_bar(self):
+        rows = [
+            [0, 100, 115, 85, 101, 0, 59_999],
+        ]
+        result = _post_entry_closed_excursion(
+            rows,
+            opened_at_ms=30_000,
+            now_ms=60_001,
+            current_price=100.4,
+        )
+        self.assertEqual(result["high"], 100.4)
+        self.assertEqual(result["low"], 100.4)
+        self.assertEqual(result["full_closed_bar_count"], 0)
+
+    def test_entry_boundary_includes_candle_opened_exactly_at_entry(self):
+        rows = [
+            [60_000, 100, 104, 97, 102, 0, 119_999],
+        ]
+        result = _post_entry_closed_excursion(
+            rows,
+            opened_at_ms=60_000,
+            now_ms=120_001,
+            current_price=101.0,
+        )
+        self.assertEqual(result["high"], 104.0)
+        self.assertEqual(result["low"], 97.0)
+        self.assertEqual(result["full_closed_bar_count"], 1)
 
     def test_v3_early_invalidation_closes_wrong_direction_examples(self):
         with patch.dict(
