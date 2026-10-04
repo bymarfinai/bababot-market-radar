@@ -271,7 +271,7 @@ class PPV4Stage1ObserverTests(unittest.TestCase):
         for index in range(60):
             true_mfe = 1.0
             old_peak = 0.70 if index < 30 else 0.90
-            v4_peak = 0.85 if index < 30 else 0.97
+            v4_peak = 0.92 if index < 30 else 0.97
             rows.append(
                 {
                     "position_id": f"P{index}",
