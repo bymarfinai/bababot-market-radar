@@ -54,8 +54,8 @@ class PPV4Stage3C4TopologyContextTests(unittest.TestCase):
         path = [
             obs(0, 1.50),
             obs(5000, 2.00),
-            obs(10000, 1.85),
-            obs(15000, 1.78),
+            obs(10000, 1.78),
+            obs(15000, 1.76),
             obs(20000, 2.05),
             obs(25000, 2.04),
         ]
