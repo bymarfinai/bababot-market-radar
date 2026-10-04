@@ -94,5 +94,3 @@ For the final candidate only:
 - non-executable trades remain unchanged.
 
 No production or paper-trading authority is granted by LP-5D discovery alone.
-
-[executed on device: core-prod (c128f313-5bdb-41c3-a53a-0590e5cfa134)]
