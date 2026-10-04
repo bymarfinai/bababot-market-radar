@@ -1,6 +1,6 @@
 # Profit Protection V4 Research Namespace
 
-Status: **V4-1 READY FOR ACTIVATION**
+Status: **V4-1 ACTIVE PROSPECTIVE CAPTURE**
 
 This directory is reserved for the PP V4 High-Frequency Peak Capture research line.
 
@@ -27,3 +27,12 @@ The observer has no paper/live trading authority and does not alter Stage 12.
 4. V4-4 Protection + Runner Engineering, only after V4-3 passes
 
 Do not skip directly to V4-4.
+
+
+## Activation
+
+- deployed commit: `fbdf4f74ebb76178802879bba3d9e95a0a7bfd10`
+- prospective boundary: `1791079128949`
+- clean activation: 0 open positions at boundary
+- endpoint: `GET /pp-v4/stage1/summary`
+- current authority: observation only
