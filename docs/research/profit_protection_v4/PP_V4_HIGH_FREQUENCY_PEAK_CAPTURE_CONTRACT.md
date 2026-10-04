@@ -1,6 +1,6 @@
 # PP V4 — High-Frequency Peak Capture Contract
 
-Status: **V4-1 IMPLEMENTATION + ACTIVATION BOUNDARY FROZEN**
+Status: **V4-1 ACTIVE PROSPECTIVE CAPTURE — RESEARCH ONLY**
 
 Canonical source of truth: `PP_DECISION_V4.md`
 
@@ -208,3 +208,15 @@ V4-3 lower-tail:
 - late chronological third cannot increase <80% share.
 
 These thresholds are frozen before prospective V4-1 results are available.
+
+
+## Activation record
+
+- deployed commit: `fbdf4f74ebb76178802879bba3d9e95a0a7bfd10`
+- start boundary: `1791079128949`
+- open positions at boundary: **0**
+- initial audit endpoint: **200 OK**
+- initial V4 rows / positions / cycles: **0 / 0 / 0**
+- Stage 12 cadence: **15 seconds**, unchanged
+- control mode after verification: **RUN**
+- live trading: **disarmed**

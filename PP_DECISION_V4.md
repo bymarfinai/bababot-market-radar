@@ -1,6 +1,6 @@
 # PP-DECISION V4 — High-Frequency Peak Capture
 
-Status: **V4-1 IMPLEMENTED / ACTIVATION BOUNDARY FROZEN — NO TRADING AUTHORITY**
+Status: **V4-1 ACTIVE PROSPECTIVE CAPTURE — NO TRADING AUTHORITY**
 
 PP-DECISION V4 is the successor research track to the retired V3 low-tail and Stage 2B.1 shadow paths.
 
@@ -105,7 +105,7 @@ Artifacts:
 - `docs/research/profit_protection_v4/PP_V4_HIGH_FREQUENCY_PEAK_CAPTURE_CONTRACT.md`
 - `research/profit_protection_v4/README.md`
 
-### V4-1 — High-Frequency Observability Benchmark 🟡 READY FOR ACTIVATION
+### V4-1 — High-Frequency Observability Benchmark 🟢 ACTIVE PROSPECTIVE CAPTURE
 
 Implementation frozen before prospective activation:
 
@@ -163,6 +163,20 @@ All must pass:
 These thresholds are frozen before prospective results are available.
 
 No exit authority.
+
+#### Activation record
+
+- deployed commit: `fbdf4f74ebb76178802879bba3d9e95a0a7bfd10`;
+- prospective start boundary: `1791079128949`;
+- boundary frozen while entries were paused and open positions = **0**;
+- runtime enabled: `PP_V4_STAGE1_ENABLED=true`;
+- target cadence: **5s**;
+- Stage 12 fast guard remained **15s**;
+- audit endpoint validated **HTTP 200**;
+- V4 tables created successfully;
+- initial rows/positions/cycles: **0 / 0 / 0** (clean start);
+- entries resumed in **RUN** after validation;
+- live trading remained disarmed.
 
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
