@@ -511,7 +511,7 @@ Stage 11C V2 invariants:
 
 ## 17. Stage 12 — Position Lifecycle
 
-Current version: `stage12-v3-three-layer`.
+Current version: `stage12-v3.1-entry-boundary`.
 
 For already-open positions, entry validation and lifecycle management remain
 separate. Stage 12 V3 has three ordered deterministic layers:
@@ -542,6 +542,9 @@ Invariants:
   opposite side
 - a new opposite position still requires a new independent Stage 6 → 11C path
 - risk-reducing exits remain available in PAUSE_ENTRIES and EXIT_ONLY
+
+
+Stage12 v3.1 separates **market context** from **position-path excursion**. MFE/MAE and hard-stop excursion bounds only admit fully closed candles whose open timestamp is at or after the position entry timestamp, plus the current price. A candle that straddles entry is never allowed to contribute its full high/low to the position path. This prevents pre-entry price extrema from contaminating MFE/MAE while leaving market-context indicators unchanged.
 
 Deterministic actions remain:
 
