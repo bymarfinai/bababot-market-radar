@@ -195,3 +195,14 @@ This playbook is the authoritative methodology reference for winner anatomy, tem
 - Requiring 2 failed reclaim cycles reduced precision to 44.44% and median retention to 72.32%.
 - Persistent premature cases: AVAAI, STX, COMP, API3, FLOW; several had 4–11.5 noise-unit drawdowns and still later continued higher.
 - Decision: no Stage3D integration. Next research must be separately preregistered around path topology / market-state context. V4.2/runtime/shadow unchanged.
+
+
+## PP V4-3C4 Path Topology & Market-State Context — COMPLETE / NO PASS
+
+- 19 runner trades, DEV 12 / LATE 7.
+- Exact context join 19/19; older WD5H proxy join rejected.
+- Frozen 12-candidate continuation-veto family.
+- 0/12 passed all gates.
+- Best 60s / 3 votes / PATH_ONLY: precision 50%, median correct retention 83.31%; one premature V4.2 close was rescued (MANTRA).
+- Static entry context bonus worsened results; entry thesis is not a substitute for protection-time market state.
+- Decision: no Stage3D; next research should use contemporaneous protection-time context, richer topology, or more runner data. V4.2/runtime/shadow unchanged.

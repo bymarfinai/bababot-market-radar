@@ -766,6 +766,68 @@ No runtime change. No paper/prospective shadow. V4.2 remains baseline.
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE3C3_MULTICYCLE_VOLNORM.md`
 
+### V4-3C4 — Path Topology & Market-State Context ⚠️ NO PASS
+
+Population:
+- runner-capable historical trades: **19**
+- DEV 12 / LATE 7
+
+Context audit:
+- old WD5H feature cohort had **0 exact position_id matches** and was not proxy-joined
+- exact causal context recovered for **19/19** from trade_events signal_id + signals + positions.raw_json Stage11C families
+- strong entry context: **11/19**
+
+Frozen candidate family:
+- **12** candidates
+- topology lookback 30/60s
+- required continuation votes 2/3/4
+- PATH_ONLY vs CONTEXT_BONUS
+- fixed 10s veto grace, max 2 vetoes
+
+DEV:
+- eligible all-gate candidates: **0 / 12**
+- coverage: 12/12
+- precision >=65%: **0/12**
+- premature <=35%: **0/12**
+- median correct retention >=80%: 10/12
+- >=80 retention share >=50%: 10/12
+- premature count lower than V4.2: 4/12
+
+Best observed candidate:
+- **60s / 3 votes / PATH_ONLY**
+- correct **6**
+- premature **6**
+- precision **50%**
+- median correct retention **83.31%**
+- >=80 retention share **66.67%**
+- 2 vetoes: 1 successful new-high rescue, 1 grace-timeout false veto
+
+Versus V4.2 DEV:
+- correct 5 -> 6
+- premature 7 -> 6
+- precision 41.67% -> 50%
+- median retention 82.93% -> 83.31%
+
+Key cases:
+- MANTRA: topology veto rescued a V4.2 premature close and later produced a correct close.
+- AVAAI: topology correctly looked continuation-like, but no new high arrived inside 10s; grace timed out and the trade later resumed much higher.
+
+CONTEXT_BONUS worsened the result:
+- more vetoes, mostly grace timeouts
+- 60s/3/context precision only 45.45%
+- static entry thesis is not sufficient evidence of later runner continuation.
+
+Decision:
+- **Stage3C4 = NO PASS**
+- no Stage3D promotion
+- do not relax gates
+- next research should require contemporaneous protection-time market state, richer structural horizon, or more runner data rather than another scalar rule.
+
+No runtime change. No paper/prospective shadow. V4.2 remains baseline.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3C4_PATH_TOPOLOGY_CONTEXT.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
