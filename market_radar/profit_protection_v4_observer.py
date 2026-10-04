@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .binance import BinancePublicClient
+from .profit_protection_v4_stage2d_shadow import process_observation as process_stage2d_shadow_observation
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -588,8 +589,10 @@ def process_pp_v4_cycle(
             if inserted:
                 with _STATE_LOCK:
                     _STATE[pid] = state
+                row["stage2d_shadow"] = process_stage2d_shadow_observation(row)
                 observed += 1
             else:
+                row["stage2d_shadow"] = {"status": "SKIPPED_DUPLICATE_V4_OBSERVATION"}
                 duplicates += 1
             row["inserted"] = inserted
             rows.append(row)
