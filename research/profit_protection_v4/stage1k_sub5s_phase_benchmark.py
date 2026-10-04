@@ -46,8 +46,13 @@ def _cadence_summary(rows: list[dict[str, Any]], cadence: str) -> dict[str, Any]
         "expected_rescues_ge80": expected80,
         "expected_rescues_ge90": expected90,
         "expected_rescues_ge95": expected95,
+        "residual_rescue_rate_ge80_pct": (
+            100.0 * expected80 / len(rows) if rows else 0.0
+        ),
         "projected_overall_lt80_pct": (
             100.0 * (BASELINE_RESIDUAL_N - expected80) / CLEAN_ELIGIBLE_TOTAL
+            if len(rows) == BASELINE_RESIDUAL_N
+            else None
         ),
         "trade_phase_probability_ge80_median": statistics.median(p80),
         "trade_phase_probability_ge90_median": statistics.median(p90),
