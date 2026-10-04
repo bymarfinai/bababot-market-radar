@@ -1036,3 +1036,31 @@ Control endpoints:
 
 ~~~text
 GET  /control/state
+
+## Stage 3C.5 unified LONG full-universe result
+
+The current outcome-blind LONG architecture has now been tested against the full frozen **1,236 LONG** universe.
+
+Frozen target remains **245 trades = META_WIN AND historical MFE >= 1.00%**.
+
+Unified policy result:
+- selected **345 / 1,236 = 27.9%**
+- captured **114 / 245 strong WIN = 46.5% recall**
+- false positives **231**
+- precision **33.0%**
+- baseline target prevalence **19.8%**
+- precision enrichment **1.67x**
+
+Chronological sealed Reserve:
+- selected **61 / 248**
+- captured **16 / 38 = 42.1% recall**
+- false positives **45**
+- precision **26.2%**
+- split baseline target rate **15.3%**
+- enrichment **1.71x**
+
+Compared with the Stage 3B ~80%-validation-recall Reserve operating point, false positives fall from **137 to 45** and precision rises from **17.0% to 26.2%**, but captured strong WIN falls from **28 to 16**.
+
+Therefore Stage 3C.5 is **PARTIAL PASS**: selectivity improves materially, but target recall remains too low for a final LONG detector.
+
+Historical PnL on the selected rows is only an **original-entry reference**. It must not be treated as delayed-entry profitability for the Flow-Aligned T+3 lane; Stage 3C.4 already established that exact delayed-entry realized economics remain inconclusive without exact intraminute historical fills.
