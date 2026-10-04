@@ -1,0 +1,77 @@
+{
+  "stage": "LP-4",
+  "status": "FAIL_FOR_DEPLOYMENT",
+  "protector": "LP-2A_ONLY_FROZEN",
+  "thresholds": {
+    "t3_side_return_pct_max": 0.0,
+    "t3_running_mfe_pct_max": 0.3026839574976226,
+    "t3_selected_slope5_norm_max": -0.03607078039566704
+  },
+  "execution_contract": {
+    "decision_time": "temporal__t3_target_ms",
+    "market_source": "Binance USD-M daily aggTrades historical archive",
+    "fill_timing": "first aggregate trade strictly after decision and no later than historical close",
+    "overlay": "preserve historical executed actions through protector execution; close all remaining quantity with stored slippage and fees; ignore later historical actions after divergence",
+    "non_executable": "historical result unchanged"
+  },
+  "coverage": {
+    "fired_total": 254,
+    "decision_alive": 133,
+    "archive_symbol_days": 120,
+    "first_trade_found": 129,
+    "archive_errors": 0
+  },
+  "full_1236": {
+    "baseline_pnl": -1294.203091057294,
+    "protected_pnl": -1264.6812083288926,
+    "delta_pnl": 29.521882728401305,
+    "baseline_win_n": 304,
+    "protected_win_n": 290,
+    "baseline_wr": 0.2459546925566343,
+    "protected_wr": 0.23462783171521034,
+    "executed_n": 129,
+    "helped_n": 85,
+    "harmed_n": 39,
+    "wrong_direction_delta_pnl": 63.340688180699985,
+    "recovered_winner_delta_pnl": -65.6457007746699,
+    "historical_positive_to_nonpositive_n": 14
+  },
+  "reserve": {
+    "delta_pnl": 4.508137745266873,
+    "executed_n": 30,
+    "wrong_direction_delta_pnl": 16.091529623264243,
+    "recovered_winner_delta_pnl": -20.27336610214244,
+    "historical_positive_to_nonpositive_n": 4
+  },
+  "current_454": {
+    "baseline_pnl": 62.53208522105432,
+    "protected_pnl": 47.857424070577906,
+    "delta_pnl": -14.67466115047641,
+    "baseline_win_n": 176,
+    "protected_win_n": 172,
+    "baseline_wr": 0.3876651982378855,
+    "protected_wr": 0.3788546255506608,
+    "fired_n": 40,
+    "decision_alive_n": 14,
+    "executed_n": 13,
+    "helped_n": 8,
+    "harmed_n": 5,
+    "wrong_direction_fired_n": 20,
+    "wrong_direction_executed_n": 4,
+    "wrong_direction_delta_pnl": 4.20704946879701,
+    "recovered_winner_fired_n": 4,
+    "recovered_winner_executed_n": 4,
+    "recovered_winner_delta_pnl": -34.25724586774628,
+    "historical_positive_to_nonpositive_n": 4
+  },
+  "execution_latency_ms": {
+    "full_median": 2100,
+    "full_p90": 14239,
+    "current_454_median": 889,
+    "current_454_p90": 3142
+  },
+  "decision": {
+    "deploy": false,
+    "reason": "The exact operational 454 replay is negative. Wrong-direction savings are outweighed by recovered-winner harm, and many discovery fires are already closed before T+3."
+  }
+}
