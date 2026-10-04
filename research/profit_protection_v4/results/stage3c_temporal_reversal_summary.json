@@ -1,0 +1,196 @@
+{
+  "baseline_name": "Profit Protector V4.2 - Hybrid Protection",
+  "candidate_n": 144,
+  "decision": {
+    "if_no_pass": "Do not relax gates post hoc. Expand causal feature design in a new preregistered stage.",
+    "paper_or_shadow": false,
+    "proceed_to_stage3d_with_temporal_detector": false,
+    "runtime_change_authority": "NONE"
+  },
+  "dev_n": 12,
+  "eligible_n": 0,
+  "gate_pass_candidate_counts": {
+    "coverage": 144,
+    "precision": 2,
+    "premature": 2,
+    "retention": 74
+  },
+  "gate_pass_count_distribution": {
+    "0": 0,
+    "1": 68,
+    "2": 74,
+    "3": 2,
+    "4": 0
+  },
+  "late_n": 7,
+  "naive_floor_baselines": {
+    "80": {
+      "dev": {
+        "correct_final_reversal_n": 6,
+        "correct_retention_ge75_share": 0.5,
+        "correct_retention_ge80_share": 0.0,
+        "median_correct_retention": 0.7361312932599431,
+        "n": 12,
+        "precision": 0.5,
+        "premature_false_reversal_n": 6,
+        "premature_share": 0.5,
+        "signal_coverage": 1.0,
+        "signals_n": 12
+      },
+      "late": {
+        "correct_final_reversal_n": 5,
+        "correct_retention_ge75_share": 0.8,
+        "correct_retention_ge80_share": 0.0,
+        "median_correct_retention": 0.7887939341617823,
+        "n": 7,
+        "precision": 0.7142857142857143,
+        "premature_false_reversal_n": 2,
+        "premature_share": 0.2857142857142857,
+        "signal_coverage": 1.0,
+        "signals_n": 7
+      }
+    },
+    "85": {
+      "dev": {
+        "correct_final_reversal_n": 5,
+        "correct_retention_ge75_share": 0.6,
+        "correct_retention_ge80_share": 0.4,
+        "median_correct_retention": 0.7844070222944679,
+        "n": 12,
+        "precision": 0.4166666666666667,
+        "premature_false_reversal_n": 7,
+        "premature_share": 0.5833333333333334,
+        "signal_coverage": 1.0,
+        "signals_n": 12
+      },
+      "late": {
+        "correct_final_reversal_n": 5,
+        "correct_retention_ge75_share": 0.8,
+        "correct_retention_ge80_share": 0.2,
+        "median_correct_retention": 0.7887939341617823,
+        "n": 7,
+        "precision": 0.7142857142857143,
+        "premature_false_reversal_n": 2,
+        "premature_share": 0.2857142857142857,
+        "signal_coverage": 1.0,
+        "signals_n": 7
+      }
+    },
+    "90": {
+      "dev": {
+        "correct_final_reversal_n": 3,
+        "correct_retention_ge75_share": 0.6666666666666666,
+        "correct_retention_ge80_share": 0.3333333333333333,
+        "median_correct_retention": 0.7844070222944679,
+        "n": 12,
+        "precision": 0.25,
+        "premature_false_reversal_n": 9,
+        "premature_share": 0.75,
+        "signal_coverage": 1.0,
+        "signals_n": 12
+      },
+      "late": {
+        "correct_final_reversal_n": 5,
+        "correct_retention_ge75_share": 1.0,
+        "correct_retention_ge80_share": 1.0,
+        "median_correct_retention": 0.888044871615452,
+        "n": 7,
+        "precision": 0.7142857142857143,
+        "premature_false_reversal_n": 2,
+        "premature_share": 0.2857142857142857,
+        "signal_coverage": 1.0,
+        "signals_n": 7
+      }
+    }
+  },
+  "near_miss_top10": [
+    {
+      "correct_final_reversal_n": 6,
+      "correct_retention_ge75_share": 0.16666666666666666,
+      "correct_retention_ge80_share": 0.0,
+      "eligible": false,
+      "floor": 0.8,
+      "gate_coverage": true,
+      "gate_pass_count": 3,
+      "gate_precision": true,
+      "gate_premature": true,
+      "gate_retention": false,
+      "median_correct_retention": 0.6297960230518473,
+      "min_age_seconds": 60,
+      "min_velocity_pp_per_sec": 0.03,
+      "n": 12,
+      "precision": 0.6,
+      "premature_false_reversal_n": 4,
+      "premature_share": 0.4,
+      "reclaim_wait_seconds": 5,
+      "signal_coverage": 0.8333333333333334,
+      "signals_n": 10
+    },
+    {
+      "correct_final_reversal_n": 6,
+      "correct_retention_ge75_share": 0.16666666666666666,
+      "correct_retention_ge80_share": 0.0,
+      "eligible": false,
+      "floor": 0.8,
+      "gate_coverage": true,
+      "gate_pass_count": 3,
+      "gate_precision": true,
+      "gate_premature": true,
+      "gate_retention": false,
+      "median_correct_retention": 0.5413945997912496,
+      "min_age_seconds": 60,
+      "min_velocity_pp_per_sec": 0.03,
+      "n": 12,
+      "precision": 0.6,
+      "premature_false_reversal_n": 4,
+      "premature_share": 0.4,
+      "reclaim_wait_seconds": 10,
+      "signal_coverage": 0.8333333333333334,
+      "signals_n": 10
+    }
+  ],
+  "runner_capable_trade_n": 19,
+  "selected_dev_candidate": null,
+  "selected_late_details": [],
+  "selected_late_metrics": null,
+  "stage": "PP-V4-3C",
+  "status": "NO_PASS",
+  "v42": {
+    "all": {
+      "correct_final_reversal_n": 10,
+      "correct_retention_ge75_share": 0.9,
+      "correct_retention_ge80_share": 0.8,
+      "median_correct_retention": 0.8560405546088647,
+      "n": 19,
+      "precision": 0.5263157894736842,
+      "premature_false_reversal_n": 9,
+      "premature_share": 0.47368421052631576,
+      "signal_coverage": 1.0,
+      "signals_n": 19
+    },
+    "dev": {
+      "correct_final_reversal_n": 5,
+      "correct_retention_ge75_share": 0.8,
+      "correct_retention_ge80_share": 0.6,
+      "median_correct_retention": 0.8292539250253966,
+      "n": 12,
+      "precision": 0.4166666666666667,
+      "premature_false_reversal_n": 7,
+      "premature_share": 0.5833333333333334,
+      "signal_coverage": 1.0,
+      "signals_n": 12
+    },
+    "late": {
+      "correct_final_reversal_n": 5,
+      "correct_retention_ge75_share": 1.0,
+      "correct_retention_ge80_share": 1.0,
+      "median_correct_retention": 0.8801894314008143,
+      "n": 7,
+      "precision": 0.7142857142857143,
+      "premature_false_reversal_n": 2,
+      "premature_share": 0.2857142857142857,
+      "signal_coverage": 1.0,
+      "signals_n": 7
+    }
+  }
+}
