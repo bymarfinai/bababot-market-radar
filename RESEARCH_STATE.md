@@ -165,3 +165,13 @@ For the complete standalone Track A methodology and the replication protocol fro
 - `research/PROFIT_DISCOVERY_PLAYBOOK_LONG_TO_SHORT.md`
 
 This playbook is the authoritative methodology reference for winner anatomy, temporal confirmation, missed-winner recovery, full-universe replay, incremental efficiency, MFE spillover, and SHORT replication. Do not copy LONG thresholds mechanically into SHORT.
+
+## PP V4-3B Giveback Window Anatomy — COMPLETE
+
+- Baseline: Profit Protector V4.2 — Hybrid Protection.
+- 62 triggered trades, 1,751 giveback events.
+- 80% running-peak crossing recovered to a later new high in 79.19% of events; fixed 80% trailing is rejected.
+- Recovery at 80% is regime-dependent: <1% peak 86.07%, 1–1.5% 62.50%, 1.5–3% 34.78%, >=3% 42.86%.
+- Of 9 Stage3A RUNNER_TRIGGER_DELAY cases, 7 were temporally premature exits before a later higher peak; 2 were true post-final-peak delayed exits.
+- At 80% crossing, final reversals were older and faster: median age 24.95s vs 10.13s transient; median downward velocity 0.0366 vs 0.0154 pp/s.
+- Next: PP V4-3C Temporal Reversal Detector. Historical research only; no runtime authority.
