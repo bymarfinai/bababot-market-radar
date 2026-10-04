@@ -347,6 +347,53 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage1k_sub5s_phase_benchmark.json`
 
+### V4-2A — Observable Peak → Realized Leakage Anatomy ✅ COMPLETE
+
+Frozen Stage1J clean cohort: **99 trades**.
+
+Stage2A reconstructs an executable-net observable peak benchmark from archived ~5s observations while preserving any REDUCE that occurred before the eventual observed peak. The benchmark includes recorded paper entry fee, exit fee, and adverse slippage.
+
+Core result:
+- mean remaining positive observability gap: **0.138 pp**;
+- mean observable-net-peak → realized leakage: **0.717 pp**;
+- leakage is about **5.21x larger** than the remaining observability gap on the mean comparison;
+- no-prior-REDUCE robustness subset (N=74): **4.98x**.
+
+Protectable observable net peak >= +0.50%, N=42:
+- median observable net peak: **+0.940%**;
+- median actual realized: **+0.378%**;
+- median retention: **29.29%**;
+- **41 / 42** retained <80%;
+- **35 / 42** retained <50%;
+- **10 / 42** ended <=0% realized.
+
+Runner >= +1.00%, N=20:
+- median retention: **36.37%**;
+- >=80% retention: **1 / 20**.
+
+Runner >= +2.00%, N=9:
+- median retention: **37.17%**;
+- >=80% retention: **0 / 9**.
+
+Giveback timing after the observed 5s peak:
+- below 90% of peak: median **9.995s**;
+- below 80%: median **15.032s**;
+- below 70%: median **25.027s**;
+- below 50%: median **74.984s**;
+- actual peak-to-close median: **234.5s**.
+
+Decision:
+- the dominant current bottleneck is **realized profit retention**, not the residual observability gap;
+- proceed to **V4-2B — Optimal Protection Frontier**;
+- Stage2A selects **no** protection threshold;
+- no runtime/trading authority is granted.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE2A_OBSERVABLE_REALIZED_LEAKAGE.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage2a_observable_realized_leakage.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.

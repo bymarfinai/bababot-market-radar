@@ -1,0 +1,5651 @@
+[
+  {
+    "actual_realized_net_pct": 0.5165990446994263,
+    "clean_mfe_pct": 1.5217614348766366,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791037726737,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.174,
+    "last_5s_pnl_pct": 0.6778477227167068,
+    "net_leakage_pp": 0.4142355134177925,
+    "net_retention_ratio": 0.5549848146424013,
+    "observable_gross_peak_pct": 1.5055323250274033,
+    "observable_net_peak_pct": 0.9308345581172188,
+    "observable_net_peak_usdt": 4.654172790586094,
+    "observable_peak_at_ms": 1791035079475,
+    "observable_peak_market_price": 6.069,
+    "opened_at_ms": 1791030387672,
+    "peak_age_seconds": 4691.803,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 2647.262,
+    "position_id": "PAPER:PROMUSDT:1791030299999:SHORT",
+    "positive_observability_gap_pp": 0.016229109849233314,
+    "quantity_closed_before_peak": 40.572774623073244,
+    "raw_gross_peak_to_realized_leakage_pp": 0.988933280327977,
+    "realized_pnl_usdt": 2.5829952234971314,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 40.572774623073244,
+    "side": "SHORT",
+    "symbol": "PROMUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791037609529,
+        "pnl_pct": 0.7265350522643987,
+        "seconds_from_peak": 2530.054,
+        "seconds_to_close": 117.208
+      },
+      "r70": {
+        "at_ms": 1791035214466,
+        "pnl_pct": 0.9699717000028252,
+        "seconds_from_peak": 134.991,
+        "seconds_to_close": 2512.271
+      },
+      "r80": {
+        "at_ms": 1791035164471,
+        "pnl_pct": 1.1809501280428125,
+        "seconds_from_peak": 84.996,
+        "seconds_to_close": 2562.266
+      },
+      "r90": {
+        "at_ms": 1791035164471,
+        "pnl_pct": 1.1809501280428125,
+        "seconds_from_peak": 84.996,
+        "seconds_to_close": 2562.266
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.6078740761893715,
+    "clean_mfe_pct": 1.2444482300637545,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032772715,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.322,
+    "last_5s_pnl_pct": 0.5847340226564857,
+    "net_leakage_pp": 0.30265630764481677,
+    "net_retention_ratio": 0.6676043841938043,
+    "observable_gross_peak_pct": 1.189472046113138,
+    "observable_net_peak_pct": 0.9105303838341883,
+    "observable_net_peak_usdt": 4.552651919170941,
+    "observable_peak_at_ms": 1791032444402,
+    "observable_peak_market_price": 0.005392,
+    "opened_at_ms": 1791030387836,
+    "peak_age_seconds": 2056.566,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 328.313,
+    "position_id": "PAPER:TUSDT:1791030299999:SHORT",
+    "positive_observability_gap_pp": 0.05497618395061643,
+    "quantity_closed_before_peak": 45813.48662550392,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5815979699237666,
+    "realized_pnl_usdt": 3.0393703809468575,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 45813.48662550392,
+    "side": "SHORT",
+    "symbol": "TUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791032609396,
+        "pnl_pct": 0.5847340226564857,
+        "seconds_from_peak": 164.994,
+        "seconds_to_close": 163.319
+      },
+      "r70": {
+        "at_ms": 1791032589391,
+        "pnl_pct": 0.822964153109107,
+        "seconds_from_peak": 144.989,
+        "seconds_to_close": 183.324
+      },
+      "r80": {
+        "at_ms": 1791032534398,
+        "pnl_pct": 0.9512419156605167,
+        "seconds_from_peak": 89.996,
+        "seconds_to_close": 238.317
+      },
+      "r90": {
+        "at_ms": 1791032484385,
+        "pnl_pct": 1.0611942835617283,
+        "seconds_from_peak": 39.983,
+        "seconds_to_close": 288.33
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.06712206161306541,
+    "clean_mfe_pct": 0.5325927063865858,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031245168,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.813,
+    "last_5s_pnl_pct": 0.10279526746356238,
+    "net_leakage_pp": 0.12291594598846443,
+    "net_retention_ratio": -1.2030361815543584,
+    "observable_gross_peak_pct": 0.2255945357272804,
+    "observable_net_peak_pct": 0.05579388437539902,
+    "observable_net_peak_usdt": 0.2789694218769951,
+    "observable_peak_at_ms": 1791030559267,
+    "observable_peak_market_price": 0.01625,
+    "opened_at_ms": 1791030388004,
+    "peak_age_seconds": 171.263,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 685.901,
+    "position_id": "PAPER:C98USDT:1791030299999:SHORT",
+    "positive_observability_gap_pp": 0.30699817065930546,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.29271659734034583,
+    "realized_pnl_usdt": -0.33561030806532705,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 30699.817065930067,
+    "side": "SHORT",
+    "symbol": "C98USDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791030674394,
+        "pnl_pct": -0.02000400080015563,
+        "seconds_from_peak": 115.127,
+        "seconds_to_close": 570.774
+      },
+      "r50": {
+        "at_ms": 1791030564285,
+        "pnl_pct": 0.10279526746356238,
+        "seconds_from_peak": 5.018,
+        "seconds_to_close": 680.883
+      },
+      "r70": {
+        "at_ms": 1791030564285,
+        "pnl_pct": 0.10279526746356238,
+        "seconds_from_peak": 5.018,
+        "seconds_to_close": 680.883
+      },
+      "r80": {
+        "at_ms": 1791030564285,
+        "pnl_pct": 0.10279526746356238,
+        "seconds_from_peak": 5.018,
+        "seconds_to_close": 680.883
+      },
+      "r90": {
+        "at_ms": 1791030564285,
+        "pnl_pct": 0.10279526746356238,
+        "seconds_from_peak": 5.018,
+        "seconds_to_close": 680.883
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.8588563594082889,
+    "clean_mfe_pct": 0.3865045416249213,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033362713,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.29,
+    "last_5s_pnl_pct": -1.0242914585551266,
+    "net_leakage_pp": 1.0176749781106635,
+    "net_retention_ratio": -5.407781319504996,
+    "observable_gross_peak_pct": 0.3291162297532013,
+    "observable_net_peak_pct": 0.15881861870237474,
+    "observable_net_peak_usdt": 0.7940930935118737,
+    "observable_peak_at_ms": 1791030844281,
+    "observable_peak_market_price": 2.0979,
+    "opened_at_ms": 1791030388167,
+    "peak_age_seconds": 456.114,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 2518.432,
+    "position_id": "PAPER:RAYSOLUSDT:1791030299999:LONG",
+    "positive_observability_gap_pp": 0.05738831187172,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.18797258916149,
+    "realized_pnl_usdt": -4.294281797041444,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 239.11796613221125,
+    "side": "LONG",
+    "symbol": "RAYSOLUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791030954294,
+        "pnl_pct": -0.034343078767762325,
+        "seconds_from_peak": 110.013,
+        "seconds_to_close": 2408.419
+      },
+      "r50": {
+        "at_ms": 1791030864286,
+        "pnl_pct": 0.12347477887948433,
+        "seconds_from_peak": 20.005,
+        "seconds_to_close": 2498.427
+      },
+      "r70": {
+        "at_ms": 1791030864286,
+        "pnl_pct": 0.12347477887948433,
+        "seconds_from_peak": 20.005,
+        "seconds_to_close": 2498.427
+      },
+      "r80": {
+        "at_ms": 1791030864286,
+        "pnl_pct": 0.12347477887948433,
+        "seconds_from_peak": 20.005,
+        "seconds_to_close": 2498.427
+      },
+      "r90": {
+        "at_ms": 1791030854332,
+        "pnl_pct": 0.29563971449468873,
+        "seconds_from_peak": 10.051,
+        "seconds_to_close": 2508.381
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.015011717378428857,
+    "clean_mfe_pct": 0.6357215499043936,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032551044,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.65,
+    "last_5s_pnl_pct": 0.15485614605439402,
+    "net_leakage_pp": 0.21878286277884787,
+    "net_retention_ratio": -0.07366949500593026,
+    "observable_gross_peak_pct": 0.6357215499043889,
+    "observable_net_peak_pct": 0.20377114540041902,
+    "observable_net_peak_usdt": 1.018855727002095,
+    "observable_peak_at_ms": 1791031169349,
+    "observable_peak_market_price": 0.02273,
+    "opened_at_ms": 1791030388748,
+    "peak_age_seconds": 780.601,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1381.695,
+    "position_id": "PAPER:CHRUSDT:1791030299999:SHORT",
+    "positive_observability_gap_pp": 4.6629367034256575e-15,
+    "quantity_closed_before_peak": 10928.759178409107,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6507332672828178,
+    "realized_pnl_usdt": -0.07505858689214429,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 10928.759178409107,
+    "side": "SHORT",
+    "symbol": "CHRUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791031179321,
+        "pnl_pct": 0.2860012561953007,
+        "seconds_from_peak": 9.972,
+        "seconds_to_close": 1371.723
+      },
+      "r70": {
+        "at_ms": 1791031174322,
+        "pnl_pct": 0.3734313296225755,
+        "seconds_from_peak": 4.973,
+        "seconds_to_close": 1376.722
+      },
+      "r80": {
+        "at_ms": 1791031174322,
+        "pnl_pct": 0.3734313296225755,
+        "seconds_from_peak": 4.973,
+        "seconds_to_close": 1376.722
+      },
+      "r90": {
+        "at_ms": 1791031174322,
+        "pnl_pct": 0.3734313296225755,
+        "seconds_from_peak": 4.973,
+        "seconds_to_close": 1376.722
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.13808956529785044,
+    "clean_mfe_pct": 0.4782276505114329,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031907261,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.872,
+    "last_5s_pnl_pct": 0.1460732163037104,
+    "net_leakage_pp": 0.3844184730470242,
+    "net_retention_ratio": -0.5605901741685193,
+    "observable_gross_peak_pct": 0.4159486940974788,
+    "observable_net_peak_pct": 0.24632890774917376,
+    "observable_net_peak_usdt": 1.2316445387458688,
+    "observable_peak_at_ms": 1791030749434,
+    "observable_peak_market_price": 0.4797,
+    "opened_at_ms": 1791030431096,
+    "peak_age_seconds": 318.338,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 1157.827,
+    "position_id": "PAPER:MASKUSDT:1791030299999:SHORT",
+    "positive_observability_gap_pp": 0.06227895641395409,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5540382593953292,
+    "realized_pnl_usdt": -0.6904478264892522,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1037.98260689913,
+    "side": "SHORT",
+    "symbol": "MASKUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791030909394,
+        "pnl_pct": -0.02000400080015563,
+        "seconds_from_peak": 159.96,
+        "seconds_to_close": 997.867
+      },
+      "r50": {
+        "at_ms": 1791030804364,
+        "pnl_pct": 0.12531356416571882,
+        "seconds_from_peak": 54.93,
+        "seconds_to_close": 1102.897
+      },
+      "r70": {
+        "at_ms": 1791030769520,
+        "pnl_pct": 0.2291118248556323,
+        "seconds_from_peak": 20.086,
+        "seconds_to_close": 1137.741
+      },
+      "r80": {
+        "at_ms": 1791030769520,
+        "pnl_pct": 0.2291118248556323,
+        "seconds_from_peak": 20.086,
+        "seconds_to_close": 1137.741
+      },
+      "r90": {
+        "at_ms": 1791030764431,
+        "pnl_pct": 0.3329100855455458,
+        "seconds_from_peak": 14.997,
+        "seconds_to_close": 1142.83
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.6165990861691453,
+    "clean_mfe_pct": 0.3946344312621141,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035444366,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.881,
+    "last_5s_pnl_pct": -0.342500559070813,
+    "net_leakage_pp": 0.3343316561746299,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.325528025918409,
+    "observable_net_peak_pct": -0.2822674299945154,
+    "observable_net_peak_usdt": -1.411337149972577,
+    "observable_peak_at_ms": 1791033759420,
+    "observable_peak_market_price": 0.4327,
+    "opened_at_ms": 1791030654313,
+    "peak_age_seconds": 3105.107,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1684.946,
+    "position_id": "PAPER:SPXUSDT:1791030599999:SHORT",
+    "positive_observability_gap_pp": 0.0691064053437051,
+    "quantity_closed_before_peak": 575.8867111976057,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9421271120875543,
+    "realized_pnl_usdt": -3.082995430845726,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 575.8867111976057,
+    "side": "SHORT",
+    "symbol": "SPXUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791034429432,
+        "pnl_pct": -0.0430394692480629,
+        "seconds_from_peak": 670.012,
+        "seconds_to_close": 1014.934
+      },
+      "r50": {
+        "at_ms": 1791034059436,
+        "pnl_pct": 0.14124427833517306,
+        "seconds_from_peak": 300.016,
+        "seconds_to_close": 1384.93
+      },
+      "r70": {
+        "at_ms": 1791033839431,
+        "pnl_pct": 0.21035068367888377,
+        "seconds_from_peak": 80.011,
+        "seconds_to_close": 1604.935
+      },
+      "r80": {
+        "at_ms": 1791033774430,
+        "pnl_pct": 0.23338615212679104,
+        "seconds_from_peak": 15.01,
+        "seconds_to_close": 1669.936
+      },
+      "r90": {
+        "at_ms": 1791033774430,
+        "pnl_pct": 0.23338615212679104,
+        "seconds_from_peak": 15.01,
+        "seconds_to_close": 1669.936
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.06528087120574387,
+    "clean_mfe_pct": 0.9302810657140913,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034909494,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.01,
+    "last_5s_pnl_pct": 0.2100650153032957,
+    "net_leakage_pp": 0.35043767679429005,
+    "net_retention_ratio": 0.1570314134882876,
+    "observable_gross_peak_pct": 0.9302810657140892,
+    "observable_net_peak_pct": 0.41571854800003394,
+    "observable_net_peak_usdt": 2.0785927400001696,
+    "observable_peak_at_ms": 1791033779432,
+    "observable_peak_market_price": 0.0009904,
+    "opened_at_ms": 1791030656329,
+    "peak_age_seconds": 3123.103,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1130.062,
+    "position_id": "PAPER:BOMEUSDT:1791030599999:SHORT",
+    "positive_observability_gap_pp": 2.1094237467877974e-15,
+    "quantity_closed_before_peak": 250075.01750375077,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8650001945083453,
+    "realized_pnl_usdt": 0.3264043560287193,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 250075.01750375077,
+    "side": "SHORT",
+    "symbol": "BOMEUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791034514449,
+        "pnl_pct": 0.4501370321069009,
+        "seconds_from_peak": 735.017,
+        "seconds_to_close": 395.045
+      },
+      "r70": {
+        "at_ms": 1791034149430,
+        "pnl_pct": 0.6501970461098794,
+        "seconds_from_peak": 369.998,
+        "seconds_to_close": 760.064
+      },
+      "r80": {
+        "at_ms": 1791033929442,
+        "pnl_pct": 0.7402240524112425,
+        "seconds_from_peak": 150.01,
+        "seconds_to_close": 980.052
+      },
+      "r90": {
+        "at_ms": 1791033829429,
+        "pnl_pct": 0.780236055211847,
+        "seconds_from_peak": 49.997,
+        "seconds_to_close": 1080.065
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.0041715714626972215,
+    "clean_mfe_pct": 0.562071677187042,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791030681878,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.386,
+    "last_5s_pnl_pct": 0.04467107453175467,
+    "net_leakage_pp": -0.1294730527094785,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.04467107453175467,
+    "observable_net_peak_pct": -0.12530148124678128,
+    "observable_net_peak_usdt": -0.6265074062339064,
+    "observable_peak_at_ms": 1791030679492,
+    "observable_peak_market_price": 0.06182,
+    "opened_at_ms": 1791030661032,
+    "peak_age_seconds": 18.46,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 2.386,
+    "position_id": "PAPER:CLOUSDT:1791030599999:SHORT",
+    "positive_observability_gap_pp": 0.5174006026552873,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.04049950306905745,
+    "realized_pnl_usdt": 0.020857857313486106,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 8084.384416488859,
+    "side": "SHORT",
+    "symbol": "CLOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": null,
+      "r90": null
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.19763398924094466,
+    "clean_mfe_pct": 0.4201447269727042,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032815608,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.111,
+    "last_5s_pnl_pct": -0.18695696650710136,
+    "net_leakage_pp": 0.30383926557693713,
+    "net_retention_ratio": -1.8608678971438954,
+    "observable_gross_peak_pct": 0.42014472697270433,
+    "observable_net_peak_pct": 0.10620527633599249,
+    "observable_net_peak_usdt": 0.5310263816799624,
+    "observable_peak_at_ms": 1791031384509,
+    "observable_peak_market_price": 0.06561,
+    "opened_at_ms": 1791030666899,
+    "peak_age_seconds": 717.61,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1431.099,
+    "position_id": "PAPER:RONINUSDT:1791030599999:SHORT",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 3794.385584248868,
+    "raw_gross_peak_to_realized_leakage_pp": 0.617778716213649,
+    "realized_pnl_usdt": -0.9881699462047233,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 3794.385584248868,
+    "side": "SHORT",
+    "symbol": "RONINUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791032209497,
+        "pnl_pct": -0.0048264584631807494,
+        "seconds_from_peak": 824.988,
+        "seconds_to_close": 606.111
+      },
+      "r50": {
+        "at_ms": 1791031519552,
+        "pnl_pct": 0.10141633789579885,
+        "seconds_from_peak": 135.043,
+        "seconds_to_close": 1296.056
+      },
+      "r70": {
+        "at_ms": 1791031519552,
+        "pnl_pct": 0.10141633789579885,
+        "seconds_from_peak": 135.043,
+        "seconds_to_close": 1296.056
+      },
+      "r80": {
+        "at_ms": 1791031399547,
+        "pnl_pct": 0.3290794729507218,
+        "seconds_from_peak": 15.038,
+        "seconds_to_close": 1416.061
+      },
+      "r90": {
+        "at_ms": 1791031399547,
+        "pnl_pct": 0.3290794729507218,
+        "seconds_from_peak": 15.038,
+        "seconds_to_close": 1416.061
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.02583067507481342,
+    "clean_mfe_pct": 0.8979948541752547,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031088788,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.192,
+    "last_5s_pnl_pct": 0.08800292331487825,
+    "net_leakage_pp": 0.5934298773515665,
+    "net_retention_ratio": 0.04171212742940585,
+    "observable_gross_peak_pct": 0.7899959300605497,
+    "observable_net_peak_pct": 0.6192605524263799,
+    "observable_net_peak_usdt": 3.0963027621319,
+    "observable_peak_at_ms": 1791030844565,
+    "observable_peak_market_price": 0.3733,
+    "opened_at_ms": 1791030690888,
+    "peak_age_seconds": 153.677,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 244.223,
+    "position_id": "PAPER:STXUSDT:1791030599999:LONG",
+    "positive_observability_gap_pp": 0.10799892411470502,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7641652549857363,
+    "realized_pnl_usdt": 0.1291533753740671,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1349.9865514339747,
+    "side": "LONG",
+    "symbol": "STXUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791030944691,
+        "pnl_pct": 0.358000233601663,
+        "seconds_from_peak": 100.126,
+        "seconds_to_close": 144.097
+      },
+      "r70": {
+        "at_ms": 1791030944691,
+        "pnl_pct": 0.358000233601663,
+        "seconds_from_peak": 100.126,
+        "seconds_to_close": 144.097
+      },
+      "r80": {
+        "at_ms": 1791030919578,
+        "pnl_pct": 0.62799754388847,
+        "seconds_from_peak": 75.013,
+        "seconds_to_close": 169.21
+      },
+      "r90": {
+        "at_ms": 1791030864532,
+        "pnl_pct": 0.7089967369745098,
+        "seconds_from_peak": 19.967,
+        "seconds_to_close": 224.256
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.033771038807147796,
+    "clean_mfe_pct": 0.5193149120789976,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032603793,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.218,
+    "last_5s_pnl_pct": 0.03676641108184553,
+    "net_leakage_pp": 0.24623885991843214,
+    "net_retention_ratio": -0.15894660485768114,
+    "observable_gross_peak_pct": 0.5193149120789942,
+    "observable_net_peak_pct": 0.21246782111128434,
+    "observable_net_peak_usdt": 1.0623391055564217,
+    "observable_peak_at_ms": 1791032449568,
+    "observable_peak_market_price": 1.0514,
+    "opened_at_ms": 1791030691365,
+    "peak_age_seconds": 1758.203,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 154.225,
+    "position_id": "PAPER:FILUSDT:1791030599999:SHORT",
+    "positive_observability_gap_pp": 3.4416913763379853e-15,
+    "quantity_closed_before_peak": 236.54338284173724,
+    "raw_gross_peak_to_realized_leakage_pp": 0.553085950886142,
+    "realized_pnl_usdt": -0.16885519403573898,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 236.54338284173724,
+    "side": "SHORT",
+    "symbol": "FILUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791032519675,
+        "pnl_pct": 0.25438632329624067,
+        "seconds_from_peak": 70.107,
+        "seconds_to_close": 84.118
+      },
+      "r70": {
+        "at_ms": 1791032484598,
+        "pnl_pct": 0.3584654117466113,
+        "seconds_from_peak": 35.03,
+        "seconds_to_close": 119.195
+      },
+      "r80": {
+        "at_ms": 1791032479583,
+        "pnl_pct": 0.3963123530012824,
+        "seconds_from_peak": 30.015,
+        "seconds_to_close": 124.21
+      },
+      "r90": {
+        "at_ms": 1791032474669,
+        "pnl_pct": 0.4530827648832947,
+        "seconds_from_peak": 25.101,
+        "seconds_to_close": 129.124
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.04388466744442414,
+    "clean_mfe_pct": 0.4910471145324048,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791030952628,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.028,
+    "last_5s_pnl_pct": 0.12601060358058414,
+    "net_leakage_pp": 0.0,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.12601060358058414,
+    "observable_net_peak_pct": -0.04388466744442414,
+    "observable_net_peak_usdt": -0.2194233372221207,
+    "observable_peak_at_ms": 1791030949600,
+    "observable_peak_market_price": 0.02736,
+    "opened_at_ms": 1791030933629,
+    "peak_age_seconds": 15.971,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 3.028,
+    "position_id": "PAPER:LYNUSDT:1791030899999:SHORT",
+    "positive_observability_gap_pp": 0.36503651095182066,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.1698952710250083,
+    "realized_pnl_usdt": -0.2194233372221207,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 18251.82554759127,
+    "side": "SHORT",
+    "symbol": "LYNUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": null,
+      "r90": null
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.9468197414265391,
+    "clean_mfe_pct": 0.5052576067934522,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031088630,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.008,
+    "last_5s_pnl_pct": -0.737169195782994,
+    "net_leakage_pp": 0.8880464076915888,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.11131740109848742,
+    "observable_net_peak_pct": -0.05877333373495036,
+    "observable_net_peak_usdt": -0.2938666686747518,
+    "observable_peak_at_ms": 1791030949651,
+    "observable_peak_market_price": 0.09911,
+    "opened_at_ms": 1791030948559,
+    "peak_age_seconds": 1.092,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 138.979,
+    "position_id": "PAPER:CUSDT:1791030899999:LONG",
+    "positive_observability_gap_pp": 0.3939402056949648,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0581371425250266,
+    "realized_pnl_usdt": -4.734098707132696,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 5050.515457627812,
+    "side": "LONG",
+    "symbol": "CUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791030969597,
+        "pnl_pct": -0.030097031715092815,
+        "seconds_from_peak": 19.946,
+        "seconds_to_close": 119.033
+      },
+      "r50": {
+        "at_ms": 1791030964608,
+        "pnl_pct": 0.050711215606957794,
+        "seconds_from_peak": 14.957,
+        "seconds_to_close": 124.022
+      },
+      "r70": {
+        "at_ms": 1791030964608,
+        "pnl_pct": 0.050711215606957794,
+        "seconds_from_peak": 14.957,
+        "seconds_to_close": 124.022
+      },
+      "r80": {
+        "at_ms": 1791030959760,
+        "pnl_pct": 0.08101430835272261,
+        "seconds_from_peak": 10.109,
+        "seconds_to_close": 128.87
+      },
+      "r90": {
+        "at_ms": 1791030959760,
+        "pnl_pct": 0.08101430835272261,
+        "seconds_from_peak": 10.109,
+        "seconds_to_close": 128.87
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5806884919147305,
+    "clean_mfe_pct": 0.7605553193881889,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031687637,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.002,
+    "last_5s_pnl_pct": -0.4319658642328861,
+    "net_leakage_pp": 0.9115177967308241,
+    "net_retention_ratio": -1.7552510719615126,
+    "observable_gross_peak_pct": 0.5003688793253969,
+    "observable_net_peak_pct": 0.3308293048160937,
+    "observable_net_peak_usdt": 1.6541465240804683,
+    "observable_peak_at_ms": 1791031629638,
+    "observable_peak_market_price": 4.589,
+    "opened_at_ms": 1791030957511,
+    "peak_age_seconds": 672.127,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 57.999,
+    "position_id": "PAPER:ARUSDT:1791030899999:SHORT",
+    "positive_observability_gap_pp": 0.260186440062792,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0810573712401275,
+    "realized_pnl_usdt": -2.903442459573652,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 108.41101669282479,
+    "side": "SHORT",
+    "symbol": "ARUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791031649786,
+        "pnl_pct": -0.2585082375243575,
+        "seconds_from_peak": 20.148,
+        "seconds_to_close": 37.851
+      },
+      "r50": {
+        "at_ms": 1791031644646,
+        "pnl_pct": 0.0016782025384132204,
+        "seconds_from_peak": 15.008,
+        "seconds_to_close": 42.991
+      },
+      "r70": {
+        "at_ms": 1791031644646,
+        "pnl_pct": 0.0016782025384132204,
+        "seconds_from_peak": 15.008,
+        "seconds_to_close": 42.991
+      },
+      "r80": {
+        "at_ms": 1791031644646,
+        "pnl_pct": 0.0016782025384132204,
+        "seconds_from_peak": 15.008,
+        "seconds_to_close": 42.991
+      },
+      "r90": {
+        "at_ms": 1791031639642,
+        "pnl_pct": 0.4353222693097236,
+        "seconds_from_peak": 10.004,
+        "seconds_to_close": 47.995
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.16341096081684725,
+    "clean_mfe_pct": 0.43180093380581486,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791031383932,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.187,
+    "last_5s_pnl_pct": 0.059732870012929595,
+    "net_leakage_pp": 0.37171465494246664,
+    "net_retention_ratio": -0.7844842190763108,
+    "observable_gross_peak_pct": 0.3786483532639551,
+    "observable_net_peak_pct": 0.2083036941256194,
+    "observable_net_peak_usdt": 1.0415184706280969,
+    "observable_peak_at_ms": 1791031304763,
+    "observable_peak_market_price": 0.3777,
+    "opened_at_ms": 1791031231329,
+    "peak_age_seconds": 73.434,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 79.169,
+    "position_id": "PAPER:SOONUSDT:1791031199999:LONG",
+    "positive_observability_gap_pp": 0.053152580541859784,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5420593140808023,
+    "realized_pnl_usdt": -0.8170548040842363,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1328.8145135459886,
+    "side": "LONG",
+    "symbol": "SOONUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791031319747,
+        "pnl_pct": -0.2591826132380959,
+        "seconds_from_peak": 14.984,
+        "seconds_to_close": 64.185
+      },
+      "r50": {
+        "at_ms": 1791031309652,
+        "pnl_pct": 0.13946174082568596,
+        "seconds_from_peak": 4.889,
+        "seconds_to_close": 74.28
+      },
+      "r70": {
+        "at_ms": 1791031309652,
+        "pnl_pct": 0.13946174082568596,
+        "seconds_from_peak": 4.889,
+        "seconds_to_close": 74.28
+      },
+      "r80": {
+        "at_ms": 1791031309652,
+        "pnl_pct": 0.13946174082568596,
+        "seconds_from_peak": 4.889,
+        "seconds_to_close": 74.28
+      },
+      "r90": {
+        "at_ms": 1791031309652,
+        "pnl_pct": 0.13946174082568596,
+        "seconds_from_peak": 4.889,
+        "seconds_to_close": 74.28
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.010696000633221332,
+    "clean_mfe_pct": 0.7388411296590158,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032476992,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.254,
+    "last_5s_pnl_pct": 0.1697072818146239,
+    "net_leakage_pp": 0.5802241401915827,
+    "net_retention_ratio": -0.01878046033250527,
+    "observable_gross_peak_pct": 0.738841129659018,
+    "observable_net_peak_pct": 0.5695281395583615,
+    "observable_net_peak_usdt": 2.847640697791807,
+    "observable_peak_at_ms": 1791031624760,
+    "observable_peak_market_price": 0.4709,
+    "opened_at_ms": 1791031246685,
+    "peak_age_seconds": 378.075,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 852.232,
+    "position_id": "PAPER:EDGEUSDT:1791031199999:SHORT",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7495371302922393,
+    "realized_pnl_usdt": -0.053480003166106654,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1053.9515700821935,
+    "side": "SHORT",
+    "symbol": "EDGEUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791031824664,
+        "pnl_pct": 0.3383395330277761,
+        "seconds_from_peak": 199.904,
+        "seconds_to_close": 652.328
+      },
+      "r70": {
+        "at_ms": 1791031699689,
+        "pnl_pct": 0.4858927528392787,
+        "seconds_from_peak": 74.929,
+        "seconds_to_close": 777.303
+      },
+      "r80": {
+        "at_ms": 1791031634769,
+        "pnl_pct": 0.5491298470442163,
+        "seconds_from_peak": 10.009,
+        "seconds_to_close": 842.223
+      },
+      "r90": {
+        "at_ms": 1791031634769,
+        "pnl_pct": 0.5491298470442163,
+        "seconds_from_peak": 10.009,
+        "seconds_to_close": 842.223
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.39693516761546,
+    "clean_mfe_pct": 4.277445331594233,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033246981,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.385,
+    "last_5s_pnl_pct": 1.4298636137697995,
+    "net_leakage_pp": 2.54750957074301,
+    "net_retention_ratio": 0.35415255131621187,
+    "observable_gross_peak_pct": 4.110554095384744,
+    "observable_net_peak_pct": 3.94444473835847,
+    "observable_net_peak_usdt": 19.72222369179235,
+    "observable_peak_at_ms": 1791032974548,
+    "observable_peak_market_price": 0.009193,
+    "opened_at_ms": 1791031259140,
+    "peak_age_seconds": 1715.408,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 272.433,
+    "position_id": "PAPER:AVAAIUSDT:1791031199999:SHORT",
+    "positive_observability_gap_pp": 0.16689123620948898,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 2.713618927769284,
+    "realized_pnl_usdt": 6.984675838077299,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 52153.511315465716,
+    "side": "SHORT",
+    "symbol": "AVAAIUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791033209680,
+        "pnl_pct": 1.8679531088197088,
+        "seconds_from_peak": 235.132,
+        "seconds_to_close": 37.301
+      },
+      "r70": {
+        "at_ms": 1791033144572,
+        "pnl_pct": 2.7962856102350053,
+        "seconds_from_peak": 170.024,
+        "seconds_to_close": 102.409
+      },
+      "r80": {
+        "at_ms": 1791033124765,
+        "pnl_pct": 3.171790891706361,
+        "seconds_from_peak": 150.217,
+        "seconds_to_close": 122.216
+      },
+      "r90": {
+        "at_ms": 1791032979768,
+        "pnl_pct": 3.672464600334824,
+        "seconds_from_peak": 5.22,
+        "seconds_to_close": 267.213
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -1.1398960532144229,
+    "clean_mfe_pct": 0.4188883317460625,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032857635,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.052,
+    "last_5s_pnl_pct": -0.9689603954946557,
+    "net_leakage_pp": 1.3891673917089031,
+    "net_retention_ratio": -4.572912634477085,
+    "observable_gross_peak_pct": 0.418888331746059,
+    "observable_net_peak_pct": 0.24927133849448024,
+    "observable_net_peak_usdt": 1.2463566924724012,
+    "observable_peak_at_ms": 1791031334853,
+    "observable_peak_market_price": 0.008395,
+    "opened_at_ms": 1791031268885,
+    "peak_age_seconds": 65.968,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 1522.782,
+    "position_id": "PAPER:BLUAIUSDT:1791031199999:SHORT",
+    "positive_observability_gap_pp": 3.497202527569243e-15,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.5587843849604819,
+    "realized_pnl_usdt": -5.699480266072115,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 59309.77466840616,
+    "side": "SHORT",
+    "symbol": "BLUAIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791031539839,
+        "pnl_pct": -0.3758626488105987,
+        "seconds_from_peak": 204.986,
+        "seconds_to_close": 1317.796
+      },
+      "r50": {
+        "at_ms": 1791031344934,
+        "pnl_pct": 0.14606336827138744,
+        "seconds_from_peak": 10.081,
+        "seconds_to_close": 1512.701
+      },
+      "r70": {
+        "at_ms": 1791031344934,
+        "pnl_pct": 0.14606336827138744,
+        "seconds_from_peak": 10.081,
+        "seconds_to_close": 1512.701
+      },
+      "r80": {
+        "at_ms": 1791031344934,
+        "pnl_pct": 0.14606336827138744,
+        "seconds_from_peak": 10.081,
+        "seconds_to_close": 1512.701
+      },
+      "r90": {
+        "at_ms": 1791031339735,
+        "pnl_pct": 0.3595785570776555,
+        "seconds_from_peak": 4.882,
+        "seconds_to_close": 1517.9
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.9807666974377798,
+    "clean_mfe_pct": 0.4188727170620659,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034888091,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.53,
+    "last_5s_pnl_pct": -1.4244094979592559,
+    "net_leakage_pp": 1.1421636630968244,
+    "net_retention_ratio": -6.07673566496706,
+    "observable_gross_peak_pct": 0.33109737348961943,
+    "observable_net_peak_pct": 0.16139696565904454,
+    "observable_net_peak_usdt": 0.8069848282952228,
+    "observable_peak_at_ms": 1791031779745,
+    "observable_peak_market_price": 0.4542,
+    "opened_at_ms": 1791031322344,
+    "peak_age_seconds": 457.401,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 3108.346,
+    "position_id": "PAPER:LDOUSDT:1791031199999:SHORT",
+    "positive_observability_gap_pp": 0.08777534357244648,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3118640709273992,
+    "realized_pnl_usdt": -4.903833487188899,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1097.1917946555525,
+    "side": "SHORT",
+    "symbol": "LDOUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791031979846,
+        "pnl_pct": -0.02000400080015563,
+        "seconds_from_peak": 200.101,
+        "seconds_to_close": 2908.245
+      },
+      "r50": {
+        "at_ms": 1791031869790,
+        "pnl_pct": 0.11165901455850724,
+        "seconds_from_peak": 90.045,
+        "seconds_to_close": 3018.301
+      },
+      "r70": {
+        "at_ms": 1791031804735,
+        "pnl_pct": 0.19943435813095656,
+        "seconds_from_peak": 24.99,
+        "seconds_to_close": 3083.356
+      },
+      "r80": {
+        "at_ms": 1791031804735,
+        "pnl_pct": 0.19943435813095656,
+        "seconds_from_peak": 24.99,
+        "seconds_to_close": 3083.356
+      },
+      "r90": {
+        "at_ms": 1791031784899,
+        "pnl_pct": 0.28720970170339477,
+        "seconds_from_peak": 5.154,
+        "seconds_to_close": 3103.192
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.0314218216555546,
+    "clean_mfe_pct": 2.6400471047956398,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033903940,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.226,
+    "last_5s_pnl_pct": 1.0547688903498553,
+    "net_leakage_pp": 1.436132634397611,
+    "net_retention_ratio": 0.4179935397678339,
+    "observable_gross_peak_pct": 2.6400471047956398,
+    "observable_net_peak_pct": 2.4675544560531657,
+    "observable_net_peak_usdt": 12.33777228026583,
+    "observable_peak_at_ms": 1791032804842,
+    "observable_peak_market_price": 0.382,
+    "opened_at_ms": 1791031545728,
+    "peak_age_seconds": 1259.114,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 1099.098,
+    "position_id": "PAPER:STXUSDT:1791031499999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.6086252831400851,
+    "realized_pnl_usdt": 5.157109108277773,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1343.4561139371158,
+    "side": "LONG",
+    "symbol": "STXUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791033689668,
+        "pnl_pct": 1.2697218685797873,
+        "seconds_from_peak": 884.826,
+        "seconds_to_close": 214.272
+      },
+      "r70": {
+        "at_ms": 1791033264612,
+        "pnl_pct": 1.8339734364333893,
+        "seconds_from_peak": 459.77,
+        "seconds_to_close": 639.328
+      },
+      "r80": {
+        "at_ms": 1791032954678,
+        "pnl_pct": 2.1026646592207987,
+        "seconds_from_peak": 149.836,
+        "seconds_to_close": 949.262
+      },
+      "r90": {
+        "at_ms": 1791032844600,
+        "pnl_pct": 2.290748515171992,
+        "seconds_from_peak": 39.758,
+        "seconds_to_close": 1059.34
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.34949383053937716,
+    "clean_mfe_pct": 1.4030991500064705,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032498102,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.32,
+    "last_5s_pnl_pct": 0.525019163338758,
+    "net_leakage_pp": 0.19662409053622393,
+    "net_retention_ratio": 0.6399603767827928,
+    "observable_gross_peak_pct": 0.7167837581282699,
+    "observable_net_peak_pct": 0.5461179210756011,
+    "observable_net_peak_usdt": 2.7305896053780057,
+    "observable_peak_at_ms": 1791032439849,
+    "observable_peak_market_price": 0.09979,
+    "opened_at_ms": 1791032148307,
+    "peak_age_seconds": 291.542,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 58.253,
+    "position_id": "PAPER:CUSDT:1791032099999:LONG",
+    "positive_observability_gap_pp": 0.6863153918782006,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.36728992758889273,
+    "realized_pnl_usdt": 1.7474691526968857,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 5046.436704986885,
+    "side": "LONG",
+    "symbol": "CUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": {
+        "at_ms": 1791032489905,
+        "pnl_pct": 0.4947405431088292,
+        "seconds_from_peak": 50.056,
+        "seconds_to_close": 8.197
+      },
+      "r80": {
+        "at_ms": 1791032469818,
+        "pnl_pct": 0.5653906569786482,
+        "seconds_from_peak": 29.969,
+        "seconds_to_close": 28.284
+      },
+      "r90": {
+        "at_ms": 1791032445098,
+        "pnl_pct": 0.5956692772085548,
+        "seconds_from_peak": 5.249,
+        "seconds_to_close": 53.004
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.6683201133089963,
+    "clean_mfe_pct": 0.7925349914537083,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032709145,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.414,
+    "last_5s_pnl_pct": -0.5181548829552907,
+    "net_leakage_pp": 1.1983112143051207,
+    "net_retention_ratio": -1.261002518821318,
+    "observable_gross_peak_pct": 0.7006416054250453,
+    "observable_net_peak_pct": 0.5299911009961243,
+    "observable_net_peak_usdt": 2.649955504980622,
+    "observable_peak_at_ms": 1791032634691,
+    "observable_peak_market_price": 2.0821,
+    "opened_at_ms": 1791032434238,
+    "peak_age_seconds": 200.453,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 74.454,
+    "position_id": "PAPER:ZROUSDT:1791032399999:LONG",
+    "positive_observability_gap_pp": 0.09189338602866304,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3689617187340417,
+    "realized_pnl_usdt": -3.3416005665449813,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 241.82470007546476,
+    "side": "LONG",
+    "symbol": "ZROUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791032684804,
+        "pnl_pct": -0.5858657989764371,
+        "seconds_from_peak": 50.113,
+        "seconds_to_close": 24.341
+      },
+      "r50": {
+        "at_ms": 1791032664832,
+        "pnl_pct": 0.3330680613103265,
+        "seconds_from_peak": 30.141,
+        "seconds_to_close": 44.313
+      },
+      "r70": {
+        "at_ms": 1791032644693,
+        "pnl_pct": 0.391105989328433,
+        "seconds_from_peak": 10.002,
+        "seconds_to_close": 64.452
+      },
+      "r80": {
+        "at_ms": 1791032644693,
+        "pnl_pct": 0.391105989328433,
+        "seconds_from_peak": 10.002,
+        "seconds_to_close": 64.452
+      },
+      "r90": {
+        "at_ms": 1791032639819,
+        "pnl_pct": 0.5652197733827746,
+        "seconds_from_peak": 5.128,
+        "seconds_to_close": 69.326
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.28688400176909457,
+    "clean_mfe_pct": 0.9362862664506144,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791032899529,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.837,
+    "last_5s_pnl_pct": -0.18630596032166435,
+    "net_leakage_pp": 0.5399939675219921,
+    "net_retention_ratio": -1.133436215819212,
+    "observable_gross_peak_pct": 0.4234972245916735,
+    "observable_net_peak_pct": 0.25310996575289757,
+    "observable_net_peak_usdt": 1.265549828764488,
+    "observable_peak_at_ms": 1791032664695,
+    "observable_peak_market_price": 0.007246,
+    "opened_at_ms": 1791032436022,
+    "peak_age_seconds": 228.673,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 234.834,
+    "position_id": "PAPER:ATHUSDT:1791032399999:LONG",
+    "positive_observability_gap_pp": 0.5127890418589409,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7103812263607681,
+    "realized_pnl_usdt": -1.4344200088454728,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 69295.81646742456,
+    "side": "LONG",
+    "symbol": "ATHUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791032739698,
+        "pnl_pct": -0.1308693071477296,
+        "seconds_from_peak": 75.003,
+        "seconds_to_close": 159.831
+      },
+      "r50": {
+        "at_ms": 1791032719715,
+        "pnl_pct": 0.06315897896107536,
+        "seconds_from_peak": 55.02,
+        "seconds_to_close": 179.814
+      },
+      "r70": {
+        "at_ms": 1791032669813,
+        "pnl_pct": 0.22946893848287964,
+        "seconds_from_peak": 5.118,
+        "seconds_to_close": 229.716
+      },
+      "r80": {
+        "at_ms": 1791032669813,
+        "pnl_pct": 0.22946893848287964,
+        "seconds_from_peak": 5.118,
+        "seconds_to_close": 229.716
+      },
+      "r90": {
+        "at_ms": 1791032669813,
+        "pnl_pct": 0.22946893848287964,
+        "seconds_from_peak": 5.118,
+        "seconds_to_close": 229.716
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.55832107610926,
+    "clean_mfe_pct": 2.019537687904731,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034458135,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.572,
+    "last_5s_pnl_pct": 0.5792144468247162,
+    "net_leakage_pp": 0.8639145304602175,
+    "net_retention_ratio": 0.3925658122538261,
+    "observable_gross_peak_pct": 1.5907391657511427,
+    "observable_net_peak_pct": 1.4222356065694775,
+    "observable_net_peak_usdt": 7.111178032847387,
+    "observable_peak_at_ms": 1791033749688,
+    "observable_peak_market_price": 0.17901,
+    "opened_at_ms": 1791032721859,
+    "peak_age_seconds": 1027.829,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 708.447,
+    "position_id": "PAPER:SYNUSDT:1791032699999:SHORT",
+    "positive_observability_gap_pp": 0.4287985221535884,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0324180896418826,
+    "realized_pnl_usdt": 2.7916053805463,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 2748.7084753435242,
+    "side": "SHORT",
+    "symbol": "SYNUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791034434577,
+        "pnl_pct": 0.7881162909508355,
+        "seconds_from_peak": 684.889,
+        "seconds_to_close": 23.558
+      },
+      "r70": {
+        "at_ms": 1791034004719,
+        "pnl_pct": 1.0739819723865618,
+        "seconds_from_peak": 255.031,
+        "seconds_to_close": 453.416
+      },
+      "r80": {
+        "at_ms": 1791033769648,
+        "pnl_pct": 1.1179613079920547,
+        "seconds_from_peak": 19.96,
+        "seconds_to_close": 688.487
+      },
+      "r90": {
+        "at_ms": 1791033769648,
+        "pnl_pct": 1.1179613079920547,
+        "seconds_from_peak": 19.96,
+        "seconds_to_close": 688.487
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.20713737007052374,
+    "clean_mfe_pct": 0.8464652760348246,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039918582,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.002,
+    "last_5s_pnl_pct": 0.15879759600729848,
+    "net_leakage_pp": 0.1957991321812624,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.5851515576243527,
+    "observable_net_peak_pct": -0.011338237889261337,
+    "observable_net_peak_usdt": -0.05669118944630669,
+    "observable_peak_at_ms": 1791039674584,
+    "observable_peak_market_price": 1.4627,
+    "opened_at_ms": 1791032750060,
+    "peak_age_seconds": 6924.524,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 243.998,
+    "position_id": "PAPER:BTWUSDT:1791032699999:LONG",
+    "positive_observability_gap_pp": 0.2613137184104719,
+    "quantity_closed_before_peak": 171.9169200068783,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7922889276948764,
+    "realized_pnl_usdt": -1.0356868503526186,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 171.9169200068783,
+    "side": "LONG",
+    "symbol": "BTWUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039839597,
+        "pnl_pct": 0.22756436401005775,
+        "seconds_from_peak": 165.013,
+        "seconds_to_close": 78.985
+      },
+      "r70": {
+        "at_ms": 1791039689633,
+        "pnl_pct": 0.3994812840169448,
+        "seconds_from_peak": 15.049,
+        "seconds_to_close": 228.949
+      },
+      "r80": {
+        "at_ms": 1791039679578,
+        "pnl_pct": 0.4544946984191389,
+        "seconds_from_peak": 4.994,
+        "seconds_to_close": 239.004
+      },
+      "r90": {
+        "at_ms": 1791039679578,
+        "pnl_pct": 0.4544946984191389,
+        "seconds_from_peak": 4.994,
+        "seconds_to_close": 239.004
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.3106690021512205,
+    "clean_mfe_pct": 0.40288014904572567,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791036350294,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.789,
+    "last_5s_pnl_pct": -0.3824612720960241,
+    "net_leakage_pp": 0.5431814754873706,
+    "net_retention_ratio": -1.3361390797390782,
+    "observable_gross_peak_pct": 0.40288014904572567,
+    "observable_net_peak_pct": 0.23251247333615008,
+    "observable_net_peak_usdt": 1.1625623666807503,
+    "observable_peak_at_ms": 1791033024781,
+    "observable_peak_market_price": 1.662,
+    "opened_at_ms": 1791032753668,
+    "peak_age_seconds": 271.113,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 3325.513,
+    "position_id": "PAPER:FLUIDUSDT:1791032699999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7135491511969462,
+    "realized_pnl_usdt": -1.5533450107561027,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 302.0543927468283,
+    "side": "LONG",
+    "symbol": "FLUIDUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791033599768,
+        "pnl_pct": -0.019996000799826774,
+        "seconds_from_peak": 574.987,
+        "seconds_to_close": 2750.526
+      },
+      "r50": {
+        "at_ms": 1791033144702,
+        "pnl_pct": 0.16123663484826078,
+        "seconds_from_peak": 119.921,
+        "seconds_to_close": 3205.592
+      },
+      "r70": {
+        "at_ms": 1791033119793,
+        "pnl_pct": 0.2216475133976381,
+        "seconds_from_peak": 95.012,
+        "seconds_to_close": 3230.501
+      },
+      "r80": {
+        "at_ms": 1791033029796,
+        "pnl_pct": 0.2820583919469932,
+        "seconds_from_peak": 5.015,
+        "seconds_to_close": 3320.498
+      },
+      "r90": {
+        "at_ms": 1791033029796,
+        "pnl_pct": 0.2820583919469932,
+        "seconds_from_peak": 5.015,
+        "seconds_to_close": 3320.498
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.6084190759268009,
+    "clean_mfe_pct": 0.9772776127046079,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035265978,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.349,
+    "last_5s_pnl_pct": 0.21934966644123755,
+    "net_leakage_pp": 0.35203531145080813,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.9373866681644305,
+    "observable_net_peak_pct": -0.25638376447599276,
+    "observable_net_peak_usdt": -1.2819188223799636,
+    "observable_peak_at_ms": 1791035009654,
+    "observable_peak_market_price": 0.7591,
+    "opened_at_ms": 1791033023132,
+    "peak_age_seconds": 1986.522,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 256.324,
+    "position_id": "PAPER:GRASSUSDT:1791032999999:LONG",
+    "positive_observability_gap_pp": 0.03989094454017739,
+    "quantity_closed_before_peak": 332.424537834819,
+    "raw_gross_peak_to_realized_leakage_pp": 1.5458057440912314,
+    "realized_pnl_usdt": -3.042095379634005,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 332.424537834819,
+    "side": "LONG",
+    "symbol": "GRASSUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035119572,
+        "pnl_pct": 0.445398352168902,
+        "seconds_from_peak": 109.918,
+        "seconds_to_close": 146.406
+      },
+      "r70": {
+        "at_ms": 1791035029566,
+        "pnl_pct": 0.6448530748697889,
+        "seconds_from_peak": 19.912,
+        "seconds_to_close": 236.412
+      },
+      "r80": {
+        "at_ms": 1791035029566,
+        "pnl_pct": 0.6448530748697889,
+        "seconds_from_peak": 19.912,
+        "seconds_to_close": 236.412
+      },
+      "r90": {
+        "at_ms": 1791035029566,
+        "pnl_pct": 0.6448530748697889,
+        "seconds_from_peak": 19.912,
+        "seconds_to_close": 236.412
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.25518240458993435,
+    "clean_mfe_pct": 1.024522486948909,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033204822,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.072,
+    "last_5s_pnl_pct": -0.18320201451058615,
+    "net_leakage_pp": 0.7826447638973727,
+    "net_retention_ratio": -0.48379263484315843,
+    "observable_gross_peak_pct": 0.6981104595274124,
+    "observable_net_peak_pct": 0.5274623593074383,
+    "observable_net_peak_usdt": 2.6373117965371917,
+    "observable_peak_at_ms": 1791033174800,
+    "observable_peak_market_price": 0.03085,
+    "opened_at_ms": 1791033030683,
+    "peak_age_seconds": 144.117,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 30.022,
+    "position_id": "PAPER:CTSIUSDT:1791032999999:LONG",
+    "positive_observability_gap_pp": 0.32641202742149655,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9532928641173467,
+    "realized_pnl_usdt": -1.2759120229496719,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 16320.601371074137,
+    "side": "LONG",
+    "symbol": "CTSIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791033199778,
+        "pnl_pct": -0.2811256227370218,
+        "seconds_from_peak": 24.978,
+        "seconds_to_close": 5.044
+      },
+      "r50": {
+        "at_ms": 1791033194857,
+        "pnl_pct": 0.1758512156530445,
+        "seconds_from_peak": 20.057,
+        "seconds_to_close": 9.965
+      },
+      "r70": {
+        "at_ms": 1791033194857,
+        "pnl_pct": 0.1758512156530445,
+        "seconds_from_peak": 20.057,
+        "seconds_to_close": 9.965
+      },
+      "r80": {
+        "at_ms": 1791033179866,
+        "pnl_pct": 0.5349044458166752,
+        "seconds_from_peak": 5.066,
+        "seconds_to_close": 24.956
+      },
+      "r90": {
+        "at_ms": 1791033179866,
+        "pnl_pct": 0.5349044458166752,
+        "seconds_from_peak": 5.066,
+        "seconds_to_close": 24.956
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.4846066154293804,
+    "clean_mfe_pct": 1.5359226285309502,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033602355,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.547,
+    "last_5s_pnl_pct": 0.6062857116351905,
+    "net_leakage_pp": 0.7625558347271593,
+    "net_retention_ratio": 0.38856735573505613,
+    "observable_gross_peak_pct": 1.4184948074493775,
+    "observable_net_peak_pct": 1.2471624501565397,
+    "observable_net_peak_usdt": 6.235812250782699,
+    "observable_peak_at_ms": 1791033389786,
+    "observable_peak_market_price": 0.010364,
+    "opened_at_ms": 1791033033442,
+    "peak_age_seconds": 356.344,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 212.569,
+    "position_id": "PAPER:MOVEUSDT:1791032999999:LONG",
+    "positive_observability_gap_pp": 0.11742782108157268,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9338881920199971,
+    "realized_pnl_usdt": 2.423033077146902,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 48928.25878398755,
+    "side": "LONG",
+    "symbol": "MOVEUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791033444716,
+        "pnl_pct": 0.704142229203164,
+        "seconds_from_peak": 54.93,
+        "seconds_to_close": 157.639
+      },
+      "r70": {
+        "at_ms": 1791033414698,
+        "pnl_pct": 0.8802839608255342,
+        "seconds_from_peak": 24.912,
+        "seconds_to_close": 187.657
+      },
+      "r80": {
+        "at_ms": 1791033414698,
+        "pnl_pct": 0.8802839608255342,
+        "seconds_from_peak": 24.912,
+        "seconds_to_close": 187.657
+      },
+      "r90": {
+        "at_ms": 1791033414698,
+        "pnl_pct": 0.8802839608255342,
+        "seconds_from_peak": 24.912,
+        "seconds_to_close": 187.657
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -1.077899483203603,
+    "clean_mfe_pct": 0.5910414075610326,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033121124,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.242,
+    "last_5s_pnl_pct": -0.88497103341455,
+    "net_leakage_pp": 1.2367700553071412,
+    "net_retention_ratio": -6.784764912290494,
+    "observable_gross_peak_pct": 0.329168232549204,
+    "observable_net_peak_pct": 0.15887057210353822,
+    "observable_net_peak_usdt": 0.7943528605176912,
+    "observable_peak_at_ms": 1791033064887,
+    "observable_peak_market_price": 0.12643,
+    "opened_at_ms": 1791033038762,
+    "peak_age_seconds": 26.125,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 56.237,
+    "position_id": "PAPER:GTCUSDT:1791032999999:LONG",
+    "positive_observability_gap_pp": 0.2618731750118286,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.407067715752807,
+    "realized_pnl_usdt": -5.389497416018015,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3967.7753789665912,
+    "side": "LONG",
+    "symbol": "GTCUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791033074903,
+        "pnl_pct": -0.012060450041906368,
+        "seconds_from_peak": 10.016,
+        "seconds_to_close": 46.221
+      },
+      "r50": {
+        "at_ms": 1791033069805,
+        "pnl_pct": 0.09110170981121435,
+        "seconds_from_peak": 4.918,
+        "seconds_to_close": 51.319
+      },
+      "r70": {
+        "at_ms": 1791033069805,
+        "pnl_pct": 0.09110170981121435,
+        "seconds_from_peak": 4.918,
+        "seconds_to_close": 51.319
+      },
+      "r80": {
+        "at_ms": 1791033069805,
+        "pnl_pct": 0.09110170981121435,
+        "seconds_from_peak": 4.918,
+        "seconds_to_close": 51.319
+      },
+      "r90": {
+        "at_ms": 1791033069805,
+        "pnl_pct": 0.09110170981121435,
+        "seconds_from_peak": 4.918,
+        "seconds_to_close": 51.319
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.01608607108251576,
+    "clean_mfe_pct": 0.6761689975877339,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034657210,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.58,
+    "last_5s_pnl_pct": 0.14065746036651117,
+    "net_leakage_pp": 0.4948776654685161,
+    "net_retention_ratio": -0.03359722950680545,
+    "observable_gross_peak_pct": 0.6493934207266738,
+    "observable_net_peak_pct": 0.47879159438600033,
+    "observable_net_peak_usdt": 2.3939579719300017,
+    "observable_peak_at_ms": 1791034489646,
+    "observable_peak_market_price": 0.003759,
+    "opened_at_ms": 1791033050026,
+    "peak_age_seconds": 1439.62,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 167.564,
+    "position_id": "PAPER:SOPHUSDT:1791032999999:LONG",
+    "positive_observability_gap_pp": 0.026775576861060024,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6654794918091896,
+    "realized_pnl_usdt": -0.08043035541257879,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 133877.88430530284,
+    "side": "LONG",
+    "symbol": "SOPHUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791034559715,
+        "pnl_pct": 0.3013109215328935,
+        "seconds_from_peak": 70.069,
+        "seconds_to_close": 97.495
+      },
+      "r70": {
+        "at_ms": 1791034519657,
+        "pnl_pct": 0.4084132289771336,
+        "seconds_from_peak": 30.011,
+        "seconds_to_close": 137.553
+      },
+      "r80": {
+        "at_ms": 1791034504697,
+        "pnl_pct": 0.5155155364213737,
+        "seconds_from_peak": 15.051,
+        "seconds_to_close": 152.513
+      },
+      "r90": {
+        "at_ms": 1791034504697,
+        "pnl_pct": 0.5155155364213737,
+        "seconds_from_peak": 15.051,
+        "seconds_to_close": 152.513
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.504727166408826,
+    "clean_mfe_pct": 1.220357432272956,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791033664902,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.154,
+    "last_5s_pnl_pct": 0.6565604172398709,
+    "net_leakage_pp": 0.3567322785443018,
+    "net_retention_ratio": 0.5858977684507114,
+    "observable_gross_peak_pct": 1.0324250939286017,
+    "observable_net_peak_pct": 0.8614594449531278,
+    "observable_net_peak_usdt": 4.307297224765639,
+    "observable_peak_at_ms": 1791033494829,
+    "observable_peak_market_price": 5.376,
+    "opened_at_ms": 1791033344239,
+    "peak_age_seconds": 150.59,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 170.073,
+    "position_id": "PAPER:KSMUSDT:1791033299999:LONG",
+    "positive_observability_gap_pp": 0.1879323383443543,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5276979275197757,
+    "realized_pnl_usdt": 2.52363583204413,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 93.9661691721806,
+    "side": "LONG",
+    "symbol": "KSMUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791033659812,
+        "pnl_pct": 0.48742131272994094,
+        "seconds_from_peak": 164.983,
+        "seconds_to_close": 5.09
+      },
+      "r70": {
+        "at_ms": 1791033499708,
+        "pnl_pct": 0.7129401187431661,
+        "seconds_from_peak": 4.879,
+        "seconds_to_close": 165.194
+      },
+      "r80": {
+        "at_ms": 1791033499708,
+        "pnl_pct": 0.7129401187431661,
+        "seconds_from_peak": 4.879,
+        "seconds_to_close": 165.194
+      },
+      "r90": {
+        "at_ms": 1791033499708,
+        "pnl_pct": 0.7129401187431661,
+        "seconds_from_peak": 4.879,
+        "seconds_to_close": 165.194
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.8351456573536339,
+    "clean_mfe_pct": 3.5789087129145236,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034186834,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.977,
+    "last_5s_pnl_pct": 1.0042065105376419,
+    "net_leakage_pp": 2.4317072744870427,
+    "net_retention_ratio": 0.25564225717472966,
+    "observable_gross_peak_pct": 3.4336054915828584,
+    "observable_net_peak_pct": 3.2668529318406767,
+    "observable_net_peak_usdt": 16.334264659203384,
+    "observable_peak_at_ms": 1791034054738,
+    "observable_peak_market_price": 0.54496,
+    "opened_at_ms": 1791033627506,
+    "peak_age_seconds": 427.232,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 132.096,
+    "position_id": "PAPER:BRUSDT:1791033599999:SHORT",
+    "positive_observability_gap_pp": 0.14530322133166518,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 2.5984598342292244,
+    "realized_pnl_usdt": 4.1757282867681695,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 885.995252022324,
+    "side": "SHORT",
+    "symbol": "BRUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791034159759,
+        "pnl_pct": 1.0573662256589733,
+        "seconds_from_peak": 105.021,
+        "seconds_to_close": 27.075
+      },
+      "r70": {
+        "at_ms": 1791034109882,
+        "pnl_pct": 1.9717133257460273,
+        "seconds_from_peak": 55.144,
+        "seconds_to_close": 76.952
+      },
+      "r80": {
+        "at_ms": 1791034109882,
+        "pnl_pct": 1.9717133257460273,
+        "seconds_from_peak": 55.144,
+        "seconds_to_close": 76.952
+      },
+      "r90": {
+        "at_ms": 1791034059736,
+        "pnl_pct": 3.0756634097658275,
+        "seconds_from_peak": 4.998,
+        "seconds_to_close": 127.098
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.655303754510146,
+    "clean_mfe_pct": 3.11190773893415,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042316257,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.518,
+    "last_5s_pnl_pct": 2.2687028859288416,
+    "net_leakage_pp": 0.2607440750805743,
+    "net_retention_ratio": 0.8639156752489467,
+    "observable_gross_peak_pct": 2.790686842551171,
+    "observable_net_peak_pct": 1.9160478295907204,
+    "observable_net_peak_usdt": 9.580239147953602,
+    "observable_peak_at_ms": 1791038284545,
+    "observable_peak_market_price": 25.6,
+    "opened_at_ms": 1791033629137,
+    "peak_age_seconds": 4655.408,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 4031.712,
+    "position_id": "PAPER:COMPUSDT:1791033599999:LONG",
+    "positive_observability_gap_pp": 0.3212208963829788,
+    "quantity_closed_before_peak": 10.038153011967887,
+    "raw_gross_peak_to_realized_leakage_pp": 1.135383088041025,
+    "realized_pnl_usdt": 8.27651877255073,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 10.038153011967887,
+    "side": "LONG",
+    "symbol": "COMPUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": {
+        "at_ms": 1791038664545,
+        "pnl_pct": 2.188397661833097,
+        "seconds_from_peak": 380.0,
+        "seconds_to_close": 3651.712
+      },
+      "r90": {
+        "at_ms": 1791038474596,
+        "pnl_pct": 2.5096185582160757,
+        "seconds_from_peak": 190.051,
+        "seconds_to_close": 3841.661
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.21622483821165228,
+    "clean_mfe_pct": 1.0888395333872092,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034103744,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.94,
+    "last_5s_pnl_pct": 0.4604993973478688,
+    "net_leakage_pp": 0.5723541918233742,
+    "net_retention_ratio": 0.27419552128091484,
+    "observable_gross_peak_pct": 0.9594753877320672,
+    "observable_net_peak_pct": 0.7885790300350265,
+    "observable_net_peak_usdt": 3.9428951501751324,
+    "observable_peak_at_ms": 1791034029818,
+    "observable_peak_market_price": 5.463,
+    "opened_at_ms": 1791033915666,
+    "peak_age_seconds": 114.152,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 73.926,
+    "position_id": "PAPER:KSMUSDT:1791033899999:LONG",
+    "positive_observability_gap_pp": 0.12936414565514198,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7432505495204149,
+    "realized_pnl_usdt": 1.0811241910582614,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 92.40296118225523,
+    "side": "LONG",
+    "symbol": "KSMUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791034039803,
+        "pnl_pct": 0.4789799895843272,
+        "seconds_from_peak": 9.985,
+        "seconds_to_close": 63.941
+      },
+      "r70": {
+        "at_ms": 1791034039803,
+        "pnl_pct": 0.4789799895843272,
+        "seconds_from_peak": 9.985,
+        "seconds_to_close": 63.941
+      },
+      "r80": {
+        "at_ms": 1791034039803,
+        "pnl_pct": 0.4789799895843272,
+        "seconds_from_peak": 9.985,
+        "seconds_to_close": 63.941
+      },
+      "r90": {
+        "at_ms": 1791034034886,
+        "pnl_pct": 0.8485918343133392,
+        "seconds_from_peak": 5.068,
+        "seconds_to_close": 68.858
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.22855366726076126,
+    "clean_mfe_pct": 0.5614579357694294,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035423312,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.728,
+    "last_5s_pnl_pct": 0.008499035306197555,
+    "net_leakage_pp": 0.21825540473572932,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.3818888082994132,
+    "observable_net_peak_pct": -0.010298262525031942,
+    "observable_net_peak_usdt": -0.05149131262515971,
+    "observable_peak_at_ms": 1791035304602,
+    "observable_peak_market_price": 3.495,
+    "opened_at_ms": 1791033938147,
+    "peak_age_seconds": 1366.455,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 118.71,
+    "position_id": "PAPER:LITUSDT:1791033899999:SHORT",
+    "positive_observability_gap_pp": 0.1795691274700162,
+    "quantity_closed_before_peak": 71.25759026588025,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6104424755601745,
+    "realized_pnl_usdt": -1.1427683363038064,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 71.25759026588025,
+    "side": "SHORT",
+    "symbol": "LITUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035319575,
+        "pnl_pct": 0.16526573389114008,
+        "seconds_from_peak": 14.973,
+        "seconds_to_close": 103.737
+      },
+      "r70": {
+        "at_ms": 1791035309674,
+        "pnl_pct": 0.25362514582083495,
+        "seconds_from_peak": 5.072,
+        "seconds_to_close": 113.638
+      },
+      "r80": {
+        "at_ms": 1791035309674,
+        "pnl_pct": 0.25362514582083495,
+        "seconds_from_peak": 5.072,
+        "seconds_to_close": 113.638
+      },
+      "r90": {
+        "at_ms": 1791035309674,
+        "pnl_pct": 0.25362514582083495,
+        "seconds_from_peak": 5.072,
+        "seconds_to_close": 113.638
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.30544494037834563,
+    "clean_mfe_pct": 0.41155018572360813,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039950398,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.784,
+    "last_5s_pnl_pct": -0.21265054835495345,
+    "net_leakage_pp": 0.5466192151580535,
+    "net_retention_ratio": -1.266490551935291,
+    "observable_gross_peak_pct": 0.41155018572360813,
+    "observable_net_peak_pct": 0.2411742747797078,
+    "observable_net_peak_usdt": 1.205871373898539,
+    "observable_peak_at_ms": 1791034944627,
+    "observable_peak_market_price": 0.1303,
+    "opened_at_ms": 1791033940442,
+    "peak_age_seconds": 1004.185,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 5005.771,
+    "position_id": "PAPER:GLMUSDT:1791033899999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7169951261019538,
+    "realized_pnl_usdt": -1.5272247018917282,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3853.090951102211,
+    "side": "LONG",
+    "symbol": "GLMUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791035014680,
+        "pnl_pct": -0.07393927411526446,
+        "seconds_from_peak": 70.053,
+        "seconds_to_close": 4935.718
+      },
+      "r50": {
+        "at_ms": 1791035014680,
+        "pnl_pct": -0.07393927411526446,
+        "seconds_from_peak": 70.053,
+        "seconds_to_close": 4935.718
+      },
+      "r70": {
+        "at_ms": 1791035014680,
+        "pnl_pct": -0.07393927411526446,
+        "seconds_from_peak": 70.053,
+        "seconds_to_close": 4935.718
+      },
+      "r80": {
+        "at_ms": 1791035014680,
+        "pnl_pct": -0.07393927411526446,
+        "seconds_from_peak": 70.053,
+        "seconds_to_close": 4935.718
+      },
+      "r90": {
+        "at_ms": 1791034959679,
+        "pnl_pct": 0.3499007305059809,
+        "seconds_from_peak": 15.052,
+        "seconds_to_close": 4990.719
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.3874081542073147,
+    "clean_mfe_pct": 1.8837374993549538,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035476100,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.427,
+    "last_5s_pnl_pct": 0.38794689209047384,
+    "net_leakage_pp": 1.1547403236115918,
+    "net_retention_ratio": 0.25121326498680224,
+    "observable_gross_peak_pct": 1.7137612939839952,
+    "observable_net_peak_pct": 1.5421484778189065,
+    "observable_net_peak_usdt": 7.710742389094532,
+    "observable_peak_at_ms": 1791035269615,
+    "observable_peak_market_price": 0.2992,
+    "opened_at_ms": 1791034216017,
+    "peak_age_seconds": 1053.598,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 206.485,
+    "position_id": "PAPER:API3USDT:1791034199999:LONG",
+    "positive_observability_gap_pp": 0.1699762053709586,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3263531397766806,
+    "realized_pnl_usdt": 1.9370407710365736,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1699.7620537096254,
+    "side": "LONG",
+    "symbol": "API3USDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035449581,
+        "pnl_pct": 0.8298850260549662,
+        "seconds_from_peak": 179.966,
+        "seconds_to_close": 26.519
+      },
+      "r70": {
+        "at_ms": 1791035429676,
+        "pnl_pct": 1.1698374367968833,
+        "seconds_from_peak": 160.061,
+        "seconds_to_close": 46.424
+      },
+      "r80": {
+        "at_ms": 1791035349597,
+        "pnl_pct": 1.2718231600194807,
+        "seconds_from_peak": 79.982,
+        "seconds_to_close": 126.503
+      },
+      "r90": {
+        "at_ms": 1791035299588,
+        "pnl_pct": 1.4417993653904393,
+        "seconds_from_peak": 29.973,
+        "seconds_to_close": 176.512
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.1887346787542767,
+    "clean_mfe_pct": 1.4962309327640089,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040823958,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.335,
+    "last_5s_pnl_pct": 0.6168193112969789,
+    "net_leakage_pp": 0.4241402887150766,
+    "net_retention_ratio": 0.3079497267339677,
+    "observable_gross_peak_pct": 1.4962309327640089,
+    "observable_net_peak_pct": 0.6128749674693533,
+    "observable_net_peak_usdt": 3.064374837346767,
+    "observable_peak_at_ms": 1791039204570,
+    "observable_peak_market_price": 0.03347,
+    "opened_at_ms": 1791034240680,
+    "peak_age_seconds": 4963.89,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1619.388,
+    "position_id": "PAPER:MAVIAUSDT:1791034199999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 7581.134667819242,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3074962540097321,
+    "realized_pnl_usdt": 0.9436733937713835,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 7581.134667819242,
+    "side": "LONG",
+    "symbol": "MAVIAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791040649661,
+        "pnl_pct": 0.738117465982091,
+        "seconds_from_peak": 1445.091,
+        "seconds_to_close": 174.297
+      },
+      "r70": {
+        "at_ms": 1791039669580,
+        "pnl_pct": 1.0110383140235824,
+        "seconds_from_peak": 465.01,
+        "seconds_to_close": 1154.378
+      },
+      "r80": {
+        "at_ms": 1791039474579,
+        "pnl_pct": 1.1626610073799615,
+        "seconds_from_peak": 270.009,
+        "seconds_to_close": 1349.379
+      },
+      "r90": {
+        "at_ms": 1791039264574,
+        "pnl_pct": 1.3446082394076297,
+        "seconds_from_peak": 60.004,
+        "seconds_to_close": 1559.384
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.01624889804647024,
+    "clean_mfe_pct": 0.929646846550436,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038912880,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.158,
+    "last_5s_pnl_pct": 0.22075852388050432,
+    "net_leakage_pp": 0.360788765992621,
+    "net_retention_ratio": -0.04716115479852053,
+    "observable_gross_peak_pct": 0.929646846550436,
+    "observable_net_peak_pct": 0.34453986794615077,
+    "observable_net_peak_usdt": 1.7226993397307537,
+    "observable_peak_at_ms": 1791038334634,
+    "observable_peak_market_price": 0.07546,
+    "opened_at_ms": 1791034522067,
+    "peak_age_seconds": 3812.567,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 578.246,
+    "position_id": "PAPER:FLUXUSDT:1791034499999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 3343.812842782614,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9458957445969062,
+    "realized_pnl_usdt": -0.0812444902323512,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 3343.812842782614,
+    "side": "LONG",
+    "symbol": "FLUXUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791038559640,
+        "pnl_pct": 0.3678862889629375,
+        "seconds_from_peak": 225.006,
+        "seconds_to_close": 353.24
+      },
+      "r70": {
+        "at_ms": 1791038559640,
+        "pnl_pct": 0.3678862889629375,
+        "seconds_from_peak": 225.006,
+        "seconds_to_close": 353.24
+      },
+      "r80": {
+        "at_ms": 1791038459736,
+        "pnl_pct": 0.6621418191278039,
+        "seconds_from_peak": 125.102,
+        "seconds_to_close": 453.144
+      },
+      "r90": {
+        "at_ms": 1791038384717,
+        "pnl_pct": 0.8092695842102593,
+        "seconds_from_peak": 50.083,
+        "seconds_to_close": 528.163
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.7102275921888422,
+    "clean_mfe_pct": 2.2506385528950457,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035077682,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.002,
+    "last_5s_pnl_pct": 0.6647985471398998,
+    "net_leakage_pp": 1.1522426877277896,
+    "net_retention_ratio": 0.3813363358585424,
+    "observable_gross_peak_pct": 2.034387643019353,
+    "observable_net_peak_pct": 1.862470279916632,
+    "observable_net_peak_usdt": 9.312351399583159,
+    "observable_peak_at_ms": 1791034909807,
+    "observable_peak_market_price": 0.2831,
+    "opened_at_ms": 1791034527159,
+    "peak_age_seconds": 382.648,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 167.875,
+    "position_id": "PAPER:AVAUSDT:1791034499999:LONG",
+    "positive_observability_gap_pp": 0.21625090987569262,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.324160050830511,
+    "realized_pnl_usdt": 3.551137960944211,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1802.090915630861,
+    "side": "LONG",
+    "symbol": "AVAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035049676,
+        "pnl_pct": 0.9891749119534499,
+        "seconds_from_peak": 139.869,
+        "seconds_to_close": 28.006
+      },
+      "r70": {
+        "at_ms": 1791034929724,
+        "pnl_pct": 1.4216767317048573,
+        "seconds_from_peak": 19.917,
+        "seconds_to_close": 147.958
+      },
+      "r80": {
+        "at_ms": 1791034929724,
+        "pnl_pct": 1.4216767317048573,
+        "seconds_from_peak": 19.917,
+        "seconds_to_close": 147.958
+      },
+      "r90": {
+        "at_ms": 1791034914672,
+        "pnl_pct": 1.7820949148310339,
+        "seconds_from_peak": 4.865,
+        "seconds_to_close": 163.01
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.3460323794615984,
+    "clean_mfe_pct": 0.3365032121780853,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035298059,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.288,
+    "last_5s_pnl_pct": -0.13215305656815168,
+    "net_leakage_pp": 0.4722129199961289,
+    "net_retention_ratio": -2.742359305133135,
+    "observable_gross_peak_pct": 0.296447120832255,
+    "observable_net_peak_pct": 0.12618054053453048,
+    "observable_net_peak_usdt": 0.6309027026726524,
+    "observable_peak_at_ms": 1791034924734,
+    "observable_peak_market_price": 0.25039,
+    "opened_at_ms": 1791034529523,
+    "peak_age_seconds": 395.211,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 373.325,
+    "position_id": "PAPER:SYRUPUSDT:1791034499999:LONG",
+    "positive_observability_gap_pp": 0.040056091345830325,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6424795002938535,
+    "realized_pnl_usdt": -1.7301618973079922,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 2002.80456729167,
+    "side": "LONG",
+    "symbol": "SYRUPUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791034949828,
+        "pnl_pct": -0.040024046472741936,
+        "seconds_from_peak": 25.094,
+        "seconds_to_close": 348.231
+      },
+      "r50": {
+        "at_ms": 1791034939728,
+        "pnl_pct": 0.08014422756474904,
+        "seconds_from_peak": 14.994,
+        "seconds_to_close": 358.331
+      },
+      "r70": {
+        "at_ms": 1791034939728,
+        "pnl_pct": 0.08014422756474904,
+        "seconds_from_peak": 14.994,
+        "seconds_to_close": 358.331
+      },
+      "r80": {
+        "at_ms": 1791034939728,
+        "pnl_pct": 0.08014422756474904,
+        "seconds_from_peak": 14.994,
+        "seconds_to_close": 358.331
+      },
+      "r90": {
+        "at_ms": 1791034939728,
+        "pnl_pct": 0.08014422756474904,
+        "seconds_from_peak": 14.994,
+        "seconds_to_close": 358.331
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.037080645399969574,
+    "clean_mfe_pct": 0.6839268864678116,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791036350137,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.53,
+    "last_5s_pnl_pct": 0.11772804236120926,
+    "net_leakage_pp": 0.5427288358047329,
+    "net_retention_ratio": -0.07333289449782686,
+    "observable_gross_peak_pct": 0.676275550736638,
+    "observable_net_peak_pct": 0.5056481904047633,
+    "observable_net_peak_usdt": 2.5282409520238165,
+    "observable_peak_at_ms": 1791036084601,
+    "observable_peak_market_price": 0.13158,
+    "opened_at_ms": 1791034563079,
+    "peak_age_seconds": 1521.522,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 265.536,
+    "position_id": "PAPER:ALGOUSDT:1791034499999:LONG",
+    "positive_observability_gap_pp": 0.007651335731173603,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7133561961366076,
+    "realized_pnl_usdt": -0.18540322699984788,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3825.6678655850674,
+    "side": "LONG",
+    "symbol": "ALGOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791036139603,
+        "pnl_pct": 0.3166627713716341,
+        "seconds_from_peak": 55.002,
+        "seconds_to_close": 210.534
+      },
+      "r70": {
+        "at_ms": 1791036134684,
+        "pnl_pct": 0.43143280733917155,
+        "seconds_from_peak": 50.083,
+        "seconds_to_close": 215.453
+      },
+      "r80": {
+        "at_ms": 1791036119691,
+        "pnl_pct": 0.5079461646508854,
+        "seconds_from_peak": 35.09,
+        "seconds_to_close": 230.446
+      },
+      "r90": {
+        "at_ms": 1791036099738,
+        "pnl_pct": 0.584459521962577,
+        "seconds_from_peak": 15.137,
+        "seconds_to_close": 250.399
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.61533553524637,
+    "clean_mfe_pct": 1.3396562065174307,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791034941570,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.802,
+    "last_5s_pnl_pct": -0.44489781558689767,
+    "net_leakage_pp": 1.7862496161084311,
+    "net_retention_ratio": -0.5255172393121637,
+    "observable_gross_peak_pct": 1.3396562065174256,
+    "observable_net_peak_pct": 1.1709140808620613,
+    "observable_net_peak_usdt": 5.854570404310307,
+    "observable_peak_at_ms": 1791034869882,
+    "observable_peak_market_price": 1.161,
+    "opened_at_ms": 1791034816115,
+    "peak_age_seconds": 53.767,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 71.688,
+    "position_id": "PAPER:RIVERUSDT:1791034799999:SHORT",
+    "positive_observability_gap_pp": 5.10702591327572e-15,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.9549917417637954,
+    "realized_pnl_usdt": -3.0766776762318497,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 424.89381478674665,
+    "side": "SHORT",
+    "symbol": "RIVERUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791034934854,
+        "pnl_pct": -0.3599190526295537,
+        "seconds_from_peak": 64.972,
+        "seconds_to_close": 6.716
+      },
+      "r50": {
+        "at_ms": 1791034894769,
+        "pnl_pct": 0.6598261028586405,
+        "seconds_from_peak": 24.887,
+        "seconds_to_close": 46.801
+      },
+      "r70": {
+        "at_ms": 1791034889878,
+        "pnl_pct": 0.8297836287733396,
+        "seconds_from_peak": 19.996,
+        "seconds_to_close": 51.692
+      },
+      "r80": {
+        "at_ms": 1791034889878,
+        "pnl_pct": 0.8297836287733396,
+        "seconds_from_peak": 19.996,
+        "seconds_to_close": 51.692
+      },
+      "r90": {
+        "at_ms": 1791034874908,
+        "pnl_pct": 1.1696986806027265,
+        "seconds_from_peak": 5.026,
+        "seconds_to_close": 66.662
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.052589553146817875,
+    "clean_mfe_pct": 0.5300162461395308,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791036318822,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.055,
+    "last_5s_pnl_pct": 0.10222894296447738,
+    "net_leakage_pp": 0.41211736335495763,
+    "net_retention_ratio": -0.1462739505919513,
+    "observable_gross_peak_pct": 0.5300162461395308,
+    "observable_net_peak_pct": 0.35952781020813973,
+    "observable_net_peak_usdt": 1.7976390510406985,
+    "observable_peak_at_ms": 1791036099646,
+    "observable_peak_market_price": 0.0329,
+    "opened_at_ms": 1791034843275,
+    "peak_age_seconds": 1256.371,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 219.176,
+    "position_id": "PAPER:FLOWUSDT:1791034799999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5826057992863487,
+    "realized_pnl_usdt": -0.2629477657340894,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 15278.117970537924,
+    "side": "LONG",
+    "symbol": "FLOWUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791036279680,
+        "pnl_pct": -0.019996000799826774,
+        "seconds_from_peak": 180.034,
+        "seconds_to_close": 39.142
+      },
+      "r50": {
+        "at_ms": 1791036204750,
+        "pnl_pct": 0.2550101226698409,
+        "seconds_from_peak": 105.104,
+        "seconds_to_close": 114.072
+      },
+      "r70": {
+        "at_ms": 1791036124673,
+        "pnl_pct": 0.2855663586109447,
+        "seconds_from_peak": 25.027,
+        "seconds_to_close": 194.149
+      },
+      "r80": {
+        "at_ms": 1791036104769,
+        "pnl_pct": 0.40779130237522665,
+        "seconds_from_peak": 5.123,
+        "seconds_to_close": 214.053
+      },
+      "r90": {
+        "at_ms": 1791036104769,
+        "pnl_pct": 0.40779130237522665,
+        "seconds_from_peak": 5.123,
+        "seconds_to_close": 214.053
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.022637039678836738,
+    "clean_mfe_pct": 0.8094488313569181,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035402269,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.396,
+    "last_5s_pnl_pct": 0.12356175861192309,
+    "net_leakage_pp": 0.47010348129799695,
+    "net_retention_ratio": -0.050589357264255314,
+    "observable_gross_peak_pct": 0.6180384854745702,
+    "observable_net_peak_pct": 0.4474664416191602,
+    "observable_net_peak_usdt": 2.237332208095801,
+    "observable_peak_at_ms": 1791035109830,
+    "observable_peak_market_price": 0.06308,
+    "opened_at_ms": 1791034856487,
+    "peak_age_seconds": 253.343,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 292.439,
+    "position_id": "PAPER:MUBARAKUSDT:1791034799999:LONG",
+    "positive_observability_gap_pp": 0.19141034588234795,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.640675525153407,
+    "realized_pnl_usdt": -0.1131851983941837,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 7975.431078430135,
+    "side": "LONG",
+    "symbol": "MUBARAKUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035174859,
+        "pnl_pct": 0.2511686558668069,
+        "seconds_from_peak": 65.029,
+        "seconds_to_close": 227.41
+      },
+      "r70": {
+        "at_ms": 1791035119789,
+        "pnl_pct": 0.42662813959226664,
+        "seconds_from_peak": 9.959,
+        "seconds_to_close": 282.48
+      },
+      "r80": {
+        "at_ms": 1791035119789,
+        "pnl_pct": 0.42662813959226664,
+        "seconds_from_peak": 9.959,
+        "seconds_to_close": 282.48
+      },
+      "r90": {
+        "at_ms": 1791035114893,
+        "pnl_pct": 0.5382841746902844,
+        "seconds_from_peak": 5.063,
+        "seconds_to_close": 287.376
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.8152359968246706,
+    "clean_mfe_pct": 0.39639901335803707,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038776401,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.691,
+    "last_5s_pnl_pct": -1.185932440443116,
+    "net_leakage_pp": 1.0419966487052468,
+    "net_retention_ratio": -3.59513870710698,
+    "observable_gross_peak_pct": 0.39639901335803973,
+    "observable_net_peak_pct": 0.22676065188057618,
+    "observable_net_peak_usdt": 1.1338032594028808,
+    "observable_peak_at_ms": 1791035614684,
+    "observable_peak_market_price": 0.01196,
+    "opened_at_ms": 1791034864020,
+    "peak_age_seconds": 750.664,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 3161.717,
+    "position_id": "PAPER:HANAUSDT:1791034799999:SHORT",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.2116350101827105,
+    "realized_pnl_usdt": -4.076179984123353,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 41640.30141582022,
+    "side": "SHORT",
+    "symbol": "HANAUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791035814685,
+        "pnl_pct": -0.02000400080015563,
+        "seconds_from_peak": 200.001,
+        "seconds_to_close": 2961.716
+      },
+      "r50": {
+        "at_ms": 1791035654764,
+        "pnl_pct": 0.14655720486310697,
+        "seconds_from_peak": 40.08,
+        "seconds_to_close": 3121.637
+      },
+      "r70": {
+        "at_ms": 1791035624813,
+        "pnl_pct": 0.22983780769476603,
+        "seconds_from_peak": 10.129,
+        "seconds_to_close": 3151.588
+      },
+      "r80": {
+        "at_ms": 1791035624813,
+        "pnl_pct": 0.22983780769476603,
+        "seconds_from_peak": 10.129,
+        "seconds_to_close": 3151.588
+      },
+      "r90": {
+        "at_ms": 1791035624813,
+        "pnl_pct": 0.22983780769476603,
+        "seconds_from_peak": 10.129,
+        "seconds_to_close": 3151.588
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.2564132051554654,
+    "clean_mfe_pct": 2.0077868235222063,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035672588,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.599,
+    "last_5s_pnl_pct": 0.5299112057959743,
+    "net_leakage_pp": 0.6867310965445301,
+    "net_retention_ratio": 0.271870597843073,
+    "observable_gross_peak_pct": 1.870310021873256,
+    "observable_net_peak_pct": 0.9431443016999955,
+    "observable_net_peak_usdt": 4.7157215084999775,
+    "observable_peak_at_ms": 1791035654878,
+    "observable_peak_market_price": 0.02964,
+    "opened_at_ms": 1791035416546,
+    "peak_age_seconds": 238.332,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 17.71,
+    "position_id": "PAPER:PARTIUSDT:1791035399999:LONG",
+    "positive_observability_gap_pp": 0.13747680164895026,
+    "quantity_closed_before_peak": 8592.300103059484,
+    "raw_gross_peak_to_realized_leakage_pp": 1.6138968167177907,
+    "realized_pnl_usdt": 1.2820660257773269,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 8592.300103059484,
+    "side": "LONG",
+    "symbol": "PARTIUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791035664752,
+        "pnl_pct": 0.49554200538373117,
+        "seconds_from_peak": 9.874,
+        "seconds_to_close": 7.836
+      },
+      "r70": {
+        "at_ms": 1791035664752,
+        "pnl_pct": 0.49554200538373117,
+        "seconds_from_peak": 9.874,
+        "seconds_to_close": 7.836
+      },
+      "r80": {
+        "at_ms": 1791035664752,
+        "pnl_pct": 0.49554200538373117,
+        "seconds_from_peak": 9.874,
+        "seconds_to_close": 7.836
+      },
+      "r90": {
+        "at_ms": 1791035659768,
+        "pnl_pct": 1.6297256189875764,
+        "seconds_from_peak": 4.89,
+        "seconds_to_close": 12.82
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.08783006691095264,
+    "clean_mfe_pct": 0.38892017097602594,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791035734970,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.193,
+    "last_5s_pnl_pct": 0.048156694496137575,
+    "net_leakage_pp": -0.0340439802291779,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.048156694496137575,
+    "observable_net_peak_pct": -0.12187404714013055,
+    "observable_net_peak_usdt": -0.6093702357006527,
+    "observable_peak_at_ms": 1791035729868,
+    "observable_peak_market_price": 0.02936,
+    "opened_at_ms": 1791035724341,
+    "peak_age_seconds": 5.527,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 5.102,
+    "position_id": "PAPER:PARTIUSDT:1791035699999:LONG",
+    "positive_observability_gap_pp": 0.34076347647988836,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.1359867614070902,
+    "realized_pnl_usdt": -0.4391503345547632,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 17038.173823994573,
+    "side": "LONG",
+    "symbol": "PARTIUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": null,
+      "r90": null
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.0064332759626887556,
+    "clean_mfe_pct": 0.6981301063329726,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791036443724,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.008,
+    "last_5s_pnl_pct": 0.10437220769801137,
+    "net_leakage_pp": 0.509024510454427,
+    "net_retention_ratio": 0.012480703817485566,
+    "observable_gross_peak_pct": 0.6860944732525409,
+    "observable_net_peak_pct": 0.5154577864171157,
+    "observable_net_peak_usdt": 2.5772889320855783,
+    "observable_peak_at_ms": 1791036369702,
+    "observable_peak_market_price": 0.0025097,
+    "opened_at_ms": 1791036320729,
+    "peak_age_seconds": 48.973,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 74.022,
+    "position_id": "PAPER:ONEUSDT:1791036299999:LONG",
+    "positive_observability_gap_pp": 0.012035633080431651,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6796611972898522,
+    "realized_pnl_usdt": 0.03216637981344378,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 200593.88467397005,
+    "side": "LONG",
+    "symbol": "ONEUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791036394716,
+        "pnl_pct": -0.003948490025929008,
+        "seconds_from_peak": 25.014,
+        "seconds_to_close": 49.008
+      },
+      "r50": {
+        "at_ms": 1791036384733,
+        "pnl_pct": 0.2006572723415312,
+        "seconds_from_peak": 15.031,
+        "seconds_to_close": 58.991
+      },
+      "r70": {
+        "at_ms": 1791036374807,
+        "pnl_pct": 0.4493936893372519,
+        "seconds_from_peak": 5.105,
+        "seconds_to_close": 68.917
+      },
+      "r80": {
+        "at_ms": 1791036374807,
+        "pnl_pct": 0.4493936893372519,
+        "seconds_from_peak": 5.105,
+        "seconds_to_close": 68.917
+      },
+      "r90": {
+        "at_ms": 1791036374807,
+        "pnl_pct": 0.4493936893372519,
+        "seconds_from_peak": 5.105,
+        "seconds_to_close": 68.917
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5871938232457669,
+    "clean_mfe_pct": 0.392645968101903,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038807983,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.214,
+    "last_5s_pnl_pct": -0.750077022703799,
+    "net_leakage_pp": 0.8101978639142635,
+    "net_retention_ratio": -2.633108447208144,
+    "observable_gross_peak_pct": 0.3926459681019012,
+    "observable_net_peak_pct": 0.2230040406684966,
+    "observable_net_peak_usdt": 1.115020203342483,
+    "observable_peak_at_ms": 1791036684791,
+    "observable_peak_market_price": 0.3138,
+    "opened_at_ms": 1791036340920,
+    "peak_age_seconds": 343.871,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 2123.192,
+    "position_id": "PAPER:MTLUSDT:1791036299999:SHORT",
+    "positive_observability_gap_pp": 1.7763568394002505e-15,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9798397913476681,
+    "realized_pnl_usdt": -2.9359691162288346,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1587.1152650079364,
+    "side": "SHORT",
+    "symbol": "MTLUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791036799716,
+        "pnl_pct": -0.05174630610029762,
+        "seconds_from_peak": 114.925,
+        "seconds_to_close": 2008.267
+      },
+      "r50": {
+        "at_ms": 1791036799716,
+        "pnl_pct": -0.05174630610029762,
+        "seconds_from_peak": 114.925,
+        "seconds_to_close": 2008.267
+      },
+      "r70": {
+        "at_ms": 1791036744758,
+        "pnl_pct": 0.26567674690127774,
+        "seconds_from_peak": 59.967,
+        "seconds_to_close": 2063.225
+      },
+      "r80": {
+        "at_ms": 1791036699720,
+        "pnl_pct": 0.29741905220144194,
+        "seconds_from_peak": 14.929,
+        "seconds_to_close": 2108.263
+      },
+      "r90": {
+        "at_ms": 1791036689882,
+        "pnl_pct": 0.32916135750159503,
+        "seconds_from_peak": 5.091,
+        "seconds_to_close": 2118.101
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.3757344522164461,
+    "clean_mfe_pct": 1.3504252271257036,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791036588199,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.317,
+    "last_5s_pnl_pct": 0.8171842824074682,
+    "net_leakage_pp": 0.24018642162084614,
+    "net_retention_ratio": 0.6100368865168609,
+    "observable_gross_peak_pct": 1.2971011326538884,
+    "observable_net_peak_pct": 0.6159208738372922,
+    "observable_net_peak_usdt": 3.079604369186461,
+    "observable_peak_at_ms": 1791036519748,
+    "observable_peak_market_price": 1.851,
+    "opened_at_ms": 1791036346414,
+    "peak_age_seconds": 173.334,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 68.451,
+    "position_id": "PAPER:MOVRUSDT:1791036299999:SHORT",
+    "positive_observability_gap_pp": 0.05332409447181519,
+    "quantity_closed_before_peak": 133.31023617955987,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9213666804374423,
+    "realized_pnl_usdt": 1.8786722610822304,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 133.31023617955987,
+    "side": "SHORT",
+    "symbol": "MOVRUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": {
+        "at_ms": 1791036554899,
+        "pnl_pct": 0.6625444084391807,
+        "seconds_from_peak": 35.151,
+        "seconds_to_close": 33.3
+      },
+      "r80": {
+        "at_ms": 1791036544777,
+        "pnl_pct": 1.025148250847574,
+        "seconds_from_peak": 25.029,
+        "seconds_to_close": 43.422
+      },
+      "r90": {
+        "at_ms": 1791036529758,
+        "pnl_pct": 1.1104668020024966,
+        "seconds_from_peak": 10.01,
+        "seconds_to_close": 58.441
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.40391215759583915,
+    "clean_mfe_pct": 0.6374456311069537,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038964706,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.893,
+    "last_5s_pnl_pct": -0.052876482395514124,
+    "net_leakage_pp": 0.35097296409325124,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.5388281863208833,
+    "observable_net_peak_pct": -0.05293919350258789,
+    "observable_net_peak_usdt": -0.26469596751293945,
+    "observable_peak_at_ms": 1791038834754,
+    "observable_peak_market_price": 0.009077,
+    "opened_at_ms": 1791036629250,
+    "peak_age_seconds": 2205.504,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 129.952,
+    "position_id": "PAPER:AVAAIUSDT:1791036599999:SHORT",
+    "positive_observability_gap_pp": 0.09861744478607049,
+    "quantity_closed_before_peak": 27393.734662795836,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9427403439167223,
+    "realized_pnl_usdt": -2.019560787979196,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 27393.734662795836,
+    "side": "SHORT",
+    "symbol": "AVAAIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791038924752,
+        "pnl_pct": -0.2501113719676207,
+        "seconds_from_peak": 89.998,
+        "seconds_to_close": 39.954
+      },
+      "r50": {
+        "at_ms": 1791038899681,
+        "pnl_pct": 0.2539333458278059,
+        "seconds_from_peak": 64.927,
+        "seconds_to_close": 65.025
+      },
+      "r70": {
+        "at_ms": 1791038854674,
+        "pnl_pct": 0.374465778344113,
+        "seconds_from_peak": 19.92,
+        "seconds_to_close": 110.032
+      },
+      "r80": {
+        "at_ms": 1791038839675,
+        "pnl_pct": 0.4182957538045762,
+        "seconds_from_peak": 4.921,
+        "seconds_to_close": 125.031
+      },
+      "r90": {
+        "at_ms": 1791038839675,
+        "pnl_pct": 0.4182957538045762,
+        "seconds_from_peak": 4.921,
+        "seconds_to_close": 125.031
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.664171020530218,
+    "clean_mfe_pct": 6.381993356097171,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791037054869,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.073,
+    "last_5s_pnl_pct": 1.955085822072622,
+    "net_leakage_pp": 4.541775399177664,
+    "net_retention_ratio": 0.26815749089379853,
+    "observable_gross_peak_pct": 6.381993356097171,
+    "observable_net_peak_pct": 6.205946419707882,
+    "observable_net_peak_usdt": 31.02973209853941,
+    "observable_peak_at_ms": 1791036989890,
+    "observable_peak_market_price": 0.3124,
+    "opened_at_ms": 1791036632243,
+    "peak_age_seconds": 357.647,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 64.979,
+    "position_id": "PAPER:UAIUSDT:1791036599999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 4.717822335566953,
+    "realized_pnl_usdt": 8.320855102651091,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1702.6567438555883,
+    "side": "LONG",
+    "symbol": "UAIUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791037029776,
+        "pnl_pct": 3.146945542771551,
+        "seconds_from_peak": 39.886,
+        "seconds_to_close": 25.093
+      },
+      "r70": {
+        "at_ms": 1791037024803,
+        "pnl_pct": 3.6236894310511136,
+        "seconds_from_peak": 34.913,
+        "seconds_to_close": 30.066
+      },
+      "r80": {
+        "at_ms": 1791037019869,
+        "pnl_pct": 4.917708556381339,
+        "seconds_from_peak": 29.979,
+        "seconds_to_close": 35.0
+      },
+      "r90": {
+        "at_ms": 1791037004880,
+        "pnl_pct": 5.564718119046486,
+        "seconds_from_peak": 14.99,
+        "seconds_to_close": 49.989
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.49742911424511066,
+    "clean_mfe_pct": 0.34743220879288866,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038118024,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.191,
+    "last_5s_pnl_pct": -0.3681014625198653,
+    "net_leakage_pp": 0.630267911354899,
+    "net_retention_ratio": -3.744607186061737,
+    "observable_gross_peak_pct": 0.3025663137267931,
+    "observable_net_peak_pct": 0.13283879710978838,
+    "observable_net_peak_usdt": 0.6641939855489418,
+    "observable_peak_at_ms": 1791037469897,
+    "observable_peak_market_price": 1288.83,
+    "opened_at_ms": 1791036961886,
+    "peak_age_seconds": 508.011,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 648.127,
+    "position_id": "PAPER:ZECUSDT:1791036899999:SHORT",
+    "positive_observability_gap_pp": 0.04486589506609556,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7999954279719037,
+    "realized_pnl_usdt": -2.4871455712255535,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 0.38677495746635787,
+    "side": "SHORT",
+    "symbol": "ZECUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791037604876,
+        "pnl_pct": -0.013042051565759216,
+        "seconds_from_peak": 134.979,
+        "seconds_to_close": 513.148
+      },
+      "r50": {
+        "at_ms": 1791037554735,
+        "pnl_pct": 0.13083823261172967,
+        "seconds_from_peak": 84.838,
+        "seconds_to_close": 563.289
+      },
+      "r70": {
+        "at_ms": 1791037509791,
+        "pnl_pct": 0.20200482478552884,
+        "seconds_from_peak": 39.894,
+        "seconds_to_close": 608.233
+      },
+      "r80": {
+        "at_ms": 1791037509791,
+        "pnl_pct": 0.20200482478552884,
+        "seconds_from_peak": 39.894,
+        "seconds_to_close": 608.233
+      },
+      "r90": {
+        "at_ms": 1791037479732,
+        "pnl_pct": 0.25770041866068905,
+        "seconds_from_peak": 9.835,
+        "seconds_to_close": 638.292
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5304791825725775,
+    "clean_mfe_pct": 0.5764756139680971,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039364203,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.454,
+    "last_5s_pnl_pct": -0.5454590900001999,
+    "net_leakage_pp": 0.9364222311787556,
+    "net_retention_ratio": -1.3067822799134001,
+    "observable_gross_peak_pct": 0.5764756139680971,
+    "observable_net_peak_pct": 0.405943048606178,
+    "observable_net_peak_usdt": 2.02971524303089,
+    "observable_peak_at_ms": 1791039129675,
+    "observable_peak_market_price": 0.07082,
+    "opened_at_ms": 1791037213435,
+    "peak_age_seconds": 1916.24,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 234.528,
+    "position_id": "PAPER:AIAUSDT:1791037199999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.1069547965406747,
+    "realized_pnl_usdt": -2.652395912862888,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 7100.852556761374,
+    "side": "LONG",
+    "symbol": "AIAUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039359749,
+        "pnl_pct": -0.5454590900001999,
+        "seconds_from_peak": 230.074,
+        "seconds_to_close": 4.454
+      },
+      "r50": {
+        "at_ms": 1791039329758,
+        "pnl_pct": 0.22143298613004347,
+        "seconds_from_peak": 200.083,
+        "seconds_to_close": 34.445
+      },
+      "r70": {
+        "at_ms": 1791039189684,
+        "pnl_pct": 0.36345003726525604,
+        "seconds_from_peak": 60.009,
+        "seconds_to_close": 174.519
+      },
+      "r80": {
+        "at_ms": 1791039134734,
+        "pnl_pct": 0.44866026794641023,
+        "seconds_from_peak": 5.059,
+        "seconds_to_close": 229.469
+      },
+      "r90": {
+        "at_ms": 1791039134734,
+        "pnl_pct": 0.44866026794641023,
+        "seconds_from_peak": 5.059,
+        "seconds_to_close": 229.469
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.41662729195051723,
+    "clean_mfe_pct": 1.3292618129545408,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039678746,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.991,
+    "last_5s_pnl_pct": 0.5871700153896375,
+    "net_leakage_pp": 0.741386921670993,
+    "net_retention_ratio": 0.359777355968352,
+    "observable_gross_peak_pct": 1.3292618129545408,
+    "observable_net_peak_pct": 1.1580142136215101,
+    "observable_net_peak_usdt": 5.790071068107551,
+    "observable_peak_at_ms": 1791038969750,
+    "observable_peak_market_price": 0.1502,
+    "opened_at_ms": 1791037561918,
+    "peak_age_seconds": 1407.832,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 708.996,
+    "position_id": "PAPER:DYDXUSDT:1791037499999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.9126345210040236,
+    "realized_pnl_usdt": 2.0831364597525863,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3373.1445343859705,
+    "side": "LONG",
+    "symbol": "DYDXUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039624698,
+        "pnl_pct": 0.6546329060773459,
+        "seconds_from_peak": 654.948,
+        "seconds_to_close": 54.048
+      },
+      "r70": {
+        "at_ms": 1791039309756,
+        "pnl_pct": 0.9244844688282461,
+        "seconds_from_peak": 340.006,
+        "seconds_to_close": 368.99
+      },
+      "r80": {
+        "at_ms": 1791039249755,
+        "pnl_pct": 1.0594102502036629,
+        "seconds_from_peak": 280.005,
+        "seconds_to_close": 428.991
+      },
+      "r90": {
+        "at_ms": 1791039024703,
+        "pnl_pct": 1.1943360315791018,
+        "seconds_from_peak": 54.953,
+        "seconds_to_close": 654.043
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.379523093657587,
+    "clean_mfe_pct": 1.544262879060354,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039636425,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.724,
+    "last_5s_pnl_pct": 0.6428255584629561,
+    "net_leakage_pp": 0.38407134735874543,
+    "net_retention_ratio": 0.4970218132448,
+    "observable_gross_peak_pct": 1.4116985672077975,
+    "observable_net_peak_pct": 0.7635944410163324,
+    "observable_net_peak_usdt": 3.817972205081662,
+    "observable_peak_at_ms": 1791039119822,
+    "observable_peak_market_price": 0.03825,
+    "opened_at_ms": 1791037847572,
+    "peak_age_seconds": 1272.25,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 516.603,
+    "position_id": "PAPER:AIOUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.13256431185255657,
+    "quantity_closed_before_peak": 6628.215592627961,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0321754735502104,
+    "realized_pnl_usdt": 1.8976154682879351,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 6628.215592627961,
+    "side": "LONG",
+    "symbol": "AIOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039634701,
+        "pnl_pct": 0.6428255584629561,
+        "seconds_from_peak": 514.879,
+        "seconds_to_close": 1.724
+      },
+      "r70": {
+        "at_ms": 1791039214741,
+        "pnl_pct": 0.9344670445385894,
+        "seconds_from_peak": 94.919,
+        "seconds_to_close": 421.684
+      },
+      "r80": {
+        "at_ms": 1791039189742,
+        "pnl_pct": 1.067031356391146,
+        "seconds_from_peak": 69.92,
+        "seconds_to_close": 446.683
+      },
+      "r90": {
+        "at_ms": 1791039124748,
+        "pnl_pct": 1.2261085306142228,
+        "seconds_from_peak": 4.926,
+        "seconds_to_close": 511.677
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.030450963051929573,
+    "clean_mfe_pct": 0.532982131469617,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038065916,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.022,
+    "last_5s_pnl_pct": 0.15913776035785254,
+    "net_leakage_pp": 0.3773797883174962,
+    "net_retention_ratio": -0.08777294025257201,
+    "observable_gross_peak_pct": 0.5174052826733,
+    "observable_net_peak_pct": 0.3469288252655666,
+    "observable_net_peak_usdt": 1.7346441263278332,
+    "observable_peak_at_ms": 1791037994974,
+    "observable_peak_market_price": 0.12906,
+    "opened_at_ms": 1791037871477,
+    "peak_age_seconds": 123.497,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 70.942,
+    "position_id": "PAPER:GTCUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.015576848796317044,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5478562457252296,
+    "realized_pnl_usdt": -0.15225481525964787,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3894.2121990807877,
+    "side": "LONG",
+    "symbol": "GTCUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791038024939,
+        "pnl_pct": 0.22144515554314292,
+        "seconds_from_peak": 29.965,
+        "seconds_to_close": 40.977
+      },
+      "r70": {
+        "at_ms": 1791038024939,
+        "pnl_pct": 0.22144515554314292,
+        "seconds_from_peak": 29.965,
+        "seconds_to_close": 40.977
+      },
+      "r80": {
+        "at_ms": 1791038024939,
+        "pnl_pct": 0.22144515554314292,
+        "seconds_from_peak": 29.965,
+        "seconds_to_close": 40.977
+      },
+      "r90": {
+        "at_ms": 1791038004839,
+        "pnl_pct": 0.4161557654971837,
+        "seconds_from_peak": 9.865,
+        "seconds_to_close": 61.077
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.03676409656718271,
+    "clean_mfe_pct": 0.8141929896229305,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039511313,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.543,
+    "last_5s_pnl_pct": 0.11494633588620129,
+    "net_leakage_pp": 0.655687059213921,
+    "net_retention_ratio": -0.059400117277869514,
+    "observable_gross_peak_pct": 0.789658019316386,
+    "observable_net_peak_pct": 0.6189229626467383,
+    "observable_net_peak_usdt": 3.0946148132336915,
+    "observable_peak_at_ms": 1791039074842,
+    "observable_peak_market_price": 0.8216,
+    "opened_at_ms": 1791037894104,
+    "peak_age_seconds": 1180.738,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 436.471,
+    "position_id": "PAPER:APTUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.0245349703065445,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8264221158835687,
+    "realized_pnl_usdt": -0.1838204828359135,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 613.3742576638047,
+    "side": "LONG",
+    "symbol": "APTUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039149855,
+        "pnl_pct": 0.3848310092582796,
+        "seconds_from_peak": 75.013,
+        "seconds_to_close": 361.458
+      },
+      "r70": {
+        "at_ms": 1791039114768,
+        "pnl_pct": 0.5443083162508522,
+        "seconds_from_peak": 39.926,
+        "seconds_to_close": 396.545
+      },
+      "r80": {
+        "at_ms": 1791039089867,
+        "pnl_pct": 0.6056457420172467,
+        "seconds_from_peak": 15.025,
+        "seconds_to_close": 421.446
+      },
+      "r90": {
+        "at_ms": 1791039084759,
+        "pnl_pct": 0.6424481974770746,
+        "seconds_from_peak": 9.917,
+        "seconds_to_close": 426.554
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.03573557289653127,
+    "clean_mfe_pct": 0.5903631768691131,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039458266,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.506,
+    "last_5s_pnl_pct": 0.06719816743858686,
+    "net_leakage_pp": 0.26133404057316184,
+    "net_retention_ratio": 0.12029359879372852,
+    "observable_gross_peak_pct": 0.5903631768691131,
+    "observable_net_peak_pct": 0.29706961346969313,
+    "observable_net_peak_usdt": 1.4853480673484656,
+    "observable_peak_at_ms": 1791039079806,
+    "observable_peak_market_price": 0.01269,
+    "opened_at_ms": 1791037916668,
+    "peak_age_seconds": 1163.138,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 378.46,
+    "position_id": "PAPER:ZKUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 19816.856417822917,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5546276039725818,
+    "realized_pnl_usdt": 0.17867786448265638,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 19816.856417822917,
+    "side": "LONG",
+    "symbol": "ZKUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039164889,
+        "pnl_pct": 0.28914695931820944,
+        "seconds_from_peak": 85.083,
+        "seconds_to_close": 293.377
+      },
+      "r70": {
+        "at_ms": 1791039094774,
+        "pnl_pct": 0.30500044445247454,
+        "seconds_from_peak": 14.968,
+        "seconds_to_close": 363.492
+      },
+      "r80": {
+        "at_ms": 1791039089881,
+        "pnl_pct": 0.43975506809366127,
+        "seconds_from_peak": 10.075,
+        "seconds_to_close": 368.385
+      },
+      "r90": {
+        "at_ms": 1791039089881,
+        "pnl_pct": 0.43975506809366127,
+        "seconds_from_peak": 10.075,
+        "seconds_to_close": 368.385
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.00848508775066248,
+    "clean_mfe_pct": 0.7745470773395047,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039604717,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.957,
+    "last_5s_pnl_pct": 0.1565691276755654,
+    "net_leakage_pp": 0.5953412860474234,
+    "net_retention_ratio": 0.014052197980838474,
+    "observable_gross_peak_pct": 0.7745470773395047,
+    "observable_net_peak_pct": 0.6038263737980859,
+    "observable_net_peak_usdt": 3.0191318689904296,
+    "observable_peak_at_ms": 1791039084780,
+    "observable_peak_market_price": 0.2283,
+    "opened_at_ms": 1791037928016,
+    "peak_age_seconds": 1156.764,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 519.937,
+    "position_id": "PAPER:THETAUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7660619895888422,
+    "realized_pnl_usdt": 0.042425438753312394,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 2207.0641059426084,
+    "side": "LONG",
+    "symbol": "THETAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039269939,
+        "pnl_pct": 0.37727553826982785,
+        "seconds_from_peak": 185.159,
+        "seconds_to_close": 334.778
+      },
+      "r70": {
+        "at_ms": 1791039214779,
+        "pnl_pct": 0.5096993846263942,
+        "seconds_from_peak": 129.999,
+        "seconds_to_close": 389.938
+      },
+      "r80": {
+        "at_ms": 1791039169783,
+        "pnl_pct": 0.5979819488640903,
+        "seconds_from_peak": 85.003,
+        "seconds_to_close": 434.934
+      },
+      "r90": {
+        "at_ms": 1791039114774,
+        "pnl_pct": 0.6862645131017864,
+        "seconds_from_peak": 29.994,
+        "seconds_to_close": 489.943
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.3097891070034904,
+    "clean_mfe_pct": 1.698172438603418,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038449083,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.048,
+    "last_5s_pnl_pct": 0.41498335094780625,
+    "net_leakage_pp": 1.216785322509127,
+    "net_retention_ratio": 0.20293088958813188,
+    "observable_gross_peak_pct": 1.698172438603418,
+    "observable_net_peak_pct": 1.5265744295126173,
+    "observable_net_peak_usdt": 7.632872147563087,
+    "observable_peak_at_ms": 1791038314846,
+    "observable_peak_market_price": 0.004676,
+    "opened_at_ms": 1791037928186,
+    "peak_age_seconds": 386.66,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 134.237,
+    "position_id": "PAPER:MANTRAUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3883833315999277,
+    "realized_pnl_usdt": 1.548945535017452,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 108744.83793691556,
+    "side": "LONG",
+    "symbol": "MANTRAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791038429977,
+        "pnl_pct": 0.7412178647585588,
+        "seconds_from_peak": 115.131,
+        "seconds_to_close": 19.106
+      },
+      "r70": {
+        "at_ms": 1791038349851,
+        "pnl_pct": 1.154448248918838,
+        "seconds_from_peak": 35.005,
+        "seconds_to_close": 99.232
+      },
+      "r80": {
+        "at_ms": 1791038329852,
+        "pnl_pct": 1.3066910220305372,
+        "seconds_from_peak": 15.006,
+        "seconds_to_close": 119.231
+      },
+      "r90": {
+        "at_ms": 1791038319852,
+        "pnl_pct": 1.4806827627295904,
+        "seconds_from_peak": 5.006,
+        "seconds_to_close": 129.231
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5592629310153475,
+    "clean_mfe_pct": 0.3061675616160109,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041462084,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.368,
+    "last_5s_pnl_pct": -0.41139227569882975,
+    "net_leakage_pp": 0.35843913155168566,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.3061675616160109,
+    "observable_net_peak_pct": -0.20082379946366186,
+    "observable_net_peak_usdt": -1.0041189973183093,
+    "observable_peak_at_ms": 1791039094845,
+    "observable_peak_market_price": 4.613,
+    "opened_at_ms": 1791037928358,
+    "peak_age_seconds": 1166.487,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 2367.239,
+    "position_id": "PAPER:ORDIUSDT:1791037799999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 54.36059373597226,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8654304926313584,
+    "realized_pnl_usdt": -2.7963146550767375,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 54.36059373597226,
+    "side": "LONG",
+    "symbol": "ORDIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039219791,
+        "pnl_pct": -0.04174023829420781,
+        "seconds_from_peak": 124.946,
+        "seconds_to_close": 2242.293
+      },
+      "r50": {
+        "at_ms": 1791039104877,
+        "pnl_pct": 0.132213661660896,
+        "seconds_from_peak": 10.032,
+        "seconds_to_close": 2357.207
+      },
+      "r70": {
+        "at_ms": 1791039099778,
+        "pnl_pct": 0.17570213664968026,
+        "seconds_from_peak": 4.933,
+        "seconds_to_close": 2362.306
+      },
+      "r80": {
+        "at_ms": 1791039099778,
+        "pnl_pct": 0.17570213664968026,
+        "seconds_from_peak": 4.933,
+        "seconds_to_close": 2362.306
+      },
+      "r90": {
+        "at_ms": 1791039099778,
+        "pnl_pct": 0.17570213664968026,
+        "seconds_from_peak": 4.933,
+        "seconds_to_close": 2362.306
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.6920475012957413,
+    "clean_mfe_pct": 0.6513379595819213,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791038345571,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.682,
+    "last_5s_pnl_pct": -0.4888046323513251,
+    "net_leakage_pp": 0.959208107361947,
+    "net_retention_ratio": -2.5903800395041916,
+    "observable_gross_peak_pct": 0.4375612235944404,
+    "observable_net_peak_pct": 0.26716060606620556,
+    "observable_net_peak_usdt": 1.3358030303310278,
+    "observable_peak_at_ms": 1791038269881,
+    "observable_peak_market_price": 0.2678,
+    "opened_at_ms": 1791038130851,
+    "peak_age_seconds": 139.03,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 75.69,
+    "position_id": "PAPER:SUPERUSDT:1791038099999:LONG",
+    "positive_observability_gap_pp": 0.21377673598748093,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.1296087248901818,
+    "realized_pnl_usdt": -3.4602375064787063,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1875.2345262060203,
+    "side": "LONG",
+    "symbol": "SUPERUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791038295032,
+        "pnl_pct": -0.057500691323941755,
+        "seconds_from_peak": 25.151,
+        "seconds_to_close": 50.539
+      },
+      "r50": {
+        "at_ms": 1791038289907,
+        "pnl_pct": 0.08126666361529811,
+        "seconds_from_peak": 20.026,
+        "seconds_to_close": 55.664
+      },
+      "r70": {
+        "at_ms": 1791038284893,
+        "pnl_pct": 0.2425368328690336,
+        "seconds_from_peak": 15.012,
+        "seconds_to_close": 60.678
+      },
+      "r80": {
+        "at_ms": 1791038284893,
+        "pnl_pct": 0.2425368328690336,
+        "seconds_from_peak": 15.012,
+        "seconds_to_close": 60.678
+      },
+      "r90": {
+        "at_ms": 1791038274910,
+        "pnl_pct": 0.3625518425462104,
+        "seconds_from_peak": 5.029,
+        "seconds_to_close": 70.661
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.021915345718736042,
+    "clean_mfe_pct": 0.707131301012498,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039805183,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.476,
+    "last_5s_pnl_pct": 0.10119188283554958,
+    "net_leakage_pp": 0.5145592866275119,
+    "net_retention_ratio": 0.040850665432007945,
+    "observable_gross_peak_pct": 0.707131301012498,
+    "observable_net_peak_pct": 0.5364746323462479,
+    "observable_net_peak_usdt": 2.68237316173124,
+    "observable_peak_at_ms": 1791039399789,
+    "observable_peak_market_price": 0.1662,
+    "opened_at_ms": 1791038459659,
+    "peak_age_seconds": 940.13,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 405.394,
+    "position_id": "PAPER:CYSUSDT:1791038399999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.685215955293762,
+    "realized_pnl_usdt": 0.1095767285936802,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3029.697090884853,
+    "side": "LONG",
+    "symbol": "CYSUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039794801,
+        "pnl_pct": -0.019996000799837876,
+        "seconds_from_peak": 395.012,
+        "seconds_to_close": 10.382
+      },
+      "r50": {
+        "at_ms": 1791039624795,
+        "pnl_pct": 0.3435676501063245,
+        "seconds_from_peak": 225.006,
+        "seconds_to_close": 180.388
+      },
+      "r70": {
+        "at_ms": 1791039434869,
+        "pnl_pct": 0.46475553374172307,
+        "seconds_from_peak": 35.08,
+        "seconds_to_close": 370.314
+      },
+      "r80": {
+        "at_ms": 1791039429790,
+        "pnl_pct": 0.5253494755594224,
+        "seconds_from_peak": 30.001,
+        "seconds_to_close": 375.393
+      },
+      "r90": {
+        "at_ms": 1791039429790,
+        "pnl_pct": 0.5253494755594224,
+        "seconds_from_peak": 30.001,
+        "seconds_to_close": 375.393
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.360860861442434,
+    "clean_mfe_pct": 3.144882027513707,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041419153,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.322,
+    "last_5s_pnl_pct": 1.3062386015410876,
+    "net_leakage_pp": 1.4002575419495558,
+    "net_retention_ratio": 0.49286581110416644,
+    "observable_gross_peak_pct": 2.9338901589594846,
+    "observable_net_peak_pct": 2.7611184033919898,
+    "observable_net_peak_usdt": 13.805592016959949,
+    "observable_peak_at_ms": 1791040719717,
+    "observable_peak_market_price": 0.03415,
+    "opened_at_ms": 1791038462405,
+    "peak_age_seconds": 2257.312,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 699.436,
+    "position_id": "PAPER:FLOWUSDT:1791038399999:LONG",
+    "positive_observability_gap_pp": 0.21099186855422225,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.5730292975170506,
+    "realized_pnl_usdt": 6.8043043072121705,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 15070.847753874008,
+    "side": "LONG",
+    "symbol": "FLOWUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791041264835,
+        "pnl_pct": 1.45694707907984,
+        "seconds_from_peak": 545.118,
+        "seconds_to_close": 154.318
+      },
+      "r70": {
+        "at_ms": 1791041054803,
+        "pnl_pct": 2.029639293727037,
+        "seconds_from_peak": 335.086,
+        "seconds_to_close": 364.35
+      },
+      "r80": {
+        "at_ms": 1791040824724,
+        "pnl_pct": 2.300914553296751,
+        "seconds_from_peak": 105.007,
+        "seconds_to_close": 594.429
+      },
+      "r90": {
+        "at_ms": 1791040739791,
+        "pnl_pct": 2.481764726343272,
+        "seconds_from_peak": 20.074,
+        "seconds_to_close": 679.362
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.010635188940662921,
+    "clean_mfe_pct": 0.5184959417452228,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039752174,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.328,
+    "last_5s_pnl_pct": -0.019996000799837876,
+    "net_leakage_pp": 0.26899022798671723,
+    "net_retention_ratio": -0.04116501454716002,
+    "observable_gross_peak_pct": 0.5184959417452228,
+    "observable_net_peak_pct": 0.25835503904605434,
+    "observable_net_peak_usdt": 1.2917751952302716,
+    "observable_peak_at_ms": 1791039329971,
+    "observable_peak_market_price": 1.68,
+    "opened_at_ms": 1791038462630,
+    "peak_age_seconds": 867.341,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 422.203,
+    "position_id": "PAPER:FLUIDUSDT:1791038399999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 149.58109515140657,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5291311306858858,
+    "realized_pnl_usdt": -0.053175944703314604,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 149.58109515140657,
+    "side": "LONG",
+    "symbol": "FLUIDUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039714773,
+        "pnl_pct": -0.07982843886040758,
+        "seconds_from_peak": 384.802,
+        "seconds_to_close": 37.401
+      },
+      "r50": {
+        "at_ms": 1791039454874,
+        "pnl_pct": 0.15950131338184903,
+        "seconds_from_peak": 124.903,
+        "seconds_to_close": 297.3
+      },
+      "r70": {
+        "at_ms": 1791039334864,
+        "pnl_pct": 0.33899862756354704,
+        "seconds_from_peak": 4.893,
+        "seconds_to_close": 417.31
+      },
+      "r80": {
+        "at_ms": 1791039334864,
+        "pnl_pct": 0.33899862756354704,
+        "seconds_from_peak": 4.893,
+        "seconds_to_close": 417.31
+      },
+      "r90": {
+        "at_ms": 1791039334864,
+        "pnl_pct": 0.33899862756354704,
+        "seconds_from_peak": 4.893,
+        "seconds_to_close": 417.31
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.28885808481866626,
+    "clean_mfe_pct": 0.5079512150375276,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042379696,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.924,
+    "last_5s_pnl_pct": 0.11199080315951182,
+    "net_leakage_pp": 0.19779215444038892,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.5079512150375276,
+    "observable_net_peak_pct": -0.09106593037827734,
+    "observable_net_peak_usdt": -0.45532965189138674,
+    "observable_peak_at_ms": 1791042124743,
+    "observable_peak_market_price": 0.1523,
+    "opened_at_ms": 1791038473066,
+    "peak_age_seconds": 3651.677,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 254.953,
+    "position_id": "PAPER:CFGUSDT:1791038399999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 1649.835049491752,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7968092998561939,
+    "realized_pnl_usdt": -1.4442904240933314,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 1649.835049491752,
+    "side": "LONG",
+    "symbol": "CFGUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791042139736,
+        "pnl_pct": 0.24397760711885041,
+        "seconds_from_peak": 14.993,
+        "seconds_to_close": 239.96
+      },
+      "r70": {
+        "at_ms": 1791042139736,
+        "pnl_pct": 0.24397760711885041,
+        "seconds_from_peak": 14.993,
+        "seconds_to_close": 239.96
+      },
+      "r80": {
+        "at_ms": 1791042139736,
+        "pnl_pct": 0.24397760711885041,
+        "seconds_from_peak": 14.993,
+        "seconds_to_close": 239.96
+      },
+      "r90": {
+        "at_ms": 1791042134852,
+        "pnl_pct": 0.4419578130578694,
+        "seconds_from_peak": 10.109,
+        "seconds_to_close": 244.844
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.5480867770406828,
+    "clean_mfe_pct": 1.6623070879276503,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039259063,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.097,
+    "last_5s_pnl_pct": 0.674868318457178,
+    "net_leakage_pp": 0.9426563684995071,
+    "net_retention_ratio": 0.3676601020641128,
+    "observable_gross_peak_pct": 1.6623070879276503,
+    "observable_net_peak_pct": 1.4907431455401898,
+    "observable_net_peak_usdt": 7.453715727700949,
+    "observable_peak_at_ms": 1791039069907,
+    "observable_peak_market_price": 0.13899,
+    "opened_at_ms": 1791038490704,
+    "peak_age_seconds": 579.203,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 189.156,
+    "position_id": "PAPER:OPUSDT:1791038399999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.1142203108869675,
+    "realized_pnl_usdt": 2.7404338852034136,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3657.180627668453,
+    "side": "LONG",
+    "symbol": "OPUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039180005,
+        "pnl_pct": 0.8138411823085834,
+        "seconds_from_peak": 110.098,
+        "seconds_to_close": 79.058
+      },
+      "r70": {
+        "at_ms": 1791039129905,
+        "pnl_pct": 1.1064156325220509,
+        "seconds_from_peak": 59.998,
+        "seconds_to_close": 129.158
+      },
+      "r80": {
+        "at_ms": 1791039109909,
+        "pnl_pct": 1.311217747671467,
+        "seconds_from_peak": 40.002,
+        "seconds_to_close": 149.154
+      },
+      "r90": {
+        "at_ms": 1791039090084,
+        "pnl_pct": 1.4940767790549092,
+        "seconds_from_peak": 20.177,
+        "seconds_to_close": 168.979
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.16764631546433897,
+    "clean_mfe_pct": 0.4267421761402934,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791043273789,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.901,
+    "last_5s_pnl_pct": 0.024677816894169702,
+    "net_leakage_pp": 0.3793667662803311,
+    "net_retention_ratio": -0.7918286344952178,
+    "observable_gross_peak_pct": 0.38206835844627474,
+    "observable_net_peak_pct": 0.21172045081599214,
+    "observable_net_peak_usdt": 1.0586022540799607,
+    "observable_peak_at_ms": 1791039185013,
+    "observable_peak_market_price": 0.002247,
+    "opened_at_ms": 1791038739342,
+    "peak_age_seconds": 445.671,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 4088.776,
+    "position_id": "PAPER:1000CATUSDT:1791038699999:LONG",
+    "positive_observability_gap_pp": 0.04467381769401868,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5497146739106137,
+    "realized_pnl_usdt": -0.838231577321695,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 223369.0884700629,
+    "side": "LONG",
+    "symbol": "1000CATUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039399895,
+        "pnl_pct": -0.019996000799837876,
+        "seconds_from_peak": 214.882,
+        "seconds_to_close": 3873.894
+      },
+      "r50": {
+        "at_ms": 1791039259997,
+        "pnl_pct": 0.11402545228220706,
+        "seconds_from_peak": 74.984,
+        "seconds_to_close": 4013.792
+      },
+      "r70": {
+        "at_ms": 1791039214957,
+        "pnl_pct": 0.20337308767024442,
+        "seconds_from_peak": 29.944,
+        "seconds_to_close": 4058.832
+      },
+      "r80": {
+        "at_ms": 1791039199972,
+        "pnl_pct": 0.2927207230582596,
+        "seconds_from_peak": 14.959,
+        "seconds_to_close": 4073.817
+      },
+      "r90": {
+        "at_ms": 1791039199972,
+        "pnl_pct": 0.2927207230582596,
+        "seconds_from_peak": 14.959,
+        "seconds_to_close": 4073.817
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.14005092494147595,
+    "clean_mfe_pct": 0.48393229097455304,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039016855,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.752,
+    "last_5s_pnl_pct": 0.06625536445856728,
+    "net_leakage_pp": 0.4180737822477092,
+    "net_retention_ratio": -0.5037388878685408,
+    "observable_gross_peak_pct": 0.4476125582340229,
+    "observable_net_peak_pct": 0.2780228573062332,
+    "observable_net_peak_usdt": 1.3901142865311662,
+    "observable_peak_at_ms": 1791038805157,
+    "observable_peak_market_price": 0.021928,
+    "opened_at_ms": 1791038740027,
+    "peak_age_seconds": 65.13,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 211.698,
+    "position_id": "PAPER:USUSDT:1791038699999:SHORT",
+    "positive_observability_gap_pp": 0.03631973274053013,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.5876634831754989,
+    "realized_pnl_usdt": -0.7002546247073798,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 22699.83296282515,
+    "side": "SHORT",
+    "symbol": "USUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791038985155,
+        "pnl_pct": -0.03362390057788378,
+        "seconds_from_peak": 179.998,
+        "seconds_to_close": 31.7
+      },
+      "r50": {
+        "at_ms": 1791038845042,
+        "pnl_pct": 0.20245436223550461,
+        "seconds_from_peak": 39.885,
+        "seconds_to_close": 171.813
+      },
+      "r70": {
+        "at_ms": 1791038830054,
+        "pnl_pct": 0.2841737609016848,
+        "seconds_from_peak": 24.897,
+        "seconds_to_close": 186.801
+      },
+      "r80": {
+        "at_ms": 1791038820214,
+        "pnl_pct": 0.33865336001246416,
+        "seconds_from_peak": 15.057,
+        "seconds_to_close": 196.641
+      },
+      "r90": {
+        "at_ms": 1791038815046,
+        "pnl_pct": 0.3885929925306897,
+        "seconds_from_peak": 9.889,
+        "seconds_to_close": 201.809
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.2838253510928587,
+    "clean_mfe_pct": 0.34497365381629397,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042682116,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.301,
+    "last_5s_pnl_pct": -0.1392435117140156,
+    "net_leakage_pp": 0.44043568870438343,
+    "net_retention_ratio": -1.8123027855089207,
+    "observable_gross_peak_pct": 0.32690584913230847,
+    "observable_net_peak_pct": 0.1566103376115247,
+    "observable_net_peak_usdt": 0.7830516880576235,
+    "observable_peak_at_ms": 1791039214971,
+    "observable_peak_market_price": 555.28,
+    "opened_at_ms": 1791038744125,
+    "peak_age_seconds": 470.846,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 3467.145,
+    "position_id": "PAPER:XMRUSDT:1791038699999:LONG",
+    "positive_observability_gap_pp": 0.0180678046839855,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6107312002251672,
+    "realized_pnl_usdt": -1.4191267554642937,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 0.9033902341983533,
+    "side": "LONG",
+    "symbol": "XMRUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039589898,
+        "pnl_pct": -0.01999600079984898,
+        "seconds_from_peak": 374.927,
+        "seconds_to_close": 3092.218
+      },
+      "r50": {
+        "at_ms": 1791039509978,
+        "pnl_pct": 0.09383116870915753,
+        "seconds_from_peak": 295.007,
+        "seconds_to_close": 3172.138
+      },
+      "r70": {
+        "at_ms": 1791039384922,
+        "pnl_pct": 0.18778375306576223,
+        "seconds_from_peak": 169.951,
+        "seconds_to_close": 3297.194
+      },
+      "r80": {
+        "at_ms": 1791039384922,
+        "pnl_pct": 0.18778375306576223,
+        "seconds_from_peak": 169.951,
+        "seconds_to_close": 3297.194
+      },
+      "r90": {
+        "at_ms": 1791039345087,
+        "pnl_pct": 0.26366853273842583,
+        "seconds_from_peak": 130.116,
+        "seconds_to_close": 3337.029
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5128127022531902,
+    "clean_mfe_pct": 0.3777364865167332,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041514701,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.954,
+    "last_5s_pnl_pct": -0.5171616099455489,
+    "net_leakage_pp": 0.447024038752676,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.3777364865167332,
+    "observable_net_peak_pct": -0.06578866350051421,
+    "observable_net_peak_usdt": -0.328943317502571,
+    "observable_peak_at_ms": 1791040294810,
+    "observable_peak_market_price": 2.019,
+    "opened_at_ms": 1791039112578,
+    "peak_age_seconds": 1182.232,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1219.891,
+    "position_id": "PAPER:RENDERUSDT:1791038999999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 124.29140228642486,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8905491887699234,
+    "realized_pnl_usdt": -2.564063511265951,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 124.29140228642486,
+    "side": "LONG",
+    "symbol": "RENDERUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791040324803,
+        "pnl_pct": -0.019996000799837876,
+        "seconds_from_peak": 29.993,
+        "seconds_to_close": 1189.898
+      },
+      "r50": {
+        "at_ms": 1791040304890,
+        "pnl_pct": 0.1788702428584532,
+        "seconds_from_peak": 10.08,
+        "seconds_to_close": 1209.811
+      },
+      "r70": {
+        "at_ms": 1791040299798,
+        "pnl_pct": 0.228586803773001,
+        "seconds_from_peak": 4.988,
+        "seconds_to_close": 1214.903
+      },
+      "r80": {
+        "at_ms": 1791040299798,
+        "pnl_pct": 0.228586803773001,
+        "seconds_from_peak": 4.988,
+        "seconds_to_close": 1214.903
+      },
+      "r90": {
+        "at_ms": 1791040299798,
+        "pnl_pct": 0.228586803773001,
+        "seconds_from_peak": 4.988,
+        "seconds_to_close": 1214.903
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.0035397642382671733,
+    "clean_mfe_pct": 0.8756815266286022,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039668261,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.364,
+    "last_5s_pnl_pct": 0.017323896176346665,
+    "net_leakage_pp": 0.5592667300806298,
+    "net_retention_ratio": -0.006369610358751715,
+    "observable_gross_peak_pct": 0.726401938723864,
+    "observable_net_peak_pct": 0.5557269658423626,
+    "observable_net_peak_usdt": 2.778634829211813,
+    "observable_peak_at_ms": 1791039529946,
+    "observable_peak_market_price": 2699.0,
+    "opened_at_ms": 1791039327774,
+    "peak_age_seconds": 202.172,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 138.315,
+    "position_id": "PAPER:YFIUSDT:1791039299999:LONG",
+    "positive_observability_gap_pp": 0.14927958790473816,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7299417029621312,
+    "realized_pnl_usdt": -0.017698821191335867,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 0.186599484880926,
+    "side": "LONG",
+    "symbol": "YFIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039639897,
+        "pnl_pct": -0.09463579475221806,
+        "seconds_from_peak": 109.951,
+        "seconds_to_close": 28.364
+      },
+      "r50": {
+        "at_ms": 1791039544982,
+        "pnl_pct": 0.315883071985823,
+        "seconds_from_peak": 15.036,
+        "seconds_to_close": 123.279
+      },
+      "r70": {
+        "at_ms": 1791039540167,
+        "pnl_pct": 0.3905228659381921,
+        "seconds_from_peak": 10.221,
+        "seconds_to_close": 128.094
+      },
+      "r80": {
+        "at_ms": 1791039540167,
+        "pnl_pct": 0.3905228659381921,
+        "seconds_from_peak": 10.221,
+        "seconds_to_close": 128.094
+      },
+      "r90": {
+        "at_ms": 1791039540167,
+        "pnl_pct": 0.3905228659381921,
+        "seconds_from_peak": 10.221,
+        "seconds_to_close": 128.094
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5493968034044666,
+    "clean_mfe_pct": 0.32084492192470115,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040111640,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.755,
+    "last_5s_pnl_pct": -0.39870813716044173,
+    "net_leakage_pp": 0.6999519707800791,
+    "net_retention_ratio": -3.6491394681512612,
+    "observable_gross_peak_pct": 0.32084492192470115,
+    "observable_net_peak_pct": 0.15055516737561248,
+    "observable_net_peak_usdt": 0.7527758368780624,
+    "observable_peak_at_ms": 1791039499987,
+    "observable_peak_market_price": 0.02649,
+    "opened_at_ms": 1791039365137,
+    "peak_age_seconds": 134.85,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 611.653,
+    "position_id": "PAPER:AEVOUSDT:1791039299999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8702417253291678,
+    "realized_pnl_usdt": -2.7469840170223327,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 18935.606818030334,
+    "side": "LONG",
+    "symbol": "AEVOUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039739900,
+        "pnl_pct": -0.019996000799837876,
+        "seconds_from_peak": 239.913,
+        "seconds_to_close": 371.74
+      },
+      "r50": {
+        "at_ms": 1791039589987,
+        "pnl_pct": 0.13148885374441033,
+        "seconds_from_peak": 90.0,
+        "seconds_to_close": 521.653
+      },
+      "r70": {
+        "at_ms": 1791039579960,
+        "pnl_pct": 0.16936006738046405,
+        "seconds_from_peak": 79.973,
+        "seconds_to_close": 531.68
+      },
+      "r80": {
+        "at_ms": 1791039534983,
+        "pnl_pct": 0.2451024946525937,
+        "seconds_from_peak": 34.996,
+        "seconds_to_close": 576.657
+      },
+      "r90": {
+        "at_ms": 1791039504987,
+        "pnl_pct": 0.28297370828864743,
+        "seconds_from_peak": 5.0,
+        "seconds_to_close": 606.653
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.08679138199056051,
+    "clean_mfe_pct": 0.6313912809365663,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039783784,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.81,
+    "last_5s_pnl_pct": 0.07532896725914728,
+    "net_leakage_pp": 0.45236351228086713,
+    "net_retention_ratio": -0.2374124688379229,
+    "observable_gross_peak_pct": 0.5360663128775922,
+    "observable_net_peak_pct": 0.3655721302903066,
+    "observable_net_peak_usdt": 1.8278606514515332,
+    "observable_peak_at_ms": 1791039574959,
+    "observable_peak_market_price": 0.006328,
+    "opened_at_ms": 1791039365311,
+    "peak_age_seconds": 209.648,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 208.825,
+    "position_id": "PAPER:ACHUSDT:1791039299999:LONG",
+    "positive_observability_gap_pp": 0.09532496805897406,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6228576948681527,
+    "realized_pnl_usdt": -0.43395690995280256,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 79437.4733824886,
+    "side": "LONG",
+    "symbol": "ACHUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791039699932,
+        "pnl_pct": 0.17065393531814355,
+        "seconds_from_peak": 124.973,
+        "seconds_to_close": 83.852
+      },
+      "r70": {
+        "at_ms": 1791039660120,
+        "pnl_pct": 0.36130387143611387,
+        "seconds_from_peak": 85.161,
+        "seconds_to_close": 123.664
+      },
+      "r80": {
+        "at_ms": 1791039585102,
+        "pnl_pct": 0.408966355465612,
+        "seconds_from_peak": 10.143,
+        "seconds_to_close": 198.682
+      },
+      "r90": {
+        "at_ms": 1791039585102,
+        "pnl_pct": 0.408966355465612,
+        "seconds_from_peak": 10.143,
+        "seconds_to_close": 198.682
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.09505220304022208,
+    "clean_mfe_pct": 0.359578557077644,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791039647330,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.206,
+    "last_5s_pnl_pct": 0.1697872781387333,
+    "net_leakage_pp": 0.0949858045612845,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.1697872781387333,
+    "observable_net_peak_pct": -6.639847893757933e-05,
+    "observable_net_peak_usdt": -0.00033199239468789665,
+    "observable_peak_at_ms": 1791039620032,
+    "observable_peak_market_price": 0.1052,
+    "opened_at_ms": 1791039618779,
+    "peak_age_seconds": 1.253,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 27.298,
+    "position_id": "PAPER:ONUSDT:1791039599999:SHORT",
+    "positive_observability_gap_pp": 0.18979127893891073,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.2648394811789554,
+    "realized_pnl_usdt": -0.4752610152011104,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 4744.7819734724935,
+    "side": "SHORT",
+    "symbol": "ONUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039630220,
+        "pnl_pct": -0.02000400080015563,
+        "seconds_from_peak": 10.188,
+        "seconds_to_close": 17.11
+      },
+      "r50": {
+        "at_ms": 1791039624999,
+        "pnl_pct": 0.07489163866928328,
+        "seconds_from_peak": 4.967,
+        "seconds_to_close": 22.331
+      },
+      "r70": {
+        "at_ms": 1791039624999,
+        "pnl_pct": 0.07489163866928328,
+        "seconds_from_peak": 4.967,
+        "seconds_to_close": 22.331
+      },
+      "r80": {
+        "at_ms": 1791039624999,
+        "pnl_pct": 0.07489163866928328,
+        "seconds_from_peak": 4.967,
+        "seconds_to_close": 22.331
+      },
+      "r90": {
+        "at_ms": 1791039624999,
+        "pnl_pct": 0.07489163866928328,
+        "seconds_from_peak": 4.967,
+        "seconds_to_close": 22.331
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.9166131126003867,
+    "clean_mfe_pct": 2.707144229140576,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040193718,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.916,
+    "last_5s_pnl_pct": 1.159303341876905,
+    "net_leakage_pp": 1.5493115682827203,
+    "net_retention_ratio": 0.37171172327620544,
+    "observable_gross_peak_pct": 2.6334375202232696,
+    "observable_net_peak_pct": 2.465924680883107,
+    "observable_net_peak_usdt": 12.329623404415536,
+    "observable_peak_at_ms": 1791040004931,
+    "observable_peak_market_price": 0.1321,
+    "opened_at_ms": 1791039928875,
+    "peak_age_seconds": 76.056,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 188.787,
+    "position_id": "PAPER:ATUSDT:1791039899999:SHORT",
+    "positive_observability_gap_pp": 0.07370670891730624,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.716824407622883,
+    "realized_pnl_usdt": 4.5830655630019335,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3685.3354458658873,
+    "side": "SHORT",
+    "symbol": "ATUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791040084817,
+        "pnl_pct": 1.3067167597115459,
+        "seconds_from_peak": 79.886,
+        "seconds_to_close": 108.901
+      },
+      "r70": {
+        "at_ms": 1791040059804,
+        "pnl_pct": 1.7489570132154464,
+        "seconds_from_peak": 54.873,
+        "seconds_to_close": 133.914
+      },
+      "r80": {
+        "at_ms": 1791040049891,
+        "pnl_pct": 1.9700771399673966,
+        "seconds_from_peak": 44.96,
+        "seconds_to_close": 143.827
+      },
+      "r90": {
+        "at_ms": 1791040024823,
+        "pnl_pct": 2.338610684553988,
+        "seconds_from_peak": 19.892,
+        "seconds_to_close": 168.895
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.9630971026341522,
+    "clean_mfe_pct": 1.1357841017241022,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041185533,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.703,
+    "last_5s_pnl_pct": -0.5526598741369515,
+    "net_leakage_pp": 0.8635015347151861,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.07045635504987491,
+    "observable_net_peak_pct": -0.0995955679189661,
+    "observable_net_peak_usdt": -0.4979778395948305,
+    "observable_peak_at_ms": 1791039959925,
+    "observable_peak_market_price": 0.09957,
+    "opened_at_ms": 1791039931361,
+    "peak_age_seconds": 28.564,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 1225.608,
+    "position_id": "PAPER:CUSDT:1791039899999:LONG",
+    "positive_observability_gap_pp": 1.0653277466742272,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.033553457684027,
+    "realized_pnl_usdt": -4.815485513170761,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 5025.130880538811,
+    "side": "LONG",
+    "symbol": "CUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791039964980,
+        "pnl_pct": -0.36170490067646277,
+        "seconds_from_peak": 5.055,
+        "seconds_to_close": 1220.553
+      },
+      "r50": {
+        "at_ms": 1791039964980,
+        "pnl_pct": -0.36170490067646277,
+        "seconds_from_peak": 5.055,
+        "seconds_to_close": 1220.553
+      },
+      "r70": {
+        "at_ms": 1791039964980,
+        "pnl_pct": -0.36170490067646277,
+        "seconds_from_peak": 5.055,
+        "seconds_to_close": 1220.553
+      },
+      "r80": {
+        "at_ms": 1791039964980,
+        "pnl_pct": -0.36170490067646277,
+        "seconds_from_peak": 5.055,
+        "seconds_to_close": 1220.553
+      },
+      "r90": {
+        "at_ms": 1791039964980,
+        "pnl_pct": -0.36170490067646277,
+        "seconds_from_peak": 5.055,
+        "seconds_to_close": 1220.553
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.26295500542205474,
+    "clean_mfe_pct": 0.5336391386070395,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040224869,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.979,
+    "last_5s_pnl_pct": -0.10742133860128789,
+    "net_leakage_pp": 0.2041675938975127,
+    "net_retention_ratio": null,
+    "observable_gross_peak_pct": 0.11112200590155386,
+    "observable_net_peak_pct": -0.058787411524542026,
+    "observable_net_peak_usdt": -0.2939370576227101,
+    "observable_peak_at_ms": 1791040054932,
+    "observable_peak_market_price": 0.06856,
+    "opened_at_ms": 1791039995640,
+    "peak_age_seconds": 59.292,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 169.937,
+    "position_id": "PAPER:PHAUSDT:1791039899999:SHORT",
+    "positive_observability_gap_pp": 0.42251713270548563,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.3740770113236086,
+    "realized_pnl_usdt": -1.3147750271102738,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 7284.778150094695,
+    "side": "SHORT",
+    "symbol": "PHAUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791040084913,
+        "pnl_pct": -0.005434444499985425,
+        "seconds_from_peak": 29.981,
+        "seconds_to_close": 139.956
+      },
+      "r50": {
+        "at_ms": 1791040074894,
+        "pnl_pct": 0.038274224400591805,
+        "seconds_from_peak": 19.962,
+        "seconds_to_close": 149.975
+      },
+      "r70": {
+        "at_ms": 1791040060032,
+        "pnl_pct": 0.06741333700097663,
+        "seconds_from_peak": 5.1,
+        "seconds_to_close": 164.837
+      },
+      "r80": {
+        "at_ms": 1791040060032,
+        "pnl_pct": 0.06741333700097663,
+        "seconds_from_peak": 5.1,
+        "seconds_to_close": 164.837
+      },
+      "r90": {
+        "at_ms": 1791040060032,
+        "pnl_pct": 0.06741333700097663,
+        "seconds_from_peak": 5.1,
+        "seconds_to_close": 164.837
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.04982086753485098,
+    "clean_mfe_pct": 0.620380178476663,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791043158315,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 3.362,
+    "last_5s_pnl_pct": 0.06004402160944,
+    "net_leakage_pp": 0.2604032601238033,
+    "net_retention_ratio": -0.23658610258123122,
+    "observable_gross_peak_pct": 0.5803561672718671,
+    "observable_net_peak_pct": 0.21058239258895234,
+    "observable_net_peak_usdt": 1.0529119629447616,
+    "observable_peak_at_ms": 1791041974859,
+    "observable_peak_market_price": 0.02484,
+    "opened_at_ms": 1791040269228,
+    "peak_age_seconds": 1705.631,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 1183.456,
+    "position_id": "PAPER:SPKUSDT:1791040199999:SHORT",
+    "positive_observability_gap_pp": 0.04002401120479593,
+    "quantity_closed_before_peak": 10006.002801200497,
+    "raw_gross_peak_to_realized_leakage_pp": 0.630177034806718,
+    "realized_pnl_usdt": -0.2491043376742549,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 10006.002801200497,
+    "side": "SHORT",
+    "symbol": "SPKUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791042459784,
+        "pnl_pct": 0.2601640776334513,
+        "seconds_from_peak": 484.925,
+        "seconds_to_close": 698.531
+      },
+      "r70": {
+        "at_ms": 1791042114842,
+        "pnl_pct": 0.38023611124785583,
+        "seconds_from_peak": 139.983,
+        "seconds_to_close": 1043.473
+      },
+      "r80": {
+        "at_ms": 1791042099842,
+        "pnl_pct": 0.42026012245266475,
+        "seconds_from_peak": 124.983,
+        "seconds_to_close": 1058.473
+      },
+      "r90": {
+        "at_ms": 1791042069840,
+        "pnl_pct": 0.5003081448622604,
+        "seconds_from_peak": 94.981,
+        "seconds_to_close": 1088.475
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.015194032519136414,
+    "clean_mfe_pct": 0.5974185977954738,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040477185,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.275,
+    "last_5s_pnl_pct": 0.14464789215891116,
+    "net_leakage_pp": 0.1747679750793434,
+    "net_retention_ratio": -0.09521625069458775,
+    "observable_gross_peak_pct": 0.329872271737508,
+    "observable_net_peak_pct": 0.159573942560207,
+    "observable_net_peak_usdt": 0.797869712801035,
+    "observable_peak_at_ms": 1791040284916,
+    "observable_peak_market_price": 0.04875,
+    "opened_at_ms": 1791040269399,
+    "peak_age_seconds": 15.517,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 192.269,
+    "position_id": "PAPER:MEGAUSDT:1791040199999:LONG",
+    "positive_observability_gap_pp": 0.2675463260579658,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.3450663042566444,
+    "realized_pnl_usdt": -0.07597016259568207,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 10290.243309921796,
+    "side": "LONG",
+    "symbol": "MEGAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791040314920,
+        "pnl_pct": 0.10348691891923778,
+        "seconds_from_peak": 30.004,
+        "seconds_to_close": 162.265
+      },
+      "r70": {
+        "at_ms": 1791040294902,
+        "pnl_pct": 0.22696983863828013,
+        "seconds_from_peak": 9.986,
+        "seconds_to_close": 182.283
+      },
+      "r80": {
+        "at_ms": 1791040294902,
+        "pnl_pct": 0.22696983863828013,
+        "seconds_from_peak": 9.986,
+        "seconds_to_close": 182.283
+      },
+      "r90": {
+        "at_ms": 1791040294902,
+        "pnl_pct": 0.22696983863828013,
+        "seconds_from_peak": 9.986,
+        "seconds_to_close": 182.283
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.26949078905468693,
+    "clean_mfe_pct": 0.8209450237695926,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040539825,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.91,
+    "last_5s_pnl_pct": 0.3610554009581879,
+    "net_leakage_pp": -0.07876333656909446,
+    "net_retention_ratio": 1.4129627672505312,
+    "observable_gross_peak_pct": 0.3610554009581879,
+    "observable_net_peak_pct": 0.19072745248559247,
+    "observable_net_peak_usdt": 0.9536372624279623,
+    "observable_peak_at_ms": 1791040534915,
+    "observable_peak_market_price": 0.07638,
+    "opened_at_ms": 1791040517046,
+    "peak_age_seconds": 17.869,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 4.91,
+    "position_id": "PAPER:SANDUSDT:1791040499999:LONG",
+    "positive_observability_gap_pp": 0.45988962281140466,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.09156461190350096,
+    "realized_pnl_usdt": 1.3474539452734347,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 6569.8517544486895,
+    "side": "LONG",
+    "symbol": "SANDUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": null,
+      "r90": null
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.23829971471830289,
+    "clean_mfe_pct": 0.9767074846741775,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791040802850,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.829,
+    "last_5s_pnl_pct": -0.2328841239107926,
+    "net_leakage_pp": 0.5027121540461611,
+    "net_retention_ratio": -0.9012424503327664,
+    "observable_gross_peak_pct": 0.7831728273006044,
+    "observable_net_peak_pct": 0.26441243932785824,
+    "observable_net_peak_usdt": 1.3220621966392911,
+    "observable_peak_at_ms": 1791040665043,
+    "observable_peak_market_price": 0.10415,
+    "opened_at_ms": 1791040537141,
+    "peak_age_seconds": 127.902,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 137.807,
+    "position_id": "PAPER:MANAUSDT:1791040499999:LONG",
+    "positive_observability_gap_pp": 0.193534657373573,
+    "quantity_closed_before_peak": 2419.183217169961,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0214725420189072,
+    "realized_pnl_usdt": -1.1914985735915145,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 2419.183217169961,
+    "side": "LONG",
+    "symbol": "MANAUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791040789927,
+        "pnl_pct": -0.136116795223995,
+        "seconds_from_peak": 124.884,
+        "seconds_to_close": 12.923
+      },
+      "r50": {
+        "at_ms": 1791040704952,
+        "pnl_pct": 0.3283663824726224,
+        "seconds_from_peak": 39.909,
+        "seconds_to_close": 97.898
+      },
+      "r70": {
+        "at_ms": 1791040684933,
+        "pnl_pct": 0.5219010398462398,
+        "seconds_from_peak": 19.89,
+        "seconds_to_close": 117.917
+      },
+      "r80": {
+        "at_ms": 1791040684933,
+        "pnl_pct": 0.5219010398462398,
+        "seconds_from_peak": 19.89,
+        "seconds_to_close": 117.917
+      },
+      "r90": {
+        "at_ms": 1791040684933,
+        "pnl_pct": 0.5219010398462398,
+        "seconds_from_peak": 19.89,
+        "seconds_to_close": 117.917
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 1.1641750668974442,
+    "clean_mfe_pct": 3.0724019199975223,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042495654,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.647,
+    "last_5s_pnl_pct": 1.332923589548829,
+    "net_leakage_pp": 1.0640245585348809,
+    "net_retention_ratio": 0.5224734146840931,
+    "observable_gross_peak_pct": 2.395938124823027,
+    "observable_net_peak_pct": 2.228199625432325,
+    "observable_net_peak_usdt": 11.140998127161625,
+    "observable_peak_at_ms": 1791042019833,
+    "observable_peak_market_price": 0.101,
+    "opened_at_ms": 1791040551366,
+    "peak_age_seconds": 1468.467,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 475.821,
+    "position_id": "PAPER:ONUSDT:1791040499999:SHORT",
+    "positive_observability_gap_pp": 0.6764637951744952,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.231763057925583,
+    "realized_pnl_usdt": 5.82087533448722,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 4831.884251246384,
+    "side": "SHORT",
+    "symbol": "ONUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791042464986,
+        "pnl_pct": 1.1396482194989677,
+        "seconds_from_peak": 445.153,
+        "seconds_to_close": 30.668
+      },
+      "r70": {
+        "at_ms": 1791042399830,
+        "pnl_pct": 1.6228366446236042,
+        "seconds_from_peak": 379.997,
+        "seconds_to_close": 95.824
+      },
+      "r80": {
+        "at_ms": 1791042079856,
+        "pnl_pct": 1.9127496996983795,
+        "seconds_from_peak": 60.023,
+        "seconds_to_close": 415.798
+      },
+      "r90": {
+        "at_ms": 1791042024835,
+        "pnl_pct": 2.1060250697482408,
+        "seconds_from_peak": 5.002,
+        "seconds_to_close": 470.819
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.5390226242385647,
+    "clean_mfe_pct": 0.302520141133078,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041312975,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.846,
+    "last_5s_pnl_pct": -0.39626483305487126,
+    "net_leakage_pp": 0.6175687832863375,
+    "net_retention_ratio": -6.8624950064168555,
+    "observable_gross_peak_pct": 0.24876745081092722,
+    "observable_net_peak_pct": 0.07854615904777276,
+    "observable_net_peak_usdt": 0.3927307952388638,
+    "observable_peak_at_ms": 1791041229919,
+    "observable_peak_market_price": 0.01865,
+    "opened_at_ms": 1791040841782,
+    "peak_age_seconds": 388.137,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 83.056,
+    "position_id": "PAPER:BMTUSDT:1791040799999:LONG",
+    "positive_observability_gap_pp": 0.0537526903221508,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.787790075049492,
+    "realized_pnl_usdt": -2.695113121192824,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 26876.345161075315,
+    "side": "LONG",
+    "symbol": "BMTUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791041239953,
+        "pnl_pct": -0.34251214273272046,
+        "seconds_from_peak": 10.034,
+        "seconds_to_close": 73.022
+      },
+      "r50": {
+        "at_ms": 1791041239953,
+        "pnl_pct": -0.34251214273272046,
+        "seconds_from_peak": 10.034,
+        "seconds_to_close": 73.022
+      },
+      "r70": {
+        "at_ms": 1791041239953,
+        "pnl_pct": -0.34251214273272046,
+        "seconds_from_peak": 10.034,
+        "seconds_to_close": 73.022
+      },
+      "r80": {
+        "at_ms": 1791041239953,
+        "pnl_pct": -0.34251214273272046,
+        "seconds_from_peak": 10.034,
+        "seconds_to_close": 73.022
+      },
+      "r90": {
+        "at_ms": 1791041239953,
+        "pnl_pct": -0.34251214273272046,
+        "seconds_from_peak": 10.034,
+        "seconds_to_close": 73.022
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.29627311136968665,
+    "clean_mfe_pct": 7.663193538361646,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042951993,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.072,
+    "last_5s_pnl_pct": -0.7860164881880571,
+    "net_leakage_pp": 4.122383917960058,
+    "net_retention_ratio": -0.07743453505302678,
+    "observable_gross_peak_pct": 7.450925017760179,
+    "observable_net_peak_pct": 3.8261108065903713,
+    "observable_net_peak_usdt": 19.130554032951856,
+    "observable_peak_at_ms": 1791042304899,
+    "observable_peak_market_price": 0.020056,
+    "opened_at_ms": 1791040867961,
+    "peak_age_seconds": 1436.938,
+    "peak_position_status": "REDUCED",
+    "peak_to_close_seconds": 647.094,
+    "position_id": "PAPER:USUSDT:1791040799999:SHORT",
+    "positive_observability_gap_pp": 0.21226852060146673,
+    "quantity_closed_before_peak": 11536.332641384102,
+    "raw_gross_peak_to_realized_leakage_pp": 7.747198129129866,
+    "realized_pnl_usdt": -1.4813655568484334,
+    "reductions_before_peak": 1,
+    "remaining_quantity_at_peak": 11536.332641384102,
+    "side": "SHORT",
+    "symbol": "USUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791042945085,
+        "pnl_pct": -0.043076666082941806,
+        "seconds_from_peak": 640.186,
+        "seconds_to_close": 6.908
+      },
+      "r50": {
+        "at_ms": 1791042939921,
+        "pnl_pct": 2.577978110039536,
+        "seconds_from_peak": 635.022,
+        "seconds_to_close": 12.072
+      },
+      "r70": {
+        "at_ms": 1791042669929,
+        "pnl_pct": 5.185189286992342,
+        "seconds_from_peak": 365.03,
+        "seconds_to_close": 282.064
+      },
+      "r80": {
+        "at_ms": 1791042374992,
+        "pnl_pct": 5.7204751215525595,
+        "seconds_from_peak": 70.093,
+        "seconds_to_close": 577.001
+      },
+      "r90": {
+        "at_ms": 1791042349866,
+        "pnl_pct": 6.389582414752848,
+        "seconds_from_peak": 44.967,
+        "seconds_to_close": 602.127
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.7349707204667525,
+    "clean_mfe_pct": 0.8292840801994498,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041227947,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.978,
+    "last_5s_pnl_pct": -0.5644194373383815,
+    "net_leakage_pp": 1.2424465853327349,
+    "net_retention_ratio": -1.448287044470279,
+    "observable_gross_peak_pct": 0.676847757968746,
+    "observable_net_peak_pct": 0.5074758648659825,
+    "observable_net_peak_usdt": 2.5373793243299123,
+    "observable_peak_at_ms": 1791041155023,
+    "observable_peak_market_price": 0.04561,
+    "opened_at_ms": 1791041125180,
+    "peak_age_seconds": 29.843,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 72.924,
+    "position_id": "PAPER:\u9f99\u867eUSDT:1791041099999:SHORT",
+    "positive_observability_gap_pp": 0.1524363222307038,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.4118184784354986,
+    "realized_pnl_usdt": -3.674853602333762,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 10888.308730764224,
+    "side": "SHORT",
+    "symbol": "\u9f99\u867eUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791041179986,
+        "pnl_pct": -0.0635572357232217,
+        "seconds_from_peak": 24.963,
+        "seconds_to_close": 47.961
+      },
+      "r50": {
+        "at_ms": 1791041164993,
+        "pnl_pct": 0.30664526112276214,
+        "seconds_from_peak": 9.97,
+        "seconds_to_close": 62.954
+      },
+      "r70": {
+        "at_ms": 1791041164993,
+        "pnl_pct": 0.30664526112276214,
+        "seconds_from_peak": 9.97,
+        "seconds_to_close": 62.954
+      },
+      "r80": {
+        "at_ms": 1791041164993,
+        "pnl_pct": 0.30664526112276214,
+        "seconds_from_peak": 9.97,
+        "seconds_to_close": 62.954
+      },
+      "r90": {
+        "at_ms": 1791041164993,
+        "pnl_pct": 0.30664526112276214,
+        "seconds_from_peak": 9.97,
+        "seconds_to_close": 62.954
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.8885650232180328,
+    "clean_mfe_pct": 2.3669728972195436,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041755260,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.349,
+    "last_5s_pnl_pct": 1.0632919184890843,
+    "net_leakage_pp": 1.1718252168733105,
+    "net_retention_ratio": 0.4312605476031764,
+    "observable_gross_peak_pct": 2.2324957762043685,
+    "observable_net_peak_pct": 2.060390240091343,
+    "observable_net_peak_usdt": 10.301951200456715,
+    "observable_peak_at_ms": 1791041404981,
+    "observable_peak_market_price": 2.7368,
+    "opened_at_ms": 1791041138930,
+    "peak_age_seconds": 266.051,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 350.279,
+    "position_id": "PAPER:MORPHOUSDT:1791041099999:LONG",
+    "positive_observability_gap_pp": 0.13447712101517517,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.3439307529863358,
+    "realized_pnl_usdt": 4.442825116090164,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 186.77377918774548,
+    "side": "LONG",
+    "symbol": "MORPHOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791041715122,
+        "pnl_pct": 0.988582406813987,
+        "seconds_from_peak": 310.141,
+        "seconds_to_close": 40.138
+      },
+      "r70": {
+        "at_ms": 1791041715122,
+        "pnl_pct": 0.988582406813987,
+        "seconds_from_peak": 310.141,
+        "seconds_to_close": 40.138
+      },
+      "r80": {
+        "at_ms": 1791041484933,
+        "pnl_pct": 1.7730322794025088,
+        "seconds_from_peak": 79.952,
+        "seconds_to_close": 270.327
+      },
+      "r90": {
+        "at_ms": 1791041475084,
+        "pnl_pct": 1.9299222539202132,
+        "seconds_from_peak": 70.103,
+        "seconds_to_close": 280.176
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.48277203686349657,
+    "clean_mfe_pct": 0.6014653223042367,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041701660,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.518,
+    "last_5s_pnl_pct": -0.31246015284926987,
+    "net_leakage_pp": 0.8416103341282104,
+    "net_retention_ratio": -1.3453748960004603,
+    "observable_gross_peak_pct": 0.5283512842919391,
+    "observable_net_peak_pct": 0.3588382972647138,
+    "observable_net_peak_usdt": 1.7941914863235688,
+    "observable_peak_at_ms": 1791041559946,
+    "observable_peak_market_price": 0.2721,
+    "opened_at_ms": 1791041163590,
+    "peak_age_seconds": 396.356,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 141.714,
+    "position_id": "PAPER:ARXUSDT:1791041099999:SHORT",
+    "positive_observability_gap_pp": 0.07311403801229754,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.0111233211554356,
+    "realized_pnl_usdt": -2.4138601843174827,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 1827.8509503070204,
+    "side": "SHORT",
+    "symbol": "ARXUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791041700142,
+        "pnl_pct": -0.31246015284926987,
+        "seconds_from_peak": 140.196,
+        "seconds_to_close": 1.518
+      },
+      "r50": {
+        "at_ms": 1791041700142,
+        "pnl_pct": -0.31246015284926987,
+        "seconds_from_peak": 140.196,
+        "seconds_to_close": 1.518
+      },
+      "r70": {
+        "at_ms": 1791041664930,
+        "pnl_pct": 0.34556618926123717,
+        "seconds_from_peak": 104.984,
+        "seconds_to_close": 36.73
+      },
+      "r80": {
+        "at_ms": 1791041584935,
+        "pnl_pct": 0.382123208267382,
+        "seconds_from_peak": 24.989,
+        "seconds_to_close": 116.725
+      },
+      "r90": {
+        "at_ms": 1791041584935,
+        "pnl_pct": 0.382123208267382,
+        "seconds_from_peak": 24.989,
+        "seconds_to_close": 116.725
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.3736727919908426,
+    "clean_mfe_pct": 1.9323384196358973,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791041419306,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 4.108,
+    "last_5s_pnl_pct": 0.43053655776201794,
+    "net_leakage_pp": 0.5637107995923546,
+    "net_retention_ratio": 0.3986338094095787,
+    "observable_gross_peak_pct": 1.106347395605256,
+    "observable_net_peak_pct": 0.9373835915831972,
+    "observable_net_peak_usdt": 4.686917957915986,
+    "observable_peak_at_ms": 1791041394999,
+    "observable_peak_market_price": 0.1317,
+    "opened_at_ms": 1791041174771,
+    "peak_age_seconds": 220.228,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 24.307,
+    "position_id": "PAPER:ATUSDT:1791041099999:SHORT",
+    "positive_observability_gap_pp": 0.8259910240306412,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.7326746036144135,
+    "realized_pnl_usdt": 1.868363959954213,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 3754.50465468469,
+    "side": "SHORT",
+    "symbol": "ATUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791041405005,
+        "pnl_pct": 0.5056266508557061,
+        "seconds_from_peak": 10.006,
+        "seconds_to_close": 14.301
+      },
+      "r70": {
+        "at_ms": 1791041400106,
+        "pnl_pct": 0.5807167439494165,
+        "seconds_from_peak": 5.107,
+        "seconds_to_close": 19.2
+      },
+      "r80": {
+        "at_ms": 1791041400106,
+        "pnl_pct": 0.5807167439494165,
+        "seconds_from_peak": 5.107,
+        "seconds_to_close": 19.2
+      },
+      "r90": {
+        "at_ms": 1791041400106,
+        "pnl_pct": 0.5807167439494165,
+        "seconds_from_peak": 5.107,
+        "seconds_to_close": 19.2
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.47227049643110475,
+    "clean_mfe_pct": 1.7136433994310751,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791043545485,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.383,
+    "last_5s_pnl_pct": 0.7754385475414072,
+    "net_leakage_pp": 1.029007429338285,
+    "net_retention_ratio": 0.3145789918872423,
+    "observable_gross_peak_pct": 1.672851884131532,
+    "observable_net_peak_pct": 1.5012779257693896,
+    "observable_net_peak_usdt": 7.506389628846948,
+    "observable_peak_at_ms": 1791043404912,
+    "observable_peak_market_price": 0.04985,
+    "opened_at_ms": 1791041431203,
+    "peak_age_seconds": 1973.709,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 140.573,
+    "position_id": "PAPER:MEGAUSDT:1791041399999:LONG",
+    "positive_observability_gap_pp": 0.04079151529954306,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.2005813877004274,
+    "realized_pnl_usdt": 2.3613524821555236,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 10197.878824887817,
+    "side": "LONG",
+    "symbol": "MEGAUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791043519925,
+        "pnl_pct": 0.6530640016427558,
+        "seconds_from_peak": 115.013,
+        "seconds_to_close": 25.56
+      },
+      "r70": {
+        "at_ms": 1791043464935,
+        "pnl_pct": 1.1221664275875787,
+        "seconds_from_peak": 60.023,
+        "seconds_to_close": 80.55
+      },
+      "r80": {
+        "at_ms": 1791043449915,
+        "pnl_pct": 1.3261240040853384,
+        "seconds_from_peak": 45.003,
+        "seconds_to_close": 95.57
+      },
+      "r90": {
+        "at_ms": 1791043419912,
+        "pnl_pct": 1.489290065283555,
+        "seconds_from_peak": 15.0,
+        "seconds_to_close": 125.573
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": 0.38157809535367276,
+    "clean_mfe_pct": 1.6457765330138319,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042453028,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.968,
+    "last_5s_pnl_pct": 0.6025654512315404,
+    "net_leakage_pp": 0.9917901786522594,
+    "net_retention_ratio": 0.27784105878655574,
+    "observable_gross_peak_pct": 1.5448206218736216,
+    "observable_net_peak_pct": 1.373368274005932,
+    "observable_net_peak_usdt": 6.86684137002966,
+    "observable_peak_at_ms": 1791042315094,
+    "observable_peak_market_price": 0.06035,
+    "opened_at_ms": 1791041766877,
+    "peak_age_seconds": 548.217,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 137.934,
+    "position_id": "PAPER:AIOTUSDT:1791041699999:LONG",
+    "positive_observability_gap_pp": 0.1009559111402103,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 1.1632425265199489,
+    "realized_pnl_usdt": 1.907890476768364,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 8412.992595018526,
+    "side": "LONG",
+    "symbol": "AIOTUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791042429966,
+        "pnl_pct": 0.6025654512315404,
+        "seconds_from_peak": 114.872,
+        "seconds_to_close": 23.062
+      },
+      "r70": {
+        "at_ms": 1791042399941,
+        "pnl_pct": 1.0232150809824647,
+        "seconds_from_peak": 84.847,
+        "seconds_to_close": 53.087
+      },
+      "r80": {
+        "at_ms": 1791042380035,
+        "pnl_pct": 1.19147493288283,
+        "seconds_from_peak": 64.941,
+        "seconds_to_close": 72.993
+      },
+      "r90": {
+        "at_ms": 1791042330300,
+        "pnl_pct": 1.3597347847831953,
+        "seconds_from_peak": 15.206,
+        "seconds_to_close": 122.728
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.37003047481700346,
+    "clean_mfe_pct": 0.5843370032250439,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042485090,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 0.109,
+    "last_5s_pnl_pct": -0.11541700143532507,
+    "net_leakage_pp": 0.6461280294312344,
+    "net_retention_ratio": -1.3402164149335456,
+    "observable_gross_peak_pct": 0.44650666897374514,
+    "observable_net_peak_pct": 0.27609755461423097,
+    "observable_net_peak_usdt": 1.3804877730711547,
+    "observable_peak_at_ms": 1791042465159,
+    "observable_peak_market_price": 0.009474,
+    "opened_at_ms": 1791042316746,
+    "peak_age_seconds": 148.413,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 19.931,
+    "position_id": "PAPER:AVAAIUSDT:1791042299999:LONG",
+    "positive_observability_gap_pp": 0.13783033425129876,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8165371437907486,
+    "realized_pnl_usdt": -1.8501523740850172,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 53011.66701972437,
+    "side": "LONG",
+    "symbol": "AVAAIUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791042484981,
+        "pnl_pct": -0.11541700143532507,
+        "seconds_from_peak": 19.822,
+        "seconds_to_close": 0.109
+      },
+      "r50": {
+        "at_ms": 1791042474968,
+        "pnl_pct": 0.011810999412009693,
+        "seconds_from_peak": 9.809,
+        "seconds_to_close": 10.122
+      },
+      "r70": {
+        "at_ms": 1791042469965,
+        "pnl_pct": 0.287471667914585,
+        "seconds_from_peak": 4.806,
+        "seconds_to_close": 15.125
+      },
+      "r80": {
+        "at_ms": 1791042469965,
+        "pnl_pct": 0.287471667914585,
+        "seconds_from_peak": 4.806,
+        "seconds_to_close": 15.125
+      },
+      "r90": {
+        "at_ms": 1791042469965,
+        "pnl_pct": 0.287471667914585,
+        "seconds_from_peak": 4.806,
+        "seconds_to_close": 15.125
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.01270373254541488,
+    "clean_mfe_pct": 0.8316526579333683,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042817435,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.489,
+    "last_5s_pnl_pct": 0.05097472076125431,
+    "net_leakage_pp": 0.6735814452016494,
+    "net_retention_ratio": -0.019222516211592867,
+    "observable_gross_peak_pct": 0.8316526579333683,
+    "observable_net_peak_pct": 0.6608777126562345,
+    "observable_net_peak_usdt": 3.3043885632811727,
+    "observable_peak_at_ms": 1791042645133,
+    "observable_peak_market_price": 0.5683,
+    "opened_at_ms": 1791042327553,
+    "peak_age_seconds": 317.58,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 172.302,
+    "position_id": "PAPER:JTOUSDT:1791042299999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.8443563904787832,
+    "realized_pnl_usdt": -0.0635186627270744,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 887.1340195137548,
+    "side": "LONG",
+    "symbol": "JTOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": {
+        "at_ms": 1791042670020,
+        "pnl_pct": 0.33485760700566747,
+        "seconds_from_peak": 24.887,
+        "seconds_to_close": 147.415
+      },
+      "r70": {
+        "at_ms": 1791042650017,
+        "pnl_pct": 0.565512452079231,
+        "seconds_from_peak": 4.884,
+        "seconds_to_close": 167.418
+      },
+      "r80": {
+        "at_ms": 1791042650017,
+        "pnl_pct": 0.565512452079231,
+        "seconds_from_peak": 4.884,
+        "seconds_to_close": 167.418
+      },
+      "r90": {
+        "at_ms": 1791042650017,
+        "pnl_pct": 0.565512452079231,
+        "seconds_from_peak": 4.884,
+        "seconds_to_close": 167.418
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.1899620075984686,
+    "clean_mfe_pct": 0.5111944571072558,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791042786298,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 1.306,
+    "last_5s_pnl_pct": -0.019996000799837876,
+    "net_leakage_pp": 0.514101972067819,
+    "net_retention_ratio": -0.5860493256653969,
+    "observable_gross_peak_pct": 0.4945947552976726,
+    "observable_net_peak_pct": 0.3241399644693505,
+    "observable_net_peak_usdt": 1.6206998223467526,
+    "observable_peak_at_ms": 1791042705093,
+    "observable_peak_market_price": 0.006054,
+    "opened_at_ms": 1791042330179,
+    "peak_age_seconds": 374.914,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 81.205,
+    "position_id": "PAPER:INXUSDT:1791042299999:LONG",
+    "positive_observability_gap_pp": 0.016599701809583145,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.6845567628961412,
+    "realized_pnl_usdt": -0.949810037992343,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 82998.50904798288,
+    "side": "LONG",
+    "symbol": "INXUSDT",
+    "thresholds": {
+      "breakeven": {
+        "at_ms": 1791042769986,
+        "pnl_pct": -0.05319540441901527,
+        "seconds_from_peak": 64.893,
+        "seconds_to_close": 16.312
+      },
+      "r50": {
+        "at_ms": 1791042765186,
+        "pnl_pct": 0.2123998245345149,
+        "seconds_from_peak": 60.093,
+        "seconds_to_close": 21.112
+      },
+      "r70": {
+        "at_ms": 1791042709973,
+        "pnl_pct": 0.32859773720170793,
+        "seconds_from_peak": 4.88,
+        "seconds_to_close": 76.325
+      },
+      "r80": {
+        "at_ms": 1791042709973,
+        "pnl_pct": 0.32859773720170793,
+        "seconds_from_peak": 4.88,
+        "seconds_to_close": 76.325
+      },
+      "r90": {
+        "at_ms": 1791042709973,
+        "pnl_pct": 0.32859773720170793,
+        "seconds_from_peak": 4.88,
+        "seconds_to_close": 76.325
+      }
+    }
+  },
+  {
+    "actual_realized_net_pct": -0.010497103608020685,
+    "clean_mfe_pct": 0.3392750607989381,
+    "close_reason": "stage12_close",
+    "closed_at_ms": 1791043567184,
+    "initial_notional_usdt": 500.0,
+    "last_5s_gap_to_close_seconds": 2.102,
+    "last_5s_pnl_pct": 0.3392750607989381,
+    "net_leakage_pp": 0.17946490399045717,
+    "net_retention_ratio": -0.06212487577077921,
+    "observable_gross_peak_pct": 0.3392750607989381,
+    "observable_net_peak_pct": 0.16896780038243647,
+    "observable_net_peak_usdt": 0.8448390019121824,
+    "observable_peak_at_ms": 1791043565082,
+    "observable_peak_market_price": 0.0391,
+    "opened_at_ms": 1791043546193,
+    "peak_age_seconds": 18.889,
+    "peak_position_status": "OPEN",
+    "peak_to_close_seconds": 2.102,
+    "position_id": "PAPER:AIOUSDT:1791043499999:LONG",
+    "positive_observability_gap_pp": 0.0,
+    "quantity_closed_before_peak": 0.0,
+    "raw_gross_peak_to_realized_leakage_pp": 0.3497721644069588,
+    "realized_pnl_usdt": -0.05248551804010343,
+    "reductions_before_peak": 0,
+    "remaining_quantity_at_peak": 12831.109342813163,
+    "side": "LONG",
+    "symbol": "AIOUSDT",
+    "thresholds": {
+      "breakeven": null,
+      "r50": null,
+      "r70": null,
+      "r80": null,
+      "r90": null
+    }
+  }
+]
