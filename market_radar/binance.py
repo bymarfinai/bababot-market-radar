@@ -79,6 +79,28 @@ class BinancePublicClient:
         payload = self.get("/fapi/v1/ticker/price", {"symbol": symbol})
         return float(payload["price"])
 
+    def ticker_prices(self) -> dict[str, float]:
+        """Return one canonical all-symbol USD-M Futures ticker snapshot."""
+        payload = self.get("/fapi/v1/ticker/price")
+        if not isinstance(payload, list):
+            raise RuntimeError("Binance all-ticker response is not a list")
+        prices: dict[str, float] = {}
+        for item in payload:
+            if not isinstance(item, dict):
+                continue
+            symbol = str(item.get("symbol") or "").upper()
+            if not symbol:
+                continue
+            try:
+                price = float(item["price"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if price > 0.0:
+                prices[symbol] = price
+        if not prices:
+            raise RuntimeError("Binance all-ticker response contained no valid prices")
+        return prices
+
     def depth(self, symbol: str, limit: int = 5) -> dict[str, Any]:
         return self.get(
             "/fapi/v1/depth",
