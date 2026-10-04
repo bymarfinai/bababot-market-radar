@@ -192,6 +192,60 @@ Stage 3C.2 must therefore tune separate multi-parameter combinations for:
 Detailed research note:
 `research/loss_anatomy/STAGE3C1C_LONG_LOSS_ANATOMY.md`
 
+### Stage 3C.2 — archetype-specific multi-parameter combination
+
+Stage 3C.2 tests 2-, 3-, and 4-parameter combinations separately inside the frozen archetypes rather than forcing one universal LONG formula.
+
+#### 3C.2A — Flow-Aligned Continuation
+
+Flow-Aligned remains the difficult T0 lane.
+
+Best 2-parameter logistic combination:
+- `f_median_abs_ret_5m_pct`
+- `f_micro_rejection_wick_last`
+- AUC Discovery / Validation / Reserve: **0.582 / 0.592 / 0.611**
+
+Adding a third or fourth T0 parameter does not improve sealed Reserve. Rule combinations that look stronger on Discovery/Validation also deteriorate on Reserve.
+
+Result: **FAIL for T0 multi-parameter separation**.
+
+#### 3C.2B — Counterflow/Reversal
+
+Counterflow is materially more structured.
+
+Best 3-parameter logistic combination:
+- `f_f_coin_residual_5m_vs_btc`
+- `f_new_momentum_curvature`
+- `f_gate_price_drift_pct`
+- AUC Discovery / Validation / Reserve: **0.676 / 0.688 / 0.718**
+
+This is predictive but not yet a stable STRONG detector because Validation remains below 0.70 and score-target correlation remains low.
+
+A conservative research-only Counterflow failure veto fires only when all four are true:
+
+1. `f_new_accel_5_vs_15 <= 0.6214308333`
+2. `f_f_selected_slope5_norm <= 0.2612069909`
+3. `f_f_coin_minus_market_30m >= -0.1486000362`
+4. `f_f_coin_minus_market_15m <= 2.5904018610`
+
+Performance:
+
+- Discovery: catches **91/141 failures (64.5%)**, false-vetoes **13/42 strong WINs (31.0%)**, phi **0.285**
+- Validation: catches **31/52 failures (59.6%)**, false-vetoes **4/16 strong WINs (25.0%)**, phi **0.294**
+- Reserve: catches **29/40 failures (72.5%)**, false-vetoes **1/7 strong WINs (14.3%)**, phi **0.431**
+
+Reserve retained pool improves from **7/47 = 14.9%** strong-WIN share to **6/17 = 35.3%**, but historical realized economics remain slightly negative: **-$5.92 total**, about **-0.070% per retained trade**.
+
+Therefore Stage 3C.2 is **PARTIAL PASS, research-only**:
+
+- Flow-Aligned: FAIL
+- Counterflow: promising veto candidate, not final
+- no production entry/veto authority changes
+- do not force a final unified T0 LONG detector yet
+
+Detailed research note:
+`research/strong_microstructure/STAGE3C2_ARCHETYPE_COMBINATION.md`
+
 ### Temporal / new-data follow-up
 
 Causal T+3 temporal features are materially more predictive than T0, but they are **not pre-entry parameters** and must never be reported as such. A selected 5-feature T+3 composite previously reached roughly AUC 0.801 on Validation and 0.707 on sealed Reserve, while Reserve correlation remained about r=0.281.
