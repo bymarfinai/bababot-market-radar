@@ -246,11 +246,49 @@ Therefore Stage 3C.2 is **PARTIAL PASS, research-only**:
 Detailed research note:
 `research/strong_microstructure/STAGE3C2_ARCHETYPE_COMBINATION.md`
 
-### Temporal / new-data follow-up
+### Stage 3C.3 — Flow-Aligned LONG temporal confirmation
 
-Causal T+3 temporal features are materially more predictive than T0, but they are **not pre-entry parameters** and must never be reported as such. A selected 5-feature T+3 composite previously reached roughly AUC 0.801 on Validation and 0.707 on sealed Reserve, while Reserve correlation remained about r=0.281.
+Stage 3C.3 addresses the unresolved Flow-Aligned lane from Stage 3C.2 using causal T+1 / T+2 / T+3 confirmation.
 
-Stage 3C.2 may combine only the stable sweet spots from Stage 3C.1 to test whether interactions create materially stronger separation.
+Frozen subtype scope:
+
+- **180 FLOW_ALIGNED_CONTINUATION strong WINs**
+- **602 FLOW_ALIGNED_FAILURE losses**
+- Counterflow 4-rule veto remains frozen and is **not retuned** in this stage.
+
+Strict censoring is mandatory: a row is eligible at a temporal horizon only when `primary_label_end_ms > temporal_target_ms`. Primary model search excludes `confirm_mfe_pct` and `confirm_mae_pct` so the MFE>=1% target is not made tautological.
+
+Eligible lane counts:
+
+- T+1: **717 total / 169 strong WIN**
+- T+2: **632 / 159**
+- T+3: **545 / 143**
+
+Best multi-parameter model AUC Discovery / Validation / Reserve:
+
+- T+1: **0.637 / 0.647 / 0.682**
+- T+2: **0.725 / 0.725 / 0.714**
+- T+3: **0.754 / 0.831 / 0.722**
+
+Therefore Flow-Aligned ambiguity is partly **temporal**: T+1 remains weak, T+2 becomes usable, and T+3 provides materially better separation.
+
+A simpler T+3 observation is especially notable: `confirm_side_return_pct` alone has AUC **0.720 / 0.794 / 0.756**. At a threshold chosen for about 60% Validation target recall (approximately **+0.1585%** side return), sealed Reserve:
+
+- selects **26/122** eligible trades
+- captures **11/24** strong WINs (**45.8% recall**)
+- has **42.3% target precision**
+- includes **15 false positives**
+- historical original-entry PnL **+$18.74**
+- historical original-entry average return **+0.144% / trade**
+
+Those economics are from the original frozen entries, not reconstructed delayed T+3 entries. The simpler feature looked better than the selected composite on sealed Reserve, but that simplification became obvious only after Reserve inspection and therefore requires a **fresh validation cohort** before promotion.
+
+Stage 3C.3 verdict: **PARTIAL PASS, research-only**. No production entry/veto authority changes.
+
+Detailed research note:
+`research/temporal_confirmation/STAGE3C3_FLOW_ALIGNED_TEMPORAL_CONFIRMATION.md`
+
+### New-data follow-up
 
 A research-only microstructure feature engine also exists on branch `research/stage3c-microstructure` for feature families not present in the frozen cohort, including multi-level order-book imbalance, microprice edge, sub-minute AggTrade CVD, large-trade imbalance, CVD acceleration/persistence, flow-price efficiency and absorption proxies.
 
@@ -998,191 +1036,3 @@ Control endpoints:
 
 ~~~text
 GET  /control/state
-POST /control/state
-POST /control/live-arm
-~~~
-
-## Stage 15 — Guarded live Binance Futures execution
-
-Live execution is **fail-closed** and requires multiple independent guards.
-
-Current bounded defaults:
-
-~~~text
-live notional                  = 25 USDT
-hard notional cap              = 50 USDT
-max open live positions        = 1
-leverage                       = 1x
-maximum Stage 15 leverage      = 3x
-hard protective stop           = 1.5%
-daily loss limit               = 10 USDT
-maximum recent loss streak     = 3
-minimum closed paper trades    = 20
-paper net PnL requirement      = >= 0
-entry max age                  = 10 minutes
-reduce fraction                = 50%
-maximum spread                 = 20 bps
-balance buffer                 = 1.25x
-live poll interval             = 10 seconds
-~~~
-
-A new live entry requires all of the following:
-
-- LIVE_TRADING_ENABLED=true
-- Binance API credentials configured
-- persistent live ARM state = true
-- control mode = RUN
-- configured notional within the hard cap
-- paper gate passed
-- daily loss limit not reached
-- loss-streak limit not reached
-- live-position capacity available
-- Binance account can trade
-- one-way position mode; hedge mode is rejected
-- sufficient available USDT
-- no unmanaged Binance position
-- no existing live position for the same symbol
-- spread within the configured cap
-- fresh Stage 11 APPROVE
-
-Live entries use isolated margin and bounded leverage.
-
-Immediately after a live market entry, Stage 15 submits an exchange-side protective stop. If the protective stop cannot be created, the engine attempts an emergency reduce-only market close. A failure of both protection and emergency close is marked CRITICAL_UNPROTECTED.
-
-Lifecycle exits are deliberately safer than entries:
-
-- exit orders are processed before new entries
-- live ARM is not required for exits
-- RUN mode is not required for exits
-- live exits remain available when live environment and credentials are configured
-
-Read endpoints:
-
-~~~text
-GET /live/preflight
-GET /live/summary
-GET /live/orders
-GET /live/positions
-~~~
-
-## API overview
-
-Read/inspection:
-
-~~~text
-GET /health
-GET /radar/latest
-GET /radar/candidates
-GET /radar/symbol/{symbol}
-GET /market/klines
-GET /execution/intents
-GET /history/summary
-GET /history/signals
-GET /approval/summary
-GET /approval/reviews
-GET /approval/models
-GET /approval/models/summary
-GET /positions/open
-GET /positions/evaluations
-GET /pp-v4/stage1/summary
-GET /paper/summary
-GET /paper/orders
-GET /live/preflight
-GET /live/summary
-GET /live/orders
-GET /live/positions
-GET /control/state
-~~~
-
-Authenticated control:
-
-~~~text
-POST /control/state
-POST /control/live-arm
-~~~
-
-MCP:
-
-~~~text
-POST /mcp
-~~~
-
-## Runtime
-
-Install:
-
-~~~bash
-python -m pip install -r requirements.txt
-~~~
-
-Run one scan:
-
-~~~bash
-python -m market_radar --once
-~~~
-
-Machine-readable one-shot scan:
-
-~~~bash
-python -m market_radar --once --json
-~~~
-
-Continuous scanner:
-
-~~~bash
-python -m market_radar
-~~~
-
-Continuous scanner + HTTP/MCP/control API:
-
-~~~bash
-python -m market_radar --serve
-~~~
-
-## Tests
-
-~~~bash
-python -m unittest discover -s tests -v
-~~~
-
-## Repository boundary
-
-bymarfinai/bababot-discovery remains responsible for:
-
-~~~text
-backtest
-historical research
-strategy discovery
-parameter exploration
-validation
-experimentation
-~~~
-
-bymarfinai/bababot-market-radar remains responsible for:
-
-~~~text
-live detection
-production scoring
-market context
-deterministic decisions
-AI supervision
-position lifecycle
-paper execution
-guarded live execution
-control plane
-dashboard/API/MCP
-persistent audit trail
-~~~
-
-Do not add historical strategy discovery or parameter optimization into this runtime.
-
-## Documentation authority
-
-For current behavior, use this order of authority:
-
-1. production source code
-2. automated tests
-3. current README / supporting MD contracts
-4. historical commit messages
-
-BLUEPRINT.md remains the architectural contract; source code is the final authority for exact implemented defaults.
