@@ -51,6 +51,7 @@ create table if not exists pp_v4_observation_cycles (
     eligible_positions integer not null,
     observed_positions integer not null,
     missing_positions integer not null,
+    duplicate_positions integer not null,
     status text not null,
     source_name text not null,
     source_mode text not null,
@@ -106,6 +107,7 @@ create table if not exists pp_v4_observation_cycles (
     eligible_positions integer not null,
     observed_positions integer not null,
     missing_positions integer not null,
+    duplicate_positions integer not null,
     status text not null,
     source_name text not null,
     source_mode text not null,
@@ -156,9 +158,9 @@ PREREGISTERED_GATES = {
     "data_quality": {
         "cycle_error_rate_max_pct": 2.0,
         "missing_position_rate_max_pct": 2.0,
-        "median_cycle_gap_max_ms": 5750,
-        "p90_cycle_gap_max_ms": 7500,
-        "max_cycle_gap_ms": 20000,
+        "median_sample_gap_max_ms": 5750,
+        "p90_sample_gap_max_ms": 7500,
+        "max_sample_gap_ms": 20000,
         "duplicate_observation_ids_allowed": 0,
     },
     "v4_2_observability": {
@@ -385,6 +387,7 @@ def _save_cycle(row: dict[str, Any]) -> None:
         int(row["eligible_positions"]),
         int(row["observed_positions"]),
         int(row["missing_positions"]),
+        int(row.get("duplicate_positions") or 0),
         str(row["status"]),
         str(row["source_name"]),
         str(row["source_mode"]),
@@ -398,9 +401,9 @@ def _save_cycle(row: dict[str, Any]) -> None:
                 insert or replace into pp_v4_observation_cycles (
                     cycle_id,started_at_ms,received_at_ms,completed_at_ms,
                     cycle_gap_ms,request_latency_ms,eligible_positions,
-                    observed_positions,missing_positions,status,source_name,
-                    source_mode,error_text,created_at_ms
-                ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    observed_positions,missing_positions,duplicate_positions,status,
+                    source_name,source_mode,error_text,created_at_ms
+                ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 values,
             )
@@ -413,9 +416,9 @@ def _save_cycle(row: dict[str, Any]) -> None:
                 insert into pp_v4_observation_cycles (
                     cycle_id,started_at_ms,received_at_ms,completed_at_ms,
                     cycle_gap_ms,request_latency_ms,eligible_positions,
-                    observed_positions,missing_positions,status,source_name,
-                    source_mode,error_text,created_at_ms
-                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    observed_positions,missing_positions,duplicate_positions,status,
+                    source_name,source_mode,error_text,created_at_ms
+                ) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                 on conflict(cycle_id) do update set
                     received_at_ms=excluded.received_at_ms,
                     completed_at_ms=excluded.completed_at_ms,
@@ -424,6 +427,7 @@ def _save_cycle(row: dict[str, Any]) -> None:
                     eligible_positions=excluded.eligible_positions,
                     observed_positions=excluded.observed_positions,
                     missing_positions=excluded.missing_positions,
+                    duplicate_positions=excluded.duplicate_positions,
                     status=excluded.status,
                     error_text=excluded.error_text
                 """,
@@ -531,6 +535,7 @@ def process_pp_v4_cycle(
 
         observed = 0
         missing = 0
+        duplicates = 0
         rows: list[dict[str, Any]] = []
         open_ids = {str(position["position_id"]) for position in positions}
 
@@ -584,6 +589,8 @@ def process_pp_v4_cycle(
                 with _STATE_LOCK:
                     _STATE[pid] = state
                 observed += 1
+            else:
+                duplicates += 1
             row["inserted"] = inserted
             rows.append(row)
 
@@ -592,7 +599,7 @@ def process_pp_v4_cycle(
             for pid in stale:
                 _STATE.pop(pid, None)
 
-        status = "COMPLETE" if missing == 0 else "PARTIAL"
+        status = "COMPLETE" if missing == 0 and duplicates == 0 else "PARTIAL"
         completed = int(time.time() * 1000)
         _save_cycle(
             {
@@ -605,6 +612,7 @@ def process_pp_v4_cycle(
                 "eligible_positions": len(positions),
                 "observed_positions": observed,
                 "missing_positions": missing,
+                "duplicate_positions": duplicates,
                 "status": status,
                 "source_name": PP_V4_SOURCE_NAME,
                 "source_mode": PP_V4_SOURCE_MODE,
@@ -618,6 +626,7 @@ def process_pp_v4_cycle(
             "eligible_positions": len(positions),
             "observed_positions": observed,
             "missing_positions": missing,
+            "duplicate_positions": duplicates,
             "request_latency_ms": request_latency,
             "cycle_gap_ms": cycle_gap,
             "rows": rows,
@@ -635,6 +644,7 @@ def process_pp_v4_cycle(
                 "eligible_positions": len(positions),
                 "observed_positions": 0,
                 "missing_positions": len(positions),
+                "duplicate_positions": 0,
                 "status": "ERROR",
                 "source_name": PP_V4_SOURCE_NAME,
                 "source_mode": PP_V4_SOURCE_MODE,
@@ -668,6 +678,7 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
     initialize_pp_v4_store()
     safe_limit = max(1, min(int(recent_limit), 100))
     cycle_gaps: list[float] = []
+    sample_gaps: list[float] = []
 
     if persistence_backend() == "sqlite":
         with _sqlite_connect(database_path()) as conn:
@@ -684,7 +695,8 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
                 select count(*) cycles,
                        sum(case when status='ERROR' then 1 else 0 end) error_cycles,
                        sum(eligible_positions) eligible,
-                       sum(missing_positions) missing
+                       sum(missing_positions) missing,
+                       sum(duplicate_positions) duplicates
                 from pp_v4_observation_cycles
                 """
             ).fetchone()
@@ -695,6 +707,16 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
                     select cycle_gap_ms from pp_v4_observation_cycles
                     where cycle_gap_ms is not null
                     order by started_at_ms desc limit 10000
+                    """
+                ).fetchall()
+            ]
+            sample_gaps = [
+                float(row["sample_gap_ms"])
+                for row in conn.execute(
+                    """
+                    select sample_gap_ms from pp_v4_peak_observations
+                    where sample_gap_ms is not null
+                    order by observed_at_ms desc limit 20000
                     """
                 ).fetchall()
             ]
@@ -729,7 +751,8 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
                     select count(*),
                            count(*) filter (where status='ERROR'),
                            coalesce(sum(eligible_positions),0),
-                           coalesce(sum(missing_positions),0)
+                           coalesce(sum(missing_positions),0),
+                           coalesce(sum(duplicate_positions),0)
                     from pp_v4_observation_cycles
                     """
                 )
@@ -742,6 +765,14 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
                     """
                 )
                 cycle_gaps = [float(row[0]) for row in cur.fetchall()]
+                cur.execute(
+                    """
+                    select sample_gap_ms from pp_v4_peak_observations
+                    where sample_gap_ms is not null
+                    order by observed_at_ms desc limit 20000
+                    """
+                )
+                sample_gaps = [float(row[0]) for row in cur.fetchall()]
                 cur.execute(
                     """
                     select position_id,symbol,side,observed_at_ms,current_pnl_pct,
@@ -776,12 +807,14 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
                 "error_cycles": int(cyc[1] or 0),
                 "eligible": int(cyc[2] or 0),
                 "missing": int(cyc[3] or 0),
+                "duplicates": int(cyc[4] or 0),
             }
 
     cycles = int(cyc_row.get("cycles") or 0)
     errors = int(cyc_row.get("error_cycles") or 0)
     eligible = int(cyc_row.get("eligible") or 0)
     missing = int(cyc_row.get("missing") or 0)
+    duplicates = int(cyc_row.get("duplicates") or 0)
 
     return {
         "version": PP_V4_VERSION,
@@ -804,6 +837,13 @@ def pp_v4_summary(*, recent_limit: int = 10) -> dict[str, Any]:
         "eligible_position_samples": eligible,
         "missing_position_samples": missing,
         "missing_position_rate_pct": (100.0 * missing / eligible) if eligible else 0.0,
+        "duplicate_observation_attempts": duplicates,
+        "sample_gap_ms": {
+            "p10": _percentile(sample_gaps, 0.10),
+            "median": statistics.median(sample_gaps) if sample_gaps else None,
+            "p90": _percentile(sample_gaps, 0.90),
+            "max": max(sample_gaps) if sample_gaps else None,
+        },
         "cycle_gap_ms": {
             "p10": _percentile(cycle_gaps, 0.10),
             "median": statistics.median(cycle_gaps) if cycle_gaps else None,
