@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import os
+import tempfile
 import unittest
 from unittest.mock import patch
 
 from market_radar.binance import BinancePublicClient
+import market_radar.profit_protection_v4_observer as v4
 from market_radar.profit_protection_v4_observer import (
     PeakState,
     advance_peak_state,
@@ -197,6 +199,68 @@ class PPV4Stage1ObserverTests(unittest.TestCase):
         self.assertEqual(result["observed_positions"], 0)
         self.assertEqual(saved_cycles[0]["status"], "ERROR")
         self.assertIn("provider down", saved_cycles[0]["error_text"])
+
+    def test_sqlite_persistence_round_trip(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = os.path.join(tmp, "v4.sqlite3")
+            v4._STORE_READY.clear()
+            v4._STATE.clear()
+            with patch.object(v4, "persistence_backend", return_value="sqlite"), \
+                 patch.object(v4, "database_path", return_value=db_path):
+                v4.initialize_pp_v4_store()
+                v4._save_cycle(
+                    {
+                        "cycle_id": "C1",
+                        "started_at_ms": 1_000,
+                        "received_at_ms": 1_050,
+                        "completed_at_ms": 1_060,
+                        "cycle_gap_ms": None,
+                        "request_latency_ms": 50,
+                        "eligible_positions": 1,
+                        "observed_positions": 1,
+                        "missing_positions": 0,
+                        "duplicate_positions": 0,
+                        "status": "COMPLETE",
+                        "source_name": v4.PP_V4_SOURCE_NAME,
+                        "source_mode": v4.PP_V4_SOURCE_MODE,
+                        "error_text": None,
+                        "created_at_ms": 1_060,
+                    }
+                )
+                inserted = v4._save_observation(
+                    {
+                        "observation_id": "O1",
+                        "cycle_id": "C1",
+                        "position_id": "P1",
+                        "opened_at_ms": 500,
+                        "observed_at_ms": 1_050,
+                        "source_event_at_ms": None,
+                        "receive_at_ms": 1_050,
+                        "symbol": "BTCUSDT",
+                        "side": "LONG",
+                        "entry_price": 100.0,
+                        "current_price": 101.0,
+                        "current_pnl_pct": 1.0,
+                        "previous_pnl_pct": None,
+                        "delta_pnl_pct_points": None,
+                        "running_observed_peak_pct": 1.0,
+                        "running_observed_peak_at_ms": 1_050,
+                        "sample_gap_ms": None,
+                        "armed": True,
+                        "source_name": v4.PP_V4_SOURCE_NAME,
+                        "source_mode": v4.PP_V4_SOURCE_MODE,
+                        "source_sequence": None,
+                        "data_quality": {"request_latency_ms": 50},
+                        "position_status": "OPEN",
+                        "created_at_ms": 1_060,
+                    }
+                )
+                self.assertTrue(inserted)
+                summary = v4.pp_v4_summary()
+            self.assertEqual(summary["rows"], 1)
+            self.assertEqual(summary["positions"], 1)
+            self.assertEqual(summary["cycles"], 1)
+            self.assertEqual(summary["duplicate_observation_attempts"], 0)
 
 
 if __name__ == "__main__":
