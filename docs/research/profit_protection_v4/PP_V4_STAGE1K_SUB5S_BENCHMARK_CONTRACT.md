@@ -48,12 +48,14 @@ For each cadence, simulate all phase offsets on a **100 ms grid**:
 
 For a sample timestamp, the observable price is the latest aggregate-trade price available at or before that timestamp. No future trade may be used.
 
-Primary outputs per cadence:
-- probability across phase offsets of capture >=80%;
-- probability across phase offsets of capture >=90%;
-- probability across phase offsets of capture >=95%;
-- median capture across phase offsets;
-- P10 capture across phase offsets.
+Primary decision outputs per cadence:
+- probability across phase offsets that the cadence's **own scheduled samples** capture >=80%;
+- probability across phase offsets that the cadence's own scheduled samples capture >=90%;
+- probability across phase offsets that the cadence's own scheduled samples capture >=95%.
+
+The archived actual 5s peak is **not** allowed to rescue a 1s/2s phase for these threshold decisions.
+
+A separate descriptive metric may report incremental capture as `max(actual archived 5s peak, simulated faster-cadence samples)`. That descriptive floor cannot be used to PASS the cadence decision rule.
 
 Event-driven/tick is reported only as an **observability upper bound**. It sees every historical aggregate trade and therefore can observe the clean MFE peak; this is not an execution-PnL claim.
 
