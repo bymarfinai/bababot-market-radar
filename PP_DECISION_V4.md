@@ -566,6 +566,61 @@ Decision:
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE3A_LOW_RETENTION_ANATOMY.md`
 
+### V4-3B — Giveback Window Anatomy ✅ COMPLETE
+
+Baseline: **Profit Protector V4.2 — Hybrid Protection**.
+
+Population:
+- 62 trades where V4.2 protection fired
+- 56 low-retention failures (<75% true clean MFE)
+- 6 >=75% controls
+- 1,751 historical giveback-crossing events
+
+Key findings:
+- 80% running-peak crossing is **not** a safe universal close rule:
+  - 298 events
+  - 236 later recovered to a new high
+  - **79.19% transient recovery rate**
+- median recovered 80%-crossings per trade: **4**
+- 60/62 trades had at least one recovered 80%-crossing
+
+80%-crossing recovery by running-peak regime:
+- <1% peak: **86.07%**
+- 1–1.5%: **62.50%**
+- 1.5–3%: **34.78%**
+- >=3%: **42.86%**
+
+Final observed peak -> 80% floor median:
+- all 62: **24.95s**
+- <1% peak: **12.61s**
+- 1–1.5%: **25.03s**
+- 1.5–3%: **60.02s**
+- >=3%: **62.62s**
+
+Temporal refinement:
+- V4.2 runner CLOSE total: 19
+- 9 occurred before a later higher archived peak
+- 10 occurred after the final observed peak
+- of the 9 Stage3A `RUNNER_TRIGGER_DELAY` cases:
+  - **7** were actually premature false-reversal exits
+  - **2** were true post-final-peak delayed exits
+
+At 80% crossings:
+- transient median age from running peak: **10.13s**
+- final-reversal median age: **24.95s**
+- transient median downward velocity: **0.0154 pp/s**
+- final-reversal median downward velocity: **0.0366 pp/s**
+- monotonic down-streak median: 2 in both groups, so streak count alone is weak.
+
+Decision:
+- proceed to **V4-3C — Temporal Reversal Detector**
+- do not deploy a fixed 80% trailing floor
+- candidate causal features: peak regime, age since last new high, downward velocity, reclaim behavior
+- no runtime change / no paper / no authority
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3B_GIVEBACK_WINDOW_ANATOMY.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
