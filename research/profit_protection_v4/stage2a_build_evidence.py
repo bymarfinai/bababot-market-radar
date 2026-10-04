@@ -334,7 +334,7 @@ def main() -> None:
     rows = json.loads(Path(args.stage1j).read_text(encoding="utf-8"))
     evidence = build_evidence(rows)
     Path(args.output).write_text(
-        json.dumps(evidence, indent=2, sort_keys=True, allow_nan=False),
+        json.dumps(evidence, indent=2, sort_keys=True, allow_nan=False) + "\n",
         encoding="utf-8",
     )
     print(json.dumps({"rows": len(evidence), "output": args.output}))
