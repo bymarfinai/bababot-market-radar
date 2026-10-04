@@ -154,3 +154,14 @@ docs/research/wrong_direction/
 
 Research code:
 research/wrong_direction/
+
+
+---
+
+## Profit Discovery Playbook
+
+For the complete standalone Track A methodology and the replication protocol from LONG into SHORT, read:
+
+- `research/PROFIT_DISCOVERY_PLAYBOOK_LONG_TO_SHORT.md`
+
+This playbook is the authoritative methodology reference for winner anatomy, temporal confirmation, missed-winner recovery, full-universe replay, incremental efficiency, MFE spillover, and SHORT replication. Do not copy LONG thresholds mechanically into SHORT.
