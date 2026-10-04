@@ -1,8 +1,10 @@
 # PP V4-1H — Historical Matched 5s vs 15s Benchmark
 
-Status: **COMPLETE — RETROSPECTIVE DIAGNOSTIC ONLY**
+Status: **COMPLETE — RETROSPECTIVE DIAGNOSTIC; MFE-BASED GATES PARTIALLY SUPERSEDED BY V4-1I**
 
 Frozen historical 5-second cutoff: `1791043570111`
+
+> **V4-1I correction:** Stage1I established that historical Stage12 lifecycle MFE can inherit pre-entry rolling 1m extrema. Therefore the directional 5s-vs-15s observation result remains useful, but MFE-based promotion/gate interpretation in this report must not be used until clean post-entry MFE labels are rebuilt. See `PP_V4_STAGE1I_5S_FAILURE_ANATOMY.md`.
 
 Source of truth:
 - script: `research/profit_protection_v4/stage1h_historical_matched_benchmark.py`
