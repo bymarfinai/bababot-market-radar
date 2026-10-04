@@ -712,6 +712,60 @@ No runtime change. No paper/prospective shadow. V4.2 remains baseline.
 Full report:
 `docs/research/profit_protection_v4/PP_V4_STAGE3C2_RECLAIM_STRUCTURE.md`
 
+### V4-3C3 — Multi-Cycle Reclaim & Volatility-Normalized Reversal ⚠️ NO PASS
+
+Population:
+- runner-capable historical trades: **19**
+- DEV 12 / LATE 7
+
+Frozen candidate family:
+- **32** candidates
+- floor 90/85%
+- local-noise lookback 6/12 samples
+- reclaim fraction 25/50%
+- failed reclaim cycles 1/2
+- normalized drawdown 2.0/3.0 noise units
+
+DEV:
+- eligible all-gate candidates: **0 / 32**
+- coverage: 32/32
+- precision >=65%: **0/32**
+- premature <=35%: **0/32**
+- median correct retention >=80%: 22/32
+- >=80 retention share >=50%: 25/32
+
+Highest-precision candidate:
+- floor90 / noise12 / reclaim25% / 1 failed cycle / z>=3
+- precision **50%**
+- premature **50%**
+- median correct retention **80.99%**
+- >=80 retention share **60%**
+
+Two-cycle best:
+- precision **44.44%**
+- median correct retention **72.32%**
+
+Persistent premature cases include:
+- AVAAI
+- STX
+- COMP
+- API3
+- FLOW
+
+Important result:
+- large normalized giveback does not imply terminal reversal;
+- AVAAI/STX/COMP/API3/FLOW all produced premature signals despite drawdowns of roughly 4–11.5 local-noise units.
+
+Conclusion:
+- multi-cycle reclaim + local-volatility normalization does not solve false-reversal discrimination.
+- **do not proceed to Stage3D**.
+- next research should move away from another scalar threshold and test path topology / market-state context in a new preregistered stage.
+
+No runtime change. No paper/prospective shadow. V4.2 remains baseline.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE3C3_MULTICYCLE_VOLNORM.md`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
