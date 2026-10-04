@@ -452,6 +452,64 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage2b_optimal_protection_frontier.json`
 
+### V4-2C — Runner Preservation / Two-Regime Protection ✅ COMPLETE
+
+Stage2C tested **24 preregistered causal hybrid candidates** on the frozen 99-trade Stage2A cohort.
+
+No untouched-holdout claim is made in Stage2C because Stage2B already inspected all chronological thirds. Instead Stage2C requires positive improvement in EARLY/MID/LATE and compares against both Stage2B static reference regimes.
+
+Balanced-pass candidates: **2 / 24**.
+
+Selected research reference by preregistered stability ranking:
+
+`small arm=0.50%, retain=60%, confirm=3 -> REDUCE 25%; runner qualify=1.50% -> retain=90%, confirm=2 -> CLOSE remaining`
+
+Full 99-trade diagnostic:
+- historical total: **-$10.02**;
+- Stage2B runner-static total: **+$75.96**;
+- selected hybrid total: **+$78.73**;
+- win rate: **36.36% actual / 37.37% runner-static / 45.45% hybrid**;
+- small partial reductions: **49**;
+- runner closes: **19**;
+- helped / harmed: **49 / 13**.
+
+Small/medium observable-net peak 0.30–1.00%, N=33:
+- nonpositive outcomes: **18 -> 12**;
+- wins: **15 -> 21**;
+- total: **+$0.65 actual -> +$8.33 hybrid**.
+
+Runner >=1%, N=20:
+- Stage2B runner-static median retention: **77.27%**;
+- selected hybrid median retention: **73.57%**;
+- difference: **-3.70 pp**, inside preregistered -5 pp tolerance;
+- hybrid total: **+$150.80**;
+- nonpositive: **1**.
+
+Runner >=2%, N=9:
+- selected hybrid median retention: **82.46%**, equal to Stage2B runner-static median;
+- total: **+$100.00**;
+- nonpositive: **0**.
+
+Chronological stability:
+- EARLY delta **+$11.86**;
+- MID delta **+$42.28**;
+- LATE delta **+$34.61**.
+
+Concentration:
+- largest positive contributor = **19.45%** of total uplift;
+- top 3 = **44.15%**.
+
+Decision:
+- the two-regime architecture passes all balanced gates;
+- proceed to **V4-2D — Full Replay / Prospective Shadow Specification**;
+- Stage2C selects **no runtime policy** and grants no protection authority.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE2C_RUNNER_PRESERVATION.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage2c_runner_preservation.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
