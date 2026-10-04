@@ -165,6 +165,33 @@ Stage 3C.2 should tune separate multi-parameter combinations for these two froze
 Detailed research note:
 `research/winner_anatomy/STAGE3C1B_WINNER_ANATOMY.md`
 
+
+### Stage 3C.1C — LONG loss anatomy & failure clustering
+
+Stage 3C.1C tests whether the **835 LONG META_LOSS** trades also contain distinct failure archetypes and then compares each failure type against the matching strong-WIN archetype from Stage 3C.1B.
+
+Discovery-only clustering produces two broad LOSS archetypes:
+
+- **FLOW_ALIGNED_FAILURE**: **602/835 (72.1%)**, split **344 / 119 / 139** across Discovery / Validation / Reserve
+- **COUNTERFLOW_FAILURE**: **233/835 (27.9%)**, split **141 / 52 / 40**
+
+This is nearly the same archetype composition as the strong-WIN population (**73.5% continuation / 26.5% counterflow**), so archetype identity alone is **not** a WIN/LOSS detector.
+
+Within-archetype comparison is asymmetric:
+
+- Flow-Aligned Continuation WIN vs Flow-Aligned Failure remains weak at T0; best stable single-feature AUC floor is about **0.551**
+- Counterflow/Reversal WIN vs Counterflow Failure is materially more separable; examples include acceleration 5m-vs-15m AUC **0.648 / 0.655 / 0.696**, coin residual 5m-vs-BTC **0.644 / 0.636 / 0.832**, and selected slope5 norm **0.628 / 0.673 / 0.850** across Discovery / Validation / Reserve
+
+Counterflow Reserve contains only **7 strong WINs**, so high Reserve AUC is explicitly low-support evidence and no rule is promoted to production.
+
+Stage 3C.2 must therefore tune separate multi-parameter combinations for:
+
+1. Flow-Aligned Continuation WIN vs Flow-Aligned Failure
+2. Counterflow/Reversal WIN vs Counterflow Failure
+
+Detailed research note:
+`research/loss_anatomy/STAGE3C1C_LONG_LOSS_ANATOMY.md`
+
 ### Temporal / new-data follow-up
 
 Causal T+3 temporal features are materially more predictive than T0, but they are **not pre-entry parameters** and must never be reported as such. A selected 5-feature T+3 composite previously reached roughly AUC 0.801 on Validation and 0.707 on sealed Reserve, while Reserve correlation remained about r=0.281.
