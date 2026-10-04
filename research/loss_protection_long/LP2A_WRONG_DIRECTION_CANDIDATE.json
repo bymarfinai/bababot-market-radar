@@ -1,0 +1,95 @@
+{
+  "stage": "LP-2A",
+  "status": "RESEARCH_CANDIDATE_FROZEN_NOT_PRODUCTION",
+  "universe": 1236,
+  "side": "LONG",
+  "split": {
+    "method": "chronological",
+    "development_n": 742,
+    "validation_n": 247,
+    "reserve_n": 247
+  },
+  "target": {
+    "bad_class": "WRONG_DIRECTION",
+    "winner_control": "RECOVERED_WINNER"
+  },
+  "decision_snapshot": "T+3",
+  "median_decision_latency_min": 2.61,
+  "rule": {
+    "all_conditions_required": true,
+    "conditions": [
+      {
+        "feature": "temporal__t3_confirm_side_return_pct",
+        "operator": "<=",
+        "threshold": 0.0
+      },
+      {
+        "feature": "temporal__t3_confirm_mfe_pct",
+        "operator": "<=",
+        "threshold": 0.3026839574976226
+      },
+      {
+        "feature": "temporal__t3_f_f_selected_slope5_norm",
+        "operator": "<=",
+        "threshold": -0.03607078039566704
+      }
+    ]
+  },
+  "selection_protocol": {
+    "threshold_search": "development only",
+    "candidate_selection": "development + validation",
+    "reserve_usage": "final gate only",
+    "development_validation_constraints": {
+      "duel_precision_min": 0.92,
+      "recovered_winner_harm_rate_max": 0.06,
+      "wrong_direction_recall_min": 0.12,
+      "net_delta_must_be_positive": true
+    },
+    "reserve_final_gate": {
+      "duel_precision_min": 0.90,
+      "recovered_winner_harm_rate_max": 0.10,
+      "net_delta_must_be_positive": true
+    }
+  },
+  "results": {
+    "development": {
+      "wrong_direction_recall": 0.34674922600619196,
+      "duel_precision": 0.9333333333333333,
+      "recovered_winner_harm_rate": 0.05517241379310345,
+      "fired_n": 158,
+      "wrong_direction_n": 112,
+      "recovered_winner_n": 8,
+      "net_delta_normalized_usd": 102.73374110965344
+    },
+    "validation": {
+      "wrong_direction_recall": 0.32727272727272727,
+      "duel_precision": 0.972972972972973,
+      "recovered_winner_harm_rate": 0.02564102564102564,
+      "fired_n": 47,
+      "wrong_direction_n": 36,
+      "recovered_winner_n": 1,
+      "net_delta_normalized_usd": 44.93140765572774
+    },
+    "reserve": {
+      "wrong_direction_recall": 0.3114754098360656,
+      "duel_precision": 0.9047619047619048,
+      "recovered_winner_harm_rate": 0.09090909090909091,
+      "fired_n": 49,
+      "wrong_direction_n": 38,
+      "recovered_winner_n": 4,
+      "net_delta_normalized_usd": 51.490712791903164
+    },
+    "full_universe_descriptive": {
+      "fired_n": 254,
+      "wrong_direction_n": 186,
+      "wrong_direction_recall": 0.33513513513513515,
+      "recovered_winner_n": 13,
+      "recovered_winner_harm_rate": 0.05701754385964912,
+      "all_realized_positive_harmed_n": 15,
+      "all_realized_positive_harm_rate": 0.049342105263157895,
+      "duel_precision": 0.9346733668341709,
+      "net_delta_normalized_usd": 199.15586155728437
+    }
+  },
+  "important_caveat": "Normalized snapshot delta uses T+3 side-return x $5 normalization versus historical realized PnL. This is discovery scoring, not an execution-realistic or fee/slippage exact backtest. Exact replay belongs to a later validation stage."
+}
