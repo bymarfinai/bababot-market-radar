@@ -1,0 +1,470 @@
+{
+  "baseline_name": "Profit Protector V4.2 - Hybrid Protection",
+  "control_ge75_n": 6,
+  "failure_lt75_n": 56,
+  "final_peak_path": {
+    "75": {
+      "seconds_from_final_observed_peak": {
+        "median": 34.915499999999994,
+        "p25": 15.01825,
+        "p75": 90.01625000000001
+      },
+      "trades_reaching_threshold_n": 62
+    },
+    "80": {
+      "seconds_from_final_observed_peak": {
+        "median": 24.950499999999998,
+        "p25": 10.00375,
+        "p75": 70.04975
+      },
+      "trades_reaching_threshold_n": 62
+    },
+    "85": {
+      "seconds_from_final_observed_peak": {
+        "median": 17.4715,
+        "p25": 9.924249999999999,
+        "p75": 40.080000000000005
+      },
+      "trades_reaching_threshold_n": 62
+    },
+    "90": {
+      "seconds_from_final_observed_peak": {
+        "median": 10.126000000000001,
+        "p25": 5.0665,
+        "p75": 24.969749999999998
+      },
+      "trades_reaching_threshold_n": 62
+    },
+    "95": {
+      "seconds_from_final_observed_peak": {
+        "median": 5.186999999999999,
+        "p25": 5.003,
+        "p75": 13.805250000000001
+      },
+      "trades_reaching_threshold_n": 62
+    }
+  },
+  "final_peak_path_by_regime": {
+    "1_5_TO_3": {
+      "peak_to_75_seconds": {
+        "median": 79.883,
+        "p25": 39.9825,
+        "p75": 107.61250000000001
+      },
+      "peak_to_80_seconds": {
+        "median": 60.023,
+        "p25": 29.981,
+        "p75": 82.489
+      },
+      "peak_to_85_seconds": {
+        "median": 30.015,
+        "p25": 17.483,
+        "p75": 54.950500000000005
+      },
+      "peak_to_90_seconds": {
+        "median": 19.96,
+        "p25": 10.003,
+        "p75": 34.8655
+      },
+      "trades_n": 15
+    },
+    "1_TO_1_5": {
+      "peak_to_75_seconds": {
+        "median": 35.151,
+        "p25": 19.996,
+        "p75": 144.989
+      },
+      "peak_to_80_seconds": {
+        "median": 25.029,
+        "p25": 19.996,
+        "p75": 89.996
+      },
+      "peak_to_85_seconds": {
+        "median": 24.912,
+        "p25": 9.996,
+        "p75": 44.997
+      },
+      "peak_to_90_seconds": {
+        "median": 10.01,
+        "p25": 5.026,
+        "p75": 39.983
+      },
+      "trades_n": 9
+    },
+    "GE3": {
+      "peak_to_75_seconds": {
+        "median": 105.104,
+        "p25": 50.08624999999999,
+        "p75": 193.82775
+      },
+      "peak_to_80_seconds": {
+        "median": 62.6185,
+        "p25": 48.85275,
+        "p75": 90.124
+      },
+      "peak_to_85_seconds": {
+        "median": 52.5445,
+        "p25": 35.05275,
+        "p75": 85.006
+      },
+      "peak_to_90_seconds": {
+        "median": 10.105,
+        "p25": 5.1645,
+        "p75": 22.48425
+      },
+      "trades_n": 4
+    },
+    "LT1": {
+      "peak_to_75_seconds": {
+        "median": 19.988500000000002,
+        "p25": 10.025500000000001,
+        "p75": 35.057
+      },
+      "peak_to_80_seconds": {
+        "median": 12.607,
+        "p25": 6.332,
+        "p75": 29.968000000000004
+      },
+      "peak_to_85_seconds": {
+        "median": 10.042,
+        "p25": 5.12425,
+        "p75": 23.719749999999998
+      },
+      "peak_to_90_seconds": {
+        "median": 10.006499999999999,
+        "p25": 5.077249999999999,
+        "p75": 19.9065
+      },
+      "trades_n": 34
+    }
+  },
+  "giveback_event_n": 1751,
+  "interpretation": {
+    "fixed_80_trailing_is_not_safe": true,
+    "next_stage": "PP-V4-3C TEMPORAL REVERSAL DETECTOR",
+    "reason": "Most 80% running-peak crossings are transient and later recover to a new high.",
+    "runtime_change_authority": "NONE",
+    "stage3c_candidate_features": [
+      "running_peak_regime",
+      "seconds_since_running_peak",
+      "downward_velocity_pp_per_sec",
+      "reclaim_or_new_high behavior"
+    ],
+    "weak_feature_in_stage3b": "monotonic_down_streak_count_alone"
+  },
+  "recovered_80_crossings_per_trade": {
+    "ge1_n": 60,
+    "ge3_n": 45,
+    "ge5_n": 19,
+    "max": 9,
+    "median": 4.0,
+    "p25": 2.0,
+    "p75": 5.0,
+    "zero_n": 2
+  },
+  "research_label_note": "RECOVERED_NEW_HIGH and final observed peak use future historical path only as retrospective research labels. They are not causal runtime inputs.",
+  "stage": "PP-V4-3B",
+  "stage3a_runner_trigger_delay_refinement": {
+    "after_final_peak_n": 2,
+    "before_later_higher_peak_n": 7,
+    "n": 9
+  },
+  "status": "COMPLETE_RESEARCH_ONLY",
+  "threshold80_by_running_peak_regime": {
+    "1_5_TO_3": {
+      "events_n": 23,
+      "final_peak_to_cross_seconds": {
+        "median": 60.023,
+        "p25": 29.981,
+        "p75": 82.489
+      },
+      "recovered_new_high_n": 8,
+      "recovered_new_high_share_pct": 34.78260869565217,
+      "recovered_peak_to_cross_seconds": {
+        "median": 94.991,
+        "p25": 46.450750000000006,
+        "p75": 105.03224999999999
+      }
+    },
+    "1_TO_1_5": {
+      "events_n": 24,
+      "final_peak_to_cross_seconds": {
+        "median": 25.029,
+        "p25": 19.996,
+        "p75": 89.996
+      },
+      "recovered_new_high_n": 15,
+      "recovered_new_high_share_pct": 62.5,
+      "recovered_peak_to_cross_seconds": {
+        "median": 25.082,
+        "p25": 17.468,
+        "p75": 42.536500000000004
+      }
+    },
+    "GE3": {
+      "events_n": 7,
+      "final_peak_to_cross_seconds": {
+        "median": 62.6185,
+        "p25": 48.85275,
+        "p75": 90.124
+      },
+      "recovered_new_high_n": 3,
+      "recovered_new_high_share_pct": 42.857142857142854,
+      "recovered_peak_to_cross_seconds": {
+        "median": 29.993,
+        "p25": 22.4945,
+        "p75": 50.0395
+      }
+    },
+    "LT1": {
+      "events_n": 244,
+      "final_peak_to_cross_seconds": {
+        "median": 12.607,
+        "p25": 6.332,
+        "p75": 29.968000000000004
+      },
+      "recovered_new_high_n": 210,
+      "recovered_new_high_share_pct": 86.06557377049181,
+      "recovered_peak_to_cross_seconds": {
+        "median": 10.0425,
+        "p25": 5.0335,
+        "p75": 20.062
+      }
+    }
+  },
+  "threshold80_temporal_features": {
+    "age_bins": [
+      {
+        "events_n": 43,
+        "lower_seconds": 0,
+        "recovered_new_high_n": 37,
+        "recovered_new_high_share_pct": 86.04651162790698,
+        "upper_seconds": 5
+      },
+      {
+        "events_n": 71,
+        "lower_seconds": 5,
+        "recovered_new_high_n": 62,
+        "recovered_new_high_share_pct": 87.32394366197182,
+        "upper_seconds": 10
+      },
+      {
+        "events_n": 43,
+        "lower_seconds": 10,
+        "recovered_new_high_n": 37,
+        "recovered_new_high_share_pct": 86.04651162790698,
+        "upper_seconds": 15
+      },
+      {
+        "events_n": 30,
+        "lower_seconds": 15,
+        "recovered_new_high_n": 21,
+        "recovered_new_high_share_pct": 70.0,
+        "upper_seconds": 20
+      },
+      {
+        "events_n": 37,
+        "lower_seconds": 20,
+        "recovered_new_high_n": 31,
+        "recovered_new_high_share_pct": 83.78378378378379,
+        "upper_seconds": 30
+      },
+      {
+        "events_n": 41,
+        "lower_seconds": 30,
+        "recovered_new_high_n": 34,
+        "recovered_new_high_share_pct": 82.92682926829268,
+        "upper_seconds": 60
+      },
+      {
+        "events_n": 21,
+        "lower_seconds": 60,
+        "recovered_new_high_n": 10,
+        "recovered_new_high_share_pct": 47.61904761904762,
+        "upper_seconds": 120
+      },
+      {
+        "events_n": 12,
+        "lower_seconds": 120,
+        "recovered_new_high_n": 4,
+        "recovered_new_high_share_pct": 33.333333333333336,
+        "upper_seconds": null
+      }
+    ],
+    "final_downward_velocity_pp_per_sec": {
+      "median": 0.036556867458777384,
+      "p25": 0.0203819783275492,
+      "p75": 0.054700801860560755
+    },
+    "final_monotonic_down_streak_n": {
+      "median": 2.0,
+      "p25": 1.0,
+      "p75": 4.0
+    },
+    "final_peak_to_cross_seconds": {
+      "median": 24.950499999999998,
+      "p25": 10.00375,
+      "p75": 70.04975
+    },
+    "recovered_downward_velocity_pp_per_sec": {
+      "median": 0.015402979228658072,
+      "p25": 0.009546903443761324,
+      "p75": 0.025404560151464455
+    },
+    "recovered_monotonic_down_streak_n": {
+      "median": 2.0,
+      "p25": 1.0,
+      "p75": 3.0
+    },
+    "recovered_peak_to_cross_seconds": {
+      "median": 10.1265,
+      "p25": 5.077500000000001,
+      "p75": 25.0365
+    }
+  },
+  "thresholds": {
+    "75": {
+      "cross_to_new_high_seconds_recovered": {
+        "median": 74.9865,
+        "p25": 26.28725,
+        "p75": 220.02175
+      },
+      "events_n": 264,
+      "final_reversal_n": 62,
+      "peak_to_cross_seconds_all": {
+        "median": 19.880000000000003,
+        "p25": 5.189,
+        "p75": 35.073499999999996
+      },
+      "peak_to_cross_seconds_final": {
+        "median": 34.915499999999994,
+        "p25": 15.01825,
+        "p75": 90.01625000000001
+      },
+      "peak_to_cross_seconds_recovered": {
+        "median": 14.996,
+        "p25": 5.1005,
+        "p75": 30.00675
+      },
+      "recovered_new_high_n": 202,
+      "recovered_new_high_share_pct": 76.51515151515152
+    },
+    "80": {
+      "cross_to_new_high_seconds_recovered": {
+        "median": 62.5325,
+        "p25": 20.054250000000003,
+        "p75": 196.19475
+      },
+      "events_n": 298,
+      "final_reversal_n": 62,
+      "peak_to_cross_seconds_all": {
+        "median": 14.987,
+        "p25": 5.1075,
+        "p75": 29.99175
+      },
+      "peak_to_cross_seconds_final": {
+        "median": 24.950499999999998,
+        "p25": 10.00375,
+        "p75": 70.04975
+      },
+      "peak_to_cross_seconds_recovered": {
+        "median": 10.1265,
+        "p25": 5.077500000000001,
+        "p75": 25.0365
+      },
+      "recovered_new_high_n": 236,
+      "recovered_new_high_share_pct": 79.19463087248322
+    },
+    "85": {
+      "cross_to_new_high_seconds_recovered": {
+        "median": 54.8945,
+        "p25": 19.82425,
+        "p75": 161.312
+      },
+      "events_n": 338,
+      "final_reversal_n": 62,
+      "peak_to_cross_seconds_all": {
+        "median": 10.1075,
+        "p25": 5.1,
+        "p75": 24.910999999999998
+      },
+      "peak_to_cross_seconds_final": {
+        "median": 17.4715,
+        "p25": 9.924249999999999,
+        "p75": 40.080000000000005
+      },
+      "peak_to_cross_seconds_recovered": {
+        "median": 10.067,
+        "p25": 5.06525,
+        "p75": 20.0815
+      },
+      "recovered_new_high_n": 276,
+      "recovered_new_high_share_pct": 81.65680473372781
+    },
+    "90": {
+      "cross_to_new_high_seconds_recovered": {
+        "median": 45.019,
+        "p25": 15.0,
+        "p75": 145.066
+      },
+      "events_n": 387,
+      "final_reversal_n": 62,
+      "peak_to_cross_seconds_all": {
+        "median": 9.992,
+        "p25": 5.0205,
+        "p75": 19.884
+      },
+      "peak_to_cross_seconds_final": {
+        "median": 10.126000000000001,
+        "p25": 5.0665,
+        "p75": 24.969749999999998
+      },
+      "peak_to_cross_seconds_recovered": {
+        "median": 9.962,
+        "p25": 5.016,
+        "p75": 15.008
+      },
+      "recovered_new_high_n": 325,
+      "recovered_new_high_share_pct": 83.97932816537468
+    },
+    "95": {
+      "cross_to_new_high_seconds_recovered": {
+        "median": 35.102000000000004,
+        "p25": 14.973,
+        "p75": 104.99625
+      },
+      "events_n": 464,
+      "final_reversal_n": 62,
+      "peak_to_cross_seconds_all": {
+        "median": 5.1425,
+        "p25": 4.99975,
+        "p75": 10.118
+      },
+      "peak_to_cross_seconds_final": {
+        "median": 5.186999999999999,
+        "p25": 5.003,
+        "p75": 13.805250000000001
+      },
+      "peak_to_cross_seconds_recovered": {
+        "median": 5.140000000000001,
+        "p25": 4.99925,
+        "p75": 10.111
+      },
+      "recovered_new_high_n": 402,
+      "recovered_new_high_share_pct": 86.63793103448276
+    }
+  },
+  "triggered_trade_n": 62,
+  "v42_runner_close_timing": {
+    "after_final_peak_n": 10,
+    "before_later_higher_peak_n": 9,
+    "failure_after_final_peak_n": 5,
+    "failure_before_later_higher_peak_n": 8,
+    "runner_close_n": 19
+  },
+  "v42_small_reduce_timing": {
+    "after_final_peak_n": 36,
+    "before_later_higher_peak_n": 13,
+    "small_reduce_n": 49
+  }
+}
