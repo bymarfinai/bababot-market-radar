@@ -1,0 +1,1398 @@
+{
+  "baseline": {
+    "all": {
+      "actual_total_usdt": -10.02066320441511,
+      "delta_usdt": 0.0,
+      "mean_pct": -0.020243764049323452,
+      "median_pct": -0.037080645399969574,
+      "median_retention": -0.05499473727106241,
+      "median_trigger_delay_s": null,
+      "n": 99,
+      "negative_retention_share": 0.5833333333333334,
+      "peak_ge050": {
+        "actual_total_usdt": 81.71451064750975,
+        "median_retention": 0.2928953927602617,
+        "n": 42,
+        "nonpositive_n": 10,
+        "ret_ge80_share": 0.023809523809523808,
+        "total_usdt": 81.71451064750975
+      },
+      "ret_ge50_share": 0.09523809523809523,
+      "ret_ge80_share": 0.023809523809523808,
+      "runner_ge1": {
+        "actual_total_usdt": 71.35249022460759,
+        "median_retention": 0.36371872901623237,
+        "n": 20,
+        "nonpositive_n": 2,
+        "ret_ge80_share": 0.05,
+        "total_usdt": 71.35249022460759
+      },
+      "runner_ge2": {
+        "actual_total_usdt": 44.80807309971739,
+        "median_retention": 0.37171172327620544,
+        "n": 9,
+        "nonpositive_n": 1,
+        "ret_ge80_share": 0.0,
+        "total_usdt": 44.80807309971739
+      },
+      "total_usdt": -10.02066320441511,
+      "trigger_n": 0,
+      "win_n": 36,
+      "win_rate": 0.36363636363636365
+    },
+    "dev": {
+      "actual_total_usdt": -10.485768730552154,
+      "delta_usdt": 0.0,
+      "mean_pct": -0.03177505675924895,
+      "median_pct": -0.035267567687165255,
+      "median_retention": -0.048875256031387926,
+      "median_trigger_delay_s": null,
+      "n": 66,
+      "negative_retention_share": 0.5535714285714286,
+      "peak_ge050": {
+        "actual_total_usdt": 56.313259437143685,
+        "median_retention": 0.27419552128091484,
+        "n": 29,
+        "nonpositive_n": 6,
+        "ret_ge80_share": 0.034482758620689655,
+        "total_usdt": 56.313259437143685
+      },
+      "ret_ge50_share": 0.10714285714285714,
+      "ret_ge80_share": 0.017857142857142856,
+      "runner_ge1": {
+        "actual_total_usdt": 44.173108616537235,
+        "median_retention": 0.3569649536422819,
+        "n": 12,
+        "nonpositive_n": 1,
+        "ret_ge80_share": 0.08333333333333333,
+        "total_usdt": 44.173108616537235
+      },
+      "runner_ge2": {
+        "actual_total_usdt": 24.63836833577433,
+        "median_retention": 0.3111550211050052,
+        "n": 4,
+        "nonpositive_n": 0,
+        "ret_ge80_share": 0.0,
+        "total_usdt": 24.63836833577433
+      },
+      "total_usdt": -10.485768730552154,
+      "trigger_n": 0,
+      "win_n": 26,
+      "win_rate": 0.3939393939393939
+    },
+    "late": {
+      "actual_total_usdt": 0.46510552613704426,
+      "delta_usdt": 0.0,
+      "mean_pct": 0.002818821370527541,
+      "median_pct": -0.08679138199056051,
+      "median_retention": -0.069779705411903,
+      "median_trigger_delay_s": null,
+      "n": 33,
+      "negative_retention_share": 0.6428571428571429,
+      "peak_ge050": {
+        "actual_total_usdt": 25.401251210366077,
+        "median_retention": 0.3145789918872423,
+        "n": 13,
+        "nonpositive_n": 4,
+        "ret_ge80_share": 0.0,
+        "total_usdt": 25.401251210366077
+      },
+      "ret_ge50_share": 0.07142857142857142,
+      "ret_ge80_share": 0.03571428571428571,
+      "runner_ge1": {
+        "actual_total_usdt": 27.179381608070358,
+        "median_retention": 0.36968591267015916,
+        "n": 8,
+        "nonpositive_n": 1,
+        "ret_ge80_share": 0.0,
+        "total_usdt": 27.179381608070358
+      },
+      "runner_ge2": {
+        "actual_total_usdt": 20.169704763943056,
+        "median_retention": 0.4312605476031764,
+        "n": 5,
+        "nonpositive_n": 1,
+        "ret_ge80_share": 0.0,
+        "total_usdt": 20.169704763943056
+      },
+      "total_usdt": 0.46510552613704426,
+      "trigger_n": 0,
+      "win_n": 10,
+      "win_rate": 0.30303030303030304
+    }
+  },
+  "best_reference_concentration": {
+    "chronological_thirds": {
+      "EARLY": {
+        "delta_usdt": 11.34290616138123,
+        "negative_changed_n": 0,
+        "positive_changed_n": 4,
+        "trigger_n": 4
+      },
+      "LATE": {
+        "delta_usdt": 38.09685252099557,
+        "negative_changed_n": 1,
+        "positive_changed_n": 7,
+        "trigger_n": 8
+      },
+      "MID": {
+        "delta_usdt": 36.539514187067724,
+        "negative_changed_n": 1,
+        "positive_changed_n": 5,
+        "trigger_n": 7
+      }
+    },
+    "late_delta_usdt": 38.09685252099557,
+    "late_top1_positive_contribution_share": 0.4076743681276529,
+    "late_top3_positive_contribution_share": 0.6893426844820965,
+    "late_triggered": [
+      {
+        "actual_pct": -0.29627311136968665,
+        "delta_usdt": 15.53111027914925,
+        "observable_net_peak_pct": 3.8261108065903713,
+        "position_id": "PAPER:USUSDT:1791040799999:SHORT",
+        "side": "SHORT",
+        "sim_pct": 2.8099489444601637,
+        "symbol": "USUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 6.048106968567868,
+        "triggered": true
+      },
+      {
+        "actual_pct": 0.9166131126003867,
+        "delta_usdt": 6.271023014477701,
+        "observable_net_peak_pct": 2.465924680883107,
+        "position_id": "PAPER:ATUSDT:1791039899999:SHORT",
+        "side": "SHORT",
+        "sim_pct": 2.170817715495927,
+        "symbol": "ATUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 2.6334375202232696,
+        "triggered": true
+      },
+      {
+        "actual_pct": 0.8885650232180328,
+        "delta_usdt": 4.459653293514657,
+        "observable_net_peak_pct": 2.060390240091343,
+        "position_id": "PAPER:MORPHOUSDT:1791041099999:LONG",
+        "side": "LONG",
+        "sim_pct": 1.7804956819209643,
+        "symbol": "MORPHOUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 2.2324957762043685,
+        "triggered": true
+      },
+      {
+        "actual_pct": 0.47227049643110475,
+        "delta_usdt": 4.12621790972283,
+        "observable_net_peak_pct": 1.5012779257693896,
+        "position_id": "PAPER:MEGAUSDT:1791041399999:LONG",
+        "side": "LONG",
+        "sim_pct": 1.297514078375671,
+        "symbol": "MEGAUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 1.672851884131532,
+        "triggered": true
+      },
+      {
+        "actual_pct": 0.38157809535367276,
+        "delta_usdt": 4.034400726721028,
+        "observable_net_peak_pct": 1.373368274005932,
+        "position_id": "PAPER:AIOTUSDT:1791041699999:LONG",
+        "side": "LONG",
+        "sim_pct": 1.1884582406978783,
+        "symbol": "AIOTUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 1.5448206218736216,
+        "triggered": true
+      },
+      {
+        "actual_pct": 0.5480867770406828,
+        "delta_usdt": 3.8363921973817576,
+        "observable_net_peak_pct": 1.4907431455401898,
+        "position_id": "PAPER:OPUSDT:1791038399999:LONG",
+        "side": "LONG",
+        "sim_pct": 1.3153652165170342,
+        "symbol": "OPUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 1.6623070879276503,
+        "triggered": true
+      },
+      {
+        "actual_pct": 1.1641750668974442,
+        "delta_usdt": 0.9672950532134665,
+        "observable_net_peak_pct": 2.228199625432325,
+        "position_id": "PAPER:ONUSDT:1791040499999:SHORT",
+        "side": "SHORT",
+        "sim_pct": 1.3576340775401372,
+        "symbol": "ONUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 2.0093873847233157,
+        "triggered": true
+      },
+      {
+        "actual_pct": 1.360860861442434,
+        "delta_usdt": -1.1292399531851185,
+        "observable_net_peak_pct": 2.7611184033919898,
+        "position_id": "PAPER:FLOWUSDT:1791038399999:LONG",
+        "side": "LONG",
+        "sim_pct": 1.1350128708054104,
+        "symbol": "FLOWUSDT",
+        "third": "LATE",
+        "trigger_peak_pct": 1.517230470095332,
+        "triggered": true
+      }
+    ]
+  },
+  "candidate_count": 144,
+  "decision": {
+    "holdout_positive_exists": true,
+    "next_stage": "V4-2C_RUNNER_PRESERVATION",
+    "proceed_to_v4_2c_runner_preservation": true,
+    "protection_authority": "NONE",
+    "runtime_change_authority": "NONE",
+    "selected_runtime_policy": null
+  },
+  "frontier_count": 18,
+  "holdout_positive_candidates": [
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 85.97927286944453,
+        "mean_pct": 0.15345173669702913,
+        "median_pct": -0.03676409656718271,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 24.939,
+        "n": 99,
+        "negative_retention_share": 0.5714285714285714,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.47587858197309585,
+          "n": 42,
+          "nonpositive_n": 9,
+          "ret_ge80_share": 0.23809523809523808,
+          "total_usdt": 167.69378351695428
+        },
+        "ret_ge50_share": 0.25,
+        "ret_ge80_share": 0.13095238095238096,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.7726834784667369,
+          "n": 20,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.45,
+          "total_usdt": 156.0322006990159
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.8245770764689235,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5555555555555556,
+          "total_usdt": 104.54648824957368
+        },
+        "total_usdt": 75.95860966502941,
+        "trigger_n": 19,
+        "win_n": 37,
+        "win_rate": 0.37373737373737376
+      },
+      "arm_pct": 1.5,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 47.88242034844895,
+        "mean_pct": 0.1133231867208994,
+        "median_pct": -0.035267567687165255,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 45.016,
+        "n": 66,
+        "negative_retention_share": 0.5535714285714286,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4547353507013917,
+          "n": 29,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.1724137931034483,
+          "total_usdt": 104.19567978559265
+        },
+        "ret_ge50_share": 0.23214285714285715,
+        "ret_ge80_share": 0.08928571428571429,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.7578890297830319,
+          "n": 12,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 90.75596656994998
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.8252595348352602,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.75,
+          "total_usdt": 58.27694179846067
+        },
+        "total_usdt": 37.3966516178968,
+        "trigger_n": 11,
+        "win_n": 26,
+        "win_rate": 0.3939393939393939
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 38.096852520995576,
+        "mean_pct": 0.2337088366492886,
+        "median_pct": -0.04982086753485098,
+        "median_retention": -0.05164494515896961,
+        "median_trigger_delay_s": 22.463,
+        "n": 33,
+        "negative_retention_share": 0.6071428571428571,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.6092964301960706,
+          "n": 13,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.38461538461538464,
+          "total_usdt": 63.49810373136165
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.21428571428571427,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.8642138285480534,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.625,
+          "total_usdt": 65.27623412906593
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.7344138961213835,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4,
+          "total_usdt": 46.269546451113015
+        },
+        "total_usdt": 38.56195804713262,
+        "trigger_n": 8,
+        "win_n": 11,
+        "win_rate": 0.3333333333333333
+      },
+      "retain_ratio": 0.9
+    },
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 65.12319012862918,
+        "mean_pct": 0.11131823621053347,
+        "median_pct": -0.022637039678836738,
+        "median_retention": -0.012575035345628493,
+        "median_trigger_delay_s": 29.936,
+        "n": 99,
+        "negative_retention_share": 0.5119047619047619,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.43721634315678026,
+          "n": 42,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.21428571428571427,
+          "total_usdt": 141.98344130156775
+        },
+        "ret_ge50_share": 0.2261904761904762,
+        "ret_ge80_share": 0.11904761904761904,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.43721634315678026,
+          "n": 20,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.3,
+          "total_usdt": 119.93166740903327
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.4309131087417435,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 79.90465687132384
+        },
+        "total_usdt": 55.10252692421406,
+        "trigger_n": 37,
+        "win_n": 42,
+        "win_rate": 0.42424242424242425
+      },
+      "arm_pct": 0.75,
+      "confirm_samples": 3,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 49.425714107173526,
+        "mean_pct": 0.11799983447461022,
+        "median_pct": -0.026544001365383155,
+        "median_retention": -0.003149878257509851,
+        "median_trigger_delay_s": 29.939999999999998,
+        "n": 66,
+        "negative_retention_share": 0.5,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4764527231087075,
+          "n": 29,
+          "nonpositive_n": 4,
+          "ret_ge80_share": 0.2413793103448276,
+          "total_usdt": 102.4556895511403
+        },
+        "ret_ge50_share": 0.26785714285714285,
+        "ret_ge80_share": 0.125,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.4826483201775452,
+          "n": 12,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4166666666666667,
+          "total_usdt": 81.74909572395231
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.629673532221787,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5,
+          "total_usdt": 51.13209999727609
+        },
+        "total_usdt": 38.939945376621374,
+        "trigger_n": 26,
+        "win_n": 29,
+        "win_rate": 0.4393939393939394
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 15.697476021455643,
+        "mean_pct": 0.09795503968237992,
+        "median_pct": -0.015194032519136414,
+        "median_retention": -0.023767312452955866,
+        "median_trigger_delay_s": 24.857,
+        "n": 33,
+        "negative_retention_share": 0.5357142857142857,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.40197311978156797,
+          "n": 13,
+          "nonpositive_n": 2,
+          "ret_ge80_share": 0.15384615384615385,
+          "total_usdt": 39.527751750427456
+        },
+        "ret_ge50_share": 0.14285714285714285,
+        "ret_ge80_share": 0.10714285714285714,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.4227463486766925,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.125,
+          "total_usdt": 38.18257168508095
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.26200436814813616,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.2,
+          "total_usdt": 28.772556874047744
+        },
+        "total_usdt": 16.162581547592687,
+        "trigger_n": 11,
+        "win_n": 13,
+        "win_rate": 0.3939393939393939
+      },
+      "retain_ratio": 0.9
+    },
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 38.23983554578704,
+        "mean_pct": 0.05700842897246854,
+        "median_pct": 0.06500937208856171,
+        "median_retention": 0.21663890261137206,
+        "median_trigger_delay_s": 70.01150000000001,
+        "n": 99,
+        "negative_retention_share": 0.34523809523809523,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.4114948203689783,
+          "n": 42,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 103.28169302542094
+        },
+        "ret_ge50_share": 0.11904761904761904,
+        "ret_ge80_share": 0.011904761904761904,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.4685225948845058,
+          "n": 20,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 81.0588619845504
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.46560053213127234,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 48.83016535334917
+        },
+        "total_usdt": 28.219172341371927,
+        "trigger_n": 62,
+        "win_n": 56,
+        "win_rate": 0.5656565656565656
+      },
+      "arm_pct": 0.5,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 23.562004679508654,
+        "mean_pct": 0.0396249574210803,
+        "median_pct": 0.08581756214802991,
+        "median_retention": 0.267489707418353,
+        "median_trigger_delay_s": 64.927,
+        "n": 66,
+        "negative_retention_share": 0.3392857142857143,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4157346358404968,
+          "n": 29,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 69.30794375375947
+        },
+        "ret_ge50_share": 0.125,
+        "ret_ge80_share": 0.0,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.4650569757569867,
+          "n": 12,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 51.093199995510105
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.39153717369537067,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 28.317020429087325
+        },
+        "total_usdt": 13.076235948956498,
+        "trigger_n": 43,
+        "win_n": 38,
+        "win_rate": 0.5757575757575758
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 14.677830866278384,
+        "mean_pct": 0.09177537207524501,
+        "median_pct": 0.027935077544567612,
+        "median_retention": 0.09992604934694313,
+        "median_trigger_delay_s": 80.097,
+        "n": 33,
+        "negative_retention_share": 0.35714285714285715,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.3585427300368929,
+          "n": 13,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 33.97374927166146
+        },
+        "ret_ge50_share": 0.10714285714285714,
+        "ret_ge80_share": 0.03571428571428571,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.4710714416346127,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 29.965661989040306
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.46560053213127234,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 20.513144924261844
+        },
+        "total_usdt": 15.142936392415429,
+        "trigger_n": 19,
+        "win_n": 18,
+        "win_rate": 0.5454545454545454
+      },
+      "retain_ratio": 0.6
+    },
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 43.024455183706785,
+        "mean_pct": 0.06667432723089228,
+        "median_pct": 0.07592540498110682,
+        "median_retention": 0.26696289592144395,
+        "median_trigger_delay_s": 82.4475,
+        "n": 99,
+        "negative_retention_share": 0.35714285714285715,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.3827569271270279,
+          "n": 42,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 106.84099078802174
+        },
+        "ret_ge50_share": 0.15476190476190477,
+        "ret_ge80_share": 0.011904761904761904,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.4545223288678929,
+          "n": 20,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 85.67759884704498
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.4189115658033163,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 50.248579880110285
+        },
+        "total_usdt": 33.00379197929168,
+        "trigger_n": 62,
+        "win_n": 55,
+        "win_rate": 0.5555555555555556
+      },
+      "arm_pct": 0.5,
+      "confirm_samples": 3,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 28.985594987852245,
+        "mean_pct": 0.056060079567576034,
+        "median_pct": 0.10094249218927359,
+        "median_retention": 0.2872691430340293,
+        "median_trigger_delay_s": 79.903,
+        "n": 66,
+        "negative_retention_share": 0.3392857142857143,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.3702084427035381,
+          "n": 29,
+          "nonpositive_n": 2,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 73.74104526336458
+        },
+        "ret_ge50_share": 0.17857142857142858,
+        "ret_ge80_share": 0.0,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.4451781117205278,
+          "n": 12,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 56.3661882015435
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.3613863587134674,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 30.13392681956185
+        },
+        "total_usdt": 18.49982625730009,
+        "trigger_n": 43,
+        "win_n": 38,
+        "win_rate": 0.5757575757575758
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 14.038860195854543,
+        "mean_pct": 0.08790282255752477,
+        "median_pct": 0.0758953815605495,
+        "median_retention": 0.18419379097907043,
+        "median_trigger_delay_s": 85.008,
+        "n": 33,
+        "negative_retention_share": 0.39285714285714285,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.43579450907764256,
+          "n": 13,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 33.09994552465716
+        },
+        "ret_ge50_share": 0.10714285714285714,
+        "ret_ge80_share": 0.03571428571428571,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.4644928404227286,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 29.31141064550147
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.4376000000980465,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 20.114653060548434
+        },
+        "total_usdt": 14.503965721991587,
+        "trigger_n": 19,
+        "win_n": 17,
+        "win_rate": 0.5151515151515151
+      },
+      "retain_ratio": 0.6
+    },
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 67.26288891200073,
+        "mean_pct": 0.1156408600153245,
+        "median_pct": -0.033771038807147796,
+        "median_retention": -0.044163084672840275,
+        "median_trigger_delay_s": 27.5305,
+        "n": 99,
+        "negative_retention_share": 0.5595238095238095,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.4861418825289028,
+          "n": 42,
+          "nonpositive_n": 8,
+          "ret_ge80_share": 0.21428571428571427,
+          "total_usdt": 148.9773995595105
+        },
+        "ret_ge50_share": 0.2261904761904762,
+        "ret_ge80_share": 0.11904761904761904,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.5545261312580457,
+          "n": 20,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.3,
+          "total_usdt": 132.05389557899164
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.4309131087417435,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 81.3555994511441
+        },
+        "total_usdt": 57.242225707585625,
+        "trigger_n": 28,
+        "win_n": 38,
+        "win_rate": 0.3838383838383838
+      },
+      "arm_pct": 1.0,
+      "confirm_samples": 3,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 53.33121705827083,
+        "mean_pct": 0.1298346919021778,
+        "median_pct": -0.03211100092953868,
+        "median_retention": -0.04037919215266299,
+        "median_trigger_delay_s": 25.086,
+        "n": 66,
+        "negative_retention_share": 0.5357142857142857,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.5746687309027445,
+          "n": 29,
+          "nonpositive_n": 5,
+          "ret_ge80_share": 0.27586206896551724,
+          "total_usdt": 109.64447649541451
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.14285714285714285,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.6763862927707462,
+          "n": 12,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4166666666666667,
+          "total_usdt": 91.31864931691965
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.629673532221787,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5,
+          "total_usdt": 51.13209999727609
+        },
+        "total_usdt": 42.84544832771868,
+        "trigger_n": 19,
+        "win_n": 27,
+        "win_rate": 0.4090909090909091
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 13.931671853729904,
+        "mean_pct": 0.08725319624161787,
+        "median_pct": -0.04982086753485098,
+        "median_retention": -0.05164494515896961,
+        "median_trigger_delay_s": 29.975,
+        "n": 33,
+        "negative_retention_share": 0.6071428571428571,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.3922388914161085,
+          "n": 13,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.07692307692307693,
+          "total_usdt": 39.33292306409598
+        },
+        "ret_ge50_share": 0.10714285714285714,
+        "ret_ge80_share": 0.07142857142857142,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.47215463056756907,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.125,
+          "total_usdt": 40.735246262072
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.3922388914161085,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.2,
+          "total_usdt": 30.22349945386801
+        },
+        "total_usdt": 14.396777379866949,
+        "trigger_n": 9,
+        "win_n": 11,
+        "win_rate": 0.3333333333333333
+      },
+      "retain_ratio": 0.9
+    },
+    {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 53.796061000930365,
+        "mean_pct": 0.08843514706366719,
+        "median_pct": -0.022637039678836738,
+        "median_retention": -0.012575035345628493,
+        "median_trigger_delay_s": 35.005,
+        "n": 99,
+        "negative_retention_share": 0.5119047619047619,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.5123464750517525,
+          "n": 42,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.047619047619047616,
+          "total_usdt": 130.6782889212298
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.03571428571428571,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.4766170535567345,
+          "n": 20,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 105.89139839587486
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.41238469832868485,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 66.6008248953565
+        },
+        "total_usdt": 43.77539779651526,
+        "trigger_n": 37,
+        "win_n": 42,
+        "win_rate": 0.42424242424242425
+      },
+      "arm_pct": 0.75,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 40.279845829848355,
+        "mean_pct": 0.09028508211907942,
+        "median_pct": -0.026544001365383155,
+        "median_retention": -0.003149878257509851,
+        "median_trigger_delay_s": 37.563,
+        "n": 66,
+        "negative_retention_share": 0.5,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.5550641299948437,
+          "n": 29,
+          "nonpositive_n": 4,
+          "ret_ge80_share": 0.06896551724137931,
+          "total_usdt": 93.52514884965525
+        },
+        "ret_ge50_share": 0.3392857142857143,
+        "ret_ge80_share": 0.03571428571428571,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.5437836842483297,
+          "n": 12,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 69.07658190242182
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.48417271157032615,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 40.99978762922946
+        },
+        "total_usdt": 29.794077099296203,
+        "trigger_n": 26,
+        "win_n": 29,
+        "win_rate": 0.4393939393939394
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 13.516215171082008,
+        "mean_pct": 0.08473527695284275,
+        "median_pct": -0.015194032519136414,
+        "median_retention": -0.023767312452955866,
+        "median_trigger_delay_s": 34.874,
+        "n": 33,
+        "negative_retention_share": 0.5357142857142857,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.3585427300368929,
+          "n": 13,
+          "nonpositive_n": 2,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 37.153140071574555
+        },
+        "ret_ge50_share": 0.17857142857142858,
+        "ret_ge80_share": 0.03571428571428571,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.38728213978887976,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 36.81481649345304
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.26200436814813616,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.0,
+          "total_usdt": 25.60103726612704
+        },
+        "total_usdt": 13.981320697219052,
+        "trigger_n": 11,
+        "win_n": 13,
+        "win_rate": 0.3939393939393939
+      },
+      "retain_ratio": 0.8
+    }
+  ],
+  "holdout_positive_count": 6,
+  "references": {
+    "best_holdout_peak_ge050_retention": {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 85.97927286944453,
+        "mean_pct": 0.15345173669702913,
+        "median_pct": -0.03676409656718271,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 24.939,
+        "n": 99,
+        "negative_retention_share": 0.5714285714285714,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.47587858197309585,
+          "n": 42,
+          "nonpositive_n": 9,
+          "ret_ge80_share": 0.23809523809523808,
+          "total_usdt": 167.69378351695428
+        },
+        "ret_ge50_share": 0.25,
+        "ret_ge80_share": 0.13095238095238096,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.7726834784667369,
+          "n": 20,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.45,
+          "total_usdt": 156.0322006990159
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.8245770764689235,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5555555555555556,
+          "total_usdt": 104.54648824957368
+        },
+        "total_usdt": 75.95860966502941,
+        "trigger_n": 19,
+        "win_n": 37,
+        "win_rate": 0.37373737373737376
+      },
+      "arm_pct": 1.5,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 47.88242034844895,
+        "mean_pct": 0.1133231867208994,
+        "median_pct": -0.035267567687165255,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 45.016,
+        "n": 66,
+        "negative_retention_share": 0.5535714285714286,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4547353507013917,
+          "n": 29,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.1724137931034483,
+          "total_usdt": 104.19567978559265
+        },
+        "ret_ge50_share": 0.23214285714285715,
+        "ret_ge80_share": 0.08928571428571429,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.7578890297830319,
+          "n": 12,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 90.75596656994998
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.8252595348352602,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.75,
+          "total_usdt": 58.27694179846067
+        },
+        "total_usdt": 37.3966516178968,
+        "trigger_n": 11,
+        "win_n": 26,
+        "win_rate": 0.3939393939393939
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 38.096852520995576,
+        "mean_pct": 0.2337088366492886,
+        "median_pct": -0.04982086753485098,
+        "median_retention": -0.05164494515896961,
+        "median_trigger_delay_s": 22.463,
+        "n": 33,
+        "negative_retention_share": 0.6071428571428571,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.6092964301960706,
+          "n": 13,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.38461538461538464,
+          "total_usdt": 63.49810373136165
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.21428571428571427,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.8642138285480534,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.625,
+          "total_usdt": 65.27623412906593
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.7344138961213835,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4,
+          "total_usdt": 46.269546451113015
+        },
+        "total_usdt": 38.56195804713262,
+        "trigger_n": 8,
+        "win_n": 11,
+        "win_rate": 0.3333333333333333
+      },
+      "retain_ratio": 0.9
+    },
+    "best_holdout_total": {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 85.97927286944453,
+        "mean_pct": 0.15345173669702913,
+        "median_pct": -0.03676409656718271,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 24.939,
+        "n": 99,
+        "negative_retention_share": 0.5714285714285714,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.47587858197309585,
+          "n": 42,
+          "nonpositive_n": 9,
+          "ret_ge80_share": 0.23809523809523808,
+          "total_usdt": 167.69378351695428
+        },
+        "ret_ge50_share": 0.25,
+        "ret_ge80_share": 0.13095238095238096,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.7726834784667369,
+          "n": 20,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.45,
+          "total_usdt": 156.0322006990159
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.8245770764689235,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5555555555555556,
+          "total_usdt": 104.54648824957368
+        },
+        "total_usdt": 75.95860966502941,
+        "trigger_n": 19,
+        "win_n": 37,
+        "win_rate": 0.37373737373737376
+      },
+      "arm_pct": 1.5,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 47.88242034844895,
+        "mean_pct": 0.1133231867208994,
+        "median_pct": -0.035267567687165255,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 45.016,
+        "n": 66,
+        "negative_retention_share": 0.5535714285714286,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4547353507013917,
+          "n": 29,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.1724137931034483,
+          "total_usdt": 104.19567978559265
+        },
+        "ret_ge50_share": 0.23214285714285715,
+        "ret_ge80_share": 0.08928571428571429,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.7578890297830319,
+          "n": 12,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 90.75596656994998
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.8252595348352602,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.75,
+          "total_usdt": 58.27694179846067
+        },
+        "total_usdt": 37.3966516178968,
+        "trigger_n": 11,
+        "win_n": 26,
+        "win_rate": 0.3939393939393939
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 38.096852520995576,
+        "mean_pct": 0.2337088366492886,
+        "median_pct": -0.04982086753485098,
+        "median_retention": -0.05164494515896961,
+        "median_trigger_delay_s": 22.463,
+        "n": 33,
+        "negative_retention_share": 0.6071428571428571,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.6092964301960706,
+          "n": 13,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.38461538461538464,
+          "total_usdt": 63.49810373136165
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.21428571428571427,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.8642138285480534,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.625,
+          "total_usdt": 65.27623412906593
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.7344138961213835,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4,
+          "total_usdt": 46.269546451113015
+        },
+        "total_usdt": 38.56195804713262,
+        "trigger_n": 8,
+        "win_n": 11,
+        "win_rate": 0.3333333333333333
+      },
+      "retain_ratio": 0.9
+    },
+    "safest_runner_reference": {
+      "all": {
+        "actual_total_usdt": -10.02066320441511,
+        "delta_usdt": 85.97927286944453,
+        "mean_pct": 0.15345173669702913,
+        "median_pct": -0.03676409656718271,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 24.939,
+        "n": 99,
+        "negative_retention_share": 0.5714285714285714,
+        "peak_ge050": {
+          "actual_total_usdt": 81.71451064750975,
+          "median_retention": 0.47587858197309585,
+          "n": 42,
+          "nonpositive_n": 9,
+          "ret_ge80_share": 0.23809523809523808,
+          "total_usdt": 167.69378351695428
+        },
+        "ret_ge50_share": 0.25,
+        "ret_ge80_share": 0.13095238095238096,
+        "runner_ge1": {
+          "actual_total_usdt": 71.35249022460759,
+          "median_retention": 0.7726834784667369,
+          "n": 20,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.45,
+          "total_usdt": 156.0322006990159
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 44.80807309971739,
+          "median_retention": 0.8245770764689235,
+          "n": 9,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.5555555555555556,
+          "total_usdt": 104.54648824957368
+        },
+        "total_usdt": 75.95860966502941,
+        "trigger_n": 19,
+        "win_n": 37,
+        "win_rate": 0.37373737373737376
+      },
+      "arm_pct": 1.5,
+      "confirm_samples": 2,
+      "dev": {
+        "actual_total_usdt": -10.485768730552154,
+        "delta_usdt": 47.88242034844895,
+        "mean_pct": 0.1133231867208994,
+        "median_pct": -0.035267567687165255,
+        "median_retention": -0.048875256031387926,
+        "median_trigger_delay_s": 45.016,
+        "n": 66,
+        "negative_retention_share": 0.5535714285714286,
+        "peak_ge050": {
+          "actual_total_usdt": 56.313259437143685,
+          "median_retention": 0.4547353507013917,
+          "n": 29,
+          "nonpositive_n": 6,
+          "ret_ge80_share": 0.1724137931034483,
+          "total_usdt": 104.19567978559265
+        },
+        "ret_ge50_share": 0.23214285714285715,
+        "ret_ge80_share": 0.08928571428571429,
+        "runner_ge1": {
+          "actual_total_usdt": 44.173108616537235,
+          "median_retention": 0.7578890297830319,
+          "n": 12,
+          "nonpositive_n": 1,
+          "ret_ge80_share": 0.3333333333333333,
+          "total_usdt": 90.75596656994998
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 24.63836833577433,
+          "median_retention": 0.8252595348352602,
+          "n": 4,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.75,
+          "total_usdt": 58.27694179846067
+        },
+        "total_usdt": 37.3966516178968,
+        "trigger_n": 11,
+        "win_n": 26,
+        "win_rate": 0.3939393939393939
+      },
+      "holdout_positive": true,
+      "late": {
+        "actual_total_usdt": 0.46510552613704426,
+        "delta_usdt": 38.096852520995576,
+        "mean_pct": 0.2337088366492886,
+        "median_pct": -0.04982086753485098,
+        "median_retention": -0.05164494515896961,
+        "median_trigger_delay_s": 22.463,
+        "n": 33,
+        "negative_retention_share": 0.6071428571428571,
+        "peak_ge050": {
+          "actual_total_usdt": 25.401251210366077,
+          "median_retention": 0.6092964301960706,
+          "n": 13,
+          "nonpositive_n": 3,
+          "ret_ge80_share": 0.38461538461538464,
+          "total_usdt": 63.49810373136165
+        },
+        "ret_ge50_share": 0.2857142857142857,
+        "ret_ge80_share": 0.21428571428571427,
+        "runner_ge1": {
+          "actual_total_usdt": 27.179381608070358,
+          "median_retention": 0.8642138285480534,
+          "n": 8,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.625,
+          "total_usdt": 65.27623412906593
+        },
+        "runner_ge2": {
+          "actual_total_usdt": 20.169704763943056,
+          "median_retention": 0.7344138961213835,
+          "n": 5,
+          "nonpositive_n": 0,
+          "ret_ge80_share": 0.4,
+          "total_usdt": 46.269546451113015
+        },
+        "total_usdt": 38.56195804713262,
+        "trigger_n": 8,
+        "win_n": 11,
+        "win_rate": 0.3333333333333333
+      },
+      "retain_ratio": 0.9
+    }
+  },
+  "stage": "PP-V4-2B",
+  "status": "COMPLETE_RESEARCH_ONLY"
+}

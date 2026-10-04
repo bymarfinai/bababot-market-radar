@@ -394,6 +394,64 @@ Full report:
 Frozen result:
 `research/profit_protection_v4/results/stage2a_observable_realized_leakage.json`
 
+### V4-2B — Optimal Protection Frontier ✅ COMPLETE
+
+Stage2B swept **144 causal CLOSE-overlay rules** on the frozen 99-trade Stage2A cohort.
+
+Split:
+- development EARLY+MID: **66 trades**;
+- untouched LATE holdout: **33 trades**.
+
+Grid:
+- arm peak: 0.30 / 0.50 / 0.75 / 1.00 / 1.50 / 2.00%;
+- retain ratio: 95 / 90 / 85 / 80 / 75 / 70 / 60 / 50%;
+- confirmation: 1 / 2 / 3 consecutive ~5s observations.
+
+Results:
+- Pareto frontier: **18 candidates**;
+- LATE holdout-positive: **6 candidates**.
+
+Strongest research reference:
+`arm=1.50%, retain=90%, confirm=2`
+
+LATE holdout:
+- total realized: **+$0.47 -> +$38.56**;
+- delta: **+$38.10**;
+- observable-net-peak >=0.50% median retention: **31.46% -> 60.93%**;
+- runner >=1% median retention: **36.97% -> 86.42%**;
+- runner >=1% >=80 retention share: **0% -> 62.50%**;
+- runner >=2% median retention: **43.13% -> 73.44%**;
+- runner >=2% nonpositive outcomes: **1 -> 0**.
+
+Full 99-trade diagnostic:
+- total realized: **-$10.02 -> +$75.96**;
+- delta: **+$85.98**;
+- trigger count: **19 / 99**;
+- runner >=1% median retention: **36.37% -> 77.27%**;
+- runner >=2% median retention: **37.17% -> 82.46%**.
+
+Concentration diagnostic for the best reference:
+- EARLY delta **+$11.34**;
+- MID delta **+$36.54**;
+- LATE delta **+$38.10**;
+- LATE 7/8 triggered trades improve and 1 deteriorates;
+- largest single LATE contributor = **40.77%** of LATE improvement.
+
+The frontier also exposes a second regime:
+- lower-arm `0.50 / 60% / 2` increases full-cohort win rate to **56.57%** and cuts >=0.50%-peak nonpositive outcomes from 10 to 1;
+- but runner >=1% / >=2% median retention remains only about **46–47%**.
+
+Decision:
+- one universal static rule is not sufficient;
+- proceed to **V4-2C — Runner Preservation / Two-Regime Protection**;
+- Stage2B selects **no runtime policy** and grants no protection authority.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE2B_OPTIMAL_PROTECTION_FRONTIER.md`
+
+Frozen result:
+`research/profit_protection_v4/results/stage2b_optimal_protection_frontier.json`
+
 ### V4-2 — 5s/Event Path vs 15s Benchmark ⏳ BLOCKED ON V4-1
 
 Use matched trades only.
