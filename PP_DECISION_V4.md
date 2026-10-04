@@ -664,3 +664,33 @@ Any prospective clean-MFE runtime cohort must use positions opened **after `1791
 - live remained disabled/disarmed
 
 Any prospective Stage2D shadow evaluation must use positions opened strictly after `1791094561302`.
+
+
+## Stage2D historical-first correction
+
+At user direction, prospective shadow collection was disabled before new PAPER validation.
+
+Expanded historical validation on all **189 strict-coverage existing trades** shows:
+- actual total: **-$242.13**;
+- selected hybrid: **-$153.38**;
+- improvement: **+$88.75** (**36.65% loss reduction**);
+- win rate: **19.58% -> 24.34%**.
+
+The 99 clean-MFE >=0.30% opportunity trades improve from **-$10.02 -> +$78.73**.
+
+The additional 90 trades with clean MFE <0.30%:
+- actual **-$232.10**;
+- hybrid **-$232.10**;
+- only **1 / 90** winners;
+- **0 protection actions**.
+
+Those 90 trades account for **95.86%** of the strict cohort's absolute net loss. Profit protection cannot repair trades that never produce protectable profit.
+
+Current decision:
+- prospective Stage2D shadow: **DISABLED**;
+- historical-first validation: **ACTIVE source of truth**;
+- next unresolved bottleneck: upstream entry/direction/NO-TRADE filtering for the 90 low-MFE trades;
+- no protection authority.
+
+Full report:
+`docs/research/profit_protection_v4/PP_V4_STAGE2D_EXPANDED_HISTORICAL_VALIDATION.md`
