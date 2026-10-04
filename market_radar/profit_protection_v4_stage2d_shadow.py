@@ -146,13 +146,19 @@ def summary(recent_limit:int=20)->dict[str,Any]:
             s=c.execute("select count(*),sum(duplicate_count),sum(out_of_order_count),sum(invariant_error_count),sum(case when small_fired=1 then 1 else 0 end),sum(case when runner_qualified=1 then 1 else 0 end),sum(case when shadow_closed=1 then 1 else 0 end) from pp_v4_stage2d_shadow_state").fetchone()
             a=c.execute("select count(*),count(distinct action_id),sum(case when action_type='SHADOW_REDUCE_25' then 1 else 0 end),sum(case when action_type='SHADOW_CLOSE_REMAINDER' then 1 else 0 end) from pp_v4_stage2d_shadow_actions").fetchone()
             recent=[dict(r) for r in c.execute("select action_id,position_id,observed_at_ms,action_type,current_pnl_pct,running_peak_pct,remaining_before,remaining_after,authority from pp_v4_stage2d_shadow_actions order by observed_at_ms desc limit ?",(limit,)).fetchall()]
-            eligible=int(c.execute("select count(*) from positions where upper(mode)='PAPER' and opened_at_ms>?",(start_ms(),)).fetchone()[0] or 0)
+            try:
+                eligible=int(c.execute("select count(*) from positions where upper(mode)='PAPER' and opened_at_ms>?",(start_ms(),)).fetchone()[0] or 0)
+            except Exception:
+                eligible=0
     else:
         with _postgres_connect() as c:
             with c.cursor() as cur:
                 cur.execute("select count(*),coalesce(sum(duplicate_count),0),coalesce(sum(out_of_order_count),0),coalesce(sum(invariant_error_count),0),count(*) filter(where small_fired),count(*) filter(where runner_qualified),count(*) filter(where shadow_closed) from pp_v4_stage2d_shadow_state");s=cur.fetchone()
                 cur.execute("select count(*),count(distinct action_id),count(*) filter(where action_type='SHADOW_REDUCE_25'),count(*) filter(where action_type='SHADOW_CLOSE_REMAINDER') from pp_v4_stage2d_shadow_actions");a=cur.fetchone()
                 cur.execute("select action_id,position_id,observed_at_ms,action_type,current_pnl_pct,running_peak_pct,remaining_before,remaining_after,authority from pp_v4_stage2d_shadow_actions order by observed_at_ms desc limit %s",(limit,));recent=[{"action_id":r[0],"position_id":r[1],"observed_at_ms":int(r[2]),"action_type":r[3],"current_pnl_pct":float(r[4]),"running_peak_pct":float(r[5]),"remaining_before":float(r[6]),"remaining_after":float(r[7]),"authority":r[8]} for r in cur.fetchall()]
-                cur.execute("select count(*) from positions where upper(mode)='PAPER' and opened_at_ms>%s",(start_ms(),));eligible=int(cur.fetchone()[0] or 0)
+                try:
+                    cur.execute("select count(*) from positions where upper(mode)='PAPER' and opened_at_ms>%s",(start_ms(),));eligible=int(cur.fetchone()[0] or 0)
+                except Exception:
+                    eligible=0
     positions=int(s[0] or 0); coverage=(100.0*positions/eligible) if eligible>0 else None
     return {"version":VERSION,"enabled":enabled(),"start_ms":start_ms(),"authority":"NONE","eligible_positions_since_boundary":eligible,"positions":positions,"position_start_coverage_pct":coverage,"duplicate_observations":int(s[1] or 0),"out_of_order_observations":int(s[2] or 0),"invariant_errors":int(s[3] or 0),"small_fired_positions":int(s[4] or 0),"runner_qualified_positions":int(s[5] or 0),"shadow_closed_positions":int(s[6] or 0),"actions":int(a[0] or 0),"unique_actions":int(a[1] or 0),"duplicate_actions":int(a[0] or 0)-int(a[1] or 0),"shadow_reduces":int(a[2] or 0),"shadow_closes":int(a[3] or 0),"recent_actions":recent}
