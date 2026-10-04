@@ -160,3 +160,18 @@ This does **not** grant protection/trading authority. It only proves the informa
 - clean-label evaluator: `research/profit_protection_v4/stage1j_clean_mfe_rebuild.py`
 - frozen evidence: `research/profit_protection_v4/results/stage1j_clean_post_entry_mfe_evidence.json`
 - frozen result: `research/profit_protection_v4/results/stage1j_clean_mfe_rebuild.json`
+
+## Stage1J production activation
+
+- merged runtime commit: `84e2f65df4e6065f0deca595253e4ff1a77e5309`
+- clean runtime boundary freeze: `1791088148534`
+- control at boundary: `PAUSE_ENTRIES`
+- open positions at boundary: **0**
+- deployed lifecycle version: `stage12-v3.1-entry-boundary`
+- post-deploy boundary probe: PASS
+- app container health: healthy
+- V4 5s observer remained enabled at 5s with no trading authority
+- control resumed to `RUN` at `1791088208713`
+- live trading remained disabled/disarmed
+
+Any prospective clean-MFE runtime cohort must use positions opened **after `1791088148534`**. Because there were zero open positions at the freeze, no pre-fix position state crosses the boundary.
