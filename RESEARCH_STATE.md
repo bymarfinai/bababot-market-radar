@@ -175,3 +175,13 @@ This playbook is the authoritative methodology reference for winner anatomy, tem
 - Of 9 Stage3A RUNNER_TRIGGER_DELAY cases, 7 were temporally premature exits before a later higher peak; 2 were true post-final-peak delayed exits.
 - At 80% crossing, final reversals were older and faster: median age 24.95s vs 10.13s transient; median downward velocity 0.0366 vs 0.0154 pp/s.
 - Next: PP V4-3C Temporal Reversal Detector. Historical research only; no runtime authority.
+
+## PP V4-3C2 Reclaim Structure — COMPLETE / NO PASS
+
+- Same 19 runner-capable trades, DEV 12 / LATE 7.
+- Frozen 81-candidate family tested bounded reclaim structure after initial giveback.
+- 0/81 passed all gates; no candidate reached precision >=65% or premature <=35%.
+- Highest precision: 63.64%, but median correct retention only 68.11%.
+- High-retention shape kept median 83.58% but precision stayed 50%.
+- Persistent false-reversal names include AVAAI, STX, COMP, FLOW.
+- Decision: no Stage3D integration. Next research must be separately preregistered around multi-cycle failed reclaim / volatility-normalized structure. V4.2/runtime/shadow unchanged.
