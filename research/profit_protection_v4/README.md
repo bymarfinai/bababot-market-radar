@@ -1,6 +1,6 @@
 # Profit Protection V4 Research Namespace
 
-Status: **NOT ACTIVE**
+Status: **V4-1 READY FOR ACTIVATION**
 
 This directory is reserved for the PP V4 High-Frequency Peak Capture research line.
 
@@ -10,15 +10,14 @@ Source of truth:
 
 ## Current state
 
-Only the namespace and research contract exist.
+V4-1 now has one research-only canonical observer implementation and an offline matched-trade evaluator.
 
-There is intentionally:
-- no runtime module;
-- no collector loop;
-- no read API endpoint;
-- no PP_V4 environment variable;
-- no database table created by V4;
-- no paper/live authority.
+Prospective start boundary: `1791079128949`\n\nRuntime components:
+- observer: `market_radar/profit_protection_v4_observer.py`
+- audit: `GET /pp-v4/stage1/summary`
+- evaluator: `stage1_observability_benchmark.py`
+
+The observer has no paper/live trading authority and does not alter Stage 12.
 
 ## Planned order
 
