@@ -31,7 +31,7 @@ def primary_provider() -> str:
 def active_model() -> str:
     return os.environ.get(
         "AI_PRIMARY_MODEL",
-        os.environ.get("CLARIO_MODEL", "gemini-3.7-flash"),
+        os.environ.get("CLARIO_MODEL", "gpt-5.6-sol"),
     ).strip()
 
 
