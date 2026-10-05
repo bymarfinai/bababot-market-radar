@@ -454,8 +454,8 @@ deterministic fail-closed risk gate
 priority queue (freshest / strongest first)
     ↓
 one fast AI lane
-    ├── Clario: gpt-5.6-sol
-    └── Thirty: thirty/gpt-5.6-sol
+    ├── Clario lane 1: gpt-5.6-sol
+    └── Clario lane 2: gpt-5.6-sol
     ↓
 APPROVE / WATCH / VETO
 ~~~
