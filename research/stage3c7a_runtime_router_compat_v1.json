@@ -1,0 +1,111 @@
+{
+  "ambiguous_rejected_n": 532,
+  "categorical_feature": "f_gate_flow_family",
+  "categorical_levels": [
+    "ALIGNED",
+    "NEUTRAL",
+    "OPPOSITE"
+  ],
+  "classification_threshold": 0.5,
+  "coefficients": [
+    -1.0790736366137357,
+    14.229721646048661,
+    25.059533150666237,
+    19.08743699472061,
+    -9.720490492765316,
+    -6.0474067588877585,
+    -9.187351232530252,
+    25.343019036686428,
+    -11.210163247347625,
+    -0.7122264522857128
+  ],
+  "counterflow_veto": {
+    "f_f_coin_minus_market_15m": [
+      "<=",
+      2.590401861
+    ],
+    "f_f_coin_minus_market_30m": [
+      ">=",
+      -0.1486000362
+    ],
+    "f_f_selected_slope5_norm": [
+      "<=",
+      0.2612069909
+    ],
+    "f_new_accel_5_vs_15": [
+      "<=",
+      0.6214308333
+    ]
+  },
+  "historical_contract": {
+    "non_target": 304,
+    "profitable_non_target": 39,
+    "provenance_counts": {
+      "BASELINE": 345,
+      "T+1": 66,
+      "T+2": 43
+    },
+    "route_counts": {
+      "COUNTERFLOW": 157,
+      "FLOW_ALIGNED": 297
+    },
+    "selected": 454,
+    "strong_win": 150,
+    "universe": 1236
+  },
+  "intercept": 13.420629337053159,
+  "numeric_features": [
+    "f_gate_taker_share_for_selected",
+    "f_gate_side_ret_1m_pct",
+    "f_new_flow_support",
+    "f_new_micro_accel_1_vs_3",
+    "f_f_coin_minus_market_30m",
+    "f_f_oi_change_30m_pct",
+    "f_micro_volume_ratio_last_vs_prev10"
+  ],
+  "numeric_mean": [
+    0.6057325572566039,
+    0.18528829317306794,
+    0.5241477272727273,
+    -0.08710865136000104,
+    1.7317277053447533,
+    0.5954397459137479,
+    6.9047392231708296
+  ],
+  "numeric_medians": {
+    "f_f_coin_minus_market_30m": 1.5216143441615508,
+    "f_f_oi_change_30m_pct": 0.3285398717764232,
+    "f_gate_side_ret_1m_pct": 0.16435080688507187,
+    "f_gate_taker_share_for_selected": 0.6169283646548142,
+    "f_micro_volume_ratio_last_vs_prev10": 2.5419802941007825,
+    "f_new_flow_support": 1.0,
+    "f_new_micro_accel_1_vs_3": -0.064296709379937
+  },
+  "numeric_scale": [
+    0.1776447082262635,
+    0.352987424558019,
+    0.7590266350544673,
+    0.3296570225586843,
+    1.0673417304961308,
+    1.2535813181763242,
+    19.297422976860997
+  ],
+  "policy_hash_sha256": "ada659086dc0b573ab1d70cd61b9c7dadc11161c35d371b54dcfd2345a76e383",
+  "recovery_method": "linear logistic boundary distilled from 704 outcome-blind frozen-policy route constraints; no PnL/outcome fields at inference",
+  "router_features": [
+    "f_gate_flow_family",
+    "f_gate_taker_share_for_selected",
+    "f_gate_side_ret_1m_pct",
+    "f_new_flow_support",
+    "f_new_micro_accel_1_vs_3",
+    "f_f_coin_minus_market_30m",
+    "f_f_oi_change_30m_pct",
+    "f_micro_volume_ratio_last_vs_prev10"
+  ],
+  "router_version": "stage3c7a-router-recovered-compat-v1",
+  "temporal_threshold_pct": 0.158514,
+  "training_C": 1000.0,
+  "training_constraint_errors": 0,
+  "training_constraint_n": 704,
+  "training_solver": "liblinear"
+}
