@@ -679,8 +679,8 @@ fresh/strong actionable signals
 priority queue
         ↓
 ┌───────────────────────────────┬────────────────────────────────┐
-│ Clario                        │ Thirty                         │
-│ gpt-5.6-sol                   │ thirty/gpt-5.6-sol            │
+│ Clario lane 1                 │ Clario lane 2                  │
+│ gpt-5.6-sol                   │ gpt-5.6-sol                   │
 └───────────────────────────────┴────────────────────────────────┘
         ↓
 APPROVE / WATCH / VETO
