@@ -1,0 +1,193 @@
+{
+  "stage": "SHORT-S10I",
+  "status": "DIAGNOSIS_COMPLETE_SUPPRESSOR_TRANSPORT_FAIL",
+  "research": {
+    "base": {
+      "n": 655,
+      "strong": 99,
+      "prevalence": 0.15114503816793892
+    },
+    "S10D": {
+      "n": 364,
+      "strong": 85,
+      "non": 279,
+      "precision": 0.23351648351648352,
+      "recall": 0.8585858585858586,
+      "lift": 1.544982794982795
+    },
+    "S10E": {
+      "n": 331,
+      "strong": 83,
+      "non": 248,
+      "precision": 0.25075528700906347,
+      "recall": 0.8383838383838383,
+      "lift": 1.6590375049589554
+    },
+    "S10G": {
+      "n": 225,
+      "strong": 79,
+      "non": 146,
+      "precision": 0.3511111111111111,
+      "recall": 0.797979797979798,
+      "lift": 2.3230078563411896
+    }
+  },
+  "fresh": {
+    "base": {
+      "n": 1449,
+      "strong": 261,
+      "prevalence": 0.18012422360248448
+    },
+    "S10D": {
+      "n": 807,
+      "strong": 189,
+      "non": 618,
+      "precision": 0.2342007434944238,
+      "recall": 0.7241379310344828,
+      "lift": 1.3002179207793871
+    },
+    "S10E": {
+      "n": 751,
+      "strong": 172,
+      "non": 579,
+      "precision": 0.22902796271637815,
+      "recall": 0.6590038314176245,
+      "lift": 1.2715000688736855
+    },
+    "S10G": {
+      "n": 516,
+      "strong": 112,
+      "non": 404,
+      "precision": 0.21705426356589147,
+      "recall": 0.42911877394636017,
+      "lift": 1.2050253942796043
+    }
+  },
+  "veto_transport": {
+    "S10E_overheat": {
+      "research": {
+        "pre_strong": 85,
+        "pre_non": 279,
+        "veto_strong": 2,
+        "veto_non": 31,
+        "veto_strong_rate": 0.06060606060606061,
+        "winner_removal_rate": 0.023529411764705882,
+        "non_removal_rate": 0.1111111111111111
+      },
+      "fresh": {
+        "pre_strong": 189,
+        "pre_non": 618,
+        "veto_strong": 17,
+        "veto_non": 39,
+        "veto_strong_rate": 0.30357142857142855,
+        "winner_removal_rate": 0.08994708994708994,
+        "non_removal_rate": 0.06310679611650485
+      }
+    },
+    "S10G_total": {
+      "research": {
+        "pre_strong": 83,
+        "pre_non": 248,
+        "veto_strong": 4,
+        "veto_non": 102,
+        "winner_removal_rate": 0.04819277108433735,
+        "non_removal_rate": 0.4112903225806452
+      },
+      "fresh": {
+        "pre_strong": 172,
+        "pre_non": 579,
+        "veto_strong": 60,
+        "veto_non": 175,
+        "winner_removal_rate": 0.3488372093023256,
+        "non_removal_rate": 0.3022452504317789
+      }
+    },
+    "T1_union": {
+      "research": {
+        "pre_n": 115,
+        "pre_strong": 14,
+        "veto_n": 75,
+        "veto_strong": 2,
+        "veto_non": 73,
+        "keep_n": 40,
+        "keep_strong": 12,
+        "keep_non": 28
+      },
+      "fresh": {
+        "pre_n": 241,
+        "pre_strong": 57,
+        "veto_n": 168,
+        "veto_strong": 43,
+        "veto_non": 125,
+        "keep_n": 73,
+        "keep_strong": 14,
+        "keep_non": 59
+      }
+    },
+    "T2_union": {
+      "research": {
+        "pre_n": 101,
+        "pre_strong": 29,
+        "veto_n": 31,
+        "veto_strong": 2,
+        "veto_non": 29,
+        "keep_n": 70,
+        "keep_strong": 27,
+        "keep_non": 43
+      },
+      "fresh": {
+        "pre_n": 238,
+        "pre_strong": 59,
+        "veto_n": 67,
+        "veto_strong": 17,
+        "veto_non": 50,
+        "keep_n": 171,
+        "keep_strong": 42,
+        "keep_non": 129
+      }
+    }
+  },
+  "individual_rule_transport": {
+    "T1_accel": {
+      "research_hit": 44,
+      "research_strong": 2,
+      "fresh_hit": 110,
+      "fresh_strong": 29
+    },
+    "T1_volume_over_range": {
+      "research_hit": 31,
+      "research_strong": 1,
+      "fresh_hit": 75,
+      "fresh_strong": 18
+    },
+    "T1_price_drift": {
+      "research_hit": 26,
+      "research_strong": 0,
+      "fresh_hit": 47,
+      "fresh_strong": 9
+    },
+    "T2_side_return": {
+      "research_hit": 13,
+      "research_strong": 0,
+      "fresh_hit": 25,
+      "fresh_strong": 5
+    },
+    "T2_taker_accel": {
+      "research_hit": 11,
+      "research_strong": 0,
+      "fresh_hit": 18,
+      "fresh_strong": 11
+    },
+    "T2_gate_price_x_flow_gap": {
+      "research_hit": 13,
+      "research_strong": 2,
+      "fresh_hit": 32,
+      "fresh_strong": 2
+    }
+  },
+  "conclusion": {
+    "primary_root_cause": "S10E/S10G suppressor thresholds do not transport; they become winner-destructive in fresh data.",
+    "base_detector_note": "S10D fresh precision is essentially unchanged vs research (23.42% vs 23.35%), while recall falls from 85.86% to 72.41%.",
+    "most_severe_rule": "T2 f_f_taker_accel_1m veto: 0/11 strong in research hit cohort vs 11/18 strong in fresh hit cohort."
+  }
+}
