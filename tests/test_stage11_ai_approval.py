@@ -42,8 +42,8 @@ class Stage11ApprovalTests(unittest.TestCase):
                 "AI_APPROVAL_MAX_AGE_MINUTES": "15",
                 "AI_APPROVAL_ENABLED": "true",
                 "AI_FAST_POOL_TARGETS": (
-                    "clario:gpt-5.6-sol,"
-                    "thirty:thirty/gpt-5.6-sol"
+                    "clario1:gpt-5.6-sol,"
+                    "clario2:gpt-5.6-sol"
                 ),
                 "AI_APPROVAL_WORKERS": "2",
             },
@@ -125,7 +125,7 @@ class Stage11ApprovalTests(unittest.TestCase):
         ) as handoff:
             result = review_signal(
                 good_signal(),
-                target=("clario", "gpt-5.6-sol"),
+                target=("clario1", "gpt-5.6-sol"),
                 now_ms=1_300_000,
             )
         handoff.assert_called_once_with("SOLUSDT:1000000:LONG")
@@ -163,7 +163,7 @@ class Stage11ApprovalTests(unittest.TestCase):
         }
         result = review_signal(
             good_signal(),
-            target=("clario", "gpt-5.6-sol"),
+            target=("clario1", "gpt-5.6-sol"),
             now_ms=1_300_000,
         )
         self.assertEqual(result["final_verdict"], "WATCH")
@@ -172,7 +172,7 @@ class Stage11ApprovalTests(unittest.TestCase):
         failover.assert_called_once()
         self.assertEqual(
             failover.call_args.kwargs["alternate_target"],
-            ("thirty", "thirty/gpt-5.6-sol"),
+            ("clario2", "gpt-5.6-sol"),
         )
         self.assertEqual(save_model.call_count, 1)
 
@@ -193,7 +193,7 @@ class Stage11ApprovalTests(unittest.TestCase):
         }
         result = review_signal(
             good_signal(),
-            target=("clario", "gpt-5.6-sol"),
+            target=("clario1", "gpt-5.6-sol"),
             now_ms=1_300_000,
         )
         self.assertEqual(result["ai_verdict"], "ERROR")
@@ -209,8 +209,8 @@ class Stage11ApprovalTests(unittest.TestCase):
         self.assertEqual(
             _fast_pool_targets(),
             [
-                ("clario", "gpt-5.6-sol"),
-                ("thirty", "thirty/gpt-5.6-sol"),
+                ("clario1", "gpt-5.6-sol"),
+                ("clario2", "gpt-5.6-sol"),
             ],
         )
         self.assertEqual(_workers(), 2)
