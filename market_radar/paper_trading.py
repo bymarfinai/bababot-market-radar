@@ -34,6 +34,11 @@ from .profit_discriminator_stage6 import (
     finalize_stage6_discriminator_position,
     process_stage6_discriminator_cycle,
 )
+from .parallel_protection_shadow_runtime import (
+    process_source_lifecycle as process_protection_shadow_source_lifecycle,
+    reconcile_source_lifecycle as reconcile_protection_shadow_source_lifecycle,
+    register_paper_position as register_protection_shadow_position,
+)
 
 PAPER_TRADING_VERSION = "stage13-v2-event-driven"
 _loop_lock = threading.Lock()
@@ -625,6 +630,23 @@ def _execute_open(
         fee=fee,
         reason="paper_market_entry",
     )
+
+    shadow_runtime: dict[str, Any] | None = None
+    try:
+        created_position = get_position(str(order["position_id"]))
+        if created_position is not None:
+            shadow_runtime = register_protection_shadow_position(created_position)
+    except Exception as exc:
+        shadow_runtime = {
+            "status": "ERROR_FAIL_ISOLATED",
+            "error": f"{type(exc).__name__}: {str(exc)[:300]}",
+        }
+        print(
+            "PS-5A entry shadow warning: "
+            f"{type(exc).__name__}: {str(exc)[:300]}",
+            flush=True,
+        )
+
     return {
         "status": "FILLED",
         "action": "OPEN",
@@ -632,6 +654,7 @@ def _execute_open(
         "fill_price": fill,
         "quantity": quantity,
         "fee": fee,
+        "shadow_runtime": shadow_runtime,
     }
 
 
@@ -761,6 +784,32 @@ def _execute_exit(
         fee=exit_fee,
         reason=str(order.get("reason") or action.lower()),
     )
+
+    shadow_runtime: dict[str, Any] | None = None
+    try:
+        shadow_runtime = process_protection_shadow_source_lifecycle(
+            position,
+            action=action,
+            executed_at_ms=executed_at,
+            market_price=market_price,
+            fill_price=fill,
+            executed_quantity=qty,
+            fee=exit_fee,
+            reason=str(order.get("reason") or action.lower()),
+            source_event_id=f"paper:{order['order_id']}:{action}",
+            client=client,
+        )
+    except Exception as exc:
+        shadow_runtime = {
+            "status": "ERROR_FAIL_ISOLATED",
+            "error": f"{type(exc).__name__}: {str(exc)[:300]}",
+        }
+        print(
+            "PS-5A lifecycle shadow warning: "
+            f"{type(exc).__name__}: {str(exc)[:300]}",
+            flush=True,
+        )
+
     if action == "CLOSE":
         try:
             finalize_stage6_discriminator_position(str(position["position_id"]))
@@ -780,6 +829,7 @@ def _execute_exit(
         "realized_net_increment": net_increment,
         "realized_net_total": realized_net,
         "realized_pnl_pct": realized_pct,
+        "shadow_runtime": shadow_runtime,
     }
 
 
@@ -850,6 +900,20 @@ def paper_cycle() -> dict[str, Any]:
 
     lifecycle = sync_lifecycle_orders()
     exits = execute_pending_orders(actions={"REDUCE", "CLOSE"})
+    try:
+        shadow_recovery = reconcile_protection_shadow_source_lifecycle()
+    except Exception as exc:
+        shadow_recovery = {
+            "status": "ERROR_FAIL_ISOLATED",
+            "checked_positions": 0,
+            "recovered_events": 0,
+            "errors": [f"{type(exc).__name__}: {str(exc)[:300]}"],
+        }
+        print(
+            "PS-5A source lifecycle recovery warning: "
+            f"{type(exc).__name__}: {str(exc)[:300]}",
+            flush=True,
+        )
     control = get_control_state()
     with _entry_handoff_lock:
         entries = sync_entry_orders()
@@ -869,6 +933,7 @@ def paper_cycle() -> dict[str, Any]:
         "pp_decision_v2_stage6": v2_stage6,
         "lifecycle_queued": lifecycle["queued"],
         "exit_execution": exits,
+        "protection_shadow_recovery": shadow_recovery,
         "entry_queued": entries["queued"],
         "entry_capacity_blocked": entries["capacity_blocked"],
         "entry_symbol_blocked": entries["symbol_blocked"],

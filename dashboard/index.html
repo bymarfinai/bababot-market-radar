@@ -52,6 +52,25 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .trade-inner{padding:12px}.trade-symbol{display:flex;justify-content:space-between;align-items:flex-start}.trade-symbol h3{margin:0;font-size:17px}.big-price{font-size:24px;font-weight:650;margin-top:5px}.score-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:12px}.score-box{padding:10px;background:#11151a}.score-box:first-child{border-right:1px solid var(--line)}.score-box span{display:block;font-size:8px;color:var(--muted);margin-bottom:5px}.score-box strong{font-size:20px}.kv{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:10px}.kv div{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.kv span{display:block;font-size:7px;color:var(--muted);margin-bottom:4px}.kv strong{display:block;font-size:9px;overflow:hidden;text-overflow:ellipsis}.reason-list{margin-top:12px;border-top:1px solid var(--line);padding:9px 3px 0 0;max-height:210px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}.reason-title{font-size:9px;color:var(--muted);margin-bottom:5px}.reason{padding:6px 0;border-bottom:1px solid var(--line2);font-size:9px;line-height:1.4}
 .bottom-terminal{background:var(--bg)}.terminal-tabs{height:42px;display:flex;align-items:center;gap:18px;padding:0 12px;border-bottom:1px solid var(--line2);background:#0d1014;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}.terminal-tabs::-webkit-scrollbar{display:none}.terminal-tab{height:42px;border:0;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;position:relative;white-space:nowrap}.terminal-tab.active{color:var(--text)}.terminal-tab.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--yellow)}
 .terminal-pane{display:none}.terminal-pane.active{display:block}.terminal-pane .table-wrap{max-height:280px;overflow-y:auto;overflow-x:auto}.pane-meta{padding:7px 10px;color:var(--muted);font-size:9px;border-bottom:1px solid var(--line2)}.cell-main{font-size:9px;color:#d6dbe2}.cell-sub{margin-top:2px;font-size:7px;color:var(--muted);line-height:1.25}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.reason-cell{max-width:220px;overflow:hidden;text-overflow:ellipsis}.score-pair{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px}.ctx-pill{display:inline-flex;min-width:22px;justify-content:center;padding:2px 5px;border-radius:999px;background:#151a20;border:1px solid var(--line);font-size:8px;color:#c7cdd5}.exec-note{font-size:7px;color:var(--muted);margin-top:2px}
+.shadow-shell{background:#0b0e11}
+.shadow-overview{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));border-bottom:1px solid var(--line2);background:#0d1014}
+.shadow-stat{padding:9px 11px;border-right:1px solid var(--line2);min-width:0}.shadow-stat:last-child{border-right:0}
+.shadow-stat span{display:block;font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}.shadow-stat strong{font-size:11px}.shadow-stat small{display:block;font-size:7px;color:var(--muted2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shadow-notice{padding:8px 11px;border-bottom:1px solid var(--line2);font-size:8px;line-height:1.45;color:var(--muted);background:rgba(240,185,11,.045)}
+.shadow-notice strong{color:var(--yellow2)}
+.shadow-cell{min-width:112px}.shadow-cell-top{display:flex;align-items:center;gap:5px}.shadow-cell-pnl{font:10px ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}.shadow-cell-sub{margin-top:3px;font-size:7px;color:var(--muted);line-height:1.25}.shadow-delta{font-size:7px;margin-left:3px}
+.shadow-best{display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border-radius:3px;background:var(--greenSoft);color:var(--green);font-size:8px;font-weight:700}
+.shadow-parity-ok{color:var(--green)}.shadow-parity-bad{color:var(--red)}
+.shadow-detail{padding:11px;border-bottom:1px solid var(--line2);background:linear-gradient(180deg,#0f1318 0%,#0b0e11 100%)}
+.shadow-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:9px}.shadow-detail-head h3{font-size:12px;margin:2px 0 0}
+.shadow-detail-grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:7px}.shadow-branch-card{border:1px solid var(--line2);background:#101419;border-radius:4px;padding:9px;min-width:0}
+.shadow-branch-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.shadow-branch-name{font-size:10px;font-weight:800}.shadow-branch-pnl{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:800;margin-top:5px}
+.shadow-branch-kv{display:grid;grid-template-columns:1fr 1fr;margin-top:8px;border-left:1px solid var(--line2);border-top:1px solid var(--line2)}.shadow-branch-kv div{padding:6px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);min-width:0}.shadow-branch-kv span{display:block;font-size:6px;color:var(--muted);text-transform:uppercase;margin-bottom:3px}.shadow-branch-kv strong{display:block;font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shadow-settlement-title{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:8px;color:var(--muted)}
+.shadow-table-row-selected{background:#151b21!important}
+@media(max-width:1180px){.shadow-detail-grid{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+@media(max-width:700px){.shadow-overview{grid-template-columns:repeat(2,1fr)}.shadow-detail-grid{grid-template-columns:1fr}}
+
 .health-inspector{padding:12px;border-bottom:1px solid var(--line2);background:linear-gradient(180deg,#0f1318 0%,#0b0e11 100%)}
 .health-inspector-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}.health-inspector-head h3{font-size:12px;margin:2px 0 0}.health-version{font:8px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);padding:4px 6px;border:1px solid var(--line);border-radius:3px}
 .health-metrics{display:grid;grid-template-columns:repeat(7,minmax(88px,1fr));gap:6px}.health-card{padding:8px 9px;background:#12161b;border:1px solid var(--line2);border-radius:4px;min-width:0}.health-card span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}.health-card strong{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.health-card small{display:block;margin-top:3px;color:var(--muted2);font-size:7px}
@@ -164,6 +183,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <section id="terminal" class="bottom-terminal">
   <div class="terminal-tabs">
     <button class="terminal-tab active" data-tab="positions">Positions <span id="positionsMeta">—</span></button>
+    <button class="terminal-tab" data-tab="shadow">Protection Shadow <span id="shadowMeta">—</span></button>
     <button class="terminal-tab" data-tab="openorders">Open Orders</button>
     <button class="terminal-tab" data-tab="orders">Order History</button>
     <button class="terminal-tab" data-tab="positionhistory">Position History</button>
@@ -175,6 +195,23 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   <div class="terminal-pane active" data-pane="positions">
     <div id="healthInspector" class="health-inspector"><div class="health-empty">Health V2 inspector waits for an open paper position.</div></div>
     <div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark</th><th>PnL</th><th>Base</th><th>Adaptive</th><th>MFE</th><th>MAE</th><th>Giveback</th><th>Penalty</th><th>Deterministic</th><th>AI</th><th>Final</th></tr></thead><tbody id="positionRows"><tr><td colspan="15" class="empty"><strong>Loading positions</strong><span>Health V2 lifecycle state appears here.</span></td></tr></tbody></table></div>
+  </div>
+
+  <div class="terminal-pane" data-pane="shadow">
+    <div class="shadow-shell">
+      <div id="shadowOverview" class="shadow-overview">
+        <div class="shadow-stat"><span>Tracked Trades</span><strong>—</strong><small>parallel shadow parents</small></div>
+        <div class="shadow-stat"><span>Comparison Eligible</span><strong>—</strong><small>parity-valid only</small></div>
+        <div class="shadow-stat"><span>Branch Settled</span><strong>—</strong><small>virtual CLOSED branches</small></div>
+        <div class="shadow-stat"><span>Authority</span><strong class="green">NONE</strong><small>shadow only</small></div>
+      </div>
+      <div id="shadowScopeNotice" class="shadow-notice"><strong>Prospective causal view.</strong> Waiting for Protection Shadow API contract.</div>
+      <div id="shadowDetail" class="shadow-detail"><div class="health-empty">Select a shadow trade to compare V4.2, V4.3, BE0.25, and BE0.18 settlement paths.</div></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Trade</th><th>Side</th><th>Entry / Mark</th><th>Parity</th><th>V4.2</th><th>V4.3</th><th>BE0.25</th><th>BE0.18</th><th>Best / Δ vs V4.2</th></tr></thead>
+        <tbody id="shadowRows"><tr><td colspan="9" class="empty"><strong>Loading Protection Shadow</strong><span>One source trade will appear as four independent virtual protector outcomes.</span></td></tr></tbody>
+      </table></div>
+    </div>
   </div>
 
   <div class="terminal-pane" data-pane="openorders">
@@ -281,6 +318,8 @@ var state={
   radar:null,paper:null,positions:[],evals:[],positionHistory:[],approvals:[],approvalSummary:null,
   models:[],modelSummary:null,orders:[],history:[],historySummary:null,control:null,
   livePreflight:null,liveSummary:null,liveOrders:[],livePositions:[],
+  shadow:null,shadowContract:null,shadowAdapters:null,shadowSettlementContract:null,shadowRuntime:null,shadowError:null,
+  shadowSettlements:{},selectedShadowParentId:null,
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
   ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
   controlAuthVerified:false,controlBusy:false
@@ -629,6 +668,132 @@ function renderPositions(){
   document.querySelectorAll('.pos-row').forEach(function(tr){tr.onclick=function(){selectSymbol(tr.dataset.symbol)}});
   renderHealthInspector();
 }
+function shadowBranchValue(b){
+  if(!b||!b.performance)return null;
+  var v=String(b.status||'').toUpperCase()==='CLOSED'?b.performance.realized_pnl_usdt:b.performance.current_pnl_usdt;
+  if(v===null||v===undefined)v=b.performance.realized_pnl_usdt;
+  return v===null||v===undefined?null:Number(v);
+}
+function shadowBranchCell(b){
+  if(!b)return '<div class="shadow-cell"><span class="muted">missing</span></div>';
+  var v=shadowBranchValue(b),delta=b.performance&&b.performance.delta_vs_v42_usdt;
+  var cls=v===null?'muted':(v>=0?'green':'red');
+  var stateLabel=b.current_state||b.status||'—';
+  var deltaHtml=(delta===null||delta===undefined)?'':'<span class="shadow-delta '+(Number(delta)>=0?'green':'red')+'">Δ '+money(Number(delta))+'</span>';
+  return '<div class="shadow-cell"><div class="shadow-cell-top"><span class="shadow-cell-pnl '+cls+'">'+(v===null?'pending':money(v))+'</span>'+deltaHtml+'</div>'+
+    '<div class="shadow-cell-sub">'+esc(b.short_label||b.label||b.branch_key)+' · '+esc(stateLabel)+'</div></div>';
+}
+function shadowBranchMap(position){
+  var m={};(position&&position.branches||[]).forEach(function(b){m[b.branch_key]=b});return m;
+}
+function renderProtectionShadow(){
+  var root=state.shadow||null,positions=root&&root.positions||[],runtime=state.shadowRuntime||{};
+  var eligible=root?Number(root.comparison_eligible_count||0):0;
+  var closed=0,issues=0;
+  positions.forEach(function(p){issues+=Number(p.parity&&p.parity.issue_count||0);(p.branches||[]).forEach(function(b){if(String(b.status||'').toUpperCase()==='CLOSED')closed++})});
+  if(el('shadowMeta'))el('shadowMeta').textContent=root?(positions.length+' · '+eligible+' valid'):'—';
+  if(el('shadowOverview')){
+    el('shadowOverview').innerHTML=
+      '<div class="shadow-stat"><span>Tracked Trades</span><strong>'+positions.length+'</strong><small>parallel shadow parents</small></div>'+
+      '<div class="shadow-stat"><span>Comparison Eligible</span><strong class="'+(positions.length&&eligible===positions.length?'green':issues?'red':'muted')+'">'+eligible+' / '+positions.length+'</strong><small>'+issues+' parity issue'+(issues===1?'':'s')+'</small></div>'+
+      '<div class="shadow-stat"><span>Runtime</span><strong class="'+(runtime.configured_enabled?'green':'muted')+'">'+(runtime.configured_enabled?'ACTIVE':'DORMANT')+'</strong><small>'+(runtime.epoch&&runtime.epoch.started_at_ms?'boundary '+dt(runtime.epoch.started_at_ms):'no prospective epoch')+'</small></div>'+
+      '<div class="shadow-stat"><span>Authority</span><strong class="green">'+esc(root&&root.execution_authority||runtime.execution_authority||'NONE')+'</strong><small>'+esc(runtime.runtime_version||root&&root.contract_version||'ps2.5')+'</small></div>';
+  }
+  var warning=state.shadowAdapters&&state.shadowAdapters.research_scope_warning;
+  if(el('shadowScopeNotice')){
+    if(state.shadowError&&!root){
+      el('shadowScopeNotice').innerHTML='<strong>Shadow backend dormant/unavailable.</strong> '+esc(state.shadowError)+' · UI is installed but no trading authority is affected.';
+    }else{
+      var msg=warning&&warning.v43_frozen?warning.v43_frozen:'Prospective branch outcomes are causal and must be evaluated independently from frozen ex-post research headlines.';
+      el('shadowScopeNotice').innerHTML='<strong>Prospective causal view.</strong> '+esc(msg);
+    }
+  }
+  if(!positions.length){
+    el('shadowRows').innerHTML='<tr><td colspan="9" class="empty"><strong>'+(state.shadowError?'Protection Shadow API not active':'No shadow trades yet')+'</strong><span>'+(state.shadowError?'The UI is ready; backend shadow wiring has not produced readable data on this deployment.':'Fresh shadow parents will appear here once prospective event wiring is enabled.')+'</span></td></tr>';
+    renderShadowDetail();
+    return;
+  }
+  if(!state.selectedShadowParentId||!positions.some(function(p){return p.parent&&p.parent.parent_id===state.selectedShadowParentId})){
+    state.selectedShadowParentId=positions[0].parent.parent_id;
+  }
+  el('shadowRows').innerHTML=positions.map(function(p){
+    var parent=p.parent||{},market=p.market||{},parity=p.parity||{},cmp=p.comparison||{},bm=shadowBranchMap(p);
+    var best=parity.comparison_eligible?cmp.current_best_branch_key:null;
+    var bestLabel=best&&bm[best]?(bm[best].short_label||bm[best].label||best):'pending';
+    var delta=cmp.current_best_delta_vs_v42_usdt;
+    var selected=parent.parent_id===state.selectedShadowParentId?' shadow-table-row-selected':'';
+    return '<tr class="click shadow-row'+selected+'" data-parent-id="'+esc(parent.parent_id)+'">'+
+      '<td><strong>'+esc(parent.symbol||'—')+'</strong><div class="cell-sub">'+tm(parent.opened_at_ms)+' · '+esc(parent.status||'—')+'</div></td>'+
+      '<td>'+badge(parent.side)+'</td>'+
+      '<td><div class="cell-main mono">'+px(parent.entry_price)+' / '+px(market.current_price)+'</div><div class="cell-sub">'+pct(market.gross_move_pct)+' shared move</div></td>'+
+      '<td><div class="'+(parity.comparison_eligible?'shadow-parity-ok':'shadow-parity-bad')+'">'+esc(parity.status||'—')+'</div><div class="cell-sub">'+Number(parity.canonical_event_count||0)+' events</div></td>'+
+      '<td>'+shadowBranchCell(bm.V42_BASELINE)+'</td>'+
+      '<td>'+shadowBranchCell(bm.V43_LS)+'</td>'+
+      '<td>'+shadowBranchCell(bm.BE025_CONSERVATIVE)+'</td>'+
+      '<td>'+shadowBranchCell(bm.BE018_AGGRESSIVE)+'</td>'+
+      '<td>'+(!parity.comparison_eligible?'<span class="red">EXCLUDED</span><div class="cell-sub">parity invalid</div>':best?'<span class="shadow-best">'+esc(bestLabel)+'</span><div class="cell-sub '+(Number(delta||0)>=0?'green':'red')+'">'+(delta===null||delta===undefined?'—':'Δ '+money(Number(delta)))+'</div>':'<span class="muted">awaiting branch PnL</span>')+'</td>'+
+      '</tr>';
+  }).join('');
+  document.querySelectorAll('.shadow-row').forEach(function(tr){
+    tr.onclick=function(){
+      state.selectedShadowParentId=tr.dataset.parentId;
+      renderProtectionShadow();
+      loadShadowSettlements(state.selectedShadowParentId);
+    };
+  });
+  renderShadowDetail();
+}
+function renderShadowDetail(){
+  var box=el('shadowDetail');if(!box)return;
+  var positions=state.shadow&&state.shadow.positions||[];
+  var p=positions.find(function(x){return x.parent&&x.parent.parent_id===state.selectedShadowParentId})||null;
+  if(!p){
+    box.innerHTML='<div class="health-empty"><strong>No selected shadow trade.</strong> Select a row once prospective shadow data exists.</div>';
+    return;
+  }
+  var parent=p.parent||{},market=p.market||{},parity=p.parity||{},bm=shadowBranchMap(p);
+  function card(key){
+    var b=bm[key];if(!b)return '';
+    var v=shadowBranchValue(b),perf=b.performance||{},tel=b.telemetry||{},dec=b.decision||{},set=b.settlement||{};
+    var cls=v===null?'muted':(v>=0?'green':'red');
+    var delta=perf.delta_vs_v42_usdt;
+    return '<div class="shadow-branch-card">'+
+      '<div class="shadow-branch-head"><div><div class="shadow-branch-name">'+esc(b.short_label||b.label||key)+'</div><div class="cell-sub">'+esc(b.protection_family||'—')+'</div></div>'+badge(b.status)+'</div>'+
+      '<div class="shadow-branch-pnl '+cls+'">'+(v===null?'PnL pending':money(v))+'</div>'+
+      '<div class="cell-sub">'+(delta===null||delta===undefined?'Δ vs V4.2 —':'Δ vs V4.2 '+money(Number(delta)))+'</div>'+
+      '<div class="shadow-branch-kv">'+
+        '<div><span>State</span><strong>'+esc(b.current_state||'—')+'</strong></div>'+
+        '<div><span>Lane</span><strong>'+esc(dec.lane||'—')+'</strong></div>'+
+        '<div><span>Action</span><strong>'+esc(dec.action||'—')+'</strong></div>'+
+        '<div><span>Reason</span><strong title="'+esc(dec.reason||'')+'">'+esc(prettyReason(dec.reason))+'</strong></div>'+
+        '<div><span>MFE / MAE</span><strong>'+pct(tel.mfe_pct)+' / '+pct(tel.mae_pct)+'</strong></div>'+
+        '<div><span>Remaining</span><strong>'+num(tel.remaining_quantity,5)+'</strong></div>'+
+        '<div><span>BE / Runner</span><strong>'+((dec.be_armed?'BE ':'')+(dec.runner_qualified?'RUNNER':'')||'—')+'</strong></div>'+
+        '<div><span>Close</span><strong title="'+esc(set.close_reason||'')+'">'+(set.closed_at_ms?tm(set.closed_at_ms)+' · '+px(set.close_price):'—')+'</strong></div>'+
+      '</div></div>';
+  }
+  var settlements=state.shadowSettlements[parent.parent_id]||[];
+  var settleHtml=settlements.length?settlements.map(function(x){
+    var pnl=Number(x.realized_delta_usdt||0);
+    return '<tr><td>'+tm(x.event_time_ms)+'</td><td>'+esc((bm[x.branch_key]&&(bm[x.branch_key].short_label||bm[x.branch_key].label))||x.branch_key)+'</td><td>'+esc(x.intent_source||'—')+'</td><td>'+badge(x.action)+'</td><td>'+badge(x.status)+'</td><td class="mono">'+num(x.executed_quantity,5)+'</td><td class="mono">'+px(x.fill_price)+'</td><td class="'+(pnl>=0?'green':'red')+'">'+money(pnl)+'</td><td class="mono">'+num(x.quantity_after,5)+'</td><td class="reason-cell" title="'+esc(x.reason||'')+'">'+esc(prettyReason(x.reason))+'</td></tr>';
+  }).join(''):'<tr><td colspan="10" class="empty"><strong>No virtual settlements yet</strong><span>REDUCE/CLOSE fills will appear here after PS-4 receives protection or source-lifecycle intents.</span></td></tr>';
+  box.innerHTML=
+    '<div class="shadow-detail-head"><div><div class="panel-sub">Parallel Protection Inspector</div><h3>'+esc(parent.symbol)+' '+badge(parent.side)+' <span class="mono muted">@ '+px(parent.entry_price)+'</span></h3><div class="cell-sub">Mark '+px(market.current_price)+' · '+pct(market.gross_move_pct)+' · '+Number(parity.canonical_event_count||0)+' canonical events</div></div><div>'+badge(parity.status)+'</div></div>'+
+    '<div class="shadow-detail-grid">'+card('V42_BASELINE')+card('V43_LS')+card('BE025_CONSERVATIVE')+card('BE018_AGGRESSIVE')+'</div>'+
+    '<div class="shadow-settlement-title"><span>Virtual Settlement Ledger</span><span>'+settlements.length+' records · read only</span></div>'+
+    '<div class="table-wrap" style="margin-top:6px;max-height:190px"><table><thead><tr><th>Time</th><th>Branch</th><th>Source</th><th>Action</th><th>Status</th><th>Qty</th><th>Fill</th><th>Δ PnL</th><th>Remaining</th><th>Reason</th></tr></thead><tbody>'+settleHtml+'</tbody></table></div>';
+}
+async function loadShadowSettlements(parentId,silent){
+  if(!parentId)return;
+  try{
+    var body=await getJSON('/shadow/protection/settlements?parent_id='+encodeURIComponent(parentId));
+    state.shadowSettlements[parentId]=body.settlements||[];
+  }catch(e){
+    if(!silent)console.warn('shadow settlements unavailable',e);
+  }
+  renderShadowDetail();
+}
+
 function renderApprovals(){
   var a=state.approvalSummary||{},total=Number(a.total_reviews||0);
   var approve=Number(a.approve_count||0),watch=Number(a.watch_count||0),veto=Number(a.veto_count||0);
@@ -897,7 +1062,12 @@ async function refresh(){
       getJSON('/live/preflight'),
       getJSON('/live/summary'),
       getJSON('/live/orders?limit=80'),
-      getJSON('/live/positions')
+      getJSON('/live/positions'),
+      getJSON('/shadow/protection/positions?limit=120'),
+      getJSON('/shadow/protection/contract'),
+      getJSON('/shadow/protection/adapters'),
+      getJSON('/shadow/protection/settlement'),
+      getJSON('/shadow/protection/runtime')
     ]);
     state.radar=settledValue(res[0],state.radar);
     state.paper=settledValue(res[1],state.paper);
@@ -915,7 +1085,15 @@ async function refresh(){
     state.liveSummary=settledValue(res[13],state.liveSummary);
     state.liveOrders=(settledValue(res[14],{orders:state.liveOrders}).orders||[]);
     state.livePositions=(settledValue(res[15],{positions:state.livePositions}).positions||[]);
-    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderPositionHistory();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();await loadChart();
+    state.shadow=settledValue(res[16],state.shadow);
+    state.shadowContract=settledValue(res[17],state.shadowContract);
+    state.shadowAdapters=settledValue(res[18],state.shadowAdapters);
+    state.shadowSettlementContract=settledValue(res[19],state.shadowSettlementContract);
+    state.shadowRuntime=settledValue(res[20],state.shadowRuntime);
+    state.shadowError=res[16].status==='rejected'?String(res[16].reason&&res[16].reason.message||res[16].reason):null;
+    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderProtectionShadow();renderPositionHistory();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();
+    if(state.selectedShadowParentId)await loadShadowSettlements(state.selectedShadowParentId,true);
+    await loadChart();
   }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
 }
 function controlToken(){

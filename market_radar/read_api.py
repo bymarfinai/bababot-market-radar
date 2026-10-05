@@ -24,6 +24,10 @@ from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
 from .paper_store import list_paper_orders, paper_summary
+from .parallel_protection_shadow_ui import contract_definition, protection_shadow_snapshot
+from .parallel_protection_shadow_adapters import adapter_contract
+from .parallel_protection_shadow_settlement import settlement_contract, list_shadow_settlements
+from .parallel_protection_shadow_runtime import runtime_summary as protection_shadow_runtime_summary
 from .profit_discriminator_stage6 import stage6_discriminator_summary
 from .profit_discriminator_stage7 import stage7_summary
 from .profit_protection_v4_observer import pp_v4_summary
@@ -713,6 +717,12 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "position_evaluations": "/positions/evaluations",
                     "paper_summary": "/paper/summary",
                     "paper_orders": "/paper/orders",
+                    "protection_shadow_contract": "/shadow/protection/contract",
+                    "protection_shadow_adapters": "/shadow/protection/adapters",
+                    "protection_shadow_settlement": "/shadow/protection/settlement",
+                    "protection_shadow_settlements": "/shadow/protection/settlements",
+                    "protection_shadow_runtime": "/shadow/protection/runtime",
+                    "protection_shadow_positions": "/shadow/protection/positions",
                     "candles": "/market/klines",
                     "ticker_24h": "/market/ticker",
                     "order_book": "/market/depth",
@@ -1336,6 +1346,135 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "evaluations": rows,
                 },
             )
+            return
+
+        if parsed.path == "/shadow/protection/contract":
+            try:
+                self._json(HTTPStatus.OK, contract_definition())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_contract_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/shadow/protection/adapters":
+            try:
+                self._json(HTTPStatus.OK, adapter_contract())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_adapters_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/shadow/protection/settlement":
+            try:
+                self._json(HTTPStatus.OK, settlement_contract())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_settlement_contract_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/shadow/protection/settlements":
+            query = parse_qs(parsed.query)
+            parent_id = query.get("parent_id", [None])[0]
+            branch_key = query.get("branch", [None])[0]
+            if not parent_id:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "error": "parent_id_required",
+                        "detail": "parent_id query parameter is required",
+                    },
+                )
+                return
+            try:
+                rows = list_shadow_settlements(
+                    parent_id,
+                    branch_key=branch_key,
+                )
+                self._json(
+                    HTTPStatus.OK,
+                    {
+                        "parent_id": parent_id,
+                        "branch": branch_key,
+                        "count": len(rows),
+                        "settlements": rows,
+                    },
+                )
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "error": "invalid_protection_shadow_settlement_query",
+                        "detail": str(exc),
+                    },
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_settlements_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/shadow/protection/runtime":
+            try:
+                self._json(HTTPStatus.OK, protection_shadow_runtime_summary())
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_runtime_summary_failed",
+                        "detail": str(exc),
+                    },
+                )
+            return
+
+        if parsed.path == "/shadow/protection/positions":
+            query = parse_qs(parsed.query)
+            try:
+                limit = int(query.get("limit", ["100"])[0])
+                status = query.get("status", [None])[0]
+                symbol = query.get("symbol", [None])[0]
+                side = query.get("side", [None])[0]
+                payload = protection_shadow_snapshot(
+                    limit=limit,
+                    status=status,
+                    symbol=symbol,
+                    side=side,
+                )
+                self._json(HTTPStatus.OK, payload)
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {
+                        "error": "invalid_protection_shadow_query",
+                        "detail": str(exc),
+                    },
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "protection_shadow_positions_failed",
+                        "detail": str(exc),
+                    },
+                )
             return
 
         if parsed.path == "/paper/summary":
