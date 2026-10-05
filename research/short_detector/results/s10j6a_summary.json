@@ -1,0 +1,69 @@
+{
+  "stage": "SHORT-S10J6A",
+  "status": "ANATOMY_COMPLETE",
+  "primary_v2": {
+    "executable": 616,
+    "strong": 164,
+    "non_target": 452,
+    "total_pnl": -218.6635013106473,
+    "strong_pnl": 449.04145440382916,
+    "non_target_pnl": -667.7049557144765
+  },
+  "non_target_subtypes": {
+    "profitable": {
+      "n": 67,
+      "pnl": 85.37161883234681
+    },
+    "be010": {
+      "n": 146,
+      "pnl": -26.902709809690027
+    },
+    "fallback_mild_gt_minus2": {
+      "n": 77,
+      "pnl": -99.98765299389109
+    },
+    "fallback_severe_le_minus2": {
+      "n": 163,
+      "pnl": -625.1764362760108,
+      "avg_pnl": -3.8354382593620295
+    }
+  },
+  "severe_by_lane": {
+    "T0": {
+      "n": 50,
+      "pnl": -175.01445009066532
+    },
+    "T1": {
+      "n": 39,
+      "pnl": -160.83997580766425
+    },
+    "T2": {
+      "n": 57,
+      "pnl": -224.70252477205648
+    },
+    "T3": {
+      "n": 17,
+      "pnl": -64.61948560562476
+    }
+  },
+  "breakeven_diagnostic": {
+    "fraction_of_severe_loss_needed": 0.3497628647252933,
+    "equivalent_avg_severe_trades": 57.0113469502228,
+    "perfect_remove_T2_severe_total_pnl": 6.039023461409187
+  },
+  "best_stable_separator": {
+    "lane": "T2",
+    "feature": "t2_confirm_side_return_pct__lrz64",
+    "mean_auc": 0.71,
+    "direction": "higher_for_strong",
+    "block_aucs": [
+      0.569,
+      0.75,
+      0.9,
+      0.689,
+      0.696,
+      0.658
+    ]
+  },
+  "next_stage": "S10J-6B T+2 severe-fallback suppressor"
+}
