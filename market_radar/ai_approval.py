@@ -82,7 +82,7 @@ def _max_per_scan() -> int:
 def _fast_pool_targets() -> list[tuple[str, str]]:
     raw = os.environ.get(
         "AI_FAST_POOL_TARGETS",
-        "clario:gpt-5.6-sol,thirty:thirty/gpt-5.6-sol",
+        "clario1:gpt-5.6-sol",
     )
     targets: list[tuple[str, str]] = []
     seen: set[tuple[str, str]] = set()
