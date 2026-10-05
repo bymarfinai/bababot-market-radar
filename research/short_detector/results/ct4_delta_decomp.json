@@ -1,0 +1,80 @@
+{
+  "T005": {
+    "research": {
+      "removed_n": 14,
+      "removed_baseline_pnl": -9.78021517653112,
+      "removed_delta": 9.78021517653112,
+      "shifted_n": 18,
+      "shifted_baseline_pnl": -22.34566852278588,
+      "shifted_new_exec_n": 14,
+      "shifted_new_pnl": -14.33047846646258,
+      "shifted_delta": 8.015190056323299,
+      "total_delta": 17.79540523285442,
+      "residual": 1.7763568394002505e-15
+    },
+    "fresh": {
+      "removed_n": 20,
+      "removed_baseline_pnl": -19.125524683827813,
+      "removed_delta": 19.125524683827813,
+      "shifted_n": 26,
+      "shifted_baseline_pnl": 5.71335978599864,
+      "shifted_new_exec_n": 24,
+      "shifted_new_pnl": -0.07596975755539015,
+      "shifted_delta": -5.789329543554031,
+      "total_delta": 13.336195140273787,
+      "residual": 5.329070518200751e-15
+    }
+  },
+  "T0075": {
+    "research": {
+      "removed_n": 31,
+      "removed_baseline_pnl": -41.438475600408125,
+      "removed_delta": 41.438475600408125,
+      "shifted_n": 31,
+      "shifted_baseline_pnl": -26.831803010251388,
+      "shifted_new_exec_n": 25,
+      "shifted_new_pnl": -23.062025393899745,
+      "shifted_delta": 3.769777616351643,
+      "total_delta": 45.20825321675977,
+      "residual": 3.552713678800501e-15
+    },
+    "fresh": {
+      "removed_n": 53,
+      "removed_baseline_pnl": -66.44626407494401,
+      "removed_delta": 66.44626407494401,
+      "shifted_n": 59,
+      "shifted_baseline_pnl": -24.221871091165205,
+      "shifted_new_exec_n": 51,
+      "shifted_new_pnl": -35.91210516910111,
+      "shifted_delta": -11.690234077935905,
+      "total_delta": 54.756029997008085,
+      "residual": -2.1316282072803006e-14
+    }
+  },
+  "T010": {
+    "research": {
+      "removed_n": 55,
+      "removed_baseline_pnl": -39.35800816140805,
+      "removed_delta": 39.35800816140805,
+      "shifted_n": 46,
+      "shifted_baseline_pnl": -61.56613308761159,
+      "shifted_new_exec_n": 39,
+      "shifted_new_pnl": -45.56956057625755,
+      "shifted_delta": 15.996572511354039,
+      "total_delta": 55.3545806727621,
+      "residual": 7.105427357601002e-15
+    },
+    "fresh": {
+      "removed_n": 89,
+      "removed_baseline_pnl": -109.11139272629697,
+      "removed_delta": 109.11139272629697,
+      "shifted_n": 81,
+      "shifted_baseline_pnl": -22.88888977957929,
+      "shifted_new_exec_n": 69,
+      "shifted_new_pnl": -44.54064567047364,
+      "shifted_delta": -21.651755890894346,
+      "total_delta": 87.45963683540259,
+      "residual": -3.197442310920451e-14
+    }
+  }
+}
