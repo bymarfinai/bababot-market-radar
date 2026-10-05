@@ -104,8 +104,10 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <div class="metric"><span>Funding</span><strong id="topFunding">—</strong></div>
     <div class="metric"><span>Regime</span><strong id="topRegime">—</strong></div>
     <div class="metric"><span>Moving / Actionable</span><strong><span id="stMoving">—</span> / <span id="stActionable">—</span></strong></div>
-    <div class="metric"><span>Open / Win Rate</span><strong><span id="stOpen">—</span> / <span id="stWr">—</span></strong></div>
-    <div class="metric"><span>Paper PnL</span><strong id="stPnl">—</strong></div>
+    <div class="metric"><span>Open / Total WR</span><strong><span id="stOpen">—</span> / <span id="stWr">—</span></strong></div>
+    <div class="metric"><span>LONG · Closed / WR / PnL</span><strong id="stLongPerf">—</strong></div>
+    <div class="metric"><span>SHORT · Closed / WR / PnL</span><strong id="stShortPerf">—</strong></div>
+    <div class="metric"><span>Total Paper PnL</span><strong id="stPnl">—</strong></div>
     <div style="display:none"><span id="stUniverse">—</span><span id="stClosed">—</span><span id="stReviews">—</span><span id="stAge">—</span></div>
   </div>
 
@@ -384,6 +386,19 @@ function renderTop(){
   var runPositions=boundary?state.positions.filter(function(x){return Number(x.opened_at_ms||0)>=boundary}):state.positions;
   var partial=runPositions.reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
   var realized=Number(run.net_pnl||0)+partial;
+  var sides=run.by_side||{};
+  ['LONG','SHORT'].forEach(function(side){
+    var d=sides[side]||{};
+    var sideOpenPartial=runPositions.filter(function(x){return String(x.side||'').toUpperCase()===side}).reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
+    var sidePnl=Number(d.net_pnl||0)+sideOpenPartial;
+    var wr=d.win_rate_pct===null||d.win_rate_pct===undefined?'—':num(d.win_rate_pct,1)+'%';
+    var closed=d.closed_positions===undefined?0:Number(d.closed_positions||0);
+    var node=el(side==='LONG'?'stLongPerf':'stShortPerf');
+    if(node){
+      node.textContent=closed+'t · '+wr+' · '+money(sidePnl);
+      node.className='value '+(sidePnl>=0?'green':'red');
+    }
+  });
   el('stPnl').textContent=money(realized);el('stPnl').className='value '+(realized>=0?'green':'red');
   el('stClosed').textContent=run.closed_positions===undefined?'—':run.closed_positions;
   el('stWr').textContent=run.win_rate_pct===null||run.win_rate_pct===undefined?'—':num(run.win_rate_pct,1)+'%';
