@@ -1,0 +1,839 @@
+{
+  "stage": "SHORT-S10F",
+  "status": "COMPLETE_EXECUTION_REALISTIC_FRONTIER",
+  "market_data": {
+    "kline_pairs": 256,
+    "agg_pairs": 273,
+    "kline_errors": [],
+    "agg_errors": []
+  },
+  "candidates": {
+    "S10C": {
+      "hold": {
+        "selected_n": 329,
+        "executable_n": 283,
+        "noexec_n": 46,
+        "noexec_strong_n": 6,
+        "strong_selected_n": 70,
+        "strong_executable_n": 64,
+        "non_target_executable_n": 219,
+        "wins": 52,
+        "wr": 0.18374558303886926,
+        "pnl": -525.3910266145275,
+        "gp": 161.9602587013492,
+        "gl": -687.3512853158768
+      },
+      "v43": {
+        "selected_n": 329,
+        "executable_n": 283,
+        "noexec_n": 46,
+        "noexec_strong_n": 6,
+        "strong_selected_n": 70,
+        "strong_executable_n": 64,
+        "non_target_executable_n": 219,
+        "wins": 88,
+        "wr": 0.31095406360424027,
+        "pnl": -468.76682936879337,
+        "gp": 173.15491384922257,
+        "gl": -641.921743218016
+      },
+      "comp": {
+        "selected_n": 329,
+        "executable_n": 283,
+        "noexec_n": 46,
+        "noexec_strong_n": 6,
+        "strong_selected_n": 70,
+        "strong_executable_n": 64,
+        "non_target_executable_n": 219,
+        "wins": 86,
+        "wr": 0.303886925795053,
+        "pnl": -236.50062525999826,
+        "gp": 172.85477201390736,
+        "gl": -409.3553972739056
+      },
+      "anatomy": {
+        "entry_methods": {
+          "T+1": 161,
+          "T+3": 35,
+          "T+2": 133
+        },
+        "all_mfe": {
+          "n": 283,
+          "median": 0.2316275167785209,
+          "mean": 0.5735990486464874,
+          "ge0p5": 90,
+          "ge1p0": 43
+        },
+        "strong_mfe": {
+          "n": 64,
+          "median": 1.1408683974333256,
+          "mean": 1.7473312606673321,
+          "ge0p5": 58,
+          "ge1p0": 37
+        },
+        "non_target_mfe": {
+          "n": 219,
+          "median": 0.13850971066191597,
+          "mean": 0.23059054832989354,
+          "ge0p5": 32,
+          "ge1p0": 6
+        }
+      },
+      "splits": {
+        "Discovery": {
+          "hold": {
+            "selected_n": 200,
+            "executable_n": 170,
+            "noexec_n": 30,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 43,
+            "strong_executable_n": 42,
+            "non_target_executable_n": 128,
+            "wins": 30,
+            "wr": 0.17647058823529413,
+            "pnl": -356.71624045280345,
+            "gp": 96.53439610809049,
+            "gl": -453.25063656089395
+          },
+          "v43": {
+            "selected_n": 200,
+            "executable_n": 170,
+            "noexec_n": 30,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 43,
+            "strong_executable_n": 42,
+            "non_target_executable_n": 128,
+            "wins": 53,
+            "wr": 0.31176470588235294,
+            "pnl": -329.24729797131704,
+            "gp": 90.70547296227734,
+            "gl": -419.95277093359437
+          },
+          "comp": {
+            "selected_n": 200,
+            "executable_n": 170,
+            "noexec_n": 30,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 43,
+            "strong_executable_n": 42,
+            "non_target_executable_n": 128,
+            "wins": 52,
+            "wr": 0.3058823529411765,
+            "pnl": -176.56492722967718,
+            "gp": 90.68762955390096,
+            "gl": -267.25255678357814
+          }
+        },
+        "Validation": {
+          "hold": {
+            "selected_n": 59,
+            "executable_n": 50,
+            "noexec_n": 9,
+            "noexec_strong_n": 4,
+            "strong_selected_n": 17,
+            "strong_executable_n": 13,
+            "non_target_executable_n": 37,
+            "wins": 14,
+            "wr": 0.28,
+            "pnl": -50.26740673253185,
+            "gp": 28.404086953152273,
+            "gl": -78.67149368568413
+          },
+          "v43": {
+            "selected_n": 59,
+            "executable_n": 50,
+            "noexec_n": 9,
+            "noexec_strong_n": 4,
+            "strong_selected_n": 17,
+            "strong_executable_n": 13,
+            "non_target_executable_n": 37,
+            "wins": 21,
+            "wr": 0.42,
+            "pnl": -33.715979531523594,
+            "gp": 38.44698643143079,
+            "gl": -72.16296596295437
+          },
+          "comp": {
+            "selected_n": 59,
+            "executable_n": 50,
+            "noexec_n": 9,
+            "noexec_strong_n": 4,
+            "strong_selected_n": 17,
+            "strong_executable_n": 13,
+            "non_target_executable_n": 37,
+            "wins": 21,
+            "wr": 0.42,
+            "pnl": -5.1732801167273745,
+            "gp": 38.44698643143079,
+            "gl": -43.62026654815816
+          }
+        },
+        "Reserve": {
+          "hold": {
+            "selected_n": 70,
+            "executable_n": 63,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 10,
+            "strong_executable_n": 9,
+            "non_target_executable_n": 54,
+            "wins": 8,
+            "wr": 0.12698412698412698,
+            "pnl": -118.40737942919223,
+            "gp": 37.02177564010644,
+            "gl": -155.42915506929867
+          },
+          "v43": {
+            "selected_n": 70,
+            "executable_n": 63,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 10,
+            "strong_executable_n": 9,
+            "non_target_executable_n": 54,
+            "wins": 14,
+            "wr": 0.2222222222222222,
+            "pnl": -105.80355186595278,
+            "gp": 44.002454455514425,
+            "gl": -149.8060063214672
+          },
+          "comp": {
+            "selected_n": 70,
+            "executable_n": 63,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 10,
+            "strong_executable_n": 9,
+            "non_target_executable_n": 54,
+            "wins": 13,
+            "wr": 0.20634920634920634,
+            "pnl": -54.76241791359368,
+            "gp": 43.72015602857562,
+            "gl": -98.4825739421693
+          }
+        }
+      }
+    },
+    "S10D": {
+      "hold": {
+        "selected_n": 364,
+        "executable_n": 320,
+        "noexec_n": 44,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 85,
+        "strong_executable_n": 80,
+        "non_target_executable_n": 240,
+        "wins": 72,
+        "wr": 0.225,
+        "pnl": -498.84902501137276,
+        "gp": 230.88435169302502,
+        "gl": -729.7333767043978
+      },
+      "v43": {
+        "selected_n": 364,
+        "executable_n": 320,
+        "noexec_n": 44,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 85,
+        "strong_executable_n": 80,
+        "non_target_executable_n": 240,
+        "wins": 108,
+        "wr": 0.3375,
+        "pnl": -457.46996178751425,
+        "gp": 219.37633233072168,
+        "gl": -676.8462941182358
+      },
+      "comp": {
+        "selected_n": 364,
+        "executable_n": 320,
+        "noexec_n": 44,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 85,
+        "strong_executable_n": 80,
+        "non_target_executable_n": 240,
+        "wins": 104,
+        "wr": 0.325,
+        "pnl": -180.54218191432938,
+        "gp": 212.9339412350324,
+        "gl": -393.47612314936174
+      },
+      "anatomy": {
+        "entry_methods": {
+          "T+1": 125,
+          "T0": 83,
+          "T+2": 119,
+          "T+3": 37
+        },
+        "all_mfe": {
+          "n": 320,
+          "median": 0.2614468987103602,
+          "mean": 0.643311719086967,
+          "ge0p5": 112,
+          "ge1p0": 63
+        },
+        "strong_mfe": {
+          "n": 80,
+          "median": 1.1777767410447781,
+          "mean": 1.7845924429608302,
+          "ge0p5": 72,
+          "ge1p0": 55
+        },
+        "non_target_mfe": {
+          "n": 240,
+          "median": 0.1543913869841651,
+          "mean": 0.26288481112901263,
+          "ge0p5": 40,
+          "ge1p0": 8
+        }
+      },
+      "splits": {
+        "Discovery": {
+          "hold": {
+            "selected_n": 220,
+            "executable_n": 191,
+            "noexec_n": 29,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 51,
+            "strong_executable_n": 50,
+            "non_target_executable_n": 141,
+            "wins": 39,
+            "wr": 0.20418848167539266,
+            "pnl": -338.56342195194696,
+            "gp": 145.39347290257183,
+            "gl": -483.9568948545188
+          },
+          "v43": {
+            "selected_n": 220,
+            "executable_n": 191,
+            "noexec_n": 29,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 51,
+            "strong_executable_n": 50,
+            "non_target_executable_n": 141,
+            "wins": 64,
+            "wr": 0.33507853403141363,
+            "pnl": -325.2298714004049,
+            "gp": 115.8745386046411,
+            "gl": -441.10441000504596
+          },
+          "comp": {
+            "selected_n": 220,
+            "executable_n": 191,
+            "noexec_n": 29,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 51,
+            "strong_executable_n": 50,
+            "non_target_executable_n": 141,
+            "wins": 60,
+            "wr": 0.31413612565445026,
+            "pnl": -143.92194617788238,
+            "gp": 109.43214750895181,
+            "gl": -253.3540936868342
+          }
+        },
+        "Validation": {
+          "hold": {
+            "selected_n": 69,
+            "executable_n": 61,
+            "noexec_n": 8,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 42,
+            "wins": 23,
+            "wr": 0.3770491803278688,
+            "pnl": -41.62688185725742,
+            "gp": 44.666975058175005,
+            "gl": -86.29385691543243
+          },
+          "v43": {
+            "selected_n": 69,
+            "executable_n": 61,
+            "noexec_n": 8,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 42,
+            "wins": 29,
+            "wr": 0.47540983606557374,
+            "pnl": -26.98752725161944,
+            "gp": 53.5503817042672,
+            "gl": -80.53790895588665
+          },
+          "comp": {
+            "selected_n": 69,
+            "executable_n": 61,
+            "noexec_n": 8,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 42,
+            "wins": 29,
+            "wr": 0.47540983606557374,
+            "pnl": 1.113735972951715,
+            "gp": 53.5503817042672,
+            "gl": -52.43664573131549
+          }
+        },
+        "Reserve": {
+          "hold": {
+            "selected_n": 75,
+            "executable_n": 68,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 57,
+            "wins": 10,
+            "wr": 0.14705882352941177,
+            "pnl": -118.65872120216837,
+            "gp": 40.82390373227818,
+            "gl": -159.48262493444656
+          },
+          "v43": {
+            "selected_n": 75,
+            "executable_n": 68,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 57,
+            "wins": 15,
+            "wr": 0.22058823529411764,
+            "pnl": -105.25256313548994,
+            "gp": 49.95141202181336,
+            "gl": -155.2039751573033
+          },
+          "comp": {
+            "selected_n": 75,
+            "executable_n": 68,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 57,
+            "wins": 15,
+            "wr": 0.22058823529411764,
+            "pnl": -37.73397170939871,
+            "gp": 49.95141202181336,
+            "gl": -87.68538373121207
+          }
+        }
+      }
+    },
+    "S10E": {
+      "hold": {
+        "selected_n": 331,
+        "executable_n": 290,
+        "noexec_n": 41,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 83,
+        "strong_executable_n": 78,
+        "non_target_executable_n": 212,
+        "wins": 71,
+        "wr": 0.24482758620689654,
+        "pnl": -395.26792279092126,
+        "gp": 226.6297844034203,
+        "gl": -621.8977071943416
+      },
+      "v43": {
+        "selected_n": 331,
+        "executable_n": 290,
+        "noexec_n": 41,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 83,
+        "strong_executable_n": 78,
+        "non_target_executable_n": 212,
+        "wins": 106,
+        "wr": 0.36551724137931035,
+        "pnl": -354.1565276855623,
+        "gp": 215.9669169768817,
+        "gl": -570.1234446624441
+      },
+      "comp": {
+        "selected_n": 331,
+        "executable_n": 290,
+        "noexec_n": 41,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 83,
+        "strong_executable_n": 78,
+        "non_target_executable_n": 212,
+        "wins": 102,
+        "wr": 0.35172413793103446,
+        "pnl": -106.99415955845808,
+        "gp": 209.5245258811924,
+        "gl": -316.5186854396505
+      },
+      "anatomy": {
+        "entry_methods": {
+          "T+1": 115,
+          "T0": 80,
+          "T+2": 101,
+          "T+3": 35
+        },
+        "all_mfe": {
+          "n": 290,
+          "median": 0.29869555057732144,
+          "mean": 0.6857632084592492,
+          "ge0p5": 109,
+          "ge1p0": 62
+        },
+        "strong_mfe": {
+          "n": 78,
+          "median": 1.1777767410447781,
+          "mean": 1.7958441826679772,
+          "ge0p5": 71,
+          "ge1p0": 54
+        },
+        "non_target_mfe": {
+          "n": 212,
+          "median": 0.17231796208557748,
+          "mean": 0.2773371896466041,
+          "ge0p5": 38,
+          "ge1p0": 8
+        }
+      },
+      "splits": {
+        "Discovery": {
+          "hold": {
+            "selected_n": 197,
+            "executable_n": 169,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 121,
+            "wins": 38,
+            "wr": 0.22485207100591717,
+            "pnl": -269.94589806957714,
+            "gp": 141.13890561296714,
+            "gl": -411.0848036825443
+          },
+          "v43": {
+            "selected_n": 197,
+            "executable_n": 169,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 121,
+            "wins": 62,
+            "wr": 0.3668639053254438,
+            "pnl": -256.8800156365346,
+            "gp": 112.46512325080113,
+            "gl": -369.34513888733574
+          },
+          "comp": {
+            "selected_n": 197,
+            "executable_n": 169,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 121,
+            "wins": 58,
+            "wr": 0.3431952662721893,
+            "pnl": -82.0407231379123,
+            "gp": 106.02273215511184,
+            "gl": -188.06345529302413
+          }
+        },
+        "Validation": {
+          "hold": {
+            "selected_n": 64,
+            "executable_n": 57,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 38,
+            "wins": 23,
+            "wr": 0.40350877192982454,
+            "pnl": -24.22092825454151,
+            "gp": 44.666975058175005,
+            "gl": -68.88790331271652
+          },
+          "v43": {
+            "selected_n": 64,
+            "executable_n": 57,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 38,
+            "wins": 29,
+            "wr": 0.5087719298245614,
+            "pnl": -9.581573648903529,
+            "gp": 53.5503817042672,
+            "gl": -63.13195535317073
+          },
+          "comp": {
+            "selected_n": 64,
+            "executable_n": 57,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 22,
+            "strong_executable_n": 19,
+            "non_target_executable_n": 38,
+            "wins": 29,
+            "wr": 0.5087719298245614,
+            "pnl": 6.5969202076465026,
+            "gp": 53.5503817042672,
+            "gl": -46.9534614966207
+          }
+        },
+        "Reserve": {
+          "hold": {
+            "selected_n": 70,
+            "executable_n": 64,
+            "noexec_n": 6,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 53,
+            "wins": 10,
+            "wr": 0.15625,
+            "pnl": -101.10109646680262,
+            "gp": 40.82390373227818,
+            "gl": -141.92500019908078
+          },
+          "v43": {
+            "selected_n": 70,
+            "executable_n": 64,
+            "noexec_n": 6,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 53,
+            "wins": 15,
+            "wr": 0.234375,
+            "pnl": -87.69493840012417,
+            "gp": 49.95141202181336,
+            "gl": -137.64635042193754
+          },
+          "comp": {
+            "selected_n": 70,
+            "executable_n": 64,
+            "noexec_n": 6,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 12,
+            "strong_executable_n": 11,
+            "non_target_executable_n": 53,
+            "wins": 15,
+            "wr": 0.234375,
+            "pnl": -31.550356628192294,
+            "gp": 49.95141202181336,
+            "gl": -81.50176865000566
+          }
+        }
+      }
+    },
+    "MAX_PRUNE": {
+      "hold": {
+        "selected_n": 310,
+        "executable_n": 268,
+        "noexec_n": 42,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 81,
+        "strong_executable_n": 76,
+        "non_target_executable_n": 192,
+        "wins": 68,
+        "wr": 0.2537313432835821,
+        "pnl": -353.52215296479045,
+        "gp": 225.65297788793737,
+        "gl": -579.1751308527278
+      },
+      "v43": {
+        "selected_n": 310,
+        "executable_n": 268,
+        "noexec_n": 42,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 81,
+        "strong_executable_n": 76,
+        "non_target_executable_n": 192,
+        "wins": 96,
+        "wr": 0.3582089552238806,
+        "pnl": -337.693836064907,
+        "gp": 198.65733931564785,
+        "gl": -536.3511753805548
+      },
+      "comp": {
+        "selected_n": 310,
+        "executable_n": 268,
+        "noexec_n": 42,
+        "noexec_strong_n": 5,
+        "strong_selected_n": 81,
+        "strong_executable_n": 76,
+        "non_target_executable_n": 192,
+        "wins": 92,
+        "wr": 0.34328358208955223,
+        "pnl": -111.67364979574728,
+        "gp": 192.21494821995856,
+        "gl": -303.88859801570584
+      },
+      "anatomy": {
+        "entry_methods": {
+          "T+1": 108,
+          "T0": 70,
+          "T+2": 101,
+          "T+3": 31
+        },
+        "all_mfe": {
+          "n": 268,
+          "median": 0.2800285325623597,
+          "mean": 0.7057837264468241,
+          "ge0p5": 99,
+          "ge1p0": 59
+        },
+        "strong_mfe": {
+          "n": 76,
+          "median": 1.1777767410447781,
+          "mean": 1.8161628385605695,
+          "ge0p5": 68,
+          "ge1p0": 51
+        },
+        "non_target_mfe": {
+          "n": 192,
+          "median": 0.16438802883006476,
+          "mean": 0.26625866123513314,
+          "ge0p5": 31,
+          "ge1p0": 8
+        }
+      },
+      "splits": {
+        "Discovery": {
+          "hold": {
+            "selected_n": 194,
+            "executable_n": 166,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 118,
+            "wins": 38,
+            "wr": 0.2289156626506024,
+            "pnl": -249.97859910890773,
+            "gp": 144.09929059132978,
+            "gl": -394.0778897002375
+          },
+          "v43": {
+            "selected_n": 194,
+            "executable_n": 166,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 118,
+            "wins": 60,
+            "wr": 0.3614457831325301,
+            "pnl": -249.27693373065262,
+            "gp": 107.39825122748114,
+            "gl": -356.67518495813374
+          },
+          "comp": {
+            "selected_n": 194,
+            "executable_n": 166,
+            "noexec_n": 28,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 49,
+            "strong_executable_n": 48,
+            "non_target_executable_n": 118,
+            "wins": 56,
+            "wr": 0.3373493975903614,
+            "pnl": -98.48966104908352,
+            "gp": 100.95586013179185,
+            "gl": -199.44552118087537
+          }
+        },
+        "Validation": {
+          "hold": {
+            "selected_n": 57,
+            "executable_n": 50,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 21,
+            "strong_executable_n": 18,
+            "non_target_executable_n": 32,
+            "wins": 21,
+            "wr": 0.42,
+            "pnl": -22.294658718398743,
+            "gp": 42.84929306591593,
+            "gl": -65.14395178431468
+          },
+          "v43": {
+            "selected_n": 57,
+            "executable_n": 50,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 21,
+            "strong_executable_n": 18,
+            "non_target_executable_n": 32,
+            "wins": 24,
+            "wr": 0.48,
+            "pnl": -14.173120272054419,
+            "gp": 46.898007892825454,
+            "gl": -61.07112816487987
+          },
+          "comp": {
+            "selected_n": 57,
+            "executable_n": 50,
+            "noexec_n": 7,
+            "noexec_strong_n": 3,
+            "strong_selected_n": 21,
+            "strong_executable_n": 18,
+            "non_target_executable_n": 32,
+            "wins": 24,
+            "wr": 0.48,
+            "pnl": 1.560888071137275,
+            "gp": 46.898007892825454,
+            "gl": -45.33711982168818
+          }
+        },
+        "Reserve": {
+          "hold": {
+            "selected_n": 59,
+            "executable_n": 52,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 11,
+            "strong_executable_n": 10,
+            "non_target_executable_n": 42,
+            "wins": 9,
+            "wr": 0.17307692307692307,
+            "pnl": -81.24889513748398,
+            "gp": 38.70439423069166,
+            "gl": -119.95328936817563
+          },
+          "v43": {
+            "selected_n": 59,
+            "executable_n": 52,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 11,
+            "strong_executable_n": 10,
+            "non_target_executable_n": 42,
+            "wins": 12,
+            "wr": 0.23076923076923078,
+            "pnl": -74.24378206219993,
+            "gp": 44.36108019534125,
+            "gl": -118.60486225754117
+          },
+          "comp": {
+            "selected_n": 59,
+            "executable_n": 52,
+            "noexec_n": 7,
+            "noexec_strong_n": 1,
+            "strong_selected_n": 11,
+            "strong_executable_n": 10,
+            "non_target_executable_n": 42,
+            "wins": 12,
+            "wr": 0.23076923076923078,
+            "pnl": -14.744876817801037,
+            "gp": 44.36108019534125,
+            "gl": -59.10595701314229
+          }
+        }
+      }
+    }
+  }
+}
