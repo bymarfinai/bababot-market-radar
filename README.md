@@ -680,7 +680,7 @@ priority queue
         ↓
 ┌───────────────────────────────┬────────────────────────────────┐
 │ Clario                        │ Thirty                         │
-│ gemini-3.7-flash              │ thirty/gpt-5.6-luna           │
+│ gpt-5.6-sol                   │ thirty/gpt-5.6-sol            │
 └───────────────────────────────┴────────────────────────────────┘
         ↓
 APPROVE / WATCH / VETO
