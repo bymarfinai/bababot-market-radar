@@ -1,0 +1,490 @@
+{
+  "stage": "PS-4-HISTORICAL-SETTLEMENT-PARITY",
+  "status": "PASS",
+  "v42": {
+    "exact_within_1e_8": true,
+    "frozen_total_usdt": -100.14766343166144,
+    "mismatch_n": 0,
+    "mismatches": [],
+    "n": 170,
+    "ps4_total_usdt": -100.14766343166133
+  },
+  "v43_forward_causal_diagnostic": {
+    "causal_total_usdt": -142.22933308764362,
+    "causal_wins": 60,
+    "causal_wr_pct": 35.294117647058826,
+    "changed_by_v42_action": {
+      "REDUCE25+RUNNER_CLOSE": 6,
+      "RUNNER_CLOSE": 11
+    },
+    "changed_vs_frozen_n": 17,
+    "frozen_ex_post_scope_total_usdt": -43.31288607292701,
+    "frozen_ex_post_scope_wins": 60,
+    "frozen_ex_post_scope_wr_pct": 35.294117647058826,
+    "frozen_reduce25_target_mismatch_n": 0,
+    "frozen_reduce25_target_n": 43,
+    "n": 170,
+    "note": "Frozen V4.3 replaced only ex-post V4.2 REDUCE25 trades. PS-3/PS-4 forward branch is causal and cannot know that future lane.",
+    "sample_differences": [
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 229,
+            "event_time_ms": 1791031529407,
+            "executed_quantity": 81.14554924614649,
+            "fill_price": 6.1342266,
+            "fraction": 1.0,
+            "market_price": 6.133,
+            "realized_delta_usdt": 1.4864894526853276,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:359d326f508cb26166c079bd894d2673",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.29729789053706557,
+            "signal_net_usdt": 1.4864894526853276,
+            "source_event_id": "OBS:228:1791031529407"
+          }
+        ],
+        "causal_v43_usdt": 1.4864894526853276,
+        "delta": -2.5788191276499837,
+        "frozen_v43_usdt": 4.065308580335311,
+        "position_id": "PAPER:PROMUSDT:1791030299999:SHORT",
+        "side": "SHORT",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 101,
+            "event_time_ms": 1791032049932,
+            "executed_quantity": 1343.4561139371158,
+            "fill_price": 0.37422514,
+            "fraction": 1.0,
+            "market_price": 0.3743,
+            "realized_delta_usdt": 2.00298603273165,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:784a73838fbf92fb3c580783e290cdaa",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.40059720654633,
+            "signal_net_usdt": 2.00298603273165,
+            "source_event_id": "OBS:100:1791032049932"
+          }
+        ],
+        "causal_v43_usdt": 2.00298603273165,
+        "delta": -8.187298196098519,
+        "frozen_v43_usdt": 10.19028422883017,
+        "position_id": "PAPER:STXUSDT:1791031499999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 112,
+            "event_time_ms": 1791033279620,
+            "executed_quantity": 2748.7084753435242,
+            "fill_price": 0.18019603199999998,
+            "fraction": 1.0,
+            "market_price": 0.18016,
+            "realized_delta_usdt": 3.947159848040879,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:95126afbbdbfbc04362fcf4576effc7e",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.7894319696081757,
+            "signal_net_usdt": 3.947159848040879,
+            "source_event_id": "OBS:111:1791033279620"
+          }
+        ],
+        "causal_v43_usdt": 3.947159848040879,
+        "delta": -1.1280412658874837,
+        "frozen_v43_usdt": 5.075201113928363,
+        "position_id": "PAPER:SYNUSDT:1791032699999:SHORT",
+        "side": "SHORT",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 19,
+            "event_time_ms": 1791033719838,
+            "executed_quantity": 885.995252022324,
+            "fill_price": 0.5618123399999999,
+            "fraction": 1.0,
+            "market_price": 0.5617,
+            "realized_delta_usdt": 1.488611933122797,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:836304514a3be90005e6d6a7e5a1c576",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.29772238662455935,
+            "signal_net_usdt": 1.488611933122797,
+            "source_event_id": "OBS:18:1791033719838"
+          }
+        ],
+        "causal_v43_usdt": 1.488611933122797,
+        "delta": -12.043247551981676,
+        "frozen_v43_usdt": 13.531859485104473,
+        "position_id": "PAPER:BRUSDT:1791033599999:SHORT",
+        "side": "SHORT",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 19,
+            "event_time_ms": 1791033719887,
+            "executed_quantity": 20.076306023935775,
+            "fill_price": 25.014996,
+            "fraction": 1.0,
+            "market_price": 25.02,
+            "realized_delta_usdt": 1.4570583473667045,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:0824f79e77b84738192a584547d24d71",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.2914116694733409,
+            "signal_net_usdt": 1.4570583473667045,
+            "source_event_id": "OBS:18:1791033719887"
+          }
+        ],
+        "causal_v43_usdt": 1.4570583473667045,
+        "delta": -4.813736770718194,
+        "frozen_v43_usdt": 6.270795118084898,
+        "position_id": "PAPER:COMPUSDT:1791033599999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 67,
+            "event_time_ms": 1791034549759,
+            "executed_quantity": 1699.7620537096254,
+            "fill_price": 0.29604078,
+            "fraction": 1.0,
+            "market_price": 0.2961,
+            "realized_delta_usdt": 2.446485031453444,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:c713c6c2a7119a568bf8b245bdf2edf0",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.4892970062906888,
+            "signal_net_usdt": 2.446485031453444,
+            "source_event_id": "OBS:66:1791034549759"
+          }
+        ],
+        "causal_v43_usdt": 2.446485031453444,
+        "delta": -3.396295069445802,
+        "frozen_v43_usdt": 5.842780100899246,
+        "position_id": "PAPER:API3USDT:1791034199999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 18,
+            "event_time_ms": 1791034614799,
+            "executed_quantity": 1802.090915630861,
+            "fill_price": 0.27924414,
+            "fraction": 1.0,
+            "market_price": 0.2793,
+            "realized_delta_usdt": 2.470910441199427,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:cf30fbe08bba953bf96b9d818f887a26",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.49418208823988546,
+            "signal_net_usdt": 2.470910441199427,
+            "source_event_id": "OBS:17:1791034614799"
+          }
+        ],
+        "causal_v43_usdt": 2.470910441199427,
+        "delta": -4.861023838851529,
+        "frozen_v43_usdt": 7.331934280050956,
+        "position_id": "PAPER:AVAUSDT:1791034499999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 31,
+            "event_time_ms": 1791035569772,
+            "executed_quantity": 17184.60020611897,
+            "fill_price": 0.029274144000000002,
+            "fraction": 1.0,
+            "market_price": 0.02928,
+            "realized_delta_usdt": 2.3121626705941547,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:fd9f8bc76b988bf093b23e304e601a20",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.4624325341188309,
+            "signal_net_usdt": 2.3121626705941547,
+            "source_event_id": "OBS:30:1791035569772"
+          }
+        ],
+        "causal_v43_usdt": 2.3121626705941547,
+        "delta": 0.7296517900786077,
+        "frozen_v43_usdt": 1.582510880515547,
+        "position_id": "PAPER:PARTIUSDT:1791035399999:LONG",
+        "side": "LONG",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 16,
+            "event_time_ms": 1791036709797,
+            "executed_quantity": 1702.6567438555883,
+            "fill_price": 0.2964407,
+            "fraction": 1.0,
+            "market_price": 0.2965,
+            "realized_delta_usdt": 3.983204440515101,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:4971bd4651ec9905a867435245c345db",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.7966408881030201,
+            "signal_net_usdt": 3.983204440515101,
+            "source_event_id": "OBS:15:1791036709797"
+          }
+        ],
+        "causal_v43_usdt": 3.983204440515101,
+        "delta": -21.603201336912438,
+        "frozen_v43_usdt": 25.58640577742754,
+        "position_id": "PAPER:UAIUSDT:1791036599999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 79,
+            "event_time_ms": 1791038854886,
+            "executed_quantity": 15070.847753874008,
+            "fill_price": 0.033363326,
+            "fraction": 1.0,
+            "market_price": 0.03337,
+            "realized_delta_usdt": 2.06149650383463,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:0e40a7ec0948792bdc96163b5bff52d3",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.412299300766926,
+            "signal_net_usdt": 2.06149650383463,
+            "source_event_id": "OBS:78:1791038854886"
+          }
+        ],
+        "causal_v43_usdt": 2.06149650383463,
+        "delta": -3.613567850192422,
+        "frozen_v43_usdt": 5.675064354027052,
+        "position_id": "PAPER:FLOWUSDT:1791038399999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 51,
+            "event_time_ms": 1791038745112,
+            "executed_quantity": 3657.180627668453,
+            "fill_price": 0.137312532,
+            "fraction": 1.0,
+            "market_price": 0.13734,
+            "realized_delta_usdt": 1.4250994175295943,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:d64bd79bf100aff1e294e89178884663",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.2850198835059189,
+            "signal_net_usdt": 1.4250994175295943,
+            "source_event_id": "OBS:50:1791038745112"
+          }
+        ],
+        "causal_v43_usdt": 1.4250994175295943,
+        "delta": -5.151726665055577,
+        "frozen_v43_usdt": 6.576826082585171,
+        "position_id": "PAPER:OPUSDT:1791038399999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 4,
+            "event_time_ms": 1791039944919,
+            "executed_quantity": 3685.3354458658873,
+            "fill_price": 0.1345269,
+            "fraction": 1.0,
+            "market_price": 0.1345,
+            "realized_delta_usdt": 3.4764144428000336,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:bb411658acb6f1cb7c5949e7ec46d300",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.6952828885600068,
+            "signal_net_usdt": 3.4764144428000336,
+            "source_event_id": "OBS:3:1791039944919"
+          }
+        ],
+        "causal_v43_usdt": 3.4764144428000336,
+        "delta": -7.3776741346796015,
+        "frozen_v43_usdt": 10.854088577479635,
+        "position_id": "PAPER:ATUSDT:1791039899999:SHORT",
+        "side": "SHORT",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 8,
+            "event_time_ms": 1791040590016,
+            "executed_quantity": 4831.884251246384,
+            "fill_price": 0.10302059999999999,
+            "fraction": 1.0,
+            "market_price": 0.103,
+            "realized_delta_usdt": 1.468047595026282,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:ad8824323ffbc29a1a3804fadb44a914",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.2936095190052564,
+            "signal_net_usdt": 1.468047595026282,
+            "source_event_id": "OBS:7:1791040590016"
+          }
+        ],
+        "causal_v43_usdt": 1.468047595026282,
+        "delta": -3.7482683312024028,
+        "frozen_v43_usdt": 5.216315926228685,
+        "position_id": "PAPER:ONUSDT:1791040499999:SHORT",
+        "side": "SHORT",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 35,
+            "event_time_ms": 1791041040082,
+            "executed_quantity": 23072.665282768205,
+            "fill_price": 0.021491297399999998,
+            "fraction": 1.0,
+            "market_price": 0.021487,
+            "realized_delta_usdt": 3.3915924638215023,
+            "reason": "v43_ls_short_retain75_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:64c8213e6020f2d694e23da97c179291",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.6783184927643005,
+            "signal_net_usdt": 3.3915924638215023,
+            "source_event_id": "OBS:34:1791041040082"
+          }
+        ],
+        "causal_v43_usdt": 3.3915924638215023,
+        "delta": -7.68761090583163,
+        "frozen_v43_usdt": 11.079203369653133,
+        "position_id": "PAPER:USUSDT:1791040799999:SHORT",
+        "side": "SHORT",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 11,
+            "event_time_ms": 1791041190074,
+            "executed_quantity": 186.77377918774548,
+            "fill_price": 2.69536082,
+            "fraction": 1.0,
+            "market_price": 2.6959,
+            "realized_delta_usdt": 2.6701595810111045,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:58934adb553d7c7cd9f74ee6eb889dd1",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.5340319162022209,
+            "signal_net_usdt": 2.6701595810111045,
+            "source_event_id": "OBS:10:1791041190074"
+          }
+        ],
+        "causal_v43_usdt": 2.6701595810111045,
+        "delta": -6.232318828593717,
+        "frozen_v43_usdt": 8.902478409604822,
+        "position_id": "PAPER:MORPHOUSDT:1791041099999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 254,
+            "event_time_ms": 1791042699923,
+            "executed_quantity": 10197.878824887817,
+            "fill_price": 0.049430112,
+            "fraction": 1.0,
+            "market_price": 0.04944,
+            "realized_delta_usdt": 3.329230757275667,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:144f1ead190443db218e7dcf8bef3a68",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.6658461514551334,
+            "signal_net_usdt": 3.329230757275667,
+            "source_event_id": "OBS:253:1791042699923"
+          }
+        ],
+        "causal_v43_usdt": 3.329230757275667,
+        "delta": -2.0121679930129996,
+        "frozen_v43_usdt": 5.341398750288667,
+        "position_id": "PAPER:MEGAUSDT:1791041399999:LONG",
+        "side": "LONG",
+        "v42_action": "REDUCE25+RUNNER_CLOSE"
+      },
+      {
+        "causal_intents": [
+          {
+            "action": "CLOSE",
+            "event_seq": 17,
+            "event_time_ms": 1791041850136,
+            "executed_quantity": 8412.992595018526,
+            "fill_price": 0.059608076,
+            "fraction": 1.0,
+            "market_price": 0.05962,
+            "realized_delta_usdt": 0.7311902648080748,
+            "reason": "v43_ls_long_retain97_full_close",
+            "settlement_authority": "PS4_NOT_AVAILABLE",
+            "settlement_id": "PSS:615f4cecab7241e07070f300efa72225",
+            "settlement_status": "VIRTUAL_FILLED",
+            "signal_net_pct": 0.14623805296161496,
+            "signal_net_usdt": 0.7311902648080748,
+            "source_event_id": "OBS:16:1791041850136"
+          }
+        ],
+        "causal_v43_usdt": 0.7311902648080748,
+        "delta": -5.211100938681318,
+        "frozen_v43_usdt": 5.942291203489392,
+        "position_id": "PAPER:AIOTUSDT:1791041699999:LONG",
+        "side": "LONG",
+        "v42_action": "RUNNER_CLOSE"
+      }
+    ]
+  }
+}

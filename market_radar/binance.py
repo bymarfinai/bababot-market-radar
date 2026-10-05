@@ -79,6 +79,31 @@ class BinancePublicClient:
         payload = self.get("/fapi/v1/ticker/price", {"symbol": symbol})
         return float(payload["price"])
 
+    def agg_trades(
+        self,
+        symbol: str,
+        *,
+        from_id: int | None = None,
+        start_time: int | None = None,
+        end_time: int | None = None,
+        limit: int = 1000,
+    ) -> list[dict[str, Any]]:
+        params: dict[str, Any] = {
+            "symbol": symbol.upper(),
+            "limit": max(1, min(int(limit), 1000)),
+        }
+        if from_id is not None:
+            params["fromId"] = int(from_id)
+        else:
+            if start_time is not None:
+                params["startTime"] = int(start_time)
+            if end_time is not None:
+                params["endTime"] = int(end_time)
+        payload = self.get("/fapi/v1/aggTrades", params)
+        if not isinstance(payload, list):
+            raise RuntimeError("Binance aggTrades response is not a list")
+        return [item for item in payload if isinstance(item, dict)]
+
     def ticker_prices(self) -> dict[str, float]:
         """Return one canonical all-symbol USD-M Futures ticker snapshot."""
         payload = self.get("/fapi/v1/ticker/price")

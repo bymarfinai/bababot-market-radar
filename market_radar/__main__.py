@@ -14,6 +14,10 @@ from .execution_handoff import (
     write_execution_handoff_atomic,
 )
 from .paper_trading import start_paper_trading_loop
+from .parallel_protection_shadow_runtime import (
+    ensure_runtime_epoch as ensure_protection_shadow_runtime_epoch,
+    runtime_enabled as protection_shadow_runtime_enabled,
+)
 from .position_lifecycle import start_fast_lifecycle_loop, start_position_lifecycle_worker
 from .profit_protection_v4_observer import start_pp_v4_observer_loop
 from .persistence import (
@@ -108,6 +112,25 @@ def main() -> int:
             file=sys.stderr,
             flush=True,
         )
+
+    if protection_shadow_runtime_enabled():
+        try:
+            shadow_epoch = ensure_protection_shadow_runtime_epoch()
+            print(
+                "PS-5A prospective shadow runtime: "
+                f"status={shadow_epoch.get('status')} "
+                f"epoch={shadow_epoch.get('epoch_id') or '-'} "
+                f"boundary_ms={shadow_epoch.get('started_at_ms') or shadow_epoch.get('configured_started_at_ms') or '-'} "
+                f"authority={shadow_epoch.get('execution_authority')}",
+                flush=True,
+            )
+        except Exception as exc:
+            print(
+                "PS-5A runtime startup warning: "
+                f"{type(exc).__name__}: {str(exc)[:300]}",
+                file=sys.stderr,
+                flush=True,
+            )
 
     start_pending_approval_worker()
     start_position_lifecycle_worker()

@@ -1,0 +1,333 @@
+{
+  "contract": {
+    "baseline_branch_key": "V42_BASELINE",
+    "branch_order": [
+      "V42_BASELINE",
+      "V43_LS",
+      "BE025_CONSERVATIVE",
+      "BE018_AGGRESSIVE"
+    ],
+    "branches": [
+      {
+        "branch_key": "V42_BASELINE",
+        "category": "BASELINE",
+        "label": "V4.2 Baseline",
+        "protection_family": "V4.2_HYBRID",
+        "protector_config": {
+          "no_action_be_arm_pct": null,
+          "reduce25_logic": "V4.2",
+          "runner_logic": "V4.2"
+        },
+        "rank": 1,
+        "short_label": "V4.2"
+      },
+      {
+        "branch_key": "V43_LS",
+        "category": "CHALLENGER",
+        "label": "V4.3-LS",
+        "protection_family": "V4.3_LS_WITH_V4.2_RUNNER",
+        "protector_config": {
+          "no_action_be_arm_pct": null,
+          "reduce25_logic": "V4.3_LS",
+          "runner_logic": "V4.2"
+        },
+        "rank": 2,
+        "short_label": "V4.3"
+      },
+      {
+        "branch_key": "BE025_CONSERVATIVE",
+        "category": "CONSERVATIVE",
+        "label": "BE 0.25 Conservative",
+        "protection_family": "V4.3_LS_BE0.25_WITH_V4.2_RUNNER",
+        "protector_config": {
+          "no_action_be_arm_pct": 0.25,
+          "reduce25_logic": "V4.3_LS",
+          "runner_logic": "V4.2"
+        },
+        "rank": 3,
+        "short_label": "BE0.25"
+      },
+      {
+        "branch_key": "BE018_AGGRESSIVE",
+        "category": "AGGRESSIVE",
+        "label": "BE 0.18 Aggressive",
+        "protection_family": "V4.3_LS_BE0.18_WITH_V4.2_RUNNER",
+        "protector_config": {
+          "no_action_be_arm_pct": 0.18,
+          "reduce25_logic": "V4.3_LS",
+          "runner_logic": "V4.2"
+        },
+        "rank": 4,
+        "short_label": "BE0.18"
+      }
+    ],
+    "contract_version": "ps2.5-v1-shadow-ui-contract",
+    "execution_authority": "NONE",
+    "nullable_until_ps3_ps4": [
+      "branch.performance.current_pnl_usdt",
+      "branch.performance.current_pnl_pct",
+      "branch.performance.realized_pnl_usdt",
+      "branch.performance.realized_pnl_pct",
+      "branch.performance.delta_vs_v42_usdt",
+      "branch.settlement.closed_at_ms",
+      "branch.settlement.close_price",
+      "branch.settlement.close_reason",
+      "comparison.current_best_branch_key",
+      "comparison.current_best_delta_vs_v42_usdt"
+    ],
+    "position_shape": {
+      "branches": "four ordered independent protection snapshots",
+      "comparison": "baseline/best-branch fields; nullable until branch PnL exists",
+      "market": "shared canonical event observation; not protector PnL",
+      "parent": "immutable source trade identity",
+      "parity": "event-stream integrity and comparison eligibility"
+    }
+  },
+  "snapshot": {
+    "baseline_branch_key": "V42_BASELINE",
+    "branch_order": [
+      "V42_BASELINE",
+      "V43_LS",
+      "BE025_CONSERVATIVE",
+      "BE018_AGGRESSIVE"
+    ],
+    "comparison_eligible_count": 1,
+    "comparison_ineligible_count": 0,
+    "contract_version": "ps2.5-v1-shadow-ui-contract",
+    "count": 1,
+    "execution_authority": "NONE",
+    "filters": {
+      "limit": 100,
+      "side": null,
+      "status": null,
+      "symbol": null
+    },
+    "generated_at_ms": 1791186755209,
+    "positions": [
+      {
+        "branches": [
+          {
+            "branch_key": "V42_BASELINE",
+            "category": "BASELINE",
+            "current_state": "MONITORING",
+            "decision": {
+              "action": "HOLD",
+              "be_armed": null,
+              "lane": "NO_ACTION",
+              "reason": "example",
+              "reduce_triggered": false,
+              "runner_qualified": false
+            },
+            "execution_authority": "NONE",
+            "label": "V4.2 Baseline",
+            "performance": {
+              "available": true,
+              "current_pnl_pct": -0.39999999999999997,
+              "current_pnl_usdt": -1.2,
+              "delta_vs_v42_usdt": 0.0,
+              "realized_pnl_pct": null,
+              "realized_pnl_usdt": null
+            },
+            "protection_family": "V4.2_HYBRID",
+            "protector_config": {
+              "no_action_be_arm_pct": null,
+              "reduce25_logic": "V4.2",
+              "runner_logic": "V4.2"
+            },
+            "rank": 1,
+            "role": "BASELINE",
+            "settlement": {
+              "close_price": null,
+              "close_reason": null,
+              "closed_at_ms": null
+            },
+            "short_label": "V4.2",
+            "status": "OPEN",
+            "telemetry": {
+              "last_event_id": "agg:1",
+              "last_event_seq": 1,
+              "last_event_time_ms": 1800000000100,
+              "mae_pct": -0.08,
+              "mfe_pct": 0.31,
+              "remaining_quantity": 2.0
+            }
+          },
+          {
+            "branch_key": "V43_LS",
+            "category": "CHALLENGER",
+            "current_state": "MONITORING",
+            "decision": {
+              "action": "HOLD",
+              "be_armed": null,
+              "lane": "NO_ACTION",
+              "reason": "example",
+              "reduce_triggered": false,
+              "runner_qualified": false
+            },
+            "execution_authority": "NONE",
+            "label": "V4.3-LS",
+            "performance": {
+              "available": true,
+              "current_pnl_pct": -0.2333333333333333,
+              "current_pnl_usdt": -0.7,
+              "delta_vs_v42_usdt": 0.5,
+              "realized_pnl_pct": null,
+              "realized_pnl_usdt": null
+            },
+            "protection_family": "V4.3_LS_WITH_V4.2_RUNNER",
+            "protector_config": {
+              "no_action_be_arm_pct": null,
+              "reduce25_logic": "V4.3_LS",
+              "runner_logic": "V4.2"
+            },
+            "rank": 2,
+            "role": "CHALLENGER",
+            "settlement": {
+              "close_price": null,
+              "close_reason": null,
+              "closed_at_ms": null
+            },
+            "short_label": "V4.3",
+            "status": "OPEN",
+            "telemetry": {
+              "last_event_id": "agg:1",
+              "last_event_seq": 1,
+              "last_event_time_ms": 1800000000100,
+              "mae_pct": -0.08,
+              "mfe_pct": 0.31,
+              "remaining_quantity": 2.0
+            }
+          },
+          {
+            "branch_key": "BE025_CONSERVATIVE",
+            "category": "CONSERVATIVE",
+            "current_state": "MONITORING",
+            "decision": {
+              "action": "HOLD",
+              "be_armed": true,
+              "lane": "NO_ACTION",
+              "reason": "example",
+              "reduce_triggered": false,
+              "runner_qualified": false
+            },
+            "execution_authority": "NONE",
+            "label": "BE 0.25 Conservative",
+            "performance": {
+              "available": true,
+              "current_pnl_pct": 0.016666666666666666,
+              "current_pnl_usdt": 0.05,
+              "delta_vs_v42_usdt": 1.25,
+              "realized_pnl_pct": null,
+              "realized_pnl_usdt": null
+            },
+            "protection_family": "V4.3_LS_BE0.25_WITH_V4.2_RUNNER",
+            "protector_config": {
+              "no_action_be_arm_pct": 0.25,
+              "reduce25_logic": "V4.3_LS",
+              "runner_logic": "V4.2"
+            },
+            "rank": 3,
+            "role": "CHALLENGER_CONSERVATIVE",
+            "settlement": {
+              "close_price": null,
+              "close_reason": null,
+              "closed_at_ms": null
+            },
+            "short_label": "BE0.25",
+            "status": "OPEN",
+            "telemetry": {
+              "last_event_id": "agg:1",
+              "last_event_seq": 1,
+              "last_event_time_ms": 1800000000100,
+              "mae_pct": -0.08,
+              "mfe_pct": 0.31,
+              "remaining_quantity": 2.0
+            }
+          },
+          {
+            "branch_key": "BE018_AGGRESSIVE",
+            "category": "AGGRESSIVE",
+            "current_state": "MONITORING",
+            "decision": {
+              "action": "HOLD",
+              "be_armed": true,
+              "lane": "NO_ACTION",
+              "reason": "example",
+              "reduce_triggered": false,
+              "runner_qualified": false
+            },
+            "execution_authority": "NONE",
+            "label": "BE 0.18 Aggressive",
+            "performance": {
+              "available": true,
+              "current_pnl_pct": 0.06,
+              "current_pnl_usdt": 0.18,
+              "delta_vs_v42_usdt": 1.38,
+              "realized_pnl_pct": null,
+              "realized_pnl_usdt": null
+            },
+            "protection_family": "V4.3_LS_BE0.18_WITH_V4.2_RUNNER",
+            "protector_config": {
+              "no_action_be_arm_pct": 0.18,
+              "reduce25_logic": "V4.3_LS",
+              "runner_logic": "V4.2"
+            },
+            "rank": 4,
+            "role": "CHALLENGER_AGGRESSIVE",
+            "settlement": {
+              "close_price": null,
+              "close_reason": null,
+              "closed_at_ms": null
+            },
+            "short_label": "BE0.18",
+            "status": "OPEN",
+            "telemetry": {
+              "last_event_id": "agg:1",
+              "last_event_seq": 1,
+              "last_event_time_ms": 1800000000100,
+              "mae_pct": -0.08,
+              "mfe_pct": 0.31,
+              "remaining_quantity": 2.0
+            }
+          }
+        ],
+        "comparison": {
+          "baseline_branch_key": "V42_BASELINE",
+          "current_best_branch_key": "BE018_AGGRESSIVE",
+          "current_best_delta_vs_v42_usdt": 1.38,
+          "performance_ready": true
+        },
+        "market": {
+          "current_price": 150.3,
+          "event_version": "ps2-v1-event-fanout-parity",
+          "gross_mark_pnl_usdt": 0.6000000000000227,
+          "gross_move_pct": 0.2000000000000076,
+          "last_event_id": "agg:1",
+          "last_event_seq": 1,
+          "last_event_time_ms": 1800000000100,
+          "note": "shared market observation; not protector performance"
+        },
+        "parent": {
+          "entry_price": 150.0,
+          "initial_notional_usdt": 300.0,
+          "initial_quantity": 2.0,
+          "opened_at_ms": 1800000000000,
+          "parent_id": "PS:40b4801ee0d270d0f2d3",
+          "side": "LONG",
+          "signal_id": "EXAMPLE-1",
+          "source_position_id": "PAPER:EXAMPLE-1",
+          "status": "OPEN",
+          "symbol": "SOLUSDT"
+        },
+        "parity": {
+          "branch_complete": true,
+          "canonical_event_count": 1,
+          "comparison_eligible": true,
+          "issue_count": 0,
+          "issue_types": [],
+          "status": "PARITY_OK"
+        }
+      }
+    ]
+  }
+}

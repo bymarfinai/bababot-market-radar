@@ -1,0 +1,26 @@
+{
+  "be": {
+    "comparisons": 216,
+    "mismatch_n": 0,
+    "mismatches": [],
+    "positions": 108
+  },
+  "stage": "PS-3-HISTORICAL-PARITY",
+  "status": "PASS",
+  "v42": {
+    "action_counts": {
+      "NO_ACTION": 108,
+      "REDUCE25": 43,
+      "REDUCE25+RUNNER_CLOSE": 6,
+      "RUNNER_CLOSE": 13
+    },
+    "mismatch_n": 0,
+    "mismatches": [],
+    "n": 170
+  },
+  "v43": {
+    "mismatch_n": 0,
+    "mismatches": [],
+    "n": 43
+  }
+}

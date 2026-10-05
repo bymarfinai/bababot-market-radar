@@ -10,6 +10,9 @@ from typing import Any
 
 from .binance import BinancePublicClient
 from .profit_protection_v4_stage2d_shadow import process_observation as process_stage2d_shadow_observation
+from .parallel_protection_shadow_runtime import (
+    process_protection_sample as process_parallel_protection_shadow_sample,
+)
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -596,6 +599,26 @@ def process_pp_v4_cycle(
                         "status": "ERROR_FAIL_ISOLATED",
                         "error": f"{type(shadow_exc).__name__}: {str(shadow_exc)[:300]}",
                     }
+                try:
+                    row["parallel_protection_shadow"] = (
+                        process_parallel_protection_shadow_sample(
+                            position,
+                            current_price=float(current_price),
+                            observed_at_ms=receive_at,
+                            cycle_id=cycle_id,
+                            client=client,
+                        )
+                    )
+                except Exception as shadow_exc:
+                    row["parallel_protection_shadow"] = {
+                        "status": "ERROR_FAIL_ISOLATED",
+                        "error": f"{type(shadow_exc).__name__}: {str(shadow_exc)[:300]}",
+                    }
+                    print(
+                        "PS-5A 5s shadow warning: "
+                        f"{type(shadow_exc).__name__}: {str(shadow_exc)[:300]}",
+                        flush=True,
+                    )
                 observed += 1
             else:
                 row["stage2d_shadow"] = {"status": "SKIPPED_DUPLICATE_V4_OBSERVATION"}
