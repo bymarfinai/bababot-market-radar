@@ -372,16 +372,21 @@ function chooseDefaultSymbol(){
 }
 function renderTop(){
   var r=state.radar||{},p=state.paper||{},a=state.approvalSummary||{},h=state.historySummary||{};
+  var run=p.current_run||p;
+  var epoch=p.performance_epoch||(run&&run.epoch)||null;
+  var boundary=epoch&&Number(epoch.started_at_ms||0);
+  var scanInRun=!boundary||Number(r.scan_finished_at_ms||0)>=boundary;
   el('stUniverse').textContent=r.universe_count===undefined?'—':r.universe_count;
-  el('stMoving').textContent=r.moving_candidate_count===undefined?'—':r.moving_candidate_count;
-  var actionable=(r.candidates||[]).filter(function(x){return x.decision==='LONG'||x.decision==='SHORT'}).length;
+  el('stMoving').textContent=scanInRun?(r.moving_candidate_count===undefined?'—':r.moving_candidate_count):0;
+  var actionable=scanInRun?(r.candidates||[]).filter(function(x){return x.decision==='LONG'||x.decision==='SHORT'}).length:0;
   if(el('stActionable'))el('stActionable').textContent=actionable;
-  el('stOpen').textContent=p.open_positions===undefined?state.positions.length:p.open_positions;
-  var partial=state.positions.reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
-  var realized=Number(p.net_pnl||0)+partial;
+  el('stOpen').textContent=run.open_positions===undefined?0:run.open_positions;
+  var runPositions=boundary?state.positions.filter(function(x){return Number(x.opened_at_ms||0)>=boundary}):state.positions;
+  var partial=runPositions.reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
+  var realized=Number(run.net_pnl||0)+partial;
   el('stPnl').textContent=money(realized);el('stPnl').className='value '+(realized>=0?'green':'red');
-  el('stClosed').textContent=p.closed_positions===undefined?'—':p.closed_positions;
-  el('stWr').textContent=p.win_rate_pct===null||p.win_rate_pct===undefined?'—':num(p.win_rate_pct,1)+'%';
+  el('stClosed').textContent=run.closed_positions===undefined?'—':run.closed_positions;
+  el('stWr').textContent=run.win_rate_pct===null||run.win_rate_pct===undefined?'—':num(run.win_rate_pct,1)+'%';
   el('stReviews').textContent=a.total_reviews===undefined?'—':a.total_reviews;
   el('stAge').textContent=age(r.scan_finished_at_ms);
   el('apiDot').className='dot ok';el('apiChip').textContent='API LIVE';
