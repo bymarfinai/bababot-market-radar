@@ -8,6 +8,7 @@ from typing import Any
 import psycopg2.extras
 
 from .pipeline_cohort import cohort_summary, label_signal_cohort
+from .performance_epoch import get_performance_epoch
 from .persistence import (
     _postgres_connect,
     _sqlite_connect,
@@ -741,6 +742,64 @@ def paper_summary() -> dict[str, Any]:
     closed = int(values["closed_positions"])
     wins = int(values["wins"])
     values["win_rate_pct"] = round(100.0 * wins / closed, 4) if closed else None
+
+    epoch = get_performance_epoch()
+    current_run = None
+    if epoch:
+        boundary = int(epoch["started_at_ms"])
+        scoped_queries = {
+            "open_positions": """
+                select count(*) from positions
+                where mode='PAPER' and status in ('OPEN','REDUCED')
+                  and opened_at_ms >= ?
+            """,
+            "closed_positions": """
+                select count(*) from positions
+                where mode='PAPER' and status='CLOSED'
+                  and opened_at_ms >= ?
+            """,
+            "wins": """
+                select count(*) from positions
+                where mode='PAPER' and status='CLOSED' and realized_pnl > 0
+                  and opened_at_ms >= ?
+            """,
+            "losses": """
+                select count(*) from positions
+                where mode='PAPER' and status='CLOSED' and realized_pnl <= 0
+                  and opened_at_ms >= ?
+            """,
+            "net_pnl": """
+                select coalesce(sum(realized_pnl),0) from positions
+                where mode='PAPER' and status='CLOSED'
+                  and opened_at_ms >= ?
+            """,
+            "fees": """
+                select coalesce(sum(fee),0) from paper_orders
+                where status='FILLED' and created_at_ms >= ?
+            """,
+        }
+        scoped: dict[str, Any] = {}
+        if persistence_backend() == "sqlite":
+            with _sqlite_connect(database_path()) as conn:
+                for key, query in scoped_queries.items():
+                    scoped[key] = conn.execute(query, (boundary,)).fetchone()[0]
+        else:
+            with _postgres_connect() as conn:
+                with conn.cursor() as cur:
+                    for key, query in scoped_queries.items():
+                        cur.execute(query.replace("?", "%s"), (boundary,))
+                        scoped[key] = cur.fetchone()[0]
+
+        run_closed = int(scoped["closed_positions"])
+        run_wins = int(scoped["wins"])
+        scoped["win_rate_pct"] = (
+            round(100.0 * run_wins / run_closed, 4) if run_closed else None
+        )
+        scoped["epoch"] = epoch
+        current_run = scoped
+
+    values["performance_epoch"] = epoch
+    values["current_run"] = current_run
     values["paper_store_version"] = PAPER_STORE_VERSION
     # Always expose the hard PRE/POST boundary next to aggregate legacy totals.
     # Consumers should use pipeline_cohorts for post-rebuild evaluation.
