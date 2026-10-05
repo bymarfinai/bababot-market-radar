@@ -9,6 +9,11 @@ from typing import Any
 from .binance import BinancePublicClient
 from .control_state import get_control_state
 from .fresh_entry_gate import check_fresh_entry, fill_max_age_ms
+from .long_detector_stage3c7a import (
+    evaluate_stage3c7a,
+    get_stage3c7a_state,
+    stage3c7a_enabled,
+)
 from .paper_store import (
     close_position,
     count_open_paper_positions,
@@ -141,8 +146,9 @@ def _metadata(position: dict[str, Any]) -> dict[str, Any]:
 def _stage11c_order_payload(
     candidate: dict[str, Any],
     gate: dict[str, Any],
+    detector: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return {
+    payload = {
         "approval_reviewed_at_ms": candidate["reviewed_at_ms"],
         "signal_time_ms": candidate["signal_time_ms"],
         "signal_price": candidate["signal_price"],
@@ -157,6 +163,89 @@ def _stage11c_order_payload(
         "stage11c_version": gate.get("version"),
         "stage13_version": PAPER_TRADING_VERSION,
     }
+    if detector is not None:
+        payload["paper_entry_policy"] = "stage3c7a"
+        payload["long_detector"] = detector
+    else:
+        payload["paper_entry_policy"] = "generic"
+    return payload
+
+
+def _evaluate_paper_entry(
+    client: BinancePublicClient,
+    candidate: dict[str, Any],
+) -> tuple[str, dict[str, Any], dict[str, Any] | None]:
+    """Return final paper-entry verdict without changing generic behavior.
+
+    In Stage3C7A mode the first Stage11C ENTER snapshot becomes immutable T0.
+    Subsequent polls consult persisted detector state and never rerun the T0
+    router.  This preserves causal temporal T+1/T+2/T+3 semantics.
+    """
+    if not stage3c7a_enabled():
+        gate = check_fresh_entry(client, candidate)
+        return str(gate.get("verdict") or "WAIT").upper(), gate, None
+
+    side = str(candidate.get("side") or "").upper()
+    if side != "LONG":
+        detector = evaluate_stage3c7a(client, candidate)
+        gate = {
+            "checked_at_ms": int(time.time() * 1000),
+            "verdict": "CANCEL",
+            "reasons": [str(detector.get("reason") or "stage3c7a_long_only")],
+            "snapshot": {
+                "symbol": str(candidate.get("symbol") or "").upper(),
+                "side": side,
+            },
+            "version": "stage3c7a-preblock",
+        }
+        return "CANCEL", gate, detector
+
+    state = get_stage3c7a_state(str(candidate["signal_id"]))
+    if state is not None:
+        detector = evaluate_stage3c7a(client, candidate)
+        frozen = dict(detector.get("frozen_gate") or {})
+        gate = {
+            "checked_at_ms": frozen.get("checked_at_ms") or detector.get("gate_checked_at_ms"),
+            "verdict": frozen.get("verdict") or "ENTER",
+            "reasons": list(frozen.get("reasons") or []),
+            "snapshot": dict(frozen.get("snapshot") or {}),
+            "version": frozen.get("version") or "stage11c-frozen",
+        }
+        return str(detector.get("verdict") or "WAIT").upper(), gate, detector
+
+    gate = check_fresh_entry(client, candidate)
+    gate_verdict = str(gate.get("verdict") or "WAIT").upper()
+    if gate_verdict != "ENTER":
+        return gate_verdict, gate, None
+
+    try:
+        detector = evaluate_stage3c7a(client, candidate, gate=gate)
+    except Exception as exc:
+        detector = {
+            "verdict": "WAIT",
+            "reason": f"stage3c7a_t0_build_failed:{type(exc).__name__}",
+            "error": str(exc)[:300],
+        }
+    return str(detector.get("verdict") or "WAIT").upper(), gate, detector
+
+
+def _entry_order_reason(
+    verdict: str,
+    detector: dict[str, Any] | None,
+) -> str:
+    if detector is None:
+        return "stage11c_enter" if verdict == "ENTER" else "stage11c_cancel"
+    suffix = "enter" if verdict == "ENTER" else "cancel"
+    return f"stage3c7a_{suffix}"
+
+
+def _entry_skip_reason(
+    gate: dict[str, Any],
+    detector: dict[str, Any] | None,
+) -> str:
+    if detector is not None:
+        return str(detector.get("reason") or "stage3c7a_cancel")[:500]
+    return "stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500]
 
 
 def process_approved_signal(signal_id: str) -> dict[str, Any]:
@@ -199,17 +288,17 @@ def process_approved_signal(signal_id: str) -> dict[str, Any]:
             }
 
         client = BinancePublicClient(timeout=5.0, retries=1)
-        gate = check_fresh_entry(client, candidate)
-        verdict = str(gate.get("verdict") or "WAIT").upper()
+        verdict, gate, detector = _evaluate_paper_entry(client, candidate)
 
         if verdict == "WAIT":
             return {
                 "status": "WAIT",
                 "signal_id": signal_id,
                 "stage11c": gate,
+                "long_detector": detector,
             }
 
-        payload = _stage11c_order_payload(candidate, gate)
+        payload = _stage11c_order_payload(candidate, gate, detector)
         order_id = create_order(
             source_type="ENTRY",
             source_id=signal_id,
@@ -219,11 +308,7 @@ def process_approved_signal(signal_id: str) -> dict[str, Any]:
             side=str(candidate["side"]),
             action="OPEN",
             requested_quantity=None,
-            reason=(
-                "stage11c_enter"
-                if verdict == "ENTER"
-                else "stage11c_cancel"
-            ),
+            reason=_entry_order_reason(verdict, detector),
             payload=payload,
         )
 
@@ -231,13 +316,14 @@ def process_approved_signal(signal_id: str) -> dict[str, Any]:
             mark_order(
                 order_id,
                 status="SKIPPED",
-                reason="stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500],
+                reason=_entry_skip_reason(gate, detector),
             )
             return {
                 "status": "CANCEL",
                 "signal_id": signal_id,
                 "order_id": order_id,
                 "stage11c": gate,
+                "long_detector": detector,
             }
 
         order = get_paper_order(order_id)
@@ -256,6 +342,7 @@ def process_approved_signal(signal_id: str) -> dict[str, Any]:
             "signal_id": signal_id,
             "order_id": order_id,
             "stage11c": gate,
+            "long_detector": detector,
             "execution": execution,
         }
 
@@ -306,14 +393,13 @@ def sync_entry_orders() -> dict[str, int]:
             symbol_blocked += 1
             continue
 
-        gate = check_fresh_entry(client, candidate)
-        verdict = str(gate.get("verdict") or "WAIT").upper()
+        verdict, gate, detector = _evaluate_paper_entry(client, candidate)
 
         if verdict == "WAIT":
             stage11c_wait += 1
             continue
 
-        payload = _stage11c_order_payload(candidate, gate)
+        payload = _stage11c_order_payload(candidate, gate, detector)
 
         order_id = create_order(
             source_type="ENTRY",
@@ -324,11 +410,7 @@ def sync_entry_orders() -> dict[str, int]:
             side=str(candidate["side"]),
             action="OPEN",
             requested_quantity=None,
-            reason=(
-                "stage11c_enter"
-                if verdict == "ENTER"
-                else "stage11c_cancel"
-            ),
+            reason=_entry_order_reason(verdict, detector),
             payload=payload,
         )
 
@@ -336,7 +418,7 @@ def sync_entry_orders() -> dict[str, int]:
             mark_order(
                 order_id,
                 status="SKIPPED",
-                reason="stage11c_cancel:" + ",".join(gate.get("reasons") or [])[:500],
+                reason=_entry_skip_reason(gate, detector),
             )
             stage11c_cancel += 1
             continue
@@ -433,8 +515,22 @@ def _execute_open(
         )
         return {"status": "SKIPPED", "reason": "approval_stale_before_fill"}
 
+    entry_policy = str(payload.get("paper_entry_policy") or "generic").lower()
     gate_ms = int(payload.get("stage11c_checked_at_ms") or 0)
-    if gate_ms <= 0 or now_ms - gate_ms > fill_max_age_ms():
+    if entry_policy == "stage3c7a":
+        detector = payload.get("long_detector") or {}
+        decision_ms = int(detector.get("decision_at_ms") or 0)
+        if decision_ms <= 0 or now_ms - decision_ms > fill_max_age_ms():
+            mark_order(
+                str(order["order_id"]),
+                status="SKIPPED",
+                reason="stage3c7a_decision_stale_before_fill",
+            )
+            return {
+                "status": "SKIPPED",
+                "reason": "stage3c7a_decision_stale_before_fill",
+            }
+    elif gate_ms <= 0 or now_ms - gate_ms > fill_max_age_ms():
         mark_order(
             str(order["order_id"]),
             status="SKIPPED",
@@ -493,7 +589,20 @@ def _execute_open(
         "slippage_bps": _slippage_bps(),
         "fee_rate": _fee_rate(),
         "hard_stop_pct": stop_pct,
+        "paper_entry_policy": entry_policy,
     }
+    if entry_policy == "stage3c7a":
+        detector = payload.get("long_detector") or {}
+        metadata.update({
+            "long_detector_version": detector.get("detector_version"),
+            "long_detector_router_version": detector.get("router_version"),
+            "long_detector_policy_hash": detector.get("policy_hash"),
+            "long_detector_route": detector.get("route"),
+            "long_detector_probability": detector.get("router_probability"),
+            "long_detector_decision_at_ms": detector.get("decision_at_ms"),
+            "long_detector_temporal_horizon": detector.get("last_temporal_horizon"),
+            "long_detector_temporal_return_pct": detector.get("last_temporal_return_pct"),
+        })
 
     create_position(
         position_id=str(order["position_id"]),

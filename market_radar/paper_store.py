@@ -120,7 +120,8 @@ def list_entry_candidates(
                     s.symbol, s.side, s.signal_time_ms, s.signal_price,
                     s.stage, s.long_score, s.short_score, s.score_edge,
                     s.structure_status, s.taker_bias, s.raw_oi_change_pct,
-                    s.market_regime, s.decision_reasons_json
+                    s.market_regime, s.decision_reasons_json,
+                    s.snapshot_json as signal_snapshot_json
                 from entry_approvals a
                 join signals s on s.signal_id = a.signal_id
                 left join positions p on p.signal_id = a.signal_id
@@ -146,7 +147,8 @@ def list_entry_candidates(
                     s.symbol, s.side, s.signal_time_ms, s.signal_price,
                     s.stage, s.long_score, s.short_score, s.score_edge,
                     s.structure_status, s.taker_bias, s.raw_oi_change_pct,
-                    s.market_regime, s.decision_reasons_json
+                    s.market_regime, s.decision_reasons_json,
+                    s.snapshot_json as signal_snapshot_json
                 from entry_approvals a
                 join signals s on s.signal_id = a.signal_id
                 left join positions p on p.signal_id = a.signal_id
@@ -174,7 +176,8 @@ def get_entry_candidate(signal_id: str) -> dict[str, Any] | None:
             s.symbol, s.side, s.signal_time_ms, s.signal_price,
             s.stage, s.long_score, s.short_score, s.score_edge,
                     s.structure_status, s.taker_bias, s.raw_oi_change_pct,
-                    s.market_regime, s.decision_reasons_json
+                    s.market_regime, s.decision_reasons_json,
+                    s.snapshot_json as signal_snapshot_json
         from entry_approvals a
         join signals s on s.signal_id = a.signal_id
         left join positions p on p.signal_id = a.signal_id
