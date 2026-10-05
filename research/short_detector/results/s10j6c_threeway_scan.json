@@ -1,0 +1,2959 @@
+{
+  "stage": "S10J6C_threeway",
+  "all": [
+    {
+      "name": "A1+MICRO_PCT_20",
+      "anchor": "A1",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    },
+    {
+      "name": "A1+MICRO_PCT_30",
+      "anchor": "A1",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A1+MICRO_LPCT_20",
+      "anchor": "A1",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A1+MICRO_LPCT_30",
+      "anchor": "A1",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A1+OIACC_PCT_70",
+      "anchor": "A1",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A1+OIACC_LPCT_70",
+      "anchor": "A1",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A2+MICRO_PCT_20",
+      "anchor": "A2",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    },
+    {
+      "name": "A2+MICRO_PCT_30",
+      "anchor": "A2",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+MICRO_LPCT_20",
+      "anchor": "A2",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+MICRO_LPCT_30",
+      "anchor": "A2",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+OIACC_PCT_70",
+      "anchor": "A2",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A2+OIACC_LPCT_70",
+      "anchor": "A2",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A3+MICRO_PCT_20",
+      "anchor": "A3",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    },
+    {
+      "name": "A3+MICRO_PCT_30",
+      "anchor": "A3",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+MICRO_LPCT_20",
+      "anchor": "A3",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+MICRO_LPCT_30",
+      "anchor": "A3",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+OIACC_PCT_70",
+      "anchor": "A3",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A3+OIACC_LPCT_70",
+      "anchor": "A3",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.3150940776131534
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 3,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.4741374834402174
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.43942241245032054
+    }
+  ],
+  "good": [
+    {
+      "name": "A1+MICRO_PCT_30",
+      "anchor": "A1",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A1+MICRO_LPCT_20",
+      "anchor": "A1",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A1+MICRO_LPCT_30",
+      "anchor": "A1",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+MICRO_PCT_30",
+      "anchor": "A2",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+MICRO_LPCT_20",
+      "anchor": "A2",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A2+MICRO_LPCT_30",
+      "anchor": "A2",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+MICRO_PCT_30",
+      "anchor": "A3",
+      "third": "MICRO_PCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+MICRO_LPCT_20",
+      "anchor": "A3",
+      "third": "MICRO_LPCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+MICRO_LPCT_30",
+      "anchor": "A3",
+      "third": "MICRO_LPCT_30",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.10526315789473684,
+          "veto_pnl": -10.551036936511348
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 6,
+          "veto_strong": 2,
+          "veto_severe": 4,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.08,
+          "veto_pnl": -16.814513657725357
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.48233543286506786
+    },
+    {
+      "name": "A3+OIACC_LPCT_70",
+      "anchor": "A3",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.3150940776131534
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 3,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.4741374834402174
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.43942241245032054
+    },
+    {
+      "name": "A1+OIACC_PCT_70",
+      "anchor": "A1",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A1+OIACC_LPCT_70",
+      "anchor": "A1",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A2+OIACC_PCT_70",
+      "anchor": "A2",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A2+OIACC_LPCT_70",
+      "anchor": "A2",
+      "third": "OIACC_LPCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A3+OIACC_PCT_70",
+      "anchor": "A3",
+      "third": "OIACC_PCT_70",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.1,
+          "veto_pnl": -4.055988057145402
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 2,
+          "veto_strong": 0,
+          "veto_severe": 2,
+          "strong_retention": 1.0,
+          "severe_removal": 0.04,
+          "veto_pnl": -6.215031462972466
+        }
+      },
+      "minret": 1.0,
+      "negblocks": 6,
+      "score": 0.4386450943889173
+    },
+    {
+      "name": "A1+MICRO_PCT_20",
+      "anchor": "A1",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    },
+    {
+      "name": "A2+MICRO_PCT_20",
+      "anchor": "A2",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    },
+    {
+      "name": "A3+MICRO_PCT_20",
+      "anchor": "A3",
+      "third": "MICRO_PCT_20",
+      "stats": {
+        "Research_Discovery": {
+          "n": 40,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Validation": {
+          "n": 26,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Research_Reserve": {
+          "n": 17,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "Fresh_2026-10-01": {
+          "n": 76,
+          "veto_n": 1,
+          "veto_strong": 1,
+          "veto_severe": 0,
+          "strong_retention": 0.9375,
+          "severe_removal": 0.0,
+          "veto_pnl": -0.07734750960658576
+        },
+        "Fresh_2026-10-02": {
+          "n": 70,
+          "veto_n": 1,
+          "veto_strong": 0,
+          "veto_severe": 1,
+          "strong_retention": 1.0,
+          "severe_removal": 0.05263157894736842,
+          "veto_pnl": -2.159043405827064
+        },
+        "Fresh_2026-10-03": {
+          "n": 35,
+          "veto_n": 3,
+          "veto_strong": 1,
+          "veto_severe": 2,
+          "strong_retention": 0.8571428571428572,
+          "severe_removal": 0.2,
+          "veto_pnl": -6.186129211607423
+        },
+        "research": {
+          "n": 83,
+          "veto_n": 0,
+          "veto_strong": 0,
+          "veto_severe": 0,
+          "strong_retention": 1.0,
+          "severe_removal": 0.0,
+          "veto_pnl": 0
+        },
+        "fresh": {
+          "n": 181,
+          "veto_n": 5,
+          "veto_strong": 2,
+          "veto_severe": 3,
+          "strong_retention": 0.9459459459459459,
+          "severe_removal": 0.06,
+          "veto_pnl": -8.422520127041073
+        }
+      },
+      "minret": 0.8571428571428572,
+      "negblocks": 6,
+      "score": 0.397159452273015
+    }
+  ]
+}
