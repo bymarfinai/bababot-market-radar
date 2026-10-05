@@ -15,6 +15,7 @@ from .ai_provider import (
     primary_provider,
 )
 from .multi_model import run_stage11b_failover
+from .control_state import get_control_state
 from .persistence import (
     get_pending_entry_signals,
     save_entry_approval,
@@ -455,7 +456,24 @@ def review_signal(
 
 
 def process_pending_approvals() -> dict[str, Any]:
-    """Review fresh unreviewed signals; never overlaps with itself."""
+    """Review fresh unreviewed signals; never overlaps with itself.
+
+    Entry AI is a RUN-only subsystem. PAUSE_ENTRIES and EXIT_ONLY keep
+    scanner/research visibility and position lifecycle alive, but must not
+    spend entry-review tokens or create fresh approvals.
+    """
+    control = get_control_state()
+    if not control.get("entries_enabled"):
+        return {
+            "approval_version": AI_APPROVAL_VERSION,
+            "status": "PAUSED",
+            "control_mode": control.get("mode"),
+            "processed": 0,
+            "approve": 0,
+            "veto": 0,
+            "watch": 0,
+        }
+
     if not _processing_lock.acquire(blocking=False):
         return {
             "approval_version": AI_APPROVAL_VERSION,
@@ -464,10 +482,34 @@ def process_pending_approvals() -> dict[str, Any]:
         }
 
     try:
+        # Re-check after acquiring the lock so a mode transition that happened
+        # while another Stage 11 batch was finishing cannot start a new batch.
+        control = get_control_state()
+        if not control.get("entries_enabled"):
+            return {
+                "approval_version": AI_APPROVAL_VERSION,
+                "status": "PAUSED",
+                "control_mode": control.get("mode"),
+                "processed": 0,
+                "approve": 0,
+                "veto": 0,
+                "watch": 0,
+            }
+
         signals = get_pending_entry_signals(
             max_age_ms=_max_age_ms(),
             limit=_max_per_scan(),
         )
+
+        # Do not replay candidates accumulated while entries were paused.
+        # A RUN transition is a clean entry epoch: only signals born at/after
+        # that transition may reach Stage 11.
+        run_started_at_ms = int(control.get("updated_at_ms") or 0)
+        signals = [
+            signal
+            for signal in signals
+            if int(signal.get("signal_time_ms") or 0) >= run_started_at_ms
+        ]
         if not signals:
             return {
                 "approval_version": AI_APPROVAL_VERSION,
@@ -514,6 +556,9 @@ def process_pending_approvals() -> dict[str, Any]:
 
 def start_pending_approval_worker() -> bool:
     """Start one background Stage 11 pass without blocking the scanner."""
+    control = get_control_state()
+    if not control.get("entries_enabled"):
+        return False
     if _processing_lock.locked():
         return False
 
