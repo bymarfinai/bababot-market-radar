@@ -447,7 +447,9 @@ function renderControl(){
 
   document.querySelectorAll('.control-btn').forEach(function(b){
     b.classList.toggle('active',b.dataset.mode===mode);
-    b.disabled=!configured||!state.controlAuthVerified||state.controlBusy;
+    // Keep mode buttons clickable so an unverified operator gets an explicit
+    // authentication prompt instead of a button that appears broken.
+    b.disabled=!configured||state.controlBusy;
   });
   el('armLive').disabled=!configured||!state.controlAuthVerified||state.controlBusy;
   el('disarmLive').disabled=!configured||!state.controlAuthVerified||state.controlBusy;
@@ -930,8 +932,10 @@ async function verifyControlToken(silent){
 }
 async function setMode(mode){
   if(!state.controlAuthVerified){
-    el('controlMessage').textContent='Verify the Admin Control Token before changing mode.';
-    el('controlMessage').className='red control-message';return;
+    el('controlMessage').textContent='Admin Control Token is required. Paste it below, click VERIFY, then choose the mode again.';
+    el('controlMessage').className='amber control-message';
+    el('controlToken').focus();
+    return;
   }
   if(state.control&&state.control.mode===mode){
     el('controlMessage').textContent='Already in '+mode+'. No change sent.';
