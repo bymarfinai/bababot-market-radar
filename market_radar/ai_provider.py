@@ -184,7 +184,7 @@ def _raise_for_quota(
 
 
 def _reasoning_effort_for(provider: str, model: str) -> str | None:
-    if provider != "clario" or not model.startswith("gemini-"):
+    if not provider.startswith("clario") or not model.startswith("gemini-"):
         return None
     value = os.environ.get(
         "CLARIO_REASONING_EFFORT",
@@ -194,10 +194,11 @@ def _reasoning_effort_for(provider: str, model: str) -> str | None:
 
 
 def _provider_config(provider: str) -> tuple[str, str, list[str]]:
-    if provider == "clario":
-        api_key = os.environ.get("CLARIO_API_KEY", "").strip()
+    if provider in {"clario", "clario1", "clario2"}:
+        key_env = "CLARIO_API_KEY_2" if provider == "clario2" else "CLARIO_API_KEY"
+        api_key = os.environ.get(key_env, "").strip()
         if not api_key:
-            raise RuntimeError("CLARIO_API_KEY is not configured")
+            raise RuntimeError(f"{key_env} is not configured")
         base_urls = [
             os.environ.get(
                 "CLARIO_BASE_URL",
@@ -208,7 +209,8 @@ def _provider_config(provider: str) -> tuple[str, str, list[str]]:
                 "https://api-direct.clariohub.id/v1",
             ).rstrip("/"),
         ]
-        return api_key, "ClarioHub", base_urls
+        lane = "2" if provider == "clario2" else "1"
+        return api_key, f"ClarioHub lane {lane}", base_urls
 
     if provider == "thirty":
         api_key = os.environ.get("THIRTY_API_KEY", "").strip()
