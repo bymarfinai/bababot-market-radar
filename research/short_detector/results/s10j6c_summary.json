@@ -1,0 +1,55 @@
+{
+  "stage": "SHORT-S10J6C",
+  "status": "NO_PASS_T0_SUPPRESSOR",
+  "baseline": {
+    "research_t0": {
+      "exec": 83,
+      "strong": 29,
+      "pnl": 9.18
+    },
+    "fresh_t0": {
+      "exec": 181,
+      "strong": 37,
+      "pnl": -75.99
+    },
+    "fresh_severe_fallback": {
+      "n": 50,
+      "pnl": -175.01445009066532
+    }
+  },
+  "single_scan": {
+    "passing_candidates": 0
+  },
+  "best_two_signal": {
+    "rule": "f_f_coin_minus_market_30m__lpct64 <= 0.35 AND f_gate_price_drift_pct__pct128 >= 0.80",
+    "research": {
+      "strong_retention": 0.966,
+      "severe_removal": 0.0,
+      "veto_pnl": 2.57
+    },
+    "fresh": {
+      "strong_retention": 0.946,
+      "severe_removal": 0.12,
+      "veto_pnl": -22.32
+    },
+    "verdict": "REJECT: improves fresh but vetoes profitable research cohort / worsens Discovery."
+  },
+  "best_three_signal": {
+    "rule": "coin-underperformance AND high price-drift AND low micro-volume",
+    "research": {
+      "veto_n": 0,
+      "strong_retention": 1.0,
+      "severe_removal": 0.0,
+      "veto_pnl": 0.0
+    },
+    "fresh": {
+      "strong_retention": 0.946,
+      "severe_removal": 0.08,
+      "veto_pnl": -16.81
+    },
+    "verdict": "REJECT: zero activation in research, therefore no transport evidence; effectively fresh-only fitting."
+  },
+  "root_observation": "T0 economics are regime-dependent: research T0 is already positive (+$9.18), while fresh T0 is negative (-$75.99). Current normalized feature set cannot isolate fresh severe fallback without either harming research or having zero research coverage.",
+  "decision": "Leave T0 unchanged. Do not add a T0 suppressor from current evidence.",
+  "next_priority": "Residual T+1 severe-fallback repair (S10J-6D)."
+}
