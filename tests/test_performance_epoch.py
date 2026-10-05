@@ -79,6 +79,14 @@ class PerformanceEpochTests(unittest.TestCase):
         self.assertEqual(run["losses"], 0)
         self.assertEqual(float(run["net_pnl"]), 4.0)
         self.assertEqual(run["win_rate_pct"], 100.0)
+        self.assertEqual(run["by_side"]["LONG"]["closed_positions"], 1)
+        self.assertEqual(run["by_side"]["LONG"]["wins"], 1)
+        self.assertEqual(run["by_side"]["LONG"]["win_rate_pct"], 100.0)
+        self.assertEqual(float(run["by_side"]["LONG"]["net_pnl"]), 4.0)
+        self.assertEqual(run["by_side"]["SHORT"]["open_positions"], 1)
+        self.assertEqual(run["by_side"]["SHORT"]["closed_positions"], 0)
+        self.assertIsNone(run["by_side"]["SHORT"]["win_rate_pct"])
+        self.assertEqual(float(run["by_side"]["SHORT"]["net_pnl"]), 0.0)
 
         with _sqlite_connect(self.db) as conn:
             self.assertEqual(conn.execute("select count(*) from positions").fetchone()[0], 3)
