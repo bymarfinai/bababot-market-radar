@@ -1,0 +1,175 @@
+{
+  "all_t3": {
+    "n": 173,
+    "exec": 131,
+    "strong": 38,
+    "exec_strong": 34,
+    "pnl": -57.09272174565662,
+    "wins": 45,
+    "wr": 0.3435114503816794,
+    "strong_pnl": 91.46620050671733,
+    "non_target_pnl": -148.55892225237395
+  },
+  "shifted_to_t3": {
+    "n": 36,
+    "exec": 31,
+    "strong": 11,
+    "exec_strong": 11,
+    "pnl": -32.51369196290457,
+    "wins": 10,
+    "wr": 0.3225806451612903,
+    "strong_pnl": 19.528708286462468,
+    "non_target_pnl": -52.04240024936704
+  },
+  "not_shifted_to_t3": {
+    "n": 137,
+    "exec": 100,
+    "strong": 27,
+    "exec_strong": 23,
+    "pnl": -24.57902978275204,
+    "wins": 35,
+    "wr": 0.35,
+    "strong_pnl": 71.93749222025487,
+    "non_target_pnl": -96.5165220030069
+  },
+  "transition": {
+    "T1_TO_T3": {
+      "overall": {
+        "n": 15,
+        "exec": 14,
+        "strong": 6,
+        "exec_strong": 6,
+        "pnl": -1.1910120011396577,
+        "wins": 5,
+        "wr": 0.35714285714285715,
+        "strong_pnl": 8.183497586887482,
+        "non_target_pnl": -9.37450958802714
+      },
+      "research": {
+        "n": 5,
+        "exec": 4,
+        "strong": 2,
+        "exec_strong": 2,
+        "pnl": -2.1230148593059726,
+        "wins": 2,
+        "wr": 0.5,
+        "strong_pnl": 2.479407749548889,
+        "non_target_pnl": -4.602422608854861
+      },
+      "fresh": {
+        "n": 10,
+        "exec": 10,
+        "strong": 4,
+        "exec_strong": 4,
+        "pnl": 0.9320028581663147,
+        "wins": 3,
+        "wr": 0.3,
+        "strong_pnl": 5.704089837338594,
+        "non_target_pnl": -4.772086979172279
+      }
+    },
+    "T2_TO_T3": {
+      "overall": {
+        "n": 21,
+        "exec": 17,
+        "strong": 5,
+        "exec_strong": 5,
+        "pnl": -31.32267996176492,
+        "wins": 5,
+        "wr": 0.29411764705882354,
+        "strong_pnl": 11.345210699574986,
+        "non_target_pnl": -42.667890661339904
+      },
+      "research": {
+        "n": 6,
+        "exec": 4,
+        "strong": 1,
+        "exec_strong": 1,
+        "pnl": -13.972471686012064,
+        "wins": 1,
+        "wr": 0.25,
+        "strong_pnl": 1.2128405322081666,
+        "non_target_pnl": -15.185312218220231
+      },
+      "fresh": {
+        "n": 15,
+        "exec": 13,
+        "strong": 4,
+        "exec_strong": 4,
+        "pnl": -17.350208275752856,
+        "wins": 4,
+        "wr": 0.3076923076923077,
+        "strong_pnl": 10.132370167366819,
+        "non_target_pnl": -27.482578443119674
+      }
+    }
+  },
+  "shifted_blocks": {
+    "Fresh_2026-10-01": {
+      "n": 6,
+      "exec": 5,
+      "strong": 1,
+      "exec_strong": 1,
+      "pnl": -11.869257061288796,
+      "wins": 1,
+      "wr": 0.2,
+      "strong_pnl": 1.2398264184086814,
+      "non_target_pnl": -13.109083479697476
+    },
+    "Fresh_2026-10-02": {
+      "n": 15,
+      "exec": 14,
+      "strong": 6,
+      "exec_strong": 6,
+      "pnl": 0.9965912945548678,
+      "wins": 5,
+      "wr": 0.35714285714285715,
+      "strong_pnl": 10.287219769267919,
+      "non_target_pnl": -9.290628474713051
+    },
+    "Fresh_2026-10-03": {
+      "n": 4,
+      "exec": 4,
+      "strong": 1,
+      "exec_strong": 1,
+      "pnl": -5.5455396508526125,
+      "wins": 1,
+      "wr": 0.25,
+      "strong_pnl": 4.309413817028814,
+      "non_target_pnl": -9.854953467881426
+    },
+    "Research_Discovery": {
+      "n": 7,
+      "exec": 6,
+      "strong": 3,
+      "exec_strong": 3,
+      "pnl": -11.493063936463175,
+      "wins": 3,
+      "wr": 0.5,
+      "strong_pnl": 3.692248281757055,
+      "non_target_pnl": -15.185312218220231
+    },
+    "Research_Reserve": {
+      "n": 2,
+      "exec": 1,
+      "strong": 0,
+      "exec_strong": 0,
+      "pnl": -3.43649065077915,
+      "wins": 0,
+      "wr": 0.0,
+      "strong_pnl": 0,
+      "non_target_pnl": -3.43649065077915
+    },
+    "Research_Validation": {
+      "n": 2,
+      "exec": 1,
+      "strong": 0,
+      "exec_strong": 0,
+      "pnl": -1.165931958075711,
+      "wins": 0,
+      "wr": 0.0,
+      "strong_pnl": 0,
+      "non_target_pnl": -1.165931958075711
+    }
+  }
+}
