@@ -851,6 +851,7 @@ def paper_summary() -> dict[str, Any]:
             )
             by_side[side] = side_values
 
+        # Dashboard current-run performance is intentionally split by side.
         scoped["by_side"] = by_side
         scoped["epoch"] = epoch
         current_run = scoped
