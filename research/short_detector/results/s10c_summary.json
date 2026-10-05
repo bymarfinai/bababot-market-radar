@@ -1,0 +1,73 @@
+{
+  "stage": "SHORT-S10C",
+  "status": "PASS_RESEARCH_FRONTIER",
+  "baseline_s10a": {
+    "open": 268,
+    "strong_win": 51,
+    "non_target": 217,
+    "precision": 0.19029850746268656
+  },
+  "lane0_selector": {
+    "rule_a": "causal T+3 t3_f_micro_decay_3_vs_prev3 <= 0.2779031656624853",
+    "rule_b": "causal T+2 t2_delta_f_coin_minus_market_15m >= 0.032030968083884837",
+    "combine": "A OR B",
+    "router_requirement": "router_lane == 0"
+  },
+  "incremental": {
+    "open": 61,
+    "strong_win": 19,
+    "true_lane0_strong_win": 15,
+    "router_error_strong_win": 4,
+    "non_target": 42,
+    "precision": 0.3114754098360656,
+    "entries_per_added_win": 3.210526315789474,
+    "historical_realized_positive": 19,
+    "historical_pnl_usdt": 5.7627432052634715,
+    "peak_mfe_equiv_usdt": 358.84307
+  },
+  "cumulative": {
+    "open": 329,
+    "strong_win": 70,
+    "non_target": 259,
+    "recall": 0.7070707070707071,
+    "precision": 0.2127659574468085,
+    "historical_realized_positive": 82,
+    "historical_wr": 0.24924012158054712,
+    "historical_pnl_usdt": -334.04296145885667,
+    "peak_mfe_equiv_usdt": 1372.25916
+  },
+  "splits": {
+    "Discovery": {
+      "incremental_open": 40,
+      "incremental_strong_win": 10,
+      "cumulative_open": 200,
+      "cumulative_strong_win": 43
+    },
+    "Validation": {
+      "incremental_open": 12,
+      "incremental_strong_win": 6,
+      "cumulative_open": 59,
+      "cumulative_strong_win": 17
+    },
+    "Reserve": {
+      "incremental_open": 9,
+      "incremental_strong_win": 3,
+      "cumulative_open": 70,
+      "cumulative_strong_win": 10
+    }
+  },
+  "remaining_missed": {
+    "total": 29,
+    "true_lane0": 13,
+    "lane1_no_same_threshold_cross": 15,
+    "router_error": 1
+  },
+  "rejected_extension": {
+    "rule": "T+3 t3_f_micro_side_ret_3m >= -0.05005005005005447",
+    "extra_open": 23,
+    "extra_strong_win": 3,
+    "entries_per_added_win": 7.666666666666667,
+    "reserve_extra_open": 4,
+    "reserve_extra_strong_win": 0
+  }
+}
