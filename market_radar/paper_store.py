@@ -795,6 +795,63 @@ def paper_summary() -> dict[str, Any]:
         scoped["win_rate_pct"] = (
             round(100.0 * run_wins / run_closed, 4) if run_closed else None
         )
+
+        by_side: dict[str, dict[str, Any]] = {}
+        for side in ("LONG", "SHORT"):
+            side_queries = {
+                "open_positions": """
+                    select count(*) from positions
+                    where mode='PAPER' and status in ('OPEN','REDUCED')
+                      and opened_at_ms >= ? and side=?
+                """,
+                "closed_positions": """
+                    select count(*) from positions
+                    where mode='PAPER' and status='CLOSED'
+                      and opened_at_ms >= ? and side=?
+                """,
+                "wins": """
+                    select count(*) from positions
+                    where mode='PAPER' and status='CLOSED' and realized_pnl > 0
+                      and opened_at_ms >= ? and side=?
+                """,
+                "losses": """
+                    select count(*) from positions
+                    where mode='PAPER' and status='CLOSED' and realized_pnl <= 0
+                      and opened_at_ms >= ? and side=?
+                """,
+                "net_pnl": """
+                    select coalesce(sum(realized_pnl),0) from positions
+                    where mode='PAPER' and status='CLOSED'
+                      and opened_at_ms >= ? and side=?
+                """,
+            }
+            side_values: dict[str, Any] = {}
+            if persistence_backend() == "sqlite":
+                with _sqlite_connect(database_path()) as conn:
+                    for key, query in side_queries.items():
+                        side_values[key] = conn.execute(
+                            query,
+                            (boundary, side),
+                        ).fetchone()[0]
+            else:
+                with _postgres_connect() as conn:
+                    with conn.cursor() as cur:
+                        for key, query in side_queries.items():
+                            cur.execute(
+                                query.replace("?", "%s"),
+                                (boundary, side),
+                            )
+                            side_values[key] = cur.fetchone()[0]
+
+            side_closed = int(side_values["closed_positions"])
+            side_wins = int(side_values["wins"])
+            side_values["win_rate_pct"] = (
+                round(100.0 * side_wins / side_closed, 4)
+                if side_closed else None
+            )
+            by_side[side] = side_values
+
+        scoped["by_side"] = by_side
         scoped["epoch"] = epoch
         current_run = scoped
 
