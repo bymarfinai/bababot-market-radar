@@ -1,0 +1,11 @@
+cluster,trades,pnl
+GRAY fallback outside all,57,-125.31641893777739
+BAD-B fallback outside all,25,-123.24112119794698
+BAD-A fallback multi-archetype,35,-115.3737237416006
+BAD-A fallback outside all,33,-73.2301483507298
+BAD-A fallback A1,23,-59.329384800424826
+BAD-A fallback A2,18,-51.110353494366784
+BAD-B fallback A1,8,-47.17208457647208
+TARGET fallback outside all,17,-41.43431184335687
+BAD-B fallback A2,9,-35.047797371357575
+BAD-B fallback multi-archetype,6,-26.98733555644206
