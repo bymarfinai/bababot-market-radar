@@ -326,6 +326,7 @@ var state={
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
   ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
   liquidity:null,lqZonesEnabled:true,lqSnapshotAsOf:null,lqSnapshotEntryPrice:null,lqSnapshotPositionId:null,
+  liquidityKey:null,liquidityFetchedAt:0,chartRequestSeq:0,refreshBusy:false,
   controlAuthVerified:false,controlBusy:false,apiFailures:[]
 };
 function el(id){return document.getElementById(id)}
@@ -339,9 +340,9 @@ function dt(ms){if(!ms)return '—';return new Date(Number(ms)).toLocaleString()
 function clsVerdict(v){v=String(v||'').toUpperCase();if(v==='APPROVE'||v==='LONG'||v==='HOLD'||v==='OPEN'||v==='FILLED'||v==='RUN')return 'long';if(v==='VETO'||v==='SHORT'||v==='CLOSE'||v==='FAILED'||v==='ERROR'||v==='SKIPPED'||v==='CANCELLED')return 'short';if(v==='WATCH'||v==='REDUCE'||v==='PENDING'||v==='SUBMITTED'||v==='DEFERRED'||v==='PAUSE_ENTRIES'||v==='EXIT_ONLY')return 'watch';return 'neutral'}
 function badge(v){return '<span class="badge '+clsVerdict(v)+'">'+(v||'—')+'</span>'}
 function esc(s){return String(s===null||s===undefined?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-async function getJSON(path){
+async function getJSON(path,timeoutMs){
   var controller=new AbortController();
-  var timer=setTimeout(function(){controller.abort()},5500);
+  var timer=setTimeout(function(){controller.abort()},timeoutMs||5500);
   try{
     var r=await fetch(API+path,{cache:'no-store',signal:controller.signal});
     if(!r.ok)throw new Error(path+' HTTP '+r.status);
@@ -922,7 +923,7 @@ function renderPositionHistory(){
       state.lqSnapshotAsOf=Number(row.opened_at_ms||0)||null;
       state.lqSnapshotEntryPrice=Number(row.entry_price||0)||null;
       state.lqSnapshotPositionId=row.position_id||null;
-      state.ticker=null;state.depth=null;state.liquidity=null;
+      state.ticker=null;state.depth=null;state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0;
       renderSelected();renderPositionHistoryDetail();
       await loadChart();
       document.getElementById('overview').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1154,6 +1155,7 @@ function drawChart(){
 }
 async function loadChart(){
   if(!state.selectedSymbol)return;
+  var requestSeq=++state.chartRequestSeq;
   el('chartTitle').textContent=state.selectedSymbol+' Perpetual'+(state.lqSnapshotAsOf?' · Entry Snapshot':'');
   renderLiquidityPanel();
   var s=encodeURIComponent(state.selectedSymbol),klinePath='/market/klines?symbol='+s+'&interval='+encodeURIComponent(state.interval)+'&limit=120';
@@ -1164,21 +1166,38 @@ async function loadChart(){
   var zonePath='/market/liquidity-zones?symbol='+s;
   if(state.lqSnapshotAsOf)zonePath+='&asof_ms='+Number(state.lqSnapshotAsOf);
   if(state.lqSnapshotEntryPrice)zonePath+='&reference_price='+encodeURIComponent(state.lqSnapshotEntryPrice);
+  var zoneKey=state.selectedSymbol+'|'+(state.lqSnapshotAsOf||'LIVE')+'|'+(state.lqSnapshotEntryPrice||'AUTO');
+  var zoneCacheFresh=!!(
+    state.lqZonesEnabled&&
+    state.liquidity&&
+    state.liquidityKey===zoneKey&&
+    (state.lqSnapshotAsOf||Date.now()-Number(state.liquidityFetchedAt||0)<60000)
+  );
+  var zonePromise=!state.lqZonesEnabled
+    ?Promise.resolve(null)
+    :(zoneCacheFresh?Promise.resolve(state.liquidity):getJSON(zonePath,12000));
   var results=await Promise.allSettled([
     getJSON(klinePath),
     getJSON('/market/ticker?symbol='+s),
     getJSON('/market/depth?symbol='+s+'&limit=20'),
-    state.lqZonesEnabled?getJSON(zonePath):Promise.resolve(null)
+    zonePromise
   ]);
-  var k=settledValue(results[0],null),t=settledValue(results[1],null),d=settledValue(results[2],null),liq=settledValue(results[3],null);
+  if(requestSeq!==state.chartRequestSeq)return;
+  var k=settledValue(results[0],null),t=settledValue(results[1],null),d=settledValue(results[2],null),liq=settledValue(results[3],zoneCacheFresh?state.liquidity:null);
   if(k)state.candles=k.candles||[];
   if(t)state.ticker=t;
   if(d)state.depth=d;
-  state.liquidity=liq;
+  if(liq){
+    state.liquidity=liq;
+    state.liquidityKey=zoneKey;
+    if(!zoneCacheFresh)state.liquidityFetchedAt=Date.now();
+  }
   drawChart();renderTicker();renderOrderBook();renderLiquidityPanel();
 }
-async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;state.liquidity=null;state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();renderLiquidityPanel();await loadChart()}
+async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0;state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();renderLiquidityPanel();await loadChart()}
 async function refresh(){
+  if(state.refreshBusy)return;
+  state.refreshBusy=true;
   try{
     var res=await Promise.allSettled([
       getJSON('/radar/latest'),
@@ -1230,6 +1249,7 @@ async function refresh(){
     if(state.selectedShadowParentId)await loadShadowSettlements(state.selectedShadowParentId,true);
     await loadChart();
   }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
+  finally{state.refreshBusy=false}
 }
 function controlToken(){
   return el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
@@ -1323,8 +1343,8 @@ if(el('marketSearch'))el('marketSearch').addEventListener('input',function(){sta
 document.querySelectorAll('.terminal-tab').forEach(function(b){b.onclick=function(){showTerminalTab(b.dataset.tab)}});
 showTerminalTab('positions');
 document.querySelectorAll('.interval-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.interval-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.interval=b.dataset.interval;loadChart()}});
-el('lqZonesBtn').onclick=function(){state.lqZonesEnabled=!state.lqZonesEnabled;if(!state.lqZonesEnabled)state.liquidity=null;renderLiquidityPanel();loadChart()};
-el('lqLiveBtn').onclick=function(){state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;state.liquidity=null;renderLiquidityPanel();loadChart()};
+el('lqZonesBtn').onclick=function(){state.lqZonesEnabled=!state.lqZonesEnabled;if(!state.lqZonesEnabled){state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0}renderLiquidityPanel();loadChart()};
+el('lqLiveBtn').onclick=function(){state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0;renderLiquidityPanel();loadChart()};
 document.querySelectorAll('.control-btn').forEach(function(b){b.onclick=function(){setMode(b.dataset.mode)}});
 el('armLive').onclick=function(){setLiveArm(true)};
 el('disarmLive').onclick=function(){setLiveArm(false)};
