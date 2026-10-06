@@ -226,7 +226,7 @@ def _net_at(
 def _price_return_pct(side: str, entry_market: float, market: float) -> float:
     if side == "LONG":
         return 100.0 * (market / entry_market - 1.0)
-    return 100.0 * (entry_market / market - 1.0)
+    return 100.0 * ((entry_market - market) / entry_market)
 
 
 def _run_cell(
