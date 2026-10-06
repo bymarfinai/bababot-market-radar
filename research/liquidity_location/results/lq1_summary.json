@@ -1,0 +1,40 @@
+{
+  "causality": {
+    "state_uses_only_bars_close_ms_lte_asof": true,
+    "synthetic_causality_test": "PASS",
+    "zone_birth_requires_right_bars_closed": true,
+    "zone_visible_only_when_born_ms_lte_asof": true
+  },
+  "contract": {
+    "entry_snapshot_only": true,
+    "expected_full_universe": 1236,
+    "outcome_threshold_optimization": false,
+    "symbols": 400,
+    "timeframes": [
+      "5m",
+      "15m",
+      "1h"
+    ],
+    "universe_rows": 1236
+  },
+  "coverage": {
+    "both_sides_pct": 94.9838,
+    "both_sides_rows": 1174,
+    "inside_demand_rows": 23,
+    "inside_supply_rows": 557,
+    "nearest_demand_pct": 99.8382,
+    "nearest_demand_rows": 1234,
+    "nearest_supply_pct": 95.1456,
+    "nearest_supply_rows": 1176,
+    "position_rows": 1236,
+    "symbol_errors": 0
+  },
+  "output_csv": "/app/data/lq1_full/lq1_entry_zone_features.csv",
+  "symbol_errors": {},
+  "version": "lq1-causal-structural-liquidity-v1",
+  "zone_candidates_total": {
+    "15m": 21964,
+    "1h": 11147,
+    "5m": 42751
+  }
+}
