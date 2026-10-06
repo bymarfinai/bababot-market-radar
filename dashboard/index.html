@@ -322,7 +322,7 @@ var state={
   shadowSettlements:{},selectedShadowParentId:null,
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
   ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
-  controlAuthVerified:false,controlBusy:false
+  controlAuthVerified:false,controlBusy:false,apiFailures:[]
 };
 function el(id){return document.getElementById(id)}
 function num(v,d){if(v===null||v===undefined||v==='')return '—';return Number(v).toFixed(d===undefined?2:d)}
@@ -336,9 +336,15 @@ function clsVerdict(v){v=String(v||'').toUpperCase();if(v==='APPROVE'||v==='LONG
 function badge(v){return '<span class="badge '+clsVerdict(v)+'">'+(v||'—')+'</span>'}
 function esc(s){return String(s===null||s===undefined?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 async function getJSON(path){
-  var r=await fetch(API+path,{cache:'no-store'});
-  if(!r.ok)throw new Error(path+' HTTP '+r.status);
-  return await r.json();
+  var controller=new AbortController();
+  var timer=setTimeout(function(){controller.abort()},5500);
+  try{
+    var r=await fetch(API+path,{cache:'no-store',signal:controller.signal});
+    if(!r.ok)throw new Error(path+' HTTP '+r.status);
+    return await r.json();
+  }finally{
+    clearTimeout(timer);
+  }
 }
 function settledValue(x,fallback){return x.status==='fulfilled'?x.value:fallback}
 
@@ -443,7 +449,9 @@ function renderTop(){
   el('stWr').textContent=run.win_rate_pct===null||run.win_rate_pct===undefined?'—':num(run.win_rate_pct,1)+'%';
   el('stReviews').textContent=a.total_reviews===undefined?'—':a.total_reviews;
   el('stAge').textContent=age(r.scan_finished_at_ms);
-  el('apiDot').className='dot ok';el('apiChip').textContent='API LIVE';
+  var apiFailCount=(state.apiFailures||[]).length;
+  el('apiDot').className=apiFailCount?'dot':'dot ok';
+  el('apiChip').textContent=apiFailCount?('API PARTIAL '+apiFailCount):'API LIVE';
   el('refreshChip').textContent='REFRESH '+(state.lastRefresh?tm(state.lastRefresh):'—');
   el('historyMeta').textContent=(h.signal_count===undefined?'—':h.signal_count)+' signals · '+(h.trade_event_count===undefined?'—':h.trade_event_count)+' events';
   el('sysDb').textContent=h.backend||'—';el('sysSignals').textContent=h.signal_count===undefined?'—':h.signal_count;el('sysEvents').textContent=h.trade_event_count===undefined?'—':h.trade_event_count;
@@ -1069,6 +1077,7 @@ async function refresh(){
       getJSON('/shadow/protection/settlement'),
       getJSON('/shadow/protection/runtime')
     ]);
+    state.apiFailures=res.map(function(x,i){return x.status==='rejected'?i:null}).filter(function(x){return x!==null});
     state.radar=settledValue(res[0],state.radar);
     state.paper=settledValue(res[1],state.paper);
     state.positions=(settledValue(res[2],{positions:state.positions}).positions||[]);
