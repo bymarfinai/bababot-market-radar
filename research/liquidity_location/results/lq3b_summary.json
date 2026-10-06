@@ -1,0 +1,210 @@
+{
+  "version": "lq3b-breakout-acceptance-retest-v1",
+  "contract": {
+    "cohort_rows": 102,
+    "cohort": "LONG entries inside FRESH 15m supply",
+    "raw_path": "Binance Vision USD-M daily aggTrades",
+    "coverage": "102/102",
+    "archive_errors": 0,
+    "acceptance_window_min": 5,
+    "retest_reclaim_window_min": 5,
+    "fee_rate_each_side": 0.0005,
+    "slippage_bps_each_side": 2,
+    "notional_usdt": 500,
+    "production_authority": "NONE",
+    "selection": "TRAIN only; no valid cell reached preregistered minimum 8 TRAIN entries"
+  },
+  "grid": {
+    "accept_buffers_pct": [
+      0,
+      0.05,
+      0.1
+    ],
+    "accept_holds_s": [
+      15,
+      30,
+      60
+    ],
+    "retest_bands_pct": [
+      0.05,
+      0.1,
+      0.15
+    ],
+    "retest_holds_s": [
+      15,
+      30
+    ],
+    "reclaims_pct": [
+      0.03,
+      0.05,
+      0.1
+    ],
+    "sls_pct": [
+      0.3,
+      0.4,
+      0.5
+    ],
+    "cells": 486
+  },
+  "cohort_mix": {
+    "GOOD": 19,
+    "BAD": 68,
+    "RTF": 15
+  },
+  "representative_rule": {
+    "accept_buffer_pct": 0.05,
+    "accept_hold_s": 15,
+    "retest_band_pct": 0.1,
+    "retest_hold_s": 15,
+    "reclaim_pct": 0.03,
+    "accept_wiggle_pct": 0.03,
+    "retest_lower_tolerance_pct": 0.03
+  },
+  "representative_funnel": {
+    "BASE": {
+      "n": 102,
+      "GOOD": 19,
+      "BAD": 68,
+      "RTF": 15
+    },
+    "CROSS": {
+      "n": 24,
+      "GOOD": 11,
+      "BAD": 4,
+      "RTF": 9
+    },
+    "ACCEPT": {
+      "n": 12,
+      "GOOD": 7,
+      "BAD": 2,
+      "RTF": 3
+    },
+    "RETEST": {
+      "n": 11,
+      "GOOD": 6,
+      "BAD": 2,
+      "RTF": 3
+    },
+    "HOLD": {
+      "n": 10,
+      "GOOD": 6,
+      "BAD": 2,
+      "RTF": 2
+    },
+    "RECLAIM": {
+      "n": 9,
+      "GOOD": 6,
+      "BAD": 1,
+      "RTF": 2
+    },
+    "reclaim_by_split": {
+      "TRAIN": {
+        "n": 7,
+        "GOOD": 5,
+        "BAD": 1,
+        "RTF": 1
+      },
+      "VALIDATION": {
+        "n": 1,
+        "GOOD": 1,
+        "BAD": 0,
+        "RTF": 0
+      },
+      "RESERVE": {
+        "n": 1,
+        "GOOD": 0,
+        "BAD": 0,
+        "RTF": 1
+      }
+    }
+  },
+  "representative_economics": [
+    {
+      "sl_pct": 0.3,
+      "TRAIN": {
+        "entries": 7,
+        "wr_pct": 57.14,
+        "net_pnl": 4.96,
+        "profit_factor": 2.036
+      },
+      "VALIDATION": {
+        "entries": 1,
+        "wr_pct": 100,
+        "net_pnl": 5.5
+      },
+      "RESERVE": {
+        "entries": 1,
+        "wr_pct": 0,
+        "net_pnl": -2.26
+      },
+      "ALL": {
+        "entries": 9,
+        "wr_pct": 55.56,
+        "net_pnl": 8.2,
+        "profit_factor": 2.163,
+        "median_time_to_entry_s": 117.1,
+        "median_post_entry_mfe_pct": 0.757,
+        "post_entry_mfe_ge_0p5_pct": 66.67,
+        "post_entry_mfe_ge_1_pct": 44.44
+      }
+    },
+    {
+      "sl_pct": 0.4,
+      "TRAIN": {
+        "entries": 7,
+        "wr_pct": 57.14,
+        "net_pnl": 4.57,
+        "profit_factor": 1.884
+      },
+      "VALIDATION": {
+        "entries": 1,
+        "wr_pct": 100,
+        "net_pnl": 5.5
+      },
+      "RESERVE": {
+        "entries": 1,
+        "wr_pct": 0,
+        "net_pnl": -3.15
+      },
+      "ALL": {
+        "entries": 9,
+        "wr_pct": 55.56,
+        "net_pnl": 6.92,
+        "profit_factor": 1.831
+      }
+    },
+    {
+      "sl_pct": 0.5,
+      "TRAIN": {
+        "entries": 7,
+        "wr_pct": 57.14,
+        "net_pnl": 3.98,
+        "profit_factor": 1.691
+      },
+      "VALIDATION": {
+        "entries": 1,
+        "wr_pct": 100,
+        "net_pnl": 5.5
+      },
+      "RESERVE": {
+        "entries": 1,
+        "wr_pct": 0,
+        "net_pnl": -2.26
+      },
+      "ALL": {
+        "entries": 9,
+        "wr_pct": 55.56,
+        "net_pnl": 7.22,
+        "profit_factor": 1.9
+      }
+    }
+  ],
+  "robustness": {
+    "max_train_entries_any_cell": 7,
+    "cells_train_entries_ge_8": 0,
+    "neighboring_structural_configs_with_all_entries_ge_8_good_ge_5_bad_le_2_at_sl_0p3": 48,
+    "positive_in_train_validation_reserve_cells": 0
+  },
+  "verdict": "PRECISION_SIGNAL_FOUND_PRODUCTION_HOLD",
+  "next_stage": "LQ-3C Open-Lane / Outside-Fresh-Supply Anatomy"
+}
