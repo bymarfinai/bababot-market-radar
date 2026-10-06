@@ -11,7 +11,7 @@ import threading
 import zipfile
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -132,10 +132,15 @@ def _day(ms: int) -> str:
     return datetime.fromtimestamp(ms / 1000.0, timezone.utc).date().isoformat()
 
 
-def _needed_days(opened_ms: int, horizon_min: int) -> list[str]:
-    start = _day(opened_ms)
-    end = _day(opened_ms + horizon_min * 60_000)
-    return [start] if start == end else [start, end]
+def _needed_days(start_ms: int, end_ms: int) -> list[str]:
+    start = datetime.fromtimestamp(start_ms / 1000.0, timezone.utc).date()
+    end = datetime.fromtimestamp(end_ms / 1000.0, timezone.utc).date()
+    out: list[str] = []
+    day = start
+    while day <= end:
+        out.append(day.isoformat())
+        day += timedelta(days=1)
+    return out
 
 
 def _download_aggtrades(symbol: str, day: str) -> list[tuple[int, float]]:
@@ -172,14 +177,15 @@ def _download_aggtrades(symbol: str, day: str) -> list[tuple[int, float]]:
 def _load_paths(
     positions: list[dict[str, Any]],
     *,
-    horizon_min: int,
     workers: int,
 ) -> tuple[dict[str, list[tuple[int, float]]], list[str]]:
     groups: dict[tuple[str, str], list[str]] = defaultdict(list)
     by_id = {str(p["position_id"]): p for p in positions}
     for p in positions:
         pid = str(p["position_id"])
-        for day in _needed_days(int(p["opened_at_ms"]), horizon_min):
+        opened = int(p["opened_at_ms"])
+        closed = int(p["closed_at_ms"])
+        for day in _needed_days(opened, closed):
             groups[(str(p["symbol"]), day)].append(pid)
 
     archives: dict[tuple[str, str], list[tuple[int, float]]] = {}
@@ -199,9 +205,9 @@ def _load_paths(
     paths: dict[str, list[tuple[int, float]]] = {}
     for pid, p in by_id.items():
         opened = int(p["opened_at_ms"])
-        end = opened + horizon_min * 60_000
+        end = int(p["closed_at_ms"])
         rows: list[tuple[int, float]] = []
-        for day in _needed_days(opened, horizon_min):
+        for day in _needed_days(opened, end):
             rows.extend(archives.get((str(p["symbol"]), day), []))
         rows = sorted((ts, px) for ts, px in rows if opened < ts <= end)
         paths[pid] = rows
@@ -359,13 +365,14 @@ def main() -> None:
     parser.add_argument("--data-dir", default="/app/data")
     parser.add_argument("--output-dir", default=str(Path(__file__).resolve().parent / "results"))
     parser.add_argument("--workers", type=int, default=6)
-    parser.add_argument("--horizon-min", type=int, default=HORIZON_MIN)
+    # Primary RD-0B is deliberately bounded by each trade's original
+    # historical close timestamp. This isolates the effect of direction and
+    # TP/SL without inventing a new holding period.
     args = parser.parse_args()
 
     positions = _load_555(Path(args.data_dir))
     paths, errors = _load_paths(
         positions,
-        horizon_min=args.horizon_min,
         workers=args.workers,
     )
     if errors:
@@ -464,9 +471,9 @@ def main() -> None:
             "notional_usdt": NOTIONAL_USDT,
             "fee_rate_per_side": FEE_RATE,
             "slippage_bps_per_side": SLIPPAGE_BPS,
-            "horizon_min": args.horizon_min,
+            "holding_window": "original opened_at_ms -> original closed_at_ms",
             "path": "Binance USD-M archived aggregate trades; true first-touch ordering",
-            "fallback": "last aggregate trade within horizon",
+            "fallback": "last aggregate trade at/before the original historical close",
             "price_lane": "TP/SL thresholds are market-price returns; reported PnL includes costs",
             "net_lane": "TP/SL thresholds are net PnL % of $500 after fees/slippage",
         },
