@@ -229,7 +229,7 @@ def _reduce_fraction() -> float:
 def _fee_rate() -> float:
     return max(
         0.0,
-        min(float(os.environ.get("PAPER_FEE_RATE", "0.00075")), 0.01),
+        min(float(os.environ.get("PAPER_FEE_RATE", "0.0005")), 0.01),
     )
 
 
