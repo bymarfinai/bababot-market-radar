@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -853,7 +854,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 )
                 return
             try:
-                client = BinancePublicClient(timeout=8.0, retries=2)
+                client = BinancePublicClient(timeout=5.0, retries=1)
                 row = client.get(
                     "/fapi/v1/ticker/24hr",
                     {"symbol": symbol},
@@ -1029,7 +1030,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 asof_ms = (
                     int(asof_raw)
                     if asof_raw not in (None, "")
-                    else client.server_time_ms()
+                    else int(time.time() * 1000)
                 )
                 reference_price = (
                     float(reference_raw)
