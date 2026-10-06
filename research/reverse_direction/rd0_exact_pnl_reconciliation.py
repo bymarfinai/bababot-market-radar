@@ -15,6 +15,7 @@ from market_radar.persistence import _postgres_connect
 
 RD0_VERSION = "rd0-exact-pnl-reconciliation-v1"
 EXPECTED_LONG_UNIVERSE = 1236
+EXPECTED_WRONG_DIRECTION = 555
 DEFAULT_NOTIONAL_USDT = 500.0
 BINANCE_REGULAR_TAKER_FEE = 0.0005
 BINANCE_BNB_TAKER_FEE = 0.00045
@@ -554,6 +555,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", default="/app/data")
     ap.add_argument(
+        "--scope",
+        choices=("wrong_direction", "all_long"),
+        default="wrong_direction",
+        help="RD-0 defaults to the frozen 555 TRUE_WRONG_DIRECTION LONG trades.",
+    )
+    ap.add_argument(
         "--output-dir",
         default=str(Path(__file__).resolve().parent / "results"),
     )
@@ -562,6 +569,18 @@ def main() -> None:
     universe = _load_universe(Path(args.data_dir))
     ids = [r["position_id"] for r in universe]
     positions = _load_positions(ids)
+    if args.scope == "wrong_direction":
+        ids = [
+            pid for pid in ids
+            if str(positions[pid].get("outcome_label") or "")
+            == "TRUE_WRONG_DIRECTION"
+        ]
+        if len(ids) != EXPECTED_WRONG_DIRECTION:
+            raise RuntimeError(
+                f"RD-0 wrong-direction scope expected "
+                f"{EXPECTED_WRONG_DIRECTION}, got {len(ids)}"
+            )
+        positions = {pid: positions[pid] for pid in ids}
     orders = _load_orders(ids)
 
     detail = [
@@ -570,8 +589,17 @@ def main() -> None:
     ]
     summary = _summary(detail)
 
-    if summary["coverage"]["trade_n"] != EXPECTED_LONG_UNIVERSE:
-        raise RuntimeError("RD-0 universe drift")
+    expected_n = (
+        EXPECTED_WRONG_DIRECTION
+        if args.scope == "wrong_direction"
+        else EXPECTED_LONG_UNIVERSE
+    )
+    if summary["coverage"]["trade_n"] != expected_n:
+        raise RuntimeError(
+            f"RD-0 universe drift: expected {expected_n}, "
+            f"got {summary['coverage']['trade_n']}"
+        )
+    summary["scope"] = args.scope
     if summary["coverage"]["raw_symmetry_max_abs_error"] > 1e-8:
         raise RuntimeError("raw direction inversion symmetry failed")
     if summary["coverage"]["historical_replay_max_abs_error"] > 0.02:
