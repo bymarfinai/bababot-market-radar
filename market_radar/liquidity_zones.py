@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import math
 import statistics
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Any
 
@@ -9,6 +12,9 @@ from .binance import BinancePublicClient
 
 
 LIQUIDITY_ZONE_VERSION = "lq-ui1-causal-zones-v1"
+_CACHE_TTL_SECONDS = 300.0
+_CACHE_LOCK = threading.Lock()
+_SNAPSHOT_CACHE: dict[tuple[str, int, float | None], tuple[float, dict[str, Any]]] = {}
 
 TF_CONFIG: dict[str, dict[str, float | int]] = {
     "5m": {
@@ -337,13 +343,35 @@ def liquidity_zone_snapshot(
     if asof_ms <= 0:
         raise ValueError("asof_ms must be positive")
 
-    client = client or BinancePublicClient(timeout=8.0, retries=2)
+    client = client or BinancePublicClient(timeout=5.0, retries=1)
+    reference_key = (
+        round(float(reference_price), 12)
+        if reference_price is not None
+        else None
+    )
+    cache_key = (symbol, asof_ms // 300_000, reference_key)
+    now = time.monotonic()
+    with _CACHE_LOCK:
+        cached = _SNAPSHOT_CACHE.get(cache_key)
+        if cached is not None and now - cached[0] <= _CACHE_TTL_SECONDS:
+            return cached[1]
+
     bars_by_tf: dict[str, list[Bar]] = {}
     zones: list[dict[str, Any]] = []
 
-    for timeframe in ("5m", "15m", "1h"):
-        bars = _fetch_closed_bars(client, symbol, timeframe, asof_ms)
-        bars_by_tf[timeframe] = bars
+    with ThreadPoolExecutor(max_workers=3, thread_name_prefix="lq-zones") as pool:
+        futures = {
+            timeframe: pool.submit(
+                _fetch_closed_bars,
+                client,
+                symbol,
+                timeframe,
+                asof_ms,
+            )
+            for timeframe in ("5m", "15m", "1h")
+        }
+        for timeframe in ("5m", "15m", "1h"):
+            bars_by_tf[timeframe] = futures[timeframe].result()
 
     if reference_price is None:
         five_minute = bars_by_tf["5m"]
@@ -394,7 +422,7 @@ def liquidity_zone_snapshot(
         if candidates:
             nearest[side.lower()] = candidates[0]
 
-    return {
+    result = {
         "version": LIQUIDITY_ZONE_VERSION,
         "symbol": symbol,
         "asof_ms": asof_ms,
@@ -405,3 +433,11 @@ def liquidity_zone_snapshot(
         "zones": zones,
         "causal": True,
     }
+    with _CACHE_LOCK:
+        _SNAPSHOT_CACHE[cache_key] = (now, result)
+        if len(_SNAPSHOT_CACHE) > 512:
+            cutoff = now - _CACHE_TTL_SECONDS
+            stale = [key for key, value in _SNAPSHOT_CACHE.items() if value[0] < cutoff]
+            for key in stale:
+                _SNAPSHOT_CACHE.pop(key, None)
+    return result
