@@ -135,6 +135,9 @@ def runtime_preflight() -> dict[str, Any]:
     observer_enabled = _bool_env("PP_V4_STAGE1_ENABLED", False)
     observer_start = _int_env("PP_V4_STAGE1_START_MS", 0)
     paper_enabled = _bool_env("PAPER_TRADING_ENABLED", False)
+    health_isolation_enabled = _bool_env(
+        "PTL3_HEALTH_OBSERVER_ONLY_ENABLED", False
+    )
     live_enabled = _bool_env("LIVE_TRADING_ENABLED", False)
     detector_policy = os.environ.get(
         "PAPER_LONG_DETECTOR_POLICY", "generic"
@@ -153,6 +156,8 @@ def runtime_preflight() -> dict[str, Any]:
         reasons.append("paper_trading_disabled")
     if detector_policy != "stage3c7a":
         reasons.append("paper_long_detector_not_stage3c7a")
+    if not health_isolation_enabled:
+        reasons.append("ptl3_health_isolation_disabled")
     if live_enabled:
         reasons.append("live_trading_must_remain_disabled")
 
@@ -166,6 +171,7 @@ def runtime_preflight() -> dict[str, Any]:
         "pp_v4_observer_start_ms": observer_start,
         "paper_trading_enabled": paper_enabled,
         "paper_long_detector_policy": detector_policy,
+        "ptl3_health_observer_only_enabled": health_isolation_enabled,
         "live_trading_enabled": live_enabled,
         "execution_authority": EXECUTION_AUTHORITY,
     }

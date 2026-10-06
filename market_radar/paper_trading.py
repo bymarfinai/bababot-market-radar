@@ -28,11 +28,19 @@ from .paper_store import (
     list_pending_orders,
     list_unacted_lifecycle_actions,
     mark_order,
+    record_health_observer_decision,
     update_position_reduce,
 )
 from .profit_discriminator_stage6 import (
     finalize_stage6_discriminator_position,
     process_stage6_discriminator_cycle,
+)
+from .parallel_protection_shadow import (
+    BRANCH_KEYS,
+    audit_shadow_parity,
+    get_shadow_parent,
+    list_shadow_branches,
+    record_shadow_integrity_issue,
 )
 from .parallel_protection_shadow_runtime import (
     process_source_lifecycle as process_protection_shadow_source_lifecycle,
@@ -41,6 +49,7 @@ from .parallel_protection_shadow_runtime import (
 )
 
 PAPER_TRADING_VERSION = "stage13-v2-event-driven"
+PTL3_HEALTH_ISOLATION_VERSION = "ptl3-v1-health-observer-only"
 _loop_lock = threading.Lock()
 _entry_handoff_lock = threading.Lock()
 _loop_started = False
@@ -49,6 +58,143 @@ _loop_started = False
 def paper_trading_enabled() -> bool:
     value = os.environ.get("PAPER_TRADING_ENABLED", "false").strip().lower()
     return value in {"1", "true", "yes", "on"}
+
+
+def health_observer_only_enabled() -> bool:
+    value = os.environ.get(
+        "PTL3_HEALTH_OBSERVER_ONLY_ENABLED", "false"
+    ).strip().lower()
+    return value in {"1", "true", "yes", "on"}
+
+
+def _position_metadata(position: dict[str, Any]) -> dict[str, Any]:
+    raw = position.get("raw_json")
+    if isinstance(raw, dict):
+        return dict(raw)
+    if not raw:
+        return {}
+    try:
+        value = json.loads(str(raw))
+    except Exception:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _health_observer_isolation_target(
+    position: dict[str, Any],
+) -> dict[str, Any]:
+    """Return observer-only eligibility for one source PAPER position.
+
+    Health loses order authority only when the source is already enrolled in a
+    healthy PT-L2 Stage3C7A LONG shadow experiment. Any uncertainty fails open
+    to the legacy Health execution path.
+    """
+    base = {
+        "isolate": False,
+        "isolation_version": PTL3_HEALTH_ISOLATION_VERSION,
+        "position_id": str(position.get("position_id") or ""),
+    }
+    if not health_observer_only_enabled():
+        return {**base, "reason": "isolation_disabled"}
+
+    if str(position.get("mode") or "PAPER").upper() != "PAPER":
+        return {**base, "reason": "source_mode_not_paper"}
+    if str(position.get("side") or "").upper() != "LONG":
+        return {**base, "reason": "source_side_not_long"}
+
+    metadata = _position_metadata(position)
+    if str(metadata.get("paper_entry_policy") or "").lower() != "stage3c7a":
+        return {**base, "reason": "source_policy_not_stage3c7a"}
+
+    try:
+        parent = get_shadow_parent(str(position["position_id"]))
+    except Exception as exc:
+        return {
+            **base,
+            "reason": "shadow_parent_lookup_failed",
+            "error": f"{type(exc).__name__}: {str(exc)[:300]}",
+        }
+    if parent is None:
+        return {**base, "reason": "shadow_parent_missing"}
+    if str(parent.get("status") or "").upper() != "OPEN":
+        return {
+            **base,
+            "reason": "shadow_parent_not_open",
+            "shadow_parent_id": parent.get("parent_id"),
+        }
+    if str(parent.get("execution_authority") or "").upper() != "NONE":
+        return {
+            **base,
+            "reason": "shadow_authority_not_none",
+            "shadow_parent_id": parent.get("parent_id"),
+        }
+
+    parent_id = str(parent["parent_id"])
+    try:
+        branches = list_shadow_branches(parent_id)
+        open_branches = [
+            row for row in branches
+            if str(row.get("status") or "").upper() == "OPEN"
+        ]
+    except Exception as exc:
+        return {
+            **base,
+            "reason": "shadow_branch_lookup_failed",
+            "shadow_parent_id": parent_id,
+            "error": f"{type(exc).__name__}: {str(exc)[:300]}",
+        }
+    branch_keys = {str(row.get("branch_key") or "") for row in branches}
+    if branch_keys != set(BRANCH_KEYS):
+        return {
+            **base,
+            "reason": "shadow_branch_contract_incomplete",
+            "shadow_parent_id": parent_id,
+            "branch_keys": sorted(branch_keys),
+        }
+    if any(
+        str(row.get("execution_authority") or "").upper() != "NONE"
+        for row in branches
+    ):
+        return {
+            **base,
+            "reason": "shadow_branch_authority_not_none",
+            "shadow_parent_id": parent_id,
+        }
+    if not open_branches:
+        return {
+            **base,
+            "reason": "shadow_branches_terminal",
+            "shadow_parent_id": parent_id,
+        }
+
+    try:
+        parity = audit_shadow_parity(parent_id)
+    except Exception as exc:
+        return {
+            **base,
+            "reason": "shadow_parity_audit_failed",
+            "shadow_parent_id": parent_id,
+            "error": f"{type(exc).__name__}: {str(exc)[:300]}",
+        }
+    if not bool(parity.get("comparison_eligible")):
+        return {
+            **base,
+            "reason": "shadow_parity_invalid",
+            "shadow_parent_id": parent_id,
+            "parity_status": parity.get("status"),
+            "parity_issue_types": parity.get("issue_types") or [],
+        }
+
+    return {
+        **base,
+        "isolate": True,
+        "reason": "ptl3_health_observer_only",
+        "shadow_parent_id": parent_id,
+        "open_branch_count": len(open_branches),
+        "parity_status": parity.get("status"),
+        "paper_entry_policy": "stage3c7a",
+        "side": "LONG",
+    }
 
 
 def _notional_usdt() -> float:
@@ -444,9 +590,17 @@ def sync_entry_orders() -> dict[str, int]:
 
 def sync_lifecycle_orders() -> dict[str, int]:
     if not paper_trading_enabled():
-        return {"queued": 0}
+        return {
+            "queued": 0,
+            "health_observer_only": 0,
+            "health_observer_hard_risk": 0,
+            "health_isolation_fail_open": 0,
+        }
 
     queued = 0
+    observer_only = 0
+    observer_hard_risk = 0
+    isolation_fail_open = 0
     latest_by_position: dict[str, dict[str, Any]] = {}
     for item in list_unacted_lifecycle_actions(limit=200):
         position_id = str(item["position_id"])
@@ -463,6 +617,57 @@ def sync_lifecycle_orders() -> dict[str, int]:
         position = get_position(str(item["position_id"]))
         if not position or position.get("status") not in {"OPEN", "REDUCED"}:
             continue
+
+        isolation = _health_observer_isolation_target(position)
+        if isolation.get("isolate"):
+            parent_id = str(isolation["shadow_parent_id"])
+            try:
+                record_health_observer_decision(
+                    evaluation=item,
+                    shadow_parent_id=parent_id,
+                    isolation_version=PTL3_HEALTH_ISOLATION_VERSION,
+                    reason="stage12_health_observer_only",
+                    payload={
+                        "health_score": item.get("health_score"),
+                        "deterministic_action": item.get("deterministic_action"),
+                        "ai_action": item.get("ai_action"),
+                        "ai_confidence": item.get("ai_confidence"),
+                        "would_action": action,
+                        "hard_risk_triggered": bool(
+                            item.get("hard_risk_triggered")
+                        ),
+                        "candle_close_time_ms": item.get(
+                            "candle_close_time_ms"
+                        ),
+                        "lifecycle_version": item.get("lifecycle_version"),
+                        "shadow_parent_id": parent_id,
+                        "open_branch_count": isolation.get(
+                            "open_branch_count"
+                        ),
+                        "parity_status": isolation.get("parity_status"),
+                    },
+                )
+            except Exception as exc:
+                # Fail open to the legacy Health order path. A failed audit write
+                # must never silently remove source-position safety authority.
+                isolation_fail_open += 1
+                try:
+                    record_shadow_integrity_issue(
+                        parent_id=parent_id,
+                        issue_type="PTL3_HEALTH_ISOLATION_PERSIST_FAILED",
+                        source_event_id=str(item["evaluation_id"]),
+                        details={
+                            "error": f"{type(exc).__name__}: {str(exc)[:500]}",
+                            "would_action": action,
+                        },
+                    )
+                except Exception:
+                    pass
+            else:
+                observer_only += 1
+                if bool(item.get("hard_risk_triggered")):
+                    observer_hard_risk += 1
+                continue
 
         if action == "REDUCE" and position.get("status") == "REDUCED":
             # Only one 50% risk reduction per paper position.
@@ -497,7 +702,12 @@ def sync_lifecycle_orders() -> dict[str, int]:
         )
         queued += 1
 
-    return {"queued": queued}
+    return {
+        "queued": queued,
+        "health_observer_only": observer_only,
+        "health_observer_hard_risk": observer_hard_risk,
+        "health_isolation_fail_open": isolation_fail_open,
+    }
 
 
 def _execute_open(

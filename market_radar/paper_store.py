@@ -50,6 +50,30 @@ create index if not exists idx_paper_orders_status_time
 on paper_orders(status, created_at_ms);
 create index if not exists idx_paper_orders_position
 on paper_orders(position_id, created_at_ms);
+
+create table if not exists health_observer_decisions (
+    evaluation_id text primary key,
+    position_id text not null,
+    shadow_parent_id text not null,
+    observed_at_ms integer not null,
+    candle_close_time_ms integer not null,
+    would_action text not null check (would_action in ('REDUCE','CLOSE')),
+    deterministic_action text not null,
+    ai_action text,
+    ai_confidence real,
+    health_score real not null,
+    unrealized_pnl_pct real,
+    mfe_pct real,
+    mae_pct real,
+    hard_risk_triggered integer not null default 0,
+    isolation_version text not null,
+    reason text not null,
+    payload_json text not null default '{}'
+);
+create index if not exists idx_health_observer_position_time
+on health_observer_decisions(position_id, candle_close_time_ms desc);
+create index if not exists idx_health_observer_action_time
+on health_observer_decisions(would_action, candle_close_time_ms desc);
 """
 
 POSTGRES_SCHEMA = """
@@ -78,6 +102,30 @@ create index if not exists idx_paper_orders_status_time
 on paper_orders(status, created_at_ms);
 create index if not exists idx_paper_orders_position
 on paper_orders(position_id, created_at_ms);
+
+create table if not exists health_observer_decisions (
+    evaluation_id text primary key,
+    position_id text not null,
+    shadow_parent_id text not null,
+    observed_at_ms bigint not null,
+    candle_close_time_ms bigint not null,
+    would_action text not null check (would_action in ('REDUCE','CLOSE')),
+    deterministic_action text not null,
+    ai_action text,
+    ai_confidence double precision,
+    health_score double precision not null,
+    unrealized_pnl_pct double precision,
+    mfe_pct double precision,
+    mae_pct double precision,
+    hard_risk_triggered boolean not null default false,
+    isolation_version text not null,
+    reason text not null,
+    payload_json text not null default '{}'
+);
+create index if not exists idx_health_observer_position_time
+on health_observer_decisions(position_id, candle_close_time_ms desc);
+create index if not exists idx_health_observer_action_time
+on health_observer_decisions(would_action, candle_close_time_ms desc);
 """
 
 
@@ -647,6 +695,115 @@ def close_position(
             )
 
 
+def record_health_observer_decision(
+    *,
+    evaluation: dict[str, Any],
+    shadow_parent_id: str,
+    isolation_version: str,
+    reason: str,
+    payload: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Persist an idempotent Health would-action without creating a paper order."""
+    initialize_paper_store()
+    now_ms = int(time.time() * 1000)
+    values = (
+        str(evaluation["evaluation_id"]),
+        str(evaluation["position_id"]),
+        str(shadow_parent_id),
+        now_ms,
+        int(evaluation["candle_close_time_ms"]),
+        str(evaluation["final_action"]).upper(),
+        str(evaluation["deterministic_action"]).upper(),
+        evaluation.get("ai_action"),
+        evaluation.get("ai_confidence"),
+        float(evaluation["health_score"]),
+        evaluation.get("unrealized_pnl_pct"),
+        evaluation.get("mfe_pct"),
+        evaluation.get("mae_pct"),
+        bool(evaluation.get("hard_risk_triggered")),
+        str(isolation_version),
+        str(reason),
+        json.dumps(payload or {}, sort_keys=True, separators=(",", ":")),
+    )
+    fields = (
+        "evaluation_id", "position_id", "shadow_parent_id", "observed_at_ms",
+        "candle_close_time_ms", "would_action", "deterministic_action",
+        "ai_action", "ai_confidence", "health_score", "unrealized_pnl_pct",
+        "mfe_pct", "mae_pct", "hard_risk_triggered", "isolation_version",
+        "reason", "payload_json",
+    )
+
+    if persistence_backend() == "sqlite":
+        with _sqlite_connect(database_path()) as conn:
+            placeholders = ",".join("?" for _ in fields)
+            updates = ",".join(
+                f"{field}=excluded.{field}"
+                for field in fields
+                if field != "evaluation_id"
+            )
+            conn.execute(
+                f"""insert into health_observer_decisions ({",".join(fields)})
+                    values ({placeholders})
+                    on conflict(evaluation_id) do update set {updates}""",
+                values,
+            )
+            row = conn.execute(
+                "select * from health_observer_decisions where evaluation_id=?",
+                (str(evaluation["evaluation_id"]),),
+            ).fetchone()
+            return dict(row)
+
+    with _postgres_connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            placeholders = ",".join("%s" for _ in fields)
+            updates = ",".join(
+                f"{field}=excluded.{field}"
+                for field in fields
+                if field != "evaluation_id"
+            )
+            cur.execute(
+                f"""insert into health_observer_decisions ({",".join(fields)})
+                    values ({placeholders})
+                    on conflict(evaluation_id) do update set {updates}
+                    returning *""",
+                values,
+            )
+            return dict(cur.fetchone())
+
+
+def list_health_observer_decisions(
+    *,
+    position_id: str | None = None,
+    limit: int = 100,
+) -> list[dict[str, Any]]:
+    initialize_paper_store()
+    safe_limit = max(1, min(int(limit), 500))
+    query = "select * from health_observer_decisions"
+    params: list[Any] = []
+    if position_id:
+        query += " where position_id=?"
+        params.append(str(position_id))
+    query += " order by candle_close_time_ms desc, observed_at_ms desc limit ?"
+    params.append(safe_limit)
+
+    if persistence_backend() == "sqlite":
+        with _sqlite_connect(database_path()) as conn:
+            rows = conn.execute(query, tuple(params)).fetchall()
+            out = [dict(row) for row in rows]
+    else:
+        with _postgres_connect() as conn:
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                cur.execute(query.replace("?", "%s"), tuple(params))
+                out = [dict(row) for row in cur.fetchall()]
+
+    for row in out:
+        try:
+            row["payload"] = json.loads(row.get("payload_json") or "{}")
+        except Exception:
+            row["payload"] = {}
+    return out
+
+
 def list_unacted_lifecycle_actions(limit: int = 100) -> list[dict[str, Any]]:
     initialize_paper_store()
     safe_limit = max(1, min(int(limit), 500))
@@ -656,6 +813,8 @@ def list_unacted_lifecycle_actions(limit: int = 100) -> list[dict[str, Any]]:
         join positions p on p.position_id=e.position_id
         left join paper_orders o
           on o.source_type='LIFECYCLE' and o.source_id=e.evaluation_id
+        left join health_observer_decisions h
+          on h.evaluation_id=e.evaluation_id
         where e.evaluation_id = (
               select e2.evaluation_id
               from position_evaluations e2
@@ -667,6 +826,7 @@ def list_unacted_lifecycle_actions(limit: int = 100) -> list[dict[str, Any]]:
           and p.mode='PAPER'
           and p.status in ('OPEN','REDUCED')
           and o.order_id is null
+          and h.evaluation_id is null
         order by e.candle_close_time_ms asc
         limit ?
     """
@@ -728,6 +888,21 @@ def paper_summary() -> dict[str, Any]:
         "fees": """
             select coalesce(sum(fee),0) from paper_orders
             where status='FILLED'
+        """,
+        "health_observer_decisions": """
+            select count(*) from health_observer_decisions
+        """,
+        "health_would_reduce": """
+            select count(*) from health_observer_decisions
+            where would_action='REDUCE'
+        """,
+        "health_would_close": """
+            select count(*) from health_observer_decisions
+            where would_action='CLOSE'
+        """,
+        "health_hard_risk_observed": """
+            select count(*) from health_observer_decisions
+            where hard_risk_triggered
         """,
     }
     values: dict[str, Any] = {}
