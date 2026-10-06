@@ -23,6 +23,7 @@ from .execution_handoff import (
 from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
+from .liquidity_zones import liquidity_zone_snapshot
 from .paper_store import list_health_observer_decisions, list_paper_orders, paper_summary
 from .parallel_protection_shadow_ui import contract_definition, protection_shadow_snapshot
 from .parallel_protection_shadow_adapters import adapter_contract
@@ -940,8 +941,16 @@ class RadarReadHandler(BaseHTTPRequestHandler):
             interval = str(query.get("interval", ["5m"])[0] or "5m").strip()
             try:
                 limit = int(query.get("limit", ["120"])[0])
+                start_time_raw = query.get("start_time_ms", [None])[0]
+                end_time_raw = query.get("end_time_ms", [None])[0]
+                start_time_ms = int(start_time_raw) if start_time_raw not in (None, "") else None
+                end_time_ms = int(end_time_raw) if end_time_raw not in (None, "") else None
             except ValueError:
-                limit = 120
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_kline_window"},
+                )
+                return
 
             allowed_intervals = {"1m", "5m", "15m", "1h", "4h"}
             if not symbol:
@@ -960,11 +969,23 @@ class RadarReadHandler(BaseHTTPRequestHandler):
 
             try:
                 client = BinancePublicClient(timeout=8.0, retries=2)
-                rows = client.klines(
-                    symbol=symbol,
-                    interval=interval,
-                    limit=limit,
-                )
+                if start_time_ms is None and end_time_ms is None:
+                    rows = client.klines(
+                        symbol=symbol,
+                        interval=interval,
+                        limit=limit,
+                    )
+                else:
+                    params: dict[str, Any] = {
+                        "symbol": symbol,
+                        "interval": interval,
+                        "limit": limit,
+                    }
+                    if start_time_ms is not None:
+                        params["startTime"] = start_time_ms
+                    if end_time_ms is not None:
+                        params["endTime"] = end_time_ms
+                    rows = client.get("/fapi/v1/klines", params)
                 candles = [
                     {
                         "open_time_ms": int(row[0]),
@@ -992,6 +1013,45 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                 self._json(
                     HTTPStatus.BAD_GATEWAY,
                     {"error": "klines_fetch_failed", "detail": str(exc)},
+                )
+            return
+
+        if parsed.path == "/market/liquidity-zones":
+            query = parse_qs(parsed.query)
+            symbol = str(query.get("symbol", [""])[0] or "").strip().upper()
+            asof_raw = query.get("asof_ms", [None])[0]
+            reference_raw = query.get("reference_price", [None])[0]
+            if not symbol:
+                self._json(HTTPStatus.BAD_REQUEST, {"error": "symbol_required"})
+                return
+            try:
+                client = BinancePublicClient(timeout=8.0, retries=2)
+                asof_ms = (
+                    int(asof_raw)
+                    if asof_raw not in (None, "")
+                    else client.server_time_ms()
+                )
+                reference_price = (
+                    float(reference_raw)
+                    if reference_raw not in (None, "")
+                    else None
+                )
+                snapshot = liquidity_zone_snapshot(
+                    symbol=symbol,
+                    asof_ms=asof_ms,
+                    reference_price=reference_price,
+                    client=client,
+                )
+                self._json(HTTPStatus.OK, snapshot)
+            except ValueError as exc:
+                self._json(
+                    HTTPStatus.BAD_REQUEST,
+                    {"error": "invalid_liquidity_zone_request", "detail": str(exc)},
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.BAD_GATEWAY,
+                    {"error": "liquidity_zone_fetch_failed", "detail": str(exc)},
                 )
             return
 
