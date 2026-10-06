@@ -24,6 +24,7 @@ class PTL2ParallelProtectionReadinessTests(unittest.TestCase):
             "PP_V4_STAGE1_START_MS": "1000",
             "PAPER_TRADING_ENABLED": "true",
             "PAPER_LONG_DETECTOR_POLICY": "stage3c7a",
+            "PTL3_HEALTH_OBSERVER_ONLY_ENABLED": "true",
             "LIVE_TRADING_ENABLED": "false",
         }
 
@@ -76,6 +77,14 @@ class PTL2ParallelProtectionReadinessTests(unittest.TestCase):
                 self.assertIn(
                     "observer_shadow_boundary_mismatch", blocked["reasons"]
                 )
+
+    def test_preflight_requires_ptl3_health_isolation(self):
+        broken = dict(self.env)
+        broken["PTL3_HEALTH_OBSERVER_ONLY_ENABLED"] = "false"
+        with patch.dict(os.environ, broken, clear=False):
+            out = rt.runtime_preflight()
+        self.assertFalse(out["ready"])
+        self.assertIn("ptl3_health_isolation_disabled", out["reasons"])
 
     def test_production_registers_only_stage3c7a_long(self):
         with patch.dict(os.environ, self.env, clear=False):

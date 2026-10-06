@@ -23,7 +23,7 @@ from .execution_handoff import (
 from .fresh_entry_gate import list_revalidations
 from .live_store import list_live_orders, list_open_live_positions, live_summary
 from .live_trading import preflight as live_preflight
-from .paper_store import list_paper_orders, paper_summary
+from .paper_store import list_health_observer_decisions, list_paper_orders, paper_summary
 from .parallel_protection_shadow_ui import contract_definition, protection_shadow_snapshot
 from .parallel_protection_shadow_adapters import adapter_contract
 from .parallel_protection_shadow_settlement import settlement_contract, list_shadow_settlements
@@ -717,6 +717,7 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                     "position_evaluations": "/positions/evaluations",
                     "paper_summary": "/paper/summary",
                     "paper_orders": "/paper/orders",
+                    "health_observer_decisions": "/paper/health-observer",
                     "protection_shadow_contract": "/shadow/protection/contract",
                     "protection_shadow_adapters": "/shadow/protection/adapters",
                     "protection_shadow_settlement": "/shadow/protection/settlement",
@@ -1540,6 +1541,34 @@ class RadarReadHandler(BaseHTTPRequestHandler):
                         "detail": str(exc),
                     },
                 )
+            return
+
+        if parsed.path == "/paper/health-observer":
+            query = parse_qs(parsed.query)
+            try:
+                raw_limit = query.get("limit", ["100"])[0]
+                limit = int(raw_limit)
+                position_id = query.get("position_id", [None])[0]
+                rows = list_health_observer_decisions(
+                    position_id=position_id,
+                    limit=limit,
+                )
+            except Exception as exc:
+                self._json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    {
+                        "error": "health_observer_decisions_read_failed",
+                        "detail": str(exc),
+                    },
+                )
+                return
+            self._json(
+                HTTPStatus.OK,
+                {
+                    "count": len(rows),
+                    "decisions": rows,
+                },
+            )
             return
 
         if parsed.path == "/paper/orders":

@@ -31,10 +31,16 @@ Do not skip directly to V4-4.
 
 ## Parallel Protection Shadow track
 
+- **PT-L3 — Health Authority Isolation: IMPLEMENTED / VALIDATED / NOT ACTIVATED**
+- Health remains ON and continues producing health score, contradictions, MFE/MAE, fast-guard and would REDUCE/CLOSE diagnostics.
+- For a parity-valid Stage3C7A LONG PT-L2 parent only, Health REDUCE/CLOSE is persisted as observer-only and cannot create a PAPER exit order.
+- Missing/invalid shadow state or observer-ledger persistence errors fail open to legacy Health authority; terminal protector branches also restore Health authority.
+- PT-L2 prospective runtime preflight now requires the PT-L3 isolation flag.
+- Detail: PTL3_HEALTH_AUTHORITY_ISOLATION.md.
+
 - **PT-L2 — LONG Parallel Profit Protector Wiring: IMPLEMENTED / VALIDATED / NOT ACTIVATED**
 - Stage3C7A LONG is the only prospective production cohort; generic PAPER and SHORT are excluded.
-- Activation is fail-closed unless the PP-V4 5s observer and shadow runtime use the exact same fresh boundary.
-- PT-L3 must isolate Stage12 Health execution authority before the prospective epoch is enabled.
+- Activation is fail-closed unless the PP-V4 5s observer and shadow runtime use the exact same fresh boundary and PT-L3 Health isolation is enabled.
 
 - **PS-5A — Prospective Shadow Runtime Wiring: IMPLEMENTED / VALIDATED**
 - Fresh PAPER positions can now create one persistent shadow parent with four branches; LIVE source positions remain excluded.
