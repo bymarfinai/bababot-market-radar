@@ -32,7 +32,7 @@ def stage6_discriminator_start_ms() -> int:
         return 0
 
 def _fee_rate() -> float:
-    return max(0.0, min(float(os.environ.get("PAPER_FEE_RATE","0.00075")), .01))
+    return max(0.0, min(float(os.environ.get("PAPER_FEE_RATE","0.0005")), .01))
 
 def _slip() -> float:
     return max(0.0, min(float(os.environ.get("PAPER_SLIPPAGE_BPS","2")),100.0))/10000.0
