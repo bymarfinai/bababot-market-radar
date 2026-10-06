@@ -48,6 +48,8 @@ button,input{font:inherit}button{appearance:none}a{text-decoration:none;color:in
 .badge,.action-pill{display:inline-flex;align-items:center;padding:2px 5px;border-radius:2px;font-size:8px;font-weight:700;border:1px solid transparent}.long,.approve,.hold{color:var(--green);background:var(--greenSoft)}.short,.veto,.close{color:var(--red);background:var(--redSoft)}.watch,.reduce{color:var(--yellow2);background:var(--yellowSoft)}.neutral{color:#aab2bd;background:#1d2229;border-color:#2b3139}
 .chart-toolbar{height:40px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line2)}.chart-title strong{font-size:12px}.chart-title span{font-size:9px;color:var(--muted);margin-left:6px}
 canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{height:38px;padding:0 10px;display:flex;align-items:center;gap:16px;border-top:1px solid var(--line2);font:9px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted)}
+.lq-panel{display:grid;grid-template-columns:1.1fr 1.1fr .9fr .9fr;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);background:#0d1116}.lq-card{padding:8px 10px;border-right:1px solid var(--line2);min-width:0}.lq-card:last-child{border-right:0}.lq-card span{display:block;font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.035em;margin-bottom:4px}.lq-card strong{display:block;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lq-card small{display:block;font-size:7px;color:var(--muted2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lq-risk{color:var(--red)!important}.lq-open{color:var(--green)!important}.lq-supply{color:#ff758a!important}.lq-demand{color:#34d399!important}.lq-toolbar-divider{width:1px;height:17px;background:var(--line);margin:0 4px}.lq-snapshot-badge{font-size:7px!important;margin-left:4px!important;padding:3px 5px;border:1px solid var(--line);border-radius:3px;color:var(--muted)!important;background:#11161c}.lq-snapshot-badge.entry{color:var(--yellow2)!important;border-color:rgba(240,185,11,.45);background:var(--yellowSoft)}
+@media(max-width:850px){.lq-panel{grid-template-columns:1fr 1fr}.lq-card:nth-child(2){border-right:0}.lq-card:nth-child(-n+2){border-bottom:1px solid var(--line2)}}
 .book-head{display:grid;grid-template-columns:1fr 1fr 1fr;padding:6px 9px;color:var(--muted);font-size:8px}.book-head span:nth-child(n+2){text-align:right}.book-side{height:226px;overflow:hidden}.book-row{height:18px;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;padding:0 8px;position:relative;font:9px ui-monospace,SFMono-Regular,Menlo,monospace}.book-row i{position:absolute;right:0;top:0;bottom:0;z-index:0;opacity:.18}.book-row.ask i{background:var(--red)}.book-row.bid i{background:var(--green)}.book-row span{position:relative;z-index:1;text-align:right}.book-row span:first-of-type{text-align:left}.book-row.ask span:first-of-type{color:var(--red)}.book-row.bid span:first-of-type{color:var(--green)}.book-mid{height:46px;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:7px 9px;display:flex;justify-content:space-between;align-items:center}.book-mid strong{font-size:15px;color:var(--green)}.book-mid span{font-size:8px;color:var(--muted)}.book-empty{padding:14px;color:var(--muted);font-size:9px}
 .trade-inner{padding:12px}.trade-symbol{display:flex;justify-content:space-between;align-items:flex-start}.trade-symbol h3{margin:0;font-size:17px}.big-price{font-size:24px;font-weight:650;margin-top:5px}.score-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:12px}.score-box{padding:10px;background:#11151a}.score-box:first-child{border-right:1px solid var(--line)}.score-box span{display:block;font-size:8px;color:var(--muted);margin-bottom:5px}.score-box strong{font-size:20px}.kv{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line);border-top:1px solid var(--line);margin-top:10px}.kv div{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.kv span{display:block;font-size:7px;color:var(--muted);margin-bottom:4px}.kv strong{display:block;font-size:9px;overflow:hidden;text-overflow:ellipsis}.reason-list{margin-top:12px;border-top:1px solid var(--line);padding:9px 3px 0 0;max-height:210px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}.reason-title{font-size:9px;color:var(--muted);margin-bottom:5px}.reason{padding:6px 0;border-bottom:1px solid var(--line2);font-size:9px;line-height:1.4}
 .bottom-terminal{background:var(--bg)}.terminal-tabs{height:42px;display:flex;align-items:center;gap:18px;padding:0 12px;border-bottom:1px solid var(--line2);background:#0d1014;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}.terminal-tabs::-webkit-scrollbar{display:none}.terminal-tab{height:42px;border:0;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;position:relative;white-space:nowrap}.terminal-tab.active{color:var(--text)}.terminal-tab.active:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--yellow)}
@@ -148,9 +150,10 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <section class="panel chart-panel">
       <div class="chart-toolbar">
         <div class="chart-title"><strong id="chartTitle">—</strong><span>USDT Perpetual</span></div>
-        <div class="toolbar"><button class="btn active interval-btn" data-interval="5m">5m</button><button class="btn interval-btn" data-interval="15m">15m</button><button class="btn interval-btn" data-interval="1h">1H</button></div>
+        <div class="toolbar"><button class="btn active interval-btn" data-interval="5m">5m</button><button class="btn interval-btn" data-interval="15m">15m</button><button class="btn interval-btn" data-interval="1h">1H</button><span class="lq-toolbar-divider"></span><button id="lqZonesBtn" class="btn active">LQ Zones</button><button id="lqLiveBtn" class="btn active">Live</button><span id="lqSnapshotBadge" class="lq-snapshot-badge">LIVE MAP</span></div>
       </div>
       <canvas id="chart"></canvas>
+      <div id="liquidityPanel" class="lq-panel"><div class="lq-card"><span>Nearest Supply</span><strong>Loading map…</strong><small>5m / 15m / 1h causal zones</small></div><div class="lq-card"><span>Nearest Demand</span><strong>Loading map…</strong><small>5m / 15m / 1h causal zones</small></div><div class="lq-card"><span>Location</span><strong>—</strong><small>LQ-2 research context</small></div><div class="lq-card"><span>Snapshot</span><strong>LIVE</strong><small>causal map</small></div></div>
       <div class="chart-meta"><span id="chartOhlc">O — H — L — C —</span><span id="chartRange">Range —</span><span id="chartUpdate">Updated —</span></div>
     </section>
 
@@ -322,6 +325,7 @@ var state={
   shadowSettlements:{},selectedShadowParentId:null,
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
   ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
+  liquidity:null,lqZonesEnabled:true,lqSnapshotAsOf:null,lqSnapshotEntryPrice:null,lqSnapshotPositionId:null,
   controlAuthVerified:false,controlBusy:false,apiFailures:[]
 };
 function el(id){return document.getElementById(id)}
@@ -910,7 +914,22 @@ function renderPositionHistory(){
       '</tr>'
     ].join('');
   }).join(''):'<tr><td colspan="11" class="empty"><strong>No closed positions yet</strong><span>Fully closed paper positions will appear here.</span></td></tr>';
-  document.querySelectorAll('.ph-row').forEach(function(tr){tr.onclick=function(){state.selectedClosedPositionId=tr.dataset.positionId;renderPositionHistoryDetail()}});
+  document.querySelectorAll('.ph-row').forEach(function(tr){tr.onclick=async function(){
+    state.selectedClosedPositionId=tr.dataset.positionId;
+    var row=rows.find(function(x){return x.position_id===tr.dataset.positionId})||null;
+    if(row){
+      state.selectedSymbol=row.symbol;
+      state.lqSnapshotAsOf=Number(row.opened_at_ms||0)||null;
+      state.lqSnapshotEntryPrice=Number(row.entry_price||0)||null;
+      state.lqSnapshotPositionId=row.position_id||null;
+      state.ticker=null;state.depth=null;state.liquidity=null;
+      renderSelected();renderPositionHistoryDetail();
+      await loadChart();
+      document.getElementById('overview').scrollIntoView({behavior:'smooth',block:'start'});
+    }else{
+      renderPositionHistoryDetail();
+    }
+  }});
   renderPositionHistoryDetail();
 }
 function renderOrders(){
@@ -962,6 +981,98 @@ function renderHistory(){
   }).join(''):'<tr><td colspan="14" class="empty"><strong>No persisted signals yet</strong><span>Actionable Stage 6 signals will appear here.</span></td></tr>';
   document.querySelectorAll('.hist-row').forEach(function(tr){tr.onclick=function(){selectSymbol(tr.dataset.symbol)}});
 }
+function intervalMs(interval){
+  return {'1m':60000,'5m':300000,'15m':900000,'1h':3600000,'4h':14400000}[interval]||300000;
+}
+function lqLocationTag(){
+  var zones=state.liquidity&&state.liquidity.zones||[];
+  var ref=Number(state.liquidity&&state.liquidity.reference_price||0);
+  var toxic=zones.some(function(z){
+    return z.side==='SUPPLY'&&z.timeframe==='15m'&&z.state==='FRESH'&&ref>=Number(z.lower)&&ref<=Number(z.upper);
+  });
+  return toxic?{label:'AVOID CANDIDATE',cls:'lq-risk',note:'inside FRESH 15m supply · LQ-2 research'}:{label:'OPEN LANE CANDIDATE',cls:'lq-open',note:'outside fresh 15m supply · not an entry signal'};
+}
+function renderLiquidityPanel(){
+  var box=el('liquidityPanel'),badgeEl=el('lqSnapshotBadge'),liveBtn=el('lqLiveBtn'),zonesBtn=el('lqZonesBtn');
+  if(!box)return;
+  zonesBtn.classList.toggle('active',!!state.lqZonesEnabled);
+  liveBtn.classList.toggle('active',!state.lqSnapshotAsOf);
+  if(badgeEl){
+    badgeEl.textContent=state.lqSnapshotAsOf?'ENTRY SNAPSHOT':'LIVE MAP';
+    badgeEl.className='lq-snapshot-badge'+(state.lqSnapshotAsOf?' entry':'');
+  }
+  if(!state.lqZonesEnabled){
+    box.innerHTML='<div class="lq-card"><span>Liquidity Map</span><strong>HIDDEN</strong><small>Click LQ Zones to show overlays</small></div><div class="lq-card"><span>Research</span><strong>LQ-2</strong><small>no production authority</small></div><div class="lq-card"><span>Location</span><strong>—</strong><small>overlay disabled</small></div><div class="lq-card"><span>Snapshot</span><strong>'+(state.lqSnapshotAsOf?'ENTRY':'LIVE')+'</strong><small>'+(state.lqSnapshotAsOf?dt(state.lqSnapshotAsOf):'current causal map')+'</small></div>';
+    return;
+  }
+  var liq=state.liquidity;
+  if(!liq){
+    box.innerHTML='<div class="lq-card"><span>Nearest Supply</span><strong>Loading…</strong><small>causal structural map</small></div><div class="lq-card"><span>Nearest Demand</span><strong>Loading…</strong><small>causal structural map</small></div><div class="lq-card"><span>Location</span><strong>—</strong><small>LQ-2 research context</small></div><div class="lq-card"><span>Snapshot</span><strong>'+(state.lqSnapshotAsOf?'ENTRY':'LIVE')+'</strong><small>'+(state.lqSnapshotAsOf?dt(state.lqSnapshotAsOf):'current causal map')+'</small></div>';
+    return;
+  }
+  function zoneText(z,side){
+    if(!z)return '<strong>—</strong><small>no active '+side.toLowerCase()+' in lookback</small>';
+    var dist=z.distance_pct===null||z.distance_pct===undefined?'—':(Number(z.distance_pct)===0?'INSIDE':num(z.distance_pct,3)+'%');
+    return '<strong class="'+(side==='SUPPLY'?'lq-supply':'lq-demand')+'">'+esc(z.timeframe)+' '+esc(z.state)+' · '+dist+'</strong><small>'+px(z.lower)+' – '+px(z.upper)+' · '+num(z.departure_atr,2)+' ATR · '+num(z.touch_count,0)+' touch</small>';
+  }
+  var nearest=liq.nearest||{},tag=lqLocationTag();
+  box.innerHTML='<div class="lq-card"><span>Nearest Supply</span>'+zoneText(nearest.supply,'SUPPLY')+'</div>'+
+    '<div class="lq-card"><span>Nearest Demand</span>'+zoneText(nearest.demand,'DEMAND')+'</div>'+
+    '<div class="lq-card"><span>Location · Research</span><strong class="'+tag.cls+'">'+tag.label+'</strong><small>'+esc(tag.note)+'</small></div>'+
+    '<div class="lq-card"><span>Snapshot</span><strong>'+(state.lqSnapshotAsOf?'ENTRY-TIME':'LIVE')+'</strong><small>'+dt(liq.asof_ms)+' · '+num(liq.zone_count,0)+' active zones</small></div>';
+}
+function chartVisibleLiquidityZones(baseLo,baseHi){
+  if(!state.lqZonesEnabled||!state.liquidity)return [];
+  var zones=(state.liquidity.zones||[]).slice(),baseRange=Math.max(baseHi-baseLo,Math.abs(baseHi)*0.0001);
+  zones=zones.filter(function(z){
+    return Number(z.upper)>=baseLo-baseRange*.30&&Number(z.lower)<=baseHi+baseRange*.30;
+  });
+  var ref=Number(state.liquidity.reference_price||0);
+  zones.sort(function(a,b){
+    function score(z){
+      var contains=ref>=Number(z.lower)&&ref<=Number(z.upper)?0:1;
+      var tf=z.timeframe==='15m'?0:(z.timeframe==='5m'?1:2);
+      var dist=z.distance_pct===null||z.distance_pct===undefined?999:Number(z.distance_pct);
+      return contains*100+tf*10+dist;
+    }
+    return score(a)-score(b);
+  });
+  return zones.slice(0,12);
+}
+function drawLiquidityZones(ctx,zones,y,padL,plotW,padT,plotH,firstTime,lastTime){
+  if(!zones.length)return;
+  var tfAlpha={'5m':.10,'15m':.18,'1h':.08};
+  zones.forEach(function(z){
+    var top=y(Number(z.upper)),bottom=y(Number(z.lower));
+    if(bottom<padT||top>padT+plotH)return;
+    top=Math.max(padT,top);bottom=Math.min(padT+plotH,bottom);
+    var born=Number(z.born_ms||firstTime);
+    var frac=(born-firstTime)/Math.max(1,lastTime-firstTime);
+    var x1=padL+Math.max(0,Math.min(1,frac))*plotW;
+    var w=Math.max(1,padL+plotW-x1);
+    var supply=z.side==='SUPPLY';
+    ctx.save();
+    ctx.fillStyle=supply?'#F6465D':'#0ECB81';
+    ctx.globalAlpha=tfAlpha[z.timeframe]||.10;
+    ctx.fillRect(x1,top,w,Math.max(2,bottom-top));
+    ctx.globalAlpha=.70;
+    ctx.strokeStyle=supply?'#F6465D':'#0ECB81';
+    ctx.lineWidth=z.timeframe==='15m'?1.2:.7;
+    ctx.setLineDash(z.state==='FRESH'?[]:[4,3]);
+    ctx.strokeRect(x1+.5,top+.5,w-1,Math.max(1,bottom-top-1));
+    ctx.setLineDash([]);
+    ctx.globalAlpha=.92;
+    ctx.fillStyle='#0b0e11';
+    var label=(supply?'SUP ':'DEM ')+z.timeframe+' '+z.state;
+    ctx.font='7px ui-monospace,SFMono-Regular,Menlo,monospace';
+    var lw=ctx.measureText(label).width+7;
+    var ly=Math.max(padT+1,Math.min(padT+plotH-10,top+2));
+    ctx.fillRect(x1+2,ly,lw,10);
+    ctx.fillStyle=supply?'#ff7b90':'#35d99a';
+    ctx.fillText(label,x1+5,ly+8);
+    ctx.restore();
+  });
+}
 function chartEntryMarkers(){
   var byId={};
   function add(row,isOpen,source){
@@ -996,10 +1107,14 @@ function drawChart(){
   var firstTime=Number(arr[0].open_time_ms||0),lastTime=Number(arr[arr.length-1].close_time_ms||0);
   var entries=chartEntryMarkers().filter(function(m){return m.time>=firstTime&&m.time<=lastTime});
   var markerPrices=entries.map(function(m){return m.price});
-  var lo=Math.min.apply(null,arr.map(function(x){return x.low}).concat(markerPrices)),hi=Math.max.apply(null,arr.map(function(x){return x.high}).concat(markerPrices));var range=Math.max(hi-lo,hi*0.0001);
+  var baseLo=Math.min.apply(null,arr.map(function(x){return x.low}).concat(markerPrices)),baseHi=Math.max.apply(null,arr.map(function(x){return x.high}).concat(markerPrices));
+  var lqZones=chartVisibleLiquidityZones(baseLo,baseHi);
+  var zonePrices=[];lqZones.forEach(function(z){zonePrices.push(Number(z.lower));zonePrices.push(Number(z.upper))});
+  var lo=Math.min.apply(null,[baseLo].concat(zonePrices)),hi=Math.max.apply(null,[baseHi].concat(zonePrices));var range=Math.max(hi-lo,hi*0.0001);
   function y(v){return padT+(hi-v)/range*plotH}
   ctx.strokeStyle='#1f252d';ctx.lineWidth=1;ctx.fillStyle='#848e9c';ctx.font='9px ui-monospace';
   for(var i=0;i<5;i++){var yy=padT+i*plotH/4;ctx.beginPath();ctx.moveTo(padL,yy);ctx.lineTo(padL+plotW,yy);ctx.stroke();var val=hi-i*range/4;ctx.fillText(px(val),padL+plotW+6,yy+3)}
+  drawLiquidityZones(ctx,lqZones,y,padL,plotW,padT,plotH,firstTime,lastTime);
   var step=plotW/arr.length,body=Math.max(2,Math.min(8,step*.62)),maxVol=Math.max.apply(null,arr.map(function(x){return x.quote_volume||x.volume||0}));
   arr.forEach(function(c,i){var x=padL+i*step+step/2,up=c.close>=c.open,color=up?'#0ECB81':'#F6465D';ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x,y(c.high));ctx.lineTo(x,y(c.low));ctx.stroke();var top=Math.min(y(c.open),y(c.close)),h=Math.max(1,Math.abs(y(c.close)-y(c.open)));ctx.fillRect(x-body/2,top,body,h);
     var vh=maxVol?((c.quote_volume||c.volume||0)/maxVol)*volH*.78:0;ctx.globalAlpha=.35;ctx.fillRect(x-body/2,padT+plotH+volH-vh,body,vh);ctx.globalAlpha=1});
@@ -1034,24 +1149,35 @@ function drawChart(){
   });
   ctx.fillStyle='#848e9c';ctx.font='9px sans-serif';
   var marks=[0,Math.floor(arr.length/2),arr.length-1];marks.forEach(function(i){var c=arr[i];var x=padL+i*step;ctx.fillText(new Date(c.open_time_ms).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),x,padT+plotH+volH+16)});
-  var last=arr[arr.length-1];el('chartOhlc').textContent='O '+px(last.open)+'  H '+px(last.high)+'  L '+px(last.low)+'  C '+px(last.close);el('chartRange').textContent='Range '+px(lo)+' – '+px(hi)+(entries.length?' · '+entries.length+' entr'+(entries.length===1?'y':'ies'):'');el('chartUpdate').textContent='Updated '+tm(last.close_time_ms);
+  var last=arr[arr.length-1];el('chartOhlc').textContent='O '+px(last.open)+'  H '+px(last.high)+'  L '+px(last.low)+'  C '+px(last.close);el('chartRange').textContent='Range '+px(lo)+' – '+px(hi)+(entries.length?' · '+entries.length+' entr'+(entries.length===1?'y':'ies'):'')+(lqZones.length?' · '+lqZones.length+' zones':'');el('chartUpdate').textContent='Updated '+tm(last.close_time_ms);
+  renderLiquidityPanel();
 }
 async function loadChart(){
   if(!state.selectedSymbol)return;
-  el('chartTitle').textContent=state.selectedSymbol+' Perpetual';
-  var s=encodeURIComponent(state.selectedSymbol);
+  el('chartTitle').textContent=state.selectedSymbol+' Perpetual'+(state.lqSnapshotAsOf?' · Entry Snapshot':'');
+  renderLiquidityPanel();
+  var s=encodeURIComponent(state.selectedSymbol),klinePath='/market/klines?symbol='+s+'&interval='+encodeURIComponent(state.interval)+'&limit=120';
+  if(state.lqSnapshotAsOf){
+    var stepMs=intervalMs(state.interval);
+    klinePath+='&start_time_ms='+(Number(state.lqSnapshotAsOf)-75*stepMs)+'&end_time_ms='+(Number(state.lqSnapshotAsOf)+45*stepMs);
+  }
+  var zonePath='/market/liquidity-zones?symbol='+s;
+  if(state.lqSnapshotAsOf)zonePath+='&asof_ms='+Number(state.lqSnapshotAsOf);
+  if(state.lqSnapshotEntryPrice)zonePath+='&reference_price='+encodeURIComponent(state.lqSnapshotEntryPrice);
   var results=await Promise.allSettled([
-    getJSON('/market/klines?symbol='+s+'&interval='+encodeURIComponent(state.interval)+'&limit=120'),
+    getJSON(klinePath),
     getJSON('/market/ticker?symbol='+s),
-    getJSON('/market/depth?symbol='+s+'&limit=20')
+    getJSON('/market/depth?symbol='+s+'&limit=20'),
+    state.lqZonesEnabled?getJSON(zonePath):Promise.resolve(null)
   ]);
-  var k=settledValue(results[0],null),t=settledValue(results[1],null),d=settledValue(results[2],null);
+  var k=settledValue(results[0],null),t=settledValue(results[1],null),d=settledValue(results[2],null),liq=settledValue(results[3],null);
   if(k)state.candles=k.candles||[];
   if(t)state.ticker=t;
   if(d)state.depth=d;
-  drawChart();renderTicker();renderOrderBook();
+  state.liquidity=liq;
+  drawChart();renderTicker();renderOrderBook();renderLiquidityPanel();
 }
-async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();await loadChart()}
+async function selectSymbol(symbol){if(!symbol)return;state.selectedSymbol=symbol;state.ticker=null;state.depth=null;state.liquidity=null;state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;renderSelected();renderHealthInspector();renderTicker();renderOrderBook();renderLiquidityPanel();await loadChart()}
 async function refresh(){
   try{
     var res=await Promise.allSettled([
@@ -1197,6 +1323,8 @@ if(el('marketSearch'))el('marketSearch').addEventListener('input',function(){sta
 document.querySelectorAll('.terminal-tab').forEach(function(b){b.onclick=function(){showTerminalTab(b.dataset.tab)}});
 showTerminalTab('positions');
 document.querySelectorAll('.interval-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.interval-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.interval=b.dataset.interval;loadChart()}});
+el('lqZonesBtn').onclick=function(){state.lqZonesEnabled=!state.lqZonesEnabled;if(!state.lqZonesEnabled)state.liquidity=null;renderLiquidityPanel();loadChart()};
+el('lqLiveBtn').onclick=function(){state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;state.liquidity=null;renderLiquidityPanel();loadChart()};
 document.querySelectorAll('.control-btn').forEach(function(b){b.onclick=function(){setMode(b.dataset.mode)}});
 el('armLive').onclick=function(){setLiveArm(true)};
 el('disarmLive').onclick=function(){setLiveArm(false)};
