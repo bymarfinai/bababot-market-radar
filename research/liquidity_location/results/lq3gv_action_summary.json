@@ -1,0 +1,212 @@
+{
+  "version": "lq3gv-clean-velocity-anatomy-v1",
+  "status": "POST_ENTRY_VELOCITY_STRONG_PREENTRY_VELOCITY_FAIL",
+  "universe": {
+    "rows": 209,
+    "baseline_wins": 63,
+    "baseline_wr_pct": 30.14,
+    "baseline_pnl": -126.42
+  },
+  "alive_coverage": {
+    "5s": 209,
+    "15s": 200,
+    "30s": 180,
+    "60s": 164,
+    "120s": 129
+  },
+  "static_vs_velocity": {
+    "best_static_entry_auc": 0.5929,
+    "best_postentry_auc": {
+      "feature": "ret_120s / v_0_120s_pps",
+      "auc": 0.7817
+    },
+    "win_vs_true_wrong": {
+      "5s": 0.7662,
+      "15s": 0.8031,
+      "30s": 0.8066,
+      "60s": 0.8536,
+      "120s": 0.9146
+    },
+    "recovery_efficiency_win_vs_true_wrong": {
+      "60s": 0.8261,
+      "120s": 0.9219
+    },
+    "recovered_vs_true_wrong": {
+      "recovery_speed_to_zero_15s_auc": 0.7396,
+      "recovery_efficiency_60s_auc": 0.7543,
+      "recovery_efficiency_120s_auc": 0.8343
+    }
+  },
+  "early_toxic_candidates": {
+    "t15": {
+      "rule": "ret_15s <= -0.20% AND recovery_efficiency_15s <= 0.50",
+      "n": 34,
+      "loss_precision_pct": 88.2,
+      "winner_harm": 4,
+      "class_mix": {
+        "TRUE_WRONG_DIRECTION": 27,
+        "RIGHT_THEN_FAILURE": 3,
+        "CORRECT_RUNNER": 1,
+        "RECOVERED_DRAWDOWN": 3,
+        "STALL_NO_EDGE": 0
+      }
+    },
+    "t30": {
+      "rule": "ret_30s <= -0.20% AND recovery_efficiency_30s <= 0.50",
+      "n": 39,
+      "loss_precision_pct": 89.7,
+      "winner_harm": 4,
+      "class_mix": {
+        "TRUE_WRONG_DIRECTION": 30,
+        "STALL_NO_EDGE": 2,
+        "RIGHT_THEN_FAILURE": 3,
+        "CORRECT_RUNNER": 0,
+        "RECOVERED_DRAWDOWN": 4
+      }
+    }
+  },
+  "continuation_candidate": {
+    "name": "C1_SECOND_MINUTE_REACCELERATION",
+    "rule": "alive at T+120 AND return at T+60 >= -0.02% AND velocity T+60->T+120 > 0",
+    "fair_baseline_alive120": {
+      "TRAIN": {
+        "n": 75,
+        "wins": 35,
+        "wr_pct": 46.67
+      },
+      "VALIDATION": {
+        "n": 30,
+        "wins": 10,
+        "wr_pct": 33.33
+      },
+      "RESERVE": {
+        "n": 24,
+        "wins": 10,
+        "wr_pct": 41.67
+      },
+      "ALL": {
+        "n": 129,
+        "wins": 55,
+        "wr_pct": 42.64
+      }
+    },
+    "selected": {
+      "TRAIN": {
+        "n": 20,
+        "wins": 16,
+        "wr_pct": 80
+      },
+      "VALIDATION": {
+        "n": 7,
+        "wins": 5,
+        "wr_pct": 71.43
+      },
+      "RESERVE": {
+        "n": 6,
+        "wins": 4,
+        "wr_pct": 66.67
+      },
+      "ALL": {
+        "n": 33,
+        "wins": 25,
+        "wr_pct": 75.76
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 21,
+        "RECOVERED_DRAWDOWN": 4,
+        "RIGHT_THEN_FAILURE": 8,
+        "TRUE_WRONG_DIRECTION": 0,
+        "STALL_NO_EDGE": 0
+      }
+    },
+    "interpretation": "Strong post-entry KEEP/SCALE candidate. Not an entry-at-T0 separator and not a universal CUT rule."
+  },
+  "action_replays": {
+    "delayed_entry_at_120": {
+      "contract": "Fresh $500 LONG at first aggTrade >= T+120 for C1 pass; same historical close; configured fee/slippage.",
+      "TRAIN": {
+        "n": 20,
+        "wins": 11,
+        "wr_pct": 55,
+        "pnl": 9.68
+      },
+      "VALIDATION": {
+        "n": 7,
+        "wins": 2,
+        "wr_pct": 28.57,
+        "pnl": -1.69
+      },
+      "RESERVE": {
+        "n": 6,
+        "wins": 2,
+        "wr_pct": 33.33,
+        "pnl": -11.79
+      },
+      "ALL": {
+        "n": 33,
+        "wins": 15,
+        "wr_pct": 45.45,
+        "pnl": -3.81
+      },
+      "verdict": "FAIL_CHASING"
+    },
+    "cut_all_non_c1_at_120": {
+      "contract": "Existing T0 entries; historical closes before T+120 unchanged; C1 pass kept; all other T+120 survivors closed at first aggTrade >= T+120.",
+      "TRAIN": {
+        "n": 123,
+        "wins": 26,
+        "wr_pct": 21.14,
+        "pnl": -120.87
+      },
+      "VALIDATION": {
+        "n": 53,
+        "wins": 15,
+        "wr_pct": 28.3,
+        "pnl": -59.45
+      },
+      "RESERVE": {
+        "n": 33,
+        "wins": 8,
+        "wr_pct": 24.24,
+        "pnl": -33.71
+      },
+      "ALL": {
+        "n": 209,
+        "wins": 49,
+        "wr_pct": 23.44,
+        "pnl": -214.03
+      },
+      "historical_all": {
+        "wins": 63,
+        "wr_pct": 30.14,
+        "pnl": -126.42
+      },
+      "cut_count": 95,
+      "historical_future_winners_harmed": 30,
+      "verdict": "FAIL_HARD_CUT"
+    }
+  },
+  "preentry_velocity": {
+    "source": "Binance Vision aggTrades T-120s..T0",
+    "best_auc": {
+      "feature": "pre_eta_15m_supply_distance_pct_30s",
+      "auc": 0.6099
+    },
+    "best_pure_segment_velocity_auc": {
+      "feature": "pre_seg_v_30_15s_pps",
+      "auc": 0.5852
+    },
+    "stable60_pair_count": 0,
+    "verdict": "FAIL_AS_ADMISSION_SOLVER"
+  },
+  "verdict": {
+    "answer": "Velocity matters strongly after entry, especially adverse/recovery/continuation dynamics. Pre-entry velocity does not provide a stable high-WR admission rule.",
+    "safe_use": "Research-only KEEP/SCALE permission or early-toxic warning.",
+    "unsafe_use": [
+      "Delay entry until T+120",
+      "Cut every non-C1 survivor at T+120",
+      "Promote any velocity rule to production authority yet"
+    ],
+    "next": "Replay a three-state velocity router: EARLY_TOXIC warning at 15-30s, NORMAL unresolved, KEEP/SCALE only after second-minute re-acceleration; evaluate exact PnL/WR without hard-cutting unresolved trades."
+  }
+}

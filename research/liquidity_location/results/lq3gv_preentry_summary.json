@@ -1,0 +1,1263 @@
+{
+  "auc_top_preentry_velocity": [
+    {
+      "auc_oriented": 0.6099,
+      "auc_raw": 0.3901,
+      "feature": "pre_eta_15m_supply_distance_pct_30s"
+    },
+    {
+      "auc_oriented": 0.5852,
+      "auc_raw": 0.4148,
+      "feature": "pre_seg_v_30_15s_pps"
+    },
+    {
+      "auc_oriented": 0.5766,
+      "auc_raw": 0.4234,
+      "feature": "pre_eta_15m_supply_distance_pct_60s"
+    },
+    {
+      "auc_oriented": 0.5586,
+      "auc_raw": 0.4414,
+      "feature": "pre_range_5s"
+    },
+    {
+      "auc_oriented": 0.5519,
+      "auc_raw": 0.5519,
+      "feature": "pre_dv_30_15_to_15_5"
+    },
+    {
+      "auc_oriented": 0.5429,
+      "auc_raw": 0.5429,
+      "feature": "pre_eta_5m_supply_distance_pct_15s"
+    },
+    {
+      "auc_oriented": 0.5421,
+      "auc_raw": 0.4579,
+      "feature": "pre_range_120s"
+    },
+    {
+      "auc_oriented": 0.5353,
+      "auc_raw": 0.4647,
+      "feature": "pre_dv_60_30_to_30_15"
+    },
+    {
+      "auc_oriented": 0.5351,
+      "auc_raw": 0.4649,
+      "feature": "pre_ret_60s"
+    },
+    {
+      "auc_oriented": 0.5351,
+      "auc_raw": 0.4649,
+      "feature": "pre_v_60s_pps"
+    },
+    {
+      "auc_oriented": 0.5341,
+      "auc_raw": 0.4659,
+      "feature": "pre_speed_ratio_15_60"
+    },
+    {
+      "auc_oriented": 0.5328,
+      "auc_raw": 0.5328,
+      "feature": "pre_ret_15s"
+    },
+    {
+      "auc_oriented": 0.5328,
+      "auc_raw": 0.5328,
+      "feature": "pre_v_15s_pps"
+    },
+    {
+      "auc_oriented": 0.5325,
+      "auc_raw": 0.4675,
+      "feature": "pre_ret_30s"
+    },
+    {
+      "auc_oriented": 0.5325,
+      "auc_raw": 0.4675,
+      "feature": "pre_v_30s_pps"
+    },
+    {
+      "auc_oriented": 0.5308,
+      "auc_raw": 0.4692,
+      "feature": "pre_range_15s"
+    },
+    {
+      "auc_oriented": 0.5294,
+      "auc_raw": 0.4706,
+      "feature": "pre_eta_5m_supply_distance_pct_30s"
+    },
+    {
+      "auc_oriented": 0.5292,
+      "auc_raw": 0.4708,
+      "feature": "pre_eta_nearest_supply_distance_pct_30s"
+    },
+    {
+      "auc_oriented": 0.5291,
+      "auc_raw": 0.4709,
+      "feature": "pre_speed_ratio_5_30"
+    },
+    {
+      "auc_oriented": 0.5275,
+      "auc_raw": 0.4725,
+      "feature": "pre_eta_15m_supply_distance_pct_15s"
+    },
+    {
+      "auc_oriented": 0.5257,
+      "auc_raw": 0.5257,
+      "feature": "pre_seg_v_15_5s_pps"
+    },
+    {
+      "auc_oriented": 0.5253,
+      "auc_raw": 0.4747,
+      "feature": "pre_seg_v_60_30s_pps"
+    },
+    {
+      "auc_oriented": 0.5234,
+      "auc_raw": 0.4766,
+      "feature": "pre_eta_nearest_supply_distance_pct_15s"
+    },
+    {
+      "auc_oriented": 0.5221,
+      "auc_raw": 0.4779,
+      "feature": "pre_ret_5s"
+    },
+    {
+      "auc_oriented": 0.5221,
+      "auc_raw": 0.4779,
+      "feature": "pre_v_5s_pps"
+    },
+    {
+      "auc_oriented": 0.5221,
+      "auc_raw": 0.4779,
+      "feature": "pre_seg_v_5_0s_pps"
+    },
+    {
+      "auc_oriented": 0.5209,
+      "auc_raw": 0.4791,
+      "feature": "pre_range_60s"
+    },
+    {
+      "auc_oriented": 0.5173,
+      "auc_raw": 0.4827,
+      "feature": "pre_range_30s"
+    },
+    {
+      "auc_oriented": 0.5142,
+      "auc_raw": 0.4858,
+      "feature": "pre_eta_nearest_supply_distance_pct_60s"
+    },
+    {
+      "auc_oriented": 0.5054,
+      "auc_raw": 0.5054,
+      "feature": "pre_eta_5m_supply_distance_pct_60s"
+    },
+    {
+      "auc_oriented": 0.5033,
+      "auc_raw": 0.5033,
+      "feature": "pre_dv_15_5_to_5_0"
+    }
+  ],
+  "baseline": {
+    "ALL": {
+      "CR": 45,
+      "RD": 15,
+      "RTF": 34,
+      "STALL": 44,
+      "TW": 71,
+      "n": 209,
+      "wins": 63,
+      "wr_pct": 30.14
+    },
+    "RESERVE": {
+      "CR": 6,
+      "RD": 5,
+      "RTF": 4,
+      "STALL": 4,
+      "TW": 14,
+      "n": 33,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "CR": 29,
+      "RD": 9,
+      "RTF": 21,
+      "STALL": 28,
+      "TW": 36,
+      "n": 123,
+      "wins": 39,
+      "wr_pct": 31.71
+    },
+    "VALIDATION": {
+      "CR": 10,
+      "RD": 1,
+      "RTF": 9,
+      "STALL": 12,
+      "TW": 21,
+      "n": 53,
+      "wins": 13,
+      "wr_pct": 24.53
+    }
+  },
+  "contract": {
+    "archive_errors": [],
+    "production_authority": "NONE",
+    "rows": 209,
+    "source": "Binance Vision pre-entry aggTrades T-120s..T0",
+    "threshold_selection": "TRAIN only"
+  },
+  "stable60_pair_count": 0,
+  "stable60_top": [],
+  "top_single_rules": [
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 2,
+        "n": 7,
+        "wins": 2,
+        "wr_pct": 28.57
+      },
+      "TRAIN": {
+        "CR": 10,
+        "RD": 3,
+        "RTF": 2,
+        "STALL": 5,
+        "TW": 5,
+        "n": 25,
+        "wins": 13,
+        "wr_pct": 52.0
+      },
+      "VALIDATION": {
+        "CR": 0,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 3,
+        "n": 8,
+        "wins": 0,
+        "wr_pct": 0.0
+      },
+      "feature": "pre_range_15s",
+      "op": "<=",
+      "threshold": 0.10934937124111865
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 2,
+        "n": 7,
+        "wins": 2,
+        "wr_pct": 28.57
+      },
+      "TRAIN": {
+        "CR": 11,
+        "RD": 3,
+        "RTF": 3,
+        "STALL": 6,
+        "TW": 8,
+        "n": 31,
+        "wins": 14,
+        "wr_pct": 45.16
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 4,
+        "n": 10,
+        "wins": 1,
+        "wr_pct": 10.0
+      },
+      "feature": "pre_range_15s",
+      "op": "<=",
+      "threshold": 0.13172338090010616
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 1,
+        "STALL": 1,
+        "TW": 1,
+        "n": 5,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "TRAIN": {
+        "CR": 9,
+        "RD": 2,
+        "RTF": 3,
+        "STALL": 5,
+        "TW": 6,
+        "n": 25,
+        "wins": 11,
+        "wr_pct": 44.0
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 0,
+        "TW": 6,
+        "n": 11,
+        "wins": 1,
+        "wr_pct": 9.09
+      },
+      "feature": "pre_range_30s",
+      "op": "<=",
+      "threshold": 0.1922152811148381
+    },
+    {
+      "RESERVE": {
+        "CR": 0,
+        "RD": 3,
+        "RTF": 2,
+        "STALL": 0,
+        "TW": 1,
+        "n": 6,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "CR": 10,
+        "RD": 3,
+        "RTF": 6,
+        "STALL": 5,
+        "TW": 7,
+        "n": 31,
+        "wins": 13,
+        "wr_pct": 41.94
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 4,
+        "n": 9,
+        "wins": 1,
+        "wr_pct": 11.11
+      },
+      "feature": "pre_range_120s",
+      "op": "<=",
+      "threshold": 0.5584192439862634
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 0,
+        "TW": 3,
+        "n": 7,
+        "wins": 2,
+        "wr_pct": 28.57
+      },
+      "TRAIN": {
+        "CR": 10,
+        "RD": 3,
+        "RTF": 4,
+        "STALL": 4,
+        "TW": 10,
+        "n": 31,
+        "wins": 13,
+        "wr_pct": 41.94
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 3,
+        "TW": 6,
+        "n": 14,
+        "wins": 1,
+        "wr_pct": 7.14
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.34218768124346655
+    },
+    {
+      "RESERVE": {
+        "CR": 2,
+        "RD": 3,
+        "RTF": 1,
+        "STALL": 1,
+        "TW": 2,
+        "n": 9,
+        "wins": 5,
+        "wr_pct": 55.56
+      },
+      "TRAIN": {
+        "CR": 6,
+        "RD": 4,
+        "RTF": 4,
+        "STALL": 6,
+        "TW": 4,
+        "n": 24,
+        "wins": 10,
+        "wr_pct": 41.67
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 3,
+        "TW": 5,
+        "n": 13,
+        "wins": 2,
+        "wr_pct": 15.38
+      },
+      "feature": "pre_range_5s",
+      "op": "<=",
+      "threshold": 0.05253020486781779
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 2,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 4,
+        "n": 12,
+        "wins": 3,
+        "wr_pct": 25.0
+      },
+      "TRAIN": {
+        "CR": 12,
+        "RD": 3,
+        "RTF": 5,
+        "STALL": 8,
+        "TW": 9,
+        "n": 37,
+        "wins": 15,
+        "wr_pct": 40.54
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 6,
+        "n": 13,
+        "wins": 2,
+        "wr_pct": 15.38
+      },
+      "feature": "pre_range_15s",
+      "op": "<=",
+      "threshold": 0.1522939272796564
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 3,
+        "n": 9,
+        "wins": 2,
+        "wr_pct": 22.22
+      },
+      "TRAIN": {
+        "CR": 12,
+        "RD": 3,
+        "RTF": 4,
+        "STALL": 9,
+        "TW": 9,
+        "n": 37,
+        "wins": 15,
+        "wr_pct": 40.54
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 1,
+        "TW": 7,
+        "n": 14,
+        "wins": 2,
+        "wr_pct": 14.29
+      },
+      "feature": "pre_range_30s",
+      "op": "<=",
+      "threshold": 0.2356406480117923
+    },
+    {
+      "RESERVE": {
+        "CR": 0,
+        "RD": 3,
+        "RTF": 1,
+        "STALL": 0,
+        "TW": 1,
+        "n": 5,
+        "wins": 3,
+        "wr_pct": 60.0
+      },
+      "TRAIN": {
+        "CR": 9,
+        "RD": 1,
+        "RTF": 6,
+        "STALL": 3,
+        "TW": 6,
+        "n": 25,
+        "wins": 10,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "CR": 0,
+        "RD": 0,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 4,
+        "n": 8,
+        "wins": 0,
+        "wr_pct": 0.0
+      },
+      "feature": "pre_range_120s",
+      "op": "<=",
+      "threshold": 0.5007664793050592
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 0,
+        "TW": 2,
+        "n": 6,
+        "wins": 2,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 8,
+        "RD": 2,
+        "RTF": 4,
+        "STALL": 4,
+        "TW": 7,
+        "n": 25,
+        "wins": 10,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 1,
+        "TW": 4,
+        "n": 9,
+        "wins": 1,
+        "wr_pct": 11.11
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.30980305377297235
+    },
+    {
+      "RESERVE": {
+        "CR": 3,
+        "RD": 2,
+        "RTF": 3,
+        "STALL": 3,
+        "TW": 5,
+        "n": 16,
+        "wins": 5,
+        "wr_pct": 31.25
+      },
+      "TRAIN": {
+        "CR": 15,
+        "RD": 4,
+        "RTF": 7,
+        "STALL": 13,
+        "TW": 10,
+        "n": 49,
+        "wins": 19,
+        "wr_pct": 38.78
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 2,
+        "TW": 9,
+        "n": 17,
+        "wins": 2,
+        "wr_pct": 11.76
+      },
+      "feature": "pre_range_15s",
+      "op": "<=",
+      "threshold": 0.18685767673620735
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 3,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 4,
+        "n": 11,
+        "wins": 4,
+        "wr_pct": 36.36
+      },
+      "TRAIN": {
+        "CR": 14,
+        "RD": 5,
+        "RTF": 6,
+        "STALL": 9,
+        "TW": 15,
+        "n": 49,
+        "wins": 19,
+        "wr_pct": 38.78
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 5,
+        "TW": 9,
+        "n": 19,
+        "wins": 1,
+        "wr_pct": 5.26
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.4282655246252598
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 5,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 8,
+        "n": 17,
+        "wins": 6,
+        "wr_pct": 35.29
+      },
+      "TRAIN": {
+        "CR": 24,
+        "RD": 7,
+        "RTF": 11,
+        "STALL": 18,
+        "TW": 20,
+        "n": 80,
+        "wins": 31,
+        "wr_pct": 38.75
+      },
+      "VALIDATION": {
+        "CR": 3,
+        "RD": 1,
+        "RTF": 5,
+        "STALL": 6,
+        "TW": 12,
+        "n": 27,
+        "wins": 4,
+        "wr_pct": 14.81
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.6311992786294018
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 2,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 9,
+        "n": 19,
+        "wins": 6,
+        "wr_pct": 31.58
+      },
+      "TRAIN": {
+        "CR": 20,
+        "RD": 4,
+        "RTF": 11,
+        "STALL": 10,
+        "TW": 17,
+        "n": 62,
+        "wins": 24,
+        "wr_pct": 38.71
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 5,
+        "TW": 11,
+        "n": 27,
+        "wins": 8,
+        "wr_pct": 29.63
+      },
+      "feature": "pre_ret_15s",
+      "op": ">=",
+      "threshold": -0.007666360012270612
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 2,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 9,
+        "n": 19,
+        "wins": 6,
+        "wr_pct": 31.58
+      },
+      "TRAIN": {
+        "CR": 20,
+        "RD": 4,
+        "RTF": 11,
+        "STALL": 10,
+        "TW": 17,
+        "n": 62,
+        "wins": 24,
+        "wr_pct": 38.71
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 5,
+        "TW": 11,
+        "n": 27,
+        "wins": 8,
+        "wr_pct": 29.63
+      },
+      "feature": "pre_v_15s_pps",
+      "op": ">=",
+      "threshold": -0.0005110906674847074
+    },
+    {
+      "RESERVE": {
+        "CR": 3,
+        "RD": 4,
+        "RTF": 3,
+        "STALL": 3,
+        "TW": 6,
+        "n": 19,
+        "wins": 7,
+        "wr_pct": 36.84
+      },
+      "TRAIN": {
+        "CR": 19,
+        "RD": 5,
+        "RTF": 9,
+        "STALL": 15,
+        "TW": 14,
+        "n": 62,
+        "wins": 24,
+        "wr_pct": 38.71
+      },
+      "VALIDATION": {
+        "CR": 3,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 4,
+        "TW": 9,
+        "n": 20,
+        "wins": 3,
+        "wr_pct": 15.0
+      },
+      "feature": "pre_range_15s",
+      "op": "<=",
+      "threshold": 0.22914757103574823
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 4,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 7,
+        "n": 15,
+        "wins": 5,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 18,
+        "RD": 6,
+        "RTF": 7,
+        "STALL": 13,
+        "TW": 18,
+        "n": 62,
+        "wins": 24,
+        "wr_pct": 38.71
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 5,
+        "TW": 11,
+        "n": 23,
+        "wins": 2,
+        "wr_pct": 8.7
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.5022156573116887
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 1,
+        "RTF": 2,
+        "STALL": 2,
+        "TW": 2,
+        "n": 8,
+        "wins": 2,
+        "wr_pct": 25.0
+      },
+      "TRAIN": {
+        "CR": 10,
+        "RD": 2,
+        "RTF": 4,
+        "STALL": 8,
+        "TW": 7,
+        "n": 31,
+        "wins": 12,
+        "wr_pct": 38.71
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 0,
+        "TW": 7,
+        "n": 12,
+        "wins": 1,
+        "wr_pct": 8.33
+      },
+      "feature": "pre_range_30s",
+      "op": "<=",
+      "threshold": 0.2127013065937433
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 4,
+        "STALL": 2,
+        "TW": 10,
+        "n": 24,
+        "wins": 8,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 19,
+        "RD": 9,
+        "RTF": 13,
+        "STALL": 12,
+        "TW": 22,
+        "n": 75,
+        "wins": 29,
+        "wr_pct": 38.67
+      },
+      "VALIDATION": {
+        "CR": 6,
+        "RD": 1,
+        "RTF": 5,
+        "STALL": 4,
+        "TW": 17,
+        "n": 33,
+        "wins": 7,
+        "wr_pct": 21.21
+      },
+      "feature": "pre_seg_v_15_5s_pps",
+      "op": ">=",
+      "threshold": -0.005191568892120024
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 4,
+        "STALL": 2,
+        "TW": 11,
+        "n": 25,
+        "wins": 8,
+        "wr_pct": 32.0
+      },
+      "TRAIN": {
+        "CR": 25,
+        "RD": 6,
+        "RTF": 15,
+        "STALL": 15,
+        "TW": 20,
+        "n": 81,
+        "wins": 31,
+        "wr_pct": 38.27
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 5,
+        "TW": 15,
+        "n": 32,
+        "wins": 8,
+        "wr_pct": 25.0
+      },
+      "feature": "pre_ret_15s",
+      "op": ">=",
+      "threshold": -0.07598784194529085
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 4,
+        "STALL": 2,
+        "TW": 11,
+        "n": 25,
+        "wins": 8,
+        "wr_pct": 32.0
+      },
+      "TRAIN": {
+        "CR": 25,
+        "RD": 6,
+        "RTF": 15,
+        "STALL": 15,
+        "TW": 20,
+        "n": 81,
+        "wins": 31,
+        "wr_pct": 38.27
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 5,
+        "TW": 15,
+        "n": 32,
+        "wins": 8,
+        "wr_pct": 25.0
+      },
+      "feature": "pre_v_15s_pps",
+      "op": ">=",
+      "threshold": -0.005065856129686057
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 9,
+        "n": 22,
+        "wins": 8,
+        "wr_pct": 36.36
+      },
+      "TRAIN": {
+        "CR": 17,
+        "RD": 6,
+        "RTF": 12,
+        "STALL": 9,
+        "TW": 19,
+        "n": 63,
+        "wins": 24,
+        "wr_pct": 38.1
+      },
+      "VALIDATION": {
+        "CR": 5,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 3,
+        "TW": 13,
+        "n": 24,
+        "wins": 5,
+        "wr_pct": 20.83
+      },
+      "feature": "pre_seg_v_15_5s_pps",
+      "op": ">=",
+      "threshold": 0.0
+    },
+    {
+      "RESERVE": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 1,
+        "STALL": 1,
+        "TW": 2,
+        "n": 6,
+        "wins": 2,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 7,
+        "RD": 1,
+        "RTF": 5,
+        "STALL": 2,
+        "TW": 6,
+        "n": 21,
+        "wins": 8,
+        "wr_pct": 38.1
+      },
+      "VALIDATION": {
+        "CR": 2,
+        "RD": 0,
+        "RTF": 2,
+        "STALL": 0,
+        "TW": 3,
+        "n": 7,
+        "wins": 2,
+        "wr_pct": 28.57
+      },
+      "feature": "pre_eta_15m_supply_distance_pct_60s",
+      "op": "<=",
+      "threshold": 190.61503573658698
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 2,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 8,
+        "n": 17,
+        "wins": 6,
+        "wr_pct": 35.29
+      },
+      "TRAIN": {
+        "CR": 14,
+        "RD": 4,
+        "RTF": 8,
+        "STALL": 7,
+        "TW": 17,
+        "n": 50,
+        "wins": 19,
+        "wr_pct": 38.0
+      },
+      "VALIDATION": {
+        "CR": 4,
+        "RD": 0,
+        "RTF": 0,
+        "STALL": 2,
+        "TW": 11,
+        "n": 17,
+        "wins": 4,
+        "wr_pct": 23.53
+      },
+      "feature": "pre_seg_v_15_5s_pps",
+      "op": ">=",
+      "threshold": 0.0026881720430105283
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 5,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 8,
+        "n": 17,
+        "wins": 6,
+        "wr_pct": 35.29
+      },
+      "TRAIN": {
+        "CR": 21,
+        "RD": 7,
+        "RTF": 10,
+        "STALL": 16,
+        "TW": 20,
+        "n": 74,
+        "wins": 28,
+        "wr_pct": 37.84
+      },
+      "VALIDATION": {
+        "CR": 3,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 6,
+        "TW": 12,
+        "n": 26,
+        "wins": 3,
+        "wr_pct": 11.54
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.5728931102065404
+    },
+    {
+      "RESERVE": {
+        "CR": 0,
+        "RD": 3,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 2,
+        "n": 8,
+        "wins": 3,
+        "wr_pct": 37.5
+      },
+      "TRAIN": {
+        "CR": 10,
+        "RD": 4,
+        "RTF": 7,
+        "STALL": 8,
+        "TW": 8,
+        "n": 37,
+        "wins": 14,
+        "wr_pct": 37.84
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 3,
+        "STALL": 4,
+        "TW": 4,
+        "n": 12,
+        "wins": 1,
+        "wr_pct": 8.33
+      },
+      "feature": "pre_range_120s",
+      "op": "<=",
+      "threshold": 0.6288501026693982
+    },
+    {
+      "RESERVE": {
+        "CR": 1,
+        "RD": 2,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 3,
+        "n": 9,
+        "wins": 3,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 11,
+        "RD": 3,
+        "RTF": 6,
+        "STALL": 6,
+        "TW": 11,
+        "n": 37,
+        "wins": 14,
+        "wr_pct": 37.84
+      },
+      "VALIDATION": {
+        "CR": 1,
+        "RD": 0,
+        "RTF": 4,
+        "STALL": 5,
+        "TW": 7,
+        "n": 17,
+        "wins": 1,
+        "wr_pct": 5.88
+      },
+      "feature": "pre_range_60s",
+      "op": "<=",
+      "threshold": 0.3894080996884708
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 11,
+        "n": 24,
+        "wins": 8,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 23,
+        "RD": 5,
+        "RTF": 13,
+        "STALL": 14,
+        "TW": 20,
+        "n": 75,
+        "wins": 28,
+        "wr_pct": 37.33
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 5,
+        "TW": 13,
+        "n": 30,
+        "wins": 8,
+        "wr_pct": 26.67
+      },
+      "feature": "pre_ret_15s",
+      "op": ">=",
+      "threshold": -0.05379959650302357
+    },
+    {
+      "RESERVE": {
+        "CR": 4,
+        "RD": 4,
+        "RTF": 3,
+        "STALL": 2,
+        "TW": 11,
+        "n": 24,
+        "wins": 8,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 23,
+        "RD": 5,
+        "RTF": 13,
+        "STALL": 14,
+        "TW": 20,
+        "n": 75,
+        "wins": 28,
+        "wr_pct": 37.33
+      },
+      "VALIDATION": {
+        "CR": 7,
+        "RD": 0,
+        "RTF": 5,
+        "STALL": 5,
+        "TW": 13,
+        "n": 30,
+        "wins": 8,
+        "wr_pct": 26.67
+      },
+      "feature": "pre_v_15s_pps",
+      "op": ">=",
+      "threshold": -0.003586639766868238
+    },
+    {
+      "RESERVE": {
+        "CR": 2,
+        "RD": 4,
+        "RTF": 2,
+        "STALL": 1,
+        "TW": 9,
+        "n": 18,
+        "wins": 6,
+        "wr_pct": 33.33
+      },
+      "TRAIN": {
+        "CR": 24,
+        "RD": 8,
+        "RTF": 14,
+        "STALL": 20,
+        "TW": 20,
+        "n": 86,
+        "wins": 32,
+        "wr_pct": 37.21
+      },
+      "VALIDATION": {
+        "CR": 8,
+        "RD": 1,
+        "RTF": 7,
+        "STALL": 7,
+        "TW": 15,
+        "n": 38,
+        "wins": 9,
+        "wr_pct": 23.68
+      },
+      "feature": "pre_range_120s",
+      "op": "<=",
+      "threshold": 1.1435033928122618
+    }
+  ],
+  "version": "lq3gv-preentry-velocity-v1"
+}
