@@ -1,0 +1,3273 @@
+{
+  "contract": {
+    "early60": {
+      "eta_nearest_supply_60s_max_seconds": 1478.8772362732022,
+      "t_mfe_60s_min_seconds": 33.321
+    },
+    "legacy_fast15_recheck": {
+      "v15_min": 0.00706050285556407,
+      "v60_min": -0.0003332666799972979
+    },
+    "production_authority": "NONE",
+    "role": "post-entry velocity state classifier; NOT a delayed-entry replay",
+    "rows": 209,
+    "source": "authoritative LQ3GV frozen trade-level",
+    "strong120": {
+      "eta_nearest_supply_60s_max_seconds": 1383.324562761091,
+      "v_0_120s_pps_min": 0.0008457198799203628
+    }
+  },
+  "early60": {
+    "ALL": {
+      "class_mix": {
+        "CORRECT_RUNNER": 22,
+        "RECOVERED_DRAWDOWN": 3,
+        "RIGHT_THEN_FAILURE": 10,
+        "STALL_NO_EDGE": 3,
+        "TRUE_WRONG_DIRECTION": 2
+      },
+      "correct_runner": 22,
+      "n": 40,
+      "pnl": 90.9,
+      "recovered": 3,
+      "rtf": 10,
+      "stall": 3,
+      "true_wrong": 2,
+      "wilson95_high": 75.78,
+      "wilson95_low": 47.03,
+      "wins": 25,
+      "wr_pct": 62.5
+    },
+    "RESERVE": {
+      "class_mix": {
+        "CORRECT_RUNNER": 2,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 1,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "correct_runner": 2,
+      "n": 5,
+      "pnl": -1.13,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 1,
+      "wilson95_high": 88.24,
+      "wilson95_low": 23.07,
+      "wins": 3,
+      "wr_pct": 60.0
+    },
+    "TRAIN": {
+      "class_mix": {
+        "CORRECT_RUNNER": 12,
+        "RECOVERED_DRAWDOWN": 2,
+        "RIGHT_THEN_FAILURE": 5,
+        "STALL_NO_EDGE": 3
+      },
+      "correct_runner": 12,
+      "n": 22,
+      "pnl": 80.45,
+      "recovered": 2,
+      "rtf": 5,
+      "stall": 3,
+      "true_wrong": 0,
+      "wilson95_high": 80.27,
+      "wilson95_low": 42.95,
+      "wins": 14,
+      "wr_pct": 63.64
+    },
+    "VALIDATION": {
+      "class_mix": {
+        "CORRECT_RUNNER": 8,
+        "RIGHT_THEN_FAILURE": 4,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "correct_runner": 8,
+      "n": 13,
+      "pnl": 11.58,
+      "recovered": 0,
+      "rtf": 4,
+      "stall": 0,
+      "true_wrong": 1,
+      "wilson95_high": 82.29,
+      "wilson95_low": 35.52,
+      "wins": 8,
+      "wr_pct": 61.54
+    }
+  },
+  "legacy_fast15_recheck": {
+    "ALL": {
+      "class_mix": {
+        "CORRECT_RUNNER": 18,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 6,
+        "STALL_NO_EDGE": 3,
+        "TRUE_WRONG_DIRECTION": 2
+      },
+      "correct_runner": 18,
+      "n": 30,
+      "pnl": 76.27,
+      "recovered": 1,
+      "rtf": 6,
+      "stall": 3,
+      "true_wrong": 2,
+      "wilson95_high": 78.13,
+      "wilson95_low": 45.51,
+      "wins": 19,
+      "wr_pct": 63.33
+    },
+    "RESERVE": {
+      "class_mix": {
+        "CORRECT_RUNNER": 3,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "correct_runner": 3,
+      "n": 4,
+      "pnl": -1.44,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 1,
+      "wilson95_high": 95.44,
+      "wilson95_low": 30.06,
+      "wins": 3,
+      "wr_pct": 75.0
+    },
+    "TRAIN": {
+      "class_mix": {
+        "CORRECT_RUNNER": 10,
+        "RIGHT_THEN_FAILURE": 3,
+        "STALL_NO_EDGE": 3
+      },
+      "correct_runner": 10,
+      "n": 16,
+      "pnl": 73.79,
+      "recovered": 0,
+      "rtf": 3,
+      "stall": 3,
+      "true_wrong": 0,
+      "wilson95_high": 81.52,
+      "wilson95_low": 38.64,
+      "wins": 10,
+      "wr_pct": 62.5
+    },
+    "VALIDATION": {
+      "class_mix": {
+        "CORRECT_RUNNER": 5,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 3,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "correct_runner": 5,
+      "n": 10,
+      "pnl": 3.91,
+      "recovered": 1,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 1,
+      "wilson95_high": 83.18,
+      "wilson95_low": 31.27,
+      "wins": 6,
+      "wr_pct": 60.0
+    }
+  },
+  "robustness": {
+    "early60": {
+      "cells": 48,
+      "stable60_cells": 14,
+      "stable60_pct": 29.17,
+      "top": [
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 24,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 4,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 24,
+            "n": 42,
+            "pnl": 94.52,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 4,
+            "true_wrong": 2,
+            "wilson95_high": 77.01,
+            "wilson95_low": 49.17,
+            "wins": 27,
+            "wr_pct": 64.29
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 14,
+            "n": 24,
+            "pnl": 85.68,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 82.03,
+            "wilson95_low": 46.71,
+            "wins": 16,
+            "wr_pct": 66.67
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 9.97,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1383.324562761091,
+          "t_mfe_min": 25
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 4,
+              "RIGHT_THEN_FAILURE": 10,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 3
+            },
+            "correct_runner": 22,
+            "n": 42,
+            "pnl": 90.39,
+            "recovered": 4,
+            "rtf": 10,
+            "stall": 3,
+            "true_wrong": 3,
+            "wilson95_high": 75.0,
+            "wilson95_low": 46.81,
+            "wins": 26,
+            "wr_pct": 61.9
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 6,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 24,
+            "pnl": 80.25,
+            "recovered": 3,
+            "rtf": 6,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 78.84,
+            "wilson95_low": 42.71,
+            "wins": 15,
+            "wr_pct": 62.5
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 11.27,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 2,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 2200,
+          "t_mfe_min": 35
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 4,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 23,
+            "n": 41,
+            "pnl": 94.26,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 4,
+            "true_wrong": 2,
+            "wilson95_high": 76.41,
+            "wilson95_low": 48.12,
+            "wins": 26,
+            "wr_pct": 63.41
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 13,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 13,
+            "n": 23,
+            "pnl": 85.43,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 81.19,
+            "wilson95_low": 44.89,
+            "wins": 15,
+            "wr_pct": 65.22
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 9.97,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1250,
+          "t_mfe_min": 25
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 4,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 23,
+            "n": 41,
+            "pnl": 92.56,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 4,
+            "true_wrong": 2,
+            "wilson95_high": 76.41,
+            "wilson95_low": 48.12,
+            "wins": 26,
+            "wr_pct": 63.41
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 13,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 13,
+            "n": 23,
+            "pnl": 83.73,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 81.19,
+            "wilson95_low": 44.89,
+            "wins": 15,
+            "wr_pct": 65.22
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 9.97,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1383.324562761091,
+          "t_mfe_min": 30
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 4,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 3
+            },
+            "correct_runner": 22,
+            "n": 41,
+            "pnl": 91.5,
+            "recovered": 4,
+            "rtf": 9,
+            "stall": 3,
+            "true_wrong": 3,
+            "wilson95_high": 76.41,
+            "wilson95_low": 48.12,
+            "wins": 26,
+            "wr_pct": 63.41
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 23,
+            "pnl": 81.36,
+            "recovered": 3,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 81.19,
+            "wilson95_low": 44.89,
+            "wins": 15,
+            "wr_pct": 65.22
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 11.27,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 2,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1800,
+          "t_mfe_min": 35
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 4,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 40,
+            "pnl": 92.31,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 4,
+            "true_wrong": 2,
+            "wilson95_high": 75.78,
+            "wilson95_low": 47.03,
+            "wins": 25,
+            "wr_pct": 62.5
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 83.48,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 9.97,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1250,
+          "t_mfe_min": 30
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 10,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 40,
+            "pnl": 90.9,
+            "recovered": 3,
+            "rtf": 10,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 75.78,
+            "wilson95_low": 47.03,
+            "wins": 25,
+            "wr_pct": 62.5
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 4,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 11.58,
+            "recovered": 0,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1478.8772362732022,
+          "t_mfe_min": 33.321
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 10,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 40,
+            "pnl": 90.9,
+            "recovered": 3,
+            "rtf": 10,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 75.78,
+            "wilson95_low": 47.03,
+            "wins": 25,
+            "wr_pct": 62.5
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 4,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 13,
+            "pnl": 11.58,
+            "recovered": 0,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 82.29,
+            "wilson95_low": 35.52,
+            "wins": 8,
+            "wr_pct": 61.54
+          },
+          "eta_max": 1600,
+          "t_mfe_min": 33.321
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 39,
+            "pnl": 91.24,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 77.26,
+            "wilson95_low": 48.42,
+            "wins": 25,
+            "wr_pct": 64.1
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 11.93,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1383.324562761091,
+          "t_mfe_min": 33.321
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 39,
+            "pnl": 94.53,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 77.26,
+            "wilson95_low": 48.42,
+            "wins": 25,
+            "wr_pct": 64.1
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 15.22,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1478.8772362732022,
+          "t_mfe_min": 35
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 39,
+            "pnl": 94.53,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 77.26,
+            "wilson95_low": 48.42,
+            "wins": 25,
+            "wr_pct": 64.1
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 15.22,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1600,
+          "t_mfe_min": 35
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 21,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 9,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 21,
+            "n": 38,
+            "pnl": 90.99,
+            "recovered": 3,
+            "rtf": 9,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 76.62,
+            "wilson95_low": 47.28,
+            "wins": 24,
+            "wr_pct": 63.16
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 11,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 11,
+            "n": 21,
+            "pnl": 80.19,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 79.25,
+            "wilson95_low": 40.88,
+            "wins": 13,
+            "wr_pct": 61.9
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 3,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 11.93,
+            "recovered": 0,
+            "rtf": 3,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1250,
+          "t_mfe_min": 33.321
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 22,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 22,
+            "n": 38,
+            "pnl": 94.88,
+            "recovered": 3,
+            "rtf": 8,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 78.79,
+            "wilson95_low": 49.89,
+            "wins": 25,
+            "wr_pct": 65.79
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 12,
+            "n": 22,
+            "pnl": 80.45,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 80.27,
+            "wilson95_low": 42.95,
+            "wins": 14,
+            "wr_pct": 63.64
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 15.56,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1383.324562761091,
+          "t_mfe_min": 35
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 21,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 3,
+              "TRUE_WRONG_DIRECTION": 2
+            },
+            "correct_runner": 21,
+            "n": 37,
+            "pnl": 94.63,
+            "recovered": 3,
+            "rtf": 8,
+            "stall": 3,
+            "true_wrong": 2,
+            "wilson95_high": 78.17,
+            "wilson95_low": 48.76,
+            "wins": 24,
+            "wr_pct": 64.86
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 2,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 2,
+            "n": 5,
+            "pnl": -1.13,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 88.24,
+            "wilson95_low": 23.07,
+            "wins": 3,
+            "wr_pct": 60.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 11,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5,
+              "STALL_NO_EDGE": 3
+            },
+            "correct_runner": 11,
+            "n": 21,
+            "pnl": 80.19,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 3,
+            "true_wrong": 0,
+            "wilson95_high": 79.25,
+            "wilson95_low": 40.88,
+            "wins": 13,
+            "wr_pct": 61.9
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 15.56,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 0,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1250,
+          "t_mfe_min": 35
+        }
+      ]
+    },
+    "strong120": {
+      "cells": 56,
+      "stable60_cells": 25,
+      "stable60_pct": 44.64,
+      "top": [
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 38,
+            "pnl": 108.25,
+            "recovered": 3,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.03,
+            "wilson95_low": 57.99,
+            "wins": 28,
+            "wr_pct": 73.68
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 21,
+            "pnl": 90.52,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 89.37,
+            "wilson95_low": 54.91,
+            "wins": 16,
+            "wr_pct": 76.19
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1800,
+          "v120_min": 0.0004
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 38,
+            "pnl": 108.25,
+            "recovered": 3,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.03,
+            "wilson95_low": 57.99,
+            "wins": 28,
+            "wr_pct": 73.68
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 21,
+            "pnl": 90.52,
+            "recovered": 2,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 89.37,
+            "wilson95_low": 54.91,
+            "wins": 16,
+            "wr_pct": 76.19
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1800,
+          "v120_min": 0.0005
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 37,
+            "pnl": 107.33,
+            "recovered": 2,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 84.6,
+            "wilson95_low": 57.02,
+            "wins": 27,
+            "wr_pct": 72.97
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 20,
+            "pnl": 89.6,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.81,
+            "wilson95_low": 53.13,
+            "wins": 15,
+            "wr_pct": 75.0
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1478.8772362732022,
+          "v120_min": 0.0004
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 37,
+            "pnl": 107.33,
+            "recovered": 2,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 84.6,
+            "wilson95_low": 57.02,
+            "wins": 27,
+            "wr_pct": 72.97
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 20,
+            "pnl": 89.6,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.81,
+            "wilson95_low": 53.13,
+            "wins": 15,
+            "wr_pct": 75.0
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1600,
+          "v120_min": 0.0004
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 37,
+            "pnl": 107.33,
+            "recovered": 2,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 84.6,
+            "wilson95_low": 57.02,
+            "wins": 27,
+            "wr_pct": 72.97
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 20,
+            "pnl": 89.6,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.81,
+            "wilson95_low": 53.13,
+            "wins": 15,
+            "wr_pct": 75.0
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1478.8772362732022,
+          "v120_min": 0.0005
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 8,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 37,
+            "pnl": 107.33,
+            "recovered": 2,
+            "rtf": 8,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 84.6,
+            "wilson95_low": 57.02,
+            "wins": 27,
+            "wr_pct": 72.97
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 14,
+            "n": 20,
+            "pnl": 89.6,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.81,
+            "wilson95_low": 53.13,
+            "wins": 15,
+            "wr_pct": 75.0
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1600,
+          "v120_min": 0.0005
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 37,
+            "pnl": 111.39,
+            "recovered": 3,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.64,
+            "wilson95_low": 59.88,
+            "wins": 28,
+            "wr_pct": 75.68
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 14,
+            "n": 20,
+            "pnl": 93.66,
+            "recovered": 2,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.93,
+            "wilson95_low": 58.4,
+            "wins": 16,
+            "wr_pct": 80.0
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1800,
+          "v120_min": 0.0006196202303003032
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 36,
+            "pnl": 110.47,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.25,
+            "wilson95_low": 58.93,
+            "wins": 27,
+            "wr_pct": 75.0
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 14,
+            "n": 19,
+            "pnl": 92.74,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.49,
+            "wilson95_low": 56.67,
+            "wins": 15,
+            "wr_pct": 78.95
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1478.8772362732022,
+          "v120_min": 0.0006196202303003032
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 25,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 25,
+            "n": 36,
+            "pnl": 110.47,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.25,
+            "wilson95_low": 58.93,
+            "wins": 27,
+            "wr_pct": 75.0
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 14,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 14,
+            "n": 19,
+            "pnl": 92.74,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.49,
+            "wilson95_low": 56.67,
+            "wins": 15,
+            "wr_pct": 78.95
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1600,
+          "v120_min": 0.0006196202303003032
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 24,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 24,
+            "n": 35,
+            "pnl": 105.49,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.84,
+            "wilson95_low": 57.93,
+            "wins": 26,
+            "wr_pct": 74.29
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 13,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 13,
+            "n": 19,
+            "pnl": 87.41,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.19,
+            "wilson95_low": 51.21,
+            "wins": 14,
+            "wr_pct": 73.68
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1383.324562761091,
+          "v120_min": 0.0004
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 24,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 24,
+            "n": 35,
+            "pnl": 105.49,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.84,
+            "wilson95_low": 57.93,
+            "wins": 26,
+            "wr_pct": 74.29
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 13,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 13,
+            "n": 19,
+            "pnl": 87.41,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 88.19,
+            "wilson95_low": 51.21,
+            "wins": 14,
+            "wr_pct": 73.68
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1383.324562761091,
+          "v120_min": 0.0005
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 35,
+            "pnl": 110.12,
+            "recovered": 3,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.84,
+            "wilson95_low": 57.93,
+            "wins": 26,
+            "wr_pct": 74.29
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 18,
+            "pnl": 92.4,
+            "recovered": 2,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.0,
+            "wilson95_low": 54.78,
+            "wins": 14,
+            "wr_pct": 77.78
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1800,
+          "v120_min": 0.00075
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 24,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 6,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 24,
+            "n": 34,
+            "pnl": 108.63,
+            "recovered": 2,
+            "rtf": 6,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 87.56,
+            "wilson95_low": 60.0,
+            "wins": 26,
+            "wr_pct": 76.47
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 13,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 13,
+            "n": 18,
+            "pnl": 90.56,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.0,
+            "wilson95_low": 54.78,
+            "wins": 14,
+            "wr_pct": 77.78
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1383.324562761091,
+          "v120_min": 0.0006196202303003032
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 3,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1
+            },
+            "correct_runner": 23,
+            "n": 34,
+            "pnl": 112.73,
+            "recovered": 3,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 0,
+            "wilson95_high": 87.56,
+            "wilson95_low": 60.0,
+            "wins": 26,
+            "wr_pct": 76.47
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 18,
+            "pnl": 92.4,
+            "recovered": 2,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 91.0,
+            "wilson95_low": 54.78,
+            "wins": 14,
+            "wr_pct": 77.78
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 15.44,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 0,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1800,
+          "v120_min": 0.0008457198799203628
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 34,
+            "pnl": 105.23,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.4,
+            "wilson95_low": 56.88,
+            "wins": 25,
+            "wr_pct": 73.53
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 12,
+            "n": 18,
+            "pnl": 87.16,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 87.5,
+            "wilson95_low": 49.13,
+            "wins": 13,
+            "wr_pct": 72.22
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1250,
+          "v120_min": 0.0004
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 34,
+            "pnl": 105.23,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.4,
+            "wilson95_low": 56.88,
+            "wins": 25,
+            "wr_pct": 73.53
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 5
+            },
+            "correct_runner": 12,
+            "n": 18,
+            "pnl": 87.16,
+            "recovered": 1,
+            "rtf": 5,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 87.5,
+            "wilson95_low": 49.13,
+            "wins": 13,
+            "wr_pct": 72.22
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1250,
+          "v120_min": 0.0005
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 34,
+            "pnl": 109.2,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.4,
+            "wilson95_low": 56.88,
+            "wins": 25,
+            "wr_pct": 73.53
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 17,
+            "pnl": 91.48,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 90.45,
+            "wilson95_low": 52.74,
+            "wins": 13,
+            "wr_pct": 76.47
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1478.8772362732022,
+          "v120_min": 0.00075
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 34,
+            "pnl": 109.2,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 85.4,
+            "wilson95_low": 56.88,
+            "wins": 25,
+            "wr_pct": 73.53
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 17,
+            "pnl": 91.48,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 90.45,
+            "wilson95_low": 52.74,
+            "wins": 13,
+            "wr_pct": 76.47
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 12,
+            "pnl": 12.83,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 86.19,
+            "wilson95_low": 39.06,
+            "wins": 8,
+            "wr_pct": 66.67
+          },
+          "eta_max": 1600,
+          "v120_min": 0.00075
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 6,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 23,
+            "n": 33,
+            "pnl": 108.38,
+            "recovered": 2,
+            "rtf": 6,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 87.17,
+            "wilson95_low": 58.98,
+            "wins": 25,
+            "wr_pct": 75.76
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 17,
+            "pnl": 90.3,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 90.45,
+            "wilson95_low": 52.74,
+            "wins": 13,
+            "wr_pct": 76.47
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 1,
+              "STALL_NO_EDGE": 1,
+              "TRUE_WRONG_DIRECTION": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 13.18,
+            "recovered": 0,
+            "rtf": 1,
+            "stall": 1,
+            "true_wrong": 1,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1250,
+          "v120_min": 0.0006196202303003032
+        },
+        {
+          "ALL": {
+            "class_mix": {
+              "CORRECT_RUNNER": 23,
+              "RECOVERED_DRAWDOWN": 2,
+              "RIGHT_THEN_FAILURE": 7,
+              "STALL_NO_EDGE": 1
+            },
+            "correct_runner": 23,
+            "n": 33,
+            "pnl": 111.81,
+            "recovered": 2,
+            "rtf": 7,
+            "stall": 1,
+            "true_wrong": 0,
+            "wilson95_high": 87.17,
+            "wilson95_low": 58.98,
+            "wins": 25,
+            "wr_pct": 75.76
+          },
+          "RESERVE": {
+            "class_mix": {
+              "CORRECT_RUNNER": 3,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 1
+            },
+            "correct_runner": 3,
+            "n": 5,
+            "pnl": 4.89,
+            "recovered": 1,
+            "rtf": 1,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 96.38,
+            "wilson95_low": 37.55,
+            "wins": 4,
+            "wr_pct": 80.0
+          },
+          "TRAIN": {
+            "class_mix": {
+              "CORRECT_RUNNER": 12,
+              "RECOVERED_DRAWDOWN": 1,
+              "RIGHT_THEN_FAILURE": 4
+            },
+            "correct_runner": 12,
+            "n": 17,
+            "pnl": 91.48,
+            "recovered": 1,
+            "rtf": 4,
+            "stall": 0,
+            "true_wrong": 0,
+            "wilson95_high": 90.45,
+            "wilson95_low": 52.74,
+            "wins": 13,
+            "wr_pct": 76.47
+          },
+          "VALIDATION": {
+            "class_mix": {
+              "CORRECT_RUNNER": 8,
+              "RIGHT_THEN_FAILURE": 2,
+              "STALL_NO_EDGE": 1
+            },
+            "correct_runner": 8,
+            "n": 11,
+            "pnl": 15.44,
+            "recovered": 0,
+            "rtf": 2,
+            "stall": 1,
+            "true_wrong": 0,
+            "wilson95_high": 90.25,
+            "wilson95_low": 43.43,
+            "wins": 8,
+            "wr_pct": 72.73
+          },
+          "eta_max": 1478.8772362732022,
+          "v120_min": 0.0008457198799203628
+        }
+      ]
+    }
+  },
+  "strong120": {
+    "ALL": {
+      "class_mix": {
+        "CORRECT_RUNNER": 22,
+        "RECOVERED_DRAWDOWN": 2,
+        "RIGHT_THEN_FAILURE": 6,
+        "STALL_NO_EDGE": 1
+      },
+      "correct_runner": 22,
+      "n": 31,
+      "pnl": 109.97,
+      "recovered": 2,
+      "rtf": 6,
+      "stall": 1,
+      "true_wrong": 0,
+      "wilson95_high": 88.61,
+      "wilson95_low": 60.19,
+      "wins": 24,
+      "wr_pct": 77.42
+    },
+    "RESERVE": {
+      "class_mix": {
+        "CORRECT_RUNNER": 3,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 1
+      },
+      "correct_runner": 3,
+      "n": 5,
+      "pnl": 4.89,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 0,
+      "wilson95_high": 96.38,
+      "wilson95_low": 37.55,
+      "wins": 4,
+      "wr_pct": 80.0
+    },
+    "TRAIN": {
+      "class_mix": {
+        "CORRECT_RUNNER": 11,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 4
+      },
+      "correct_runner": 11,
+      "n": 16,
+      "pnl": 89.29,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 0,
+      "true_wrong": 0,
+      "wilson95_high": 89.82,
+      "wilson95_low": 50.5,
+      "wins": 12,
+      "wr_pct": 75.0
+    },
+    "VALIDATION": {
+      "class_mix": {
+        "CORRECT_RUNNER": 8,
+        "RIGHT_THEN_FAILURE": 1,
+        "STALL_NO_EDGE": 1
+      },
+      "correct_runner": 8,
+      "n": 10,
+      "pnl": 15.79,
+      "recovered": 0,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wilson95_high": 94.33,
+      "wilson95_low": 49.02,
+      "wins": 8,
+      "wr_pct": 80.0
+    }
+  },
+  "transitions": {
+    "EARLY60_AND_STRONG120": {
+      "ALL": {
+        "class_mix": {
+          "CORRECT_RUNNER": 18,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 4
+        },
+        "correct_runner": 18,
+        "n": 24,
+        "pnl": 106.05,
+        "recovered": 2,
+        "rtf": 4,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 93.32,
+        "wilson95_low": 64.15,
+        "wins": 20,
+        "wr_pct": 83.33
+      },
+      "RESERVE": {
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 1
+        },
+        "correct_runner": 2,
+        "n": 4,
+        "pnl": 3.55,
+        "recovered": 1,
+        "rtf": 1,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 95.44,
+        "wilson95_low": 30.06,
+        "wins": 3,
+        "wr_pct": 75.0
+      },
+      "TRAIN": {
+        "class_mix": {
+          "CORRECT_RUNNER": 8,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 3
+        },
+        "correct_runner": 8,
+        "n": 12,
+        "pnl": 83.3,
+        "recovered": 1,
+        "rtf": 3,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 91.11,
+        "wilson95_low": 46.77,
+        "wins": 9,
+        "wr_pct": 75.0
+      },
+      "VALIDATION": {
+        "class_mix": {
+          "CORRECT_RUNNER": 8
+        },
+        "correct_runner": 8,
+        "n": 8,
+        "pnl": 19.2,
+        "recovered": 0,
+        "rtf": 0,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 100.0,
+        "wilson95_low": 67.56,
+        "wins": 8,
+        "wr_pct": 100.0
+      }
+    },
+    "EARLY60_ONLY_DECAY": {
+      "ALL": {
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 6,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "correct_runner": 4,
+        "n": 16,
+        "pnl": -15.15,
+        "recovered": 1,
+        "rtf": 6,
+        "stall": 3,
+        "true_wrong": 2,
+        "wilson95_high": 55.6,
+        "wilson95_low": 14.16,
+        "wins": 5,
+        "wr_pct": 31.25
+      },
+      "RESERVE": {
+        "class_mix": {
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "correct_runner": 0,
+        "n": 1,
+        "pnl": -4.68,
+        "recovered": 0,
+        "rtf": 0,
+        "stall": 0,
+        "true_wrong": 1,
+        "wilson95_high": 79.35,
+        "wilson95_low": 0.0,
+        "wins": 0,
+        "wr_pct": 0.0
+      },
+      "TRAIN": {
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3
+        },
+        "correct_runner": 4,
+        "n": 10,
+        "pnl": -2.86,
+        "recovered": 1,
+        "rtf": 2,
+        "stall": 3,
+        "true_wrong": 0,
+        "wilson95_high": 76.34,
+        "wilson95_low": 23.66,
+        "wins": 5,
+        "wr_pct": 50.0
+      },
+      "VALIDATION": {
+        "class_mix": {
+          "RIGHT_THEN_FAILURE": 4,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "correct_runner": 0,
+        "n": 5,
+        "pnl": -7.62,
+        "recovered": 0,
+        "rtf": 4,
+        "stall": 0,
+        "true_wrong": 1,
+        "wilson95_high": 43.45,
+        "wilson95_low": -0.0,
+        "wins": 0,
+        "wr_pct": 0.0
+      }
+    },
+    "LATE_STRONG120_ONLY": {
+      "ALL": {
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 1
+        },
+        "correct_runner": 4,
+        "n": 7,
+        "pnl": 3.92,
+        "recovered": 0,
+        "rtf": 2,
+        "stall": 1,
+        "true_wrong": 0,
+        "wilson95_high": 84.18,
+        "wilson95_low": 25.05,
+        "wins": 4,
+        "wr_pct": 57.14
+      },
+      "RESERVE": {
+        "class_mix": {
+          "CORRECT_RUNNER": 1
+        },
+        "correct_runner": 1,
+        "n": 1,
+        "pnl": 1.34,
+        "recovered": 0,
+        "rtf": 0,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 100.0,
+        "wilson95_low": 20.65,
+        "wins": 1,
+        "wr_pct": 100.0
+      },
+      "TRAIN": {
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RIGHT_THEN_FAILURE": 1
+        },
+        "correct_runner": 3,
+        "n": 4,
+        "pnl": 5.99,
+        "recovered": 0,
+        "rtf": 1,
+        "stall": 0,
+        "true_wrong": 0,
+        "wilson95_high": 95.44,
+        "wilson95_low": 30.06,
+        "wins": 3,
+        "wr_pct": 75.0
+      },
+      "VALIDATION": {
+        "class_mix": {
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1
+        },
+        "correct_runner": 0,
+        "n": 2,
+        "pnl": -3.41,
+        "recovered": 0,
+        "rtf": 1,
+        "stall": 1,
+        "true_wrong": 0,
+        "wilson95_high": 65.76,
+        "wilson95_low": 0.0,
+        "wins": 0,
+        "wr_pct": 0.0
+      }
+    },
+    "NEITHER": {
+      "ALL": {
+        "class_mix": {
+          "CORRECT_RUNNER": 19,
+          "RECOVERED_DRAWDOWN": 12,
+          "RIGHT_THEN_FAILURE": 22,
+          "STALL_NO_EDGE": 40,
+          "TRUE_WRONG_DIRECTION": 69
+        },
+        "correct_runner": 19,
+        "n": 162,
+        "pnl": -221.24,
+        "recovered": 12,
+        "rtf": 22,
+        "stall": 40,
+        "true_wrong": 69,
+        "wilson95_high": 27.89,
+        "wilson95_low": 15.43,
+        "wins": 34,
+        "wr_pct": 20.99
+      },
+      "RESERVE": {
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 4,
+          "TRUE_WRONG_DIRECTION": 13
+        },
+        "correct_runner": 3,
+        "n": 27,
+        "pnl": -39.09,
+        "recovered": 4,
+        "rtf": 3,
+        "stall": 4,
+        "true_wrong": 13,
+        "wilson95_high": 44.68,
+        "wilson95_low": 13.17,
+        "wins": 7,
+        "wr_pct": 25.93
+      },
+      "TRAIN": {
+        "class_mix": {
+          "CORRECT_RUNNER": 14,
+          "RECOVERED_DRAWDOWN": 7,
+          "RIGHT_THEN_FAILURE": 15,
+          "STALL_NO_EDGE": 25,
+          "TRUE_WRONG_DIRECTION": 36
+        },
+        "correct_runner": 14,
+        "n": 97,
+        "pnl": -84.92,
+        "recovered": 7,
+        "rtf": 15,
+        "stall": 25,
+        "true_wrong": 36,
+        "wilson95_high": 31.96,
+        "wilson95_low": 15.48,
+        "wins": 22,
+        "wr_pct": 22.68
+      },
+      "VALIDATION": {
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 4,
+          "STALL_NO_EDGE": 11,
+          "TRUE_WRONG_DIRECTION": 20
+        },
+        "correct_runner": 2,
+        "n": 38,
+        "pnl": -97.22,
+        "recovered": 1,
+        "rtf": 4,
+        "stall": 11,
+        "true_wrong": 20,
+        "wilson95_high": 27.33,
+        "wilson95_low": 5.75,
+        "wins": 5,
+        "wr_pct": 13.16
+      }
+    }
+  },
+  "verdict": {
+    "early60_status": "PASS_RESEARCH; all splits >=60 but Reserve n=5 and pooled CI crosses below 60",
+    "legacy_fast15_status": "DO_NOT_FREEZE; stale V1 probe did not reproduce on authoritative frozen CSV",
+    "production": "HOLD",
+    "router_interpretation": "T60 early-confirm trades that fail to upgrade to T120 strong are a high-risk decay state",
+    "strong120_status": "PASS_STRONG_RESEARCH; all splits >=75/80/80, pooled WR 77.42 and pooled Wilson95 lower >60"
+  },
+  "version": "lq3gv2-velocity-router-validation-v1"
+}
