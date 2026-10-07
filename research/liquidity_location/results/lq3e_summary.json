@@ -1,0 +1,160 @@
+{
+  "version": "lq3e-rtf-temporal-profit-lock-v1",
+  "status": "PASS_DIAGNOSIS_TARGET60_NOT_MET_AT_1M",
+  "contract": {
+    "base_cohort": "LQ3D admission-selected OPEN_LANE LONG",
+    "rows": 76,
+    "composition": {
+      "GOOD": 28,
+      "BAD": 10,
+      "RIGHT_THEN_FAILURE": 38
+    },
+    "historical": {
+      "wins": 28,
+      "wr_pct": 36.84,
+      "net_pnl": -45.805
+    },
+    "splits": {
+      "TRAIN": {
+        "n": 44,
+        "wins": 15,
+        "wr_pct": 34.09,
+        "net_pnl": -26.401
+      },
+      "VALIDATION": {
+        "n": 19,
+        "wins": 9,
+        "wr_pct": 47.37,
+        "net_pnl": -1.601
+      },
+      "RESERVE": {
+        "n": 13,
+        "wins": 4,
+        "wr_pct": 30.77,
+        "net_pnl": -17.803
+      }
+    },
+    "production_authority": "NONE"
+  },
+  "temporal_separation": {
+    "good_vs_rtf": {
+      "t3_selected_slope5_norm_auc": 0.687,
+      "t2_side_return_auc": 0.675,
+      "t3_side_return_auc": 0.673,
+      "interpretation": "GOOD and RTF separate moderately after entry; no clean minute-checkpoint classifier."
+    },
+    "checkpoint_oracle": {
+      "rtf_positive_net_at_t1": 7,
+      "rtf_positive_net_at_t2": 11,
+      "rtf_positive_net_at_t3": 13,
+      "rtf_positive_at_any_t1_t2_t3": 16,
+      "rtf_total": 38,
+      "split_any_positive": {
+        "TRAIN": 7,
+        "VALIDATION": 4,
+        "RESERVE": 5
+      },
+      "theoretical_max_wins_if_perfect_checkpoint_choice": 44,
+      "theoretical_max_wr_pct": 57.89,
+      "wins_needed_for_60pct": 46,
+      "verdict": "T1_T2_T3_DISCRETE_CHECKPOINTS_CANNOT_REACH_60"
+    }
+  },
+  "replay_1m": {
+    "source": "Binance USD-M 1m historical klines",
+    "horizon_hours": 6,
+    "notional_usdt": 500,
+    "entry_fee_rate": 0.00075,
+    "exit_fee_rate": 0.00075,
+    "exit_slippage_bps": 2,
+    "causality": [
+      "arm threshold recognized only after completed 1m bar",
+      "profit floor active starting next bar",
+      "if next bar opens through stop, fill at bar open",
+      "otherwise stop fills at floor when bar low crosses",
+      "path guarded against later post-trade extension using frozen historical MFE +0.05pp tolerance"
+    ],
+    "policies": {
+      "ARM_0P50_LOCK_0P18_FIXED": {
+        "wins": 40,
+        "wr_pct": 52.63,
+        "net_pnl_approx": -50.697,
+        "note": "WR improves, PnL worsens because fixed floor caps winners and 1m delayed activation can gap through floor."
+      },
+      "ARM_0P50_LOCK_0P18_RUNNER_PRESERVE_60": {
+        "wins": 40,
+        "wr_pct": 52.63,
+        "net_pnl_approx": -7.159,
+        "splits": {
+          "TRAIN": {
+            "n": 44,
+            "wins": 22,
+            "wr_pct": 50,
+            "net_pnl_approx": -4.142
+          },
+          "VALIDATION": {
+            "n": 19,
+            "wins": 11,
+            "wr_pct": 57.89,
+            "net_pnl_approx": 1.658
+          },
+          "RESERVE": {
+            "n": 13,
+            "wins": 7,
+            "wr_pct": 53.85,
+            "net_pnl_approx": -4.675
+          }
+        },
+        "verdict": "BEST_ECONOMIC_POLICY_IN_TESTED_1M_SET"
+      },
+      "ARM_0P40_LOCK_0P18_FIXED": {
+        "wins": 42,
+        "wr_pct": 55.26,
+        "net_pnl_approx": -53.242,
+        "rtf_rescued": 17,
+        "rtf_total": 38,
+        "rtf_rescue_pct": 44.74,
+        "splits": {
+          "TRAIN": {
+            "n": 44,
+            "wins": 24,
+            "wr_pct": 54.55
+          },
+          "VALIDATION": {
+            "n": 19,
+            "wins": 10,
+            "wr_pct": 52.63
+          },
+          "RESERVE": {
+            "n": 13,
+            "wins": 8,
+            "wr_pct": 61.54
+          }
+        },
+        "note": "Earlier arming improves WR but increases winner harm / gap-through losses at 1m cadence."
+      }
+    }
+  },
+  "theoretical_continuous_lock": {
+    "statement": "All 38 RTF reached MFE >=0.5% by label definition and later realized non-positive.",
+    "ideal_no_gap_instant_lock_at_0p18_after_mfe_0p5": {
+      "theoretical_wins": 66,
+      "theoretical_wr_pct": 86.84,
+      "caveat": "Continuity/execution upper bound only; not validated as an executable result."
+    }
+  },
+  "infrastructure_limit": {
+    "historical_aggtrades_live_api": "Binance live compressed aggTrades rejected the Sep 29-30 requests with code -4166: search window restricted to recent 2 days.",
+    "desktop_commander": "core-prod relay went offline during the sub-minute exact replay step.",
+    "effect": "100ms historical replay was not completed; 1m replay is intentionally conservative and frozen as the validated stage result."
+  },
+  "verdict": {
+    "minute_checkpoint_layer": "FAIL_TARGET_60",
+    "conservative_1m_profit_lock": "PARTIAL_PASS",
+    "best_1m_wr_pct": 55.26,
+    "best_1m_economic_policy": "ARM_0P50_LOCK_0P18_RUNNER_PRESERVE_60",
+    "target_60_reached": false,
+    "root_cause": "The remaining gap is dominated by intra-minute giveback / arming latency, not static entry discrimination.",
+    "next_stage": "Sub-minute historical replay of immediate hard profit floor after MFE arm; validate rescue rate and runner preservation before any production change."
+  }
+}
