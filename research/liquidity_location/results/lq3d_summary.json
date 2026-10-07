@@ -1,0 +1,269 @@
+{
+  "admission": {
+    "ALL": {
+      "bad": 10,
+      "class_mix": {
+        "CORRECT_RUNNER": 11,
+        "RECOVERED_DRAWDOWN": 17,
+        "RIGHT_THEN_FAILURE": 38,
+        "STALL_NO_EDGE": 1,
+        "TRUE_WRONG_DIRECTION": 9
+      },
+      "good": 28,
+      "good_vs_bad_rate_pct": 73.68,
+      "historical_wr_pct": 36.84,
+      "n": 76,
+      "rtf": 38
+    },
+    "RESERVE": {
+      "bad": 2,
+      "class_mix": {
+        "CORRECT_RUNNER": 1,
+        "RECOVERED_DRAWDOWN": 3,
+        "RIGHT_THEN_FAILURE": 7,
+        "TRUE_WRONG_DIRECTION": 2
+      },
+      "good": 4,
+      "good_vs_bad_rate_pct": 66.67,
+      "historical_wr_pct": 30.77,
+      "n": 13,
+      "rtf": 7
+    },
+    "TRAIN": {
+      "bad": 6,
+      "class_mix": {
+        "CORRECT_RUNNER": 5,
+        "RECOVERED_DRAWDOWN": 10,
+        "RIGHT_THEN_FAILURE": 23,
+        "TRUE_WRONG_DIRECTION": 6
+      },
+      "good": 15,
+      "good_vs_bad_rate_pct": 71.43,
+      "historical_wr_pct": 34.09,
+      "n": 44,
+      "rtf": 23
+    },
+    "VALIDATION": {
+      "bad": 2,
+      "class_mix": {
+        "CORRECT_RUNNER": 5,
+        "RECOVERED_DRAWDOWN": 4,
+        "RIGHT_THEN_FAILURE": 8,
+        "STALL_NO_EDGE": 1,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "good": 9,
+      "good_vs_bad_rate_pct": 81.82,
+      "historical_wr_pct": 47.37,
+      "n": 19,
+      "rtf": 8
+    }
+  },
+  "contract": {
+    "admission_rule": {
+      "f_gate_side_adjusted_drift_pct_max": 0.06782,
+      "f_micro_consecutive_selected_bars_max": 2.0
+    },
+    "base": "LQ3C OPEN_LANE",
+    "pp_replay_source": "pp_decision_v2_observations fast-shadow",
+    "pp_v2": "Frozen PP Decision V2: V1 base contract + fast-decay overlay",
+    "production_authority": "NONE"
+  },
+  "good_vs_all_entry_result": {
+    "best_univariate_auc": 0.5929,
+    "interpretation": "GOOD separates from BAD, but RTF overlaps GOOD at entry; entry-time isolation of GOOD vs all non-GOOD is weak.",
+    "stable_2feature_rules_ge60_all_splits": 0
+  },
+  "good_vs_rtf_temporal": {
+    "best_auc": 0.687,
+    "best_feature": "T+3 selected slope5 norm",
+    "interpretation": "GOOD and RTF begin to diverge after entry, but separation is moderate rather than a clean hard classifier.",
+    "t2_side_return_auc": 0.675,
+    "t3_side_return_auc": 0.673
+  },
+  "open_lane_rows": 209,
+  "pp_replay": {
+    "ALL": {
+      "actual": {
+        "net_pnl": -27.09,
+        "wins": 21,
+        "wr_pct": 40.38
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 7,
+        "RECOVERED_DRAWDOWN": 14,
+        "RIGHT_THEN_FAILURE": 26,
+        "STALL_NO_EDGE": 1,
+        "TRUE_WRONG_DIRECTION": 4
+      },
+      "n": 52,
+      "v1": {
+        "net_pnl": -11.23,
+        "wins": 21,
+        "wr_pct": 40.38
+      },
+      "v2": {
+        "net_pnl": -0.06,
+        "wins": 23,
+        "wr_pct": 44.23
+      }
+    },
+    "CORRECT_RUNNER": {
+      "actual": {
+        "net_pnl": 7.81,
+        "wins": 7,
+        "wr_pct": 100.0
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 7
+      },
+      "n": 7,
+      "v1": {
+        "net_pnl": 1.99,
+        "wins": 5,
+        "wr_pct": 71.43
+      },
+      "v2": {
+        "net_pnl": 2.79,
+        "wins": 5,
+        "wr_pct": 71.43
+      }
+    },
+    "RECOVERED_DRAWDOWN": {
+      "actual": {
+        "net_pnl": 33.27,
+        "wins": 14,
+        "wr_pct": 100.0
+      },
+      "class_mix": {
+        "RECOVERED_DRAWDOWN": 14
+      },
+      "n": 14,
+      "v1": {
+        "net_pnl": 49.23,
+        "wins": 14,
+        "wr_pct": 100.0
+      },
+      "v2": {
+        "net_pnl": 52.53,
+        "wins": 14,
+        "wr_pct": 100.0
+      }
+    },
+    "RESERVE": {
+      "actual": {
+        "net_pnl": -17.8,
+        "wins": 4,
+        "wr_pct": 30.77
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 1,
+        "RECOVERED_DRAWDOWN": 3,
+        "RIGHT_THEN_FAILURE": 7,
+        "TRUE_WRONG_DIRECTION": 2
+      },
+      "n": 13,
+      "v1": {
+        "net_pnl": -8.26,
+        "wins": 5,
+        "wr_pct": 38.46
+      },
+      "v2": {
+        "net_pnl": -7.34,
+        "wins": 4,
+        "wr_pct": 30.77
+      }
+    },
+    "RTF": {
+      "actual": {
+        "net_pnl": -44.95,
+        "wins": 0,
+        "wr_pct": 0.0
+      },
+      "class_mix": {
+        "RIGHT_THEN_FAILURE": 26
+      },
+      "n": 26,
+      "v1": {
+        "net_pnl": -32.36,
+        "wins": 2,
+        "wr_pct": 7.69
+      },
+      "v2": {
+        "net_pnl": -25.29,
+        "wins": 4,
+        "wr_pct": 15.38
+      }
+    },
+    "TRAIN": {
+      "actual": {
+        "net_pnl": -7.69,
+        "wins": 8,
+        "wr_pct": 40.0
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 1,
+        "RECOVERED_DRAWDOWN": 7,
+        "RIGHT_THEN_FAILURE": 11,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "n": 20,
+      "v1": {
+        "net_pnl": 5.85,
+        "wins": 8,
+        "wr_pct": 40.0
+      },
+      "v2": {
+        "net_pnl": 14.23,
+        "wins": 10,
+        "wr_pct": 50.0
+      }
+    },
+    "VALIDATION": {
+      "actual": {
+        "net_pnl": -1.6,
+        "wins": 9,
+        "wr_pct": 47.37
+      },
+      "class_mix": {
+        "CORRECT_RUNNER": 5,
+        "RECOVERED_DRAWDOWN": 4,
+        "RIGHT_THEN_FAILURE": 8,
+        "STALL_NO_EDGE": 1,
+        "TRUE_WRONG_DIRECTION": 1
+      },
+      "n": 19,
+      "v1": {
+        "net_pnl": -8.82,
+        "wins": 8,
+        "wr_pct": 42.11
+      },
+      "v2": {
+        "net_pnl": -6.95,
+        "wins": 9,
+        "wr_pct": 47.37
+      }
+    },
+    "coverage": {
+      "coverage_pct": 68.42,
+      "fast_shadow_covered": 52,
+      "selected": 76
+    }
+  },
+  "target_math": {
+    "additional_net_wins_needed": 18,
+    "available_rtf": 38,
+    "historical_wins": 28,
+    "required_rtf_conversion_pct_if_no_winner_harm": 47.37,
+    "selected_trades": 76,
+    "target_wr_pct": 60.0,
+    "wins_needed_for_target": 46
+  },
+  "verdict": {
+    "admission": "PASS_PARTIAL_GOOD_VS_BAD_ONLY",
+    "good_isolation": "FAIL_GOOD_VS_ALL_AT_ENTRY",
+    "next": "Study RTF temporal decay / profit-lock timing directly; current entry features cannot cleanly remove RTF and current V2 does not convert enough RTF to reach 60% WR.",
+    "pp_v2_target60": "FAIL"
+  },
+  "version": "lq3d-open-lane-admission-pp-v1"
+}
