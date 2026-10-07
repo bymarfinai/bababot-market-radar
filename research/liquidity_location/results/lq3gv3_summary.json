@@ -1,0 +1,641 @@
+{
+  "action_full": {
+    "ALL": {
+      "avg_pnl": -0.5653,
+      "correct_runner": 45,
+      "n": 209,
+      "net_pnl": -118.16,
+      "recovered": 15,
+      "rtf": 34,
+      "stall": 44,
+      "true_wrong": 71,
+      "wins": 61,
+      "wr_pct": 29.19
+    },
+    "RESERVE": {
+      "avg_pnl": -1.0651,
+      "correct_runner": 6,
+      "n": 33,
+      "net_pnl": -35.15,
+      "recovered": 5,
+      "rtf": 4,
+      "stall": 4,
+      "true_wrong": 14,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "avg_pnl": -0.0027,
+      "correct_runner": 29,
+      "n": 123,
+      "net_pnl": -0.33,
+      "recovered": 9,
+      "rtf": 21,
+      "stall": 28,
+      "true_wrong": 36,
+      "wins": 36,
+      "wr_pct": 29.27
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.56,
+      "correct_runner": 10,
+      "n": 53,
+      "net_pnl": -82.68,
+      "recovered": 1,
+      "rtf": 9,
+      "stall": 12,
+      "true_wrong": 21,
+      "wins": 14,
+      "wr_pct": 26.42
+    }
+  },
+  "closed_before120_early60": {
+    "ALL": {
+      "avg_pnl": -0.1886,
+      "correct_runner": 2,
+      "n": 6,
+      "net_pnl": -1.13,
+      "recovered": 0,
+      "rtf": 2,
+      "stall": 2,
+      "true_wrong": 0,
+      "wins": 2,
+      "wr_pct": 33.33
+    },
+    "RESERVE": {
+      "n": 0
+    },
+    "TRAIN": {
+      "avg_pnl": -0.1592,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -0.8,
+      "recovered": 0,
+      "rtf": 1,
+      "stall": 2,
+      "true_wrong": 0,
+      "wins": 2,
+      "wr_pct": 40.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -0.3355,
+      "correct_runner": 0,
+      "n": 1,
+      "net_pnl": -0.34,
+      "recovered": 0,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 0,
+      "wr_pct": 0.0
+    }
+  },
+  "contract": {
+    "action_policy": "original entry unchanged; close only eligible DECAY120 at T+120; all others continue historical lifecycle",
+    "causality": [
+      "EARLY60 requires position alive at T+60",
+      "STRONG120 requires position alive at T+120",
+      "DECAY120 is defined only when EARLY60 is true and position survives to T+120 but STRONG120 is false",
+      "T+120 exit uses first aggTrade at or after checkpoint, then original position slippage/fees",
+      "trades already closed before T+120 are never labeled DECAY120"
+    ],
+    "delayed_entry_secondary": "enter only confirmed lanes at actual T+60/T+120 market; same initial notional; historical close time; fees/slippage applied",
+    "production_authority": "NONE",
+    "rows": 209,
+    "source": "authoritative LQ3GV2 states + Binance Vision aggTrades + position economics"
+  },
+  "decay120_action": {
+    "ALL": {
+      "avg_pnl": -0.5756,
+      "correct_runner": 2,
+      "n": 10,
+      "net_pnl": -5.76,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 1,
+      "true_wrong": 2,
+      "wins": 1,
+      "wr_pct": 10.0
+    },
+    "RESERVE": {
+      "avg_pnl": -0.9498,
+      "correct_runner": 0,
+      "n": 1,
+      "net_pnl": -0.95,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "TRAIN": {
+      "avg_pnl": -0.7795,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -3.9,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -0.2272,
+      "correct_runner": 0,
+      "n": 4,
+      "net_pnl": -0.91,
+      "recovered": 0,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 1,
+      "wr_pct": 25.0
+    }
+  },
+  "decay120_historical": {
+    "ALL": {
+      "avg_pnl": -1.4023,
+      "correct_runner": 2,
+      "n": 10,
+      "net_pnl": -14.02,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 1,
+      "true_wrong": 2,
+      "wins": 3,
+      "wr_pct": 30.0
+    },
+    "RESERVE": {
+      "avg_pnl": -4.6801,
+      "correct_runner": 0,
+      "n": 1,
+      "net_pnl": -4.68,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "TRAIN": {
+      "avg_pnl": -0.4118,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -2.06,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 3,
+      "wr_pct": 60.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.8209,
+      "correct_runner": 0,
+      "n": 4,
+      "net_pnl": -7.28,
+      "recovered": 0,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    }
+  },
+  "decay120_loss_cut": {
+    "ALL": {
+      "avg_pnl": -0.7563,
+      "correct_runner": 2,
+      "n": 10,
+      "net_pnl": -7.56,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 1,
+      "true_wrong": 2,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "RESERVE": {
+      "avg_pnl": -0.9498,
+      "correct_runner": 0,
+      "n": 1,
+      "net_pnl": -0.95,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "TRAIN": {
+      "avg_pnl": -0.7795,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -3.9,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -0.6789,
+      "correct_runner": 0,
+      "n": 4,
+      "net_pnl": -2.72,
+      "recovered": 0,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    }
+  },
+  "decay120_profit_lock": {
+    "ALL": {
+      "avg_pnl": -1.2216,
+      "correct_runner": 2,
+      "n": 10,
+      "net_pnl": -12.22,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 1,
+      "true_wrong": 2,
+      "wins": 4,
+      "wr_pct": 40.0
+    },
+    "RESERVE": {
+      "avg_pnl": -4.6801,
+      "correct_runner": 0,
+      "n": 1,
+      "net_pnl": -4.68,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 0,
+      "wr_pct": 0.0
+    },
+    "TRAIN": {
+      "avg_pnl": -0.4118,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -2.06,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 3,
+      "wr_pct": 60.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.3693,
+      "correct_runner": 0,
+      "n": 4,
+      "net_pnl": -5.48,
+      "recovered": 0,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 1,
+      "wr_pct": 25.0
+    }
+  },
+  "delayed120_strong": {
+    "ALL": {
+      "avg_pnl": 0.9599,
+      "correct_runner": 22,
+      "n": 31,
+      "net_pnl": 29.76,
+      "recovered": 2,
+      "rtf": 6,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 11,
+      "wr_pct": 35.48
+    },
+    "RESERVE": {
+      "avg_pnl": -2.2994,
+      "correct_runner": 3,
+      "n": 5,
+      "net_pnl": -11.5,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 1,
+      "wr_pct": 20.0
+    },
+    "TRAIN": {
+      "avg_pnl": 3.7139,
+      "correct_runner": 11,
+      "n": 16,
+      "net_pnl": 59.42,
+      "recovered": 1,
+      "rtf": 4,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 8,
+      "wr_pct": 50.0
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.8168,
+      "correct_runner": 8,
+      "n": 10,
+      "net_pnl": -18.17,
+      "recovered": 0,
+      "rtf": 1,
+      "stall": 1,
+      "true_wrong": 0,
+      "wins": 2,
+      "wr_pct": 20.0
+    }
+  },
+  "delayed60": {
+    "ALL": {
+      "avg_pnl": 0.0696,
+      "correct_runner": 22,
+      "n": 40,
+      "net_pnl": 2.79,
+      "recovered": 3,
+      "rtf": 10,
+      "stall": 3,
+      "true_wrong": 2,
+      "wins": 16,
+      "wr_pct": 40.0
+    },
+    "RESERVE": {
+      "avg_pnl": -1.8829,
+      "correct_runner": 2,
+      "n": 5,
+      "net_pnl": -9.41,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 2,
+      "wr_pct": 40.0
+    },
+    "TRAIN": {
+      "avg_pnl": 2.0157,
+      "correct_runner": 12,
+      "n": 22,
+      "net_pnl": 44.34,
+      "recovered": 2,
+      "rtf": 5,
+      "stall": 3,
+      "true_wrong": 0,
+      "wins": 10,
+      "wr_pct": 45.45
+    },
+    "VALIDATION": {
+      "avg_pnl": -2.4727,
+      "correct_runner": 8,
+      "n": 13,
+      "net_pnl": -32.15,
+      "recovered": 0,
+      "rtf": 4,
+      "stall": 0,
+      "true_wrong": 1,
+      "wins": 4,
+      "wr_pct": 30.77
+    }
+  },
+  "eligibility_audit": {
+    "alive120_n": 129,
+    "alive60_n": 164,
+    "early60_alive120_n": 34,
+    "early60_closed_before120_n": 6,
+    "early60_n": 40,
+    "early60_to_strong120_n": 24,
+    "eligible_decay120_n": 10,
+    "open_lane_n": 209,
+    "strong120_n": 31
+  },
+  "historical_full": {
+    "ALL": {
+      "avg_pnl": -0.6049,
+      "correct_runner": 45,
+      "n": 209,
+      "net_pnl": -126.42,
+      "recovered": 15,
+      "rtf": 34,
+      "stall": 44,
+      "true_wrong": 71,
+      "wins": 63,
+      "wr_pct": 30.14
+    },
+    "RESERVE": {
+      "avg_pnl": -1.1782,
+      "correct_runner": 6,
+      "n": 33,
+      "net_pnl": -38.88,
+      "recovered": 5,
+      "rtf": 4,
+      "stall": 4,
+      "true_wrong": 14,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "avg_pnl": 0.0123,
+      "correct_runner": 29,
+      "n": 123,
+      "net_pnl": 1.51,
+      "recovered": 9,
+      "rtf": 21,
+      "stall": 28,
+      "true_wrong": 36,
+      "wins": 39,
+      "wr_pct": 31.71
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.6803,
+      "correct_runner": 10,
+      "n": 53,
+      "net_pnl": -89.06,
+      "recovered": 1,
+      "rtf": 9,
+      "stall": 12,
+      "true_wrong": 21,
+      "wins": 13,
+      "wr_pct": 24.53
+    }
+  },
+  "loss_cut_full": {
+    "ALL": {
+      "avg_pnl": -0.574,
+      "correct_runner": 45,
+      "n": 209,
+      "net_pnl": -119.96,
+      "recovered": 15,
+      "rtf": 34,
+      "stall": 44,
+      "true_wrong": 71,
+      "wins": 60,
+      "wr_pct": 28.71
+    },
+    "RESERVE": {
+      "avg_pnl": -1.0651,
+      "correct_runner": 6,
+      "n": 33,
+      "net_pnl": -35.15,
+      "recovered": 5,
+      "rtf": 4,
+      "stall": 4,
+      "true_wrong": 14,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "avg_pnl": -0.0027,
+      "correct_runner": 29,
+      "n": 123,
+      "net_pnl": -0.33,
+      "recovered": 9,
+      "rtf": 21,
+      "stall": 28,
+      "true_wrong": 36,
+      "wins": 36,
+      "wr_pct": 29.27
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.5941,
+      "correct_runner": 10,
+      "n": 53,
+      "net_pnl": -84.49,
+      "recovered": 1,
+      "rtf": 9,
+      "stall": 12,
+      "true_wrong": 21,
+      "wins": 13,
+      "wr_pct": 24.53
+    }
+  },
+  "profit_lock_full": {
+    "ALL": {
+      "avg_pnl": -0.5963,
+      "correct_runner": 45,
+      "n": 209,
+      "net_pnl": -124.62,
+      "recovered": 15,
+      "rtf": 34,
+      "stall": 44,
+      "true_wrong": 71,
+      "wins": 64,
+      "wr_pct": 30.62
+    },
+    "RESERVE": {
+      "avg_pnl": -1.1782,
+      "correct_runner": 6,
+      "n": 33,
+      "net_pnl": -38.88,
+      "recovered": 5,
+      "rtf": 4,
+      "stall": 4,
+      "true_wrong": 14,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "avg_pnl": 0.0123,
+      "correct_runner": 29,
+      "n": 123,
+      "net_pnl": 1.51,
+      "recovered": 9,
+      "rtf": 21,
+      "stall": 28,
+      "true_wrong": 36,
+      "wins": 39,
+      "wr_pct": 31.71
+    },
+    "VALIDATION": {
+      "avg_pnl": -1.6462,
+      "correct_runner": 10,
+      "n": 53,
+      "net_pnl": -87.25,
+      "recovered": 1,
+      "rtf": 9,
+      "stall": 12,
+      "true_wrong": 21,
+      "wins": 14,
+      "wr_pct": 26.42
+    }
+  },
+  "strong_path_historical": {
+    "ALL": {
+      "avg_pnl": 4.4188,
+      "correct_runner": 18,
+      "n": 24,
+      "net_pnl": 106.05,
+      "recovered": 2,
+      "rtf": 4,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 20,
+      "wr_pct": 83.33
+    },
+    "RESERVE": {
+      "avg_pnl": 0.8872,
+      "correct_runner": 2,
+      "n": 4,
+      "net_pnl": 3.55,
+      "recovered": 1,
+      "rtf": 1,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 3,
+      "wr_pct": 75.0
+    },
+    "TRAIN": {
+      "avg_pnl": 6.9417,
+      "correct_runner": 8,
+      "n": 12,
+      "net_pnl": 83.3,
+      "recovered": 1,
+      "rtf": 3,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 9,
+      "wr_pct": 75.0
+    },
+    "VALIDATION": {
+      "avg_pnl": 2.4002,
+      "correct_runner": 8,
+      "n": 8,
+      "net_pnl": 19.2,
+      "recovered": 0,
+      "rtf": 0,
+      "stall": 0,
+      "true_wrong": 0,
+      "wins": 8,
+      "wr_pct": 100.0
+    }
+  },
+  "verdict": {
+    "decay_delta_pnl": 8.26,
+    "decay_delta_wins": -2,
+    "delayed120_net_pnl": 29.76,
+    "delayed120_wr_pct": 35.48,
+    "delayed60_net_pnl": 2.79,
+    "delayed60_wr_pct": 40.0,
+    "full_delta_pnl": 8.26,
+    "full_delta_wins": -2,
+    "full_delta_wr_pp": -0.95,
+    "loss_cut_decay_delta_pnl": 6.46,
+    "loss_cut_decay_delta_wins": -3,
+    "loss_cut_full_delta_pnl": 6.46,
+    "loss_cut_full_delta_wins": -3,
+    "loss_cut_full_delta_wr_pp": -1.43,
+    "production": "HOLD",
+    "profit_lock_decay_delta_pnl": 1.8,
+    "profit_lock_decay_delta_wins": 1,
+    "profit_lock_full_delta_pnl": 1.8,
+    "profit_lock_full_delta_wins": 1,
+    "profit_lock_full_delta_wr_pp": 0.48
+  },
+  "version": "lq3gv3-velocity-action-replay-v1"
+}
