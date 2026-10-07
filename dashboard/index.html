@@ -648,16 +648,20 @@ function renderHealthInspector(){
 }
 function renderPositions(){
   var map=latestEvalMap();
+  var evalFeedFailed=state.apiFailures.indexOf(3)!==-1;
   var waiting=state.positions.filter(function(p){return !map[p.position_id]}).length;
-  el('positionsMeta').textContent=state.positions.length+' monitored'+(waiting?' · '+waiting+' initializing':'');
+  var metaSuffix=evalFeedFailed?' · evaluation feed retrying':(waiting?' · '+waiting+' initializing':'');
+  el('positionsMeta').textContent=state.positions.length+' monitored'+metaSuffix;
   el('positionRows').innerHTML=state.positions.length?state.positions.map(function(p){
     var e=map[p.position_id]||null;
     if(!e){
+      var waitText=evalFeedFailed?'evaluation feed retrying':'awaiting first fast snapshot';
+      var waitStatus=evalFeedFailed?'SYNCING':'INITIALIZING';
       return '<tr class="click pos-row" data-symbol="'+esc(p.symbol)+'">'+
-        '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">awaiting first fast snapshot · '+age(p.opened_at_ms)+'</div></td>'+
-        '<td>'+badge(p.side)+'</td><td>'+badge('INITIALIZING')+'</td>'+
+        '<td><strong>'+esc(p.symbol)+'</strong><div class="cell-sub">'+waitText+' · '+age(p.opened_at_ms)+'</div></td>'+
+        '<td>'+badge(p.side)+'</td><td>'+badge(waitStatus)+'</td>'+
         '<td>'+px(p.entry_price)+'</td>'+
-        '<td class="muted">fetching…</td><td class="muted">pending</td>'+
+        '<td class="muted">'+(evalFeedFailed?'syncing…':'fetching…')+'</td><td class="muted">pending</td>'+
         '<td class="muted">awaiting 5m</td><td class="muted">awaiting 5m</td>'+
         '<td class="muted">pending</td><td class="muted">pending</td>'+
         '<td class="muted">pending</td><td class="muted">—</td>'+
@@ -1203,7 +1207,7 @@ async function refresh(){
       getJSON('/radar/latest'),
       getJSON('/paper/summary'),
       getJSON('/positions/open'),
-      getJSON('/positions/evaluations?limit=300'),
+      getJSON('/positions/evaluations/latest-open'),
       getJSON('/positions/history?limit=120'),
       getJSON('/approval/summary'),
       getJSON('/approval/reviews?limit=100'),
