@@ -1,0 +1,2021 @@
+{
+  "baseline": {
+    "ALL": {
+      "bad": 115,
+      "class_mix": {
+        "CORRECT_RUNNER": 45,
+        "RECOVERED_DRAWDOWN": 15,
+        "RIGHT_THEN_FAILURE": 34,
+        "STALL_NO_EDGE": 44,
+        "TRUE_WRONG_DIRECTION": 71
+      },
+      "good": 60,
+      "n": 209,
+      "rtf": 34,
+      "wins": 63,
+      "wr_pct": 30.14
+    },
+    "RESERVE": {
+      "bad": 18,
+      "class_mix": {
+        "CORRECT_RUNNER": 6,
+        "RECOVERED_DRAWDOWN": 5,
+        "RIGHT_THEN_FAILURE": 4,
+        "STALL_NO_EDGE": 4,
+        "TRUE_WRONG_DIRECTION": 14
+      },
+      "good": 11,
+      "n": 33,
+      "rtf": 4,
+      "wins": 11,
+      "wr_pct": 33.33
+    },
+    "TRAIN": {
+      "bad": 64,
+      "class_mix": {
+        "CORRECT_RUNNER": 29,
+        "RECOVERED_DRAWDOWN": 9,
+        "RIGHT_THEN_FAILURE": 21,
+        "STALL_NO_EDGE": 28,
+        "TRUE_WRONG_DIRECTION": 36
+      },
+      "good": 38,
+      "n": 123,
+      "rtf": 21,
+      "wins": 39,
+      "wr_pct": 31.71
+    },
+    "VALIDATION": {
+      "bad": 33,
+      "class_mix": {
+        "CORRECT_RUNNER": 10,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 9,
+        "STALL_NO_EDGE": 12,
+        "TRUE_WRONG_DIRECTION": 21
+      },
+      "good": 11,
+      "n": 53,
+      "rtf": 9,
+      "wins": 13,
+      "wr_pct": 24.53
+    }
+  },
+  "changed_labels": 88,
+  "clean_class_mix": {
+    "CORRECT_RUNNER": 45,
+    "RECOVERED_DRAWDOWN": 15,
+    "RIGHT_THEN_FAILURE": 34,
+    "STALL_NO_EDGE": 44,
+    "TRUE_WRONG_DIRECTION": 71
+  },
+  "contract": {
+    "archive_errors": [],
+    "path_coverage": 209,
+    "production_authority": "NONE",
+    "rows": 209,
+    "source": "Binance Vision USD-M aggTrades strictly inside position lifetime",
+    "thresholds": {
+      "directional": 0.5,
+      "early_adverse": -0.35,
+      "runner": 1.0,
+      "wrong_ceiling": 0.35
+    }
+  },
+  "entry_feature_auc_top": [
+    {
+      "auc_oriented": 0.5929,
+      "auc_raw": 0.4071,
+      "feature": "f_gate_positioning_oi_change_pct"
+    },
+    {
+      "auc_oriented": 0.5484,
+      "auc_raw": 0.5484,
+      "feature": "f_context_taker_share_for_selected"
+    },
+    {
+      "auc_oriented": 0.5484,
+      "auc_raw": 0.5484,
+      "feature": "f_context_taker_buy_share"
+    },
+    {
+      "auc_oriented": 0.5454,
+      "auc_raw": 0.4546,
+      "feature": "f_f_selected_slope5_norm"
+    },
+    {
+      "auc_oriented": 0.5437,
+      "auc_raw": 0.5437,
+      "feature": "f_f_taker_selected_share_3m"
+    },
+    {
+      "auc_oriented": 0.5372,
+      "auc_raw": 0.4628,
+      "feature": "f_micro_reversal_pressure"
+    },
+    {
+      "auc_oriented": 0.5329,
+      "auc_raw": 0.4671,
+      "feature": "f_gate_side_ret_3m_pct"
+    },
+    {
+      "auc_oriented": 0.5329,
+      "auc_raw": 0.5329,
+      "feature": "f_micro_selected_clv_last"
+    },
+    {
+      "auc_oriented": 0.5316,
+      "auc_raw": 0.4684,
+      "feature": "f_micro_side_ret_3m"
+    },
+    {
+      "auc_oriented": 0.5311,
+      "auc_raw": 0.4689,
+      "feature": "f_gate_aligned_family_count"
+    },
+    {
+      "auc_oriented": 0.5301,
+      "auc_raw": 0.4699,
+      "feature": "f_gate_impulse_concentration_ratio"
+    },
+    {
+      "auc_oriented": 0.5283,
+      "auc_raw": 0.4717,
+      "feature": "f_new_accel_5_vs_15"
+    },
+    {
+      "auc_oriented": 0.525,
+      "auc_raw": 0.525,
+      "feature": "f_micro_selected_vwap_extension_20"
+    },
+    {
+      "auc_oriented": 0.5236,
+      "auc_raw": 0.5236,
+      "feature": "f_gate_taker_share_for_selected"
+    },
+    {
+      "auc_oriented": 0.5236,
+      "auc_raw": 0.5236,
+      "feature": "f_gate_taker_buy_share_1m"
+    },
+    {
+      "auc_oriented": 0.5215,
+      "auc_raw": 0.4785,
+      "feature": "f_micro_side_ret_5m"
+    },
+    {
+      "auc_oriented": 0.5211,
+      "auc_raw": 0.4789,
+      "feature": "f_f_coin_minus_market_15m"
+    },
+    {
+      "auc_oriented": 0.5199,
+      "auc_raw": 0.4801,
+      "feature": "f_micro_side_ret_10m"
+    },
+    {
+      "auc_oriented": 0.5171,
+      "auc_raw": 0.5171,
+      "feature": "f_f_oi_change_30m_pct"
+    },
+    {
+      "auc_oriented": 0.5153,
+      "auc_raw": 0.4847,
+      "feature": "f_f_coin_minus_market_5m"
+    }
+  ],
+  "legacy_class_mix": {
+    "CORRECT_RUNNER": 19,
+    "RECOVERED_DRAWDOWN": 44,
+    "RIGHT_THEN_FAILURE": 76,
+    "STALL_NO_EDGE": 5,
+    "TRUE_WRONG_DIRECTION": 65
+  },
+  "old_lq3d_rule_clean_metrics": {
+    "ALL": {
+      "bad": 38,
+      "class_mix": {
+        "CORRECT_RUNNER": 18,
+        "RECOVERED_DRAWDOWN": 8,
+        "RIGHT_THEN_FAILURE": 12,
+        "STALL_NO_EDGE": 18,
+        "TRUE_WRONG_DIRECTION": 20
+      },
+      "good": 26,
+      "n": 76,
+      "rtf": 12,
+      "wins": 28,
+      "wr_pct": 36.84
+    },
+    "RESERVE": {
+      "bad": 6,
+      "class_mix": {
+        "CORRECT_RUNNER": 1,
+        "RECOVERED_DRAWDOWN": 3,
+        "RIGHT_THEN_FAILURE": 3,
+        "STALL_NO_EDGE": 2,
+        "TRUE_WRONG_DIRECTION": 4
+      },
+      "good": 4,
+      "n": 13,
+      "rtf": 3,
+      "wins": 4,
+      "wr_pct": 30.77
+    },
+    "TRAIN": {
+      "bad": 22,
+      "class_mix": {
+        "CORRECT_RUNNER": 11,
+        "RECOVERED_DRAWDOWN": 4,
+        "RIGHT_THEN_FAILURE": 7,
+        "STALL_NO_EDGE": 10,
+        "TRUE_WRONG_DIRECTION": 12
+      },
+      "good": 15,
+      "n": 44,
+      "rtf": 7,
+      "wins": 15,
+      "wr_pct": 34.09
+    },
+    "VALIDATION": {
+      "bad": 10,
+      "class_mix": {
+        "CORRECT_RUNNER": 6,
+        "RECOVERED_DRAWDOWN": 1,
+        "RIGHT_THEN_FAILURE": 2,
+        "STALL_NO_EDGE": 6,
+        "TRUE_WRONG_DIRECTION": 4
+      },
+      "good": 7,
+      "n": 19,
+      "rtf": 2,
+      "wins": 9,
+      "wr_pct": 47.37
+    }
+  },
+  "stable60_pair_count": 0,
+  "stable60_top": [],
+  "top_pairs": [
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 7,
+        "n": 16,
+        "rtf": 2,
+        "wins": 7,
+        "wr_pct": 43.75
+      },
+      "VALIDATION": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 24.7263535263298
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 6,
+      "min_wr": 43.75
+    },
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 8,
+        "n": 19,
+        "rtf": 2,
+        "wins": 8,
+        "wr_pct": 42.11
+      },
+      "VALIDATION": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 26.693121095114034
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 6,
+      "min_wr": 42.11
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 10,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 7
+        },
+        "good": 11,
+        "n": 24,
+        "rtf": 3,
+        "wins": 11,
+        "wr_pct": 45.83
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 12,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 41.67
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 26.693121095114034
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        }
+      ],
+      "min_oos_n": 7,
+      "min_wr": 41.67
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 9,
+        "n": 20,
+        "rtf": 3,
+        "wins": 9,
+        "wr_pct": 45.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 12,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 41.67
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 24.7263535263298
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        }
+      ],
+      "min_oos_n": 7,
+      "min_wr": 41.67
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 5,
+        "n": 9,
+        "rtf": 1,
+        "wins": 5,
+        "wr_pct": 55.56
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 9,
+        "n": 21,
+        "rtf": 3,
+        "wins": 9,
+        "wr_pct": 42.86
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 12,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 41.67
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_micro_side_ret_5m",
+          "op": "<=",
+          "threshold": 1.0486073184052591
+        }
+      ],
+      "min_oos_n": 9,
+      "min_wr": 41.67
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 5,
+        "n": 8,
+        "rtf": 0,
+        "wins": 5,
+        "wr_pct": 62.5
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 8,
+        "n": 19,
+        "rtf": 3,
+        "wins": 8,
+        "wr_pct": 42.11
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 12,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 41.67
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_micro_side_ret_5m",
+          "op": "<=",
+          "threshold": 0.9189640768588081
+        }
+      ],
+      "min_oos_n": 8,
+      "min_wr": 41.67
+    },
+    {
+      "RESERVE": {
+        "bad": 0,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2
+        },
+        "good": 3,
+        "n": 3,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 100.0
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 7,
+        "n": 17,
+        "rtf": 2,
+        "wins": 7,
+        "wr_pct": 41.18
+      },
+      "VALIDATION": {
+        "bad": 1,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 2,
+        "n": 4,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 50.0
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 26.693121095114034
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6745866123753829
+        }
+      ],
+      "min_oos_n": 3,
+      "min_wr": 41.18
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 7,
+        "n": 17,
+        "rtf": 2,
+        "wins": 7,
+        "wr_pct": 41.18
+      },
+      "VALIDATION": {
+        "bad": 1,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 2,
+        "n": 4,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 50.0
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 34.05614763482946
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6745866123753829
+        }
+      ],
+      "min_oos_n": 4,
+      "min_wr": 41.18
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 7,
+        "n": 17,
+        "rtf": 2,
+        "wins": 7,
+        "wr_pct": 41.18
+      },
+      "VALIDATION": {
+        "bad": 1,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 2,
+        "n": 4,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 50.0
+      },
+      "features": [
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6745866123753829
+        },
+        {
+          "key": "f_f_coin_minus_market_15m",
+          "op": "<=",
+          "threshold": 1.505887835187758
+        }
+      ],
+      "min_oos_n": 4,
+      "min_wr": 41.18
+    },
+    {
+      "RESERVE": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 1,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "TRAIN": {
+        "bad": 11,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 4,
+          "TRUE_WRONG_DIRECTION": 7
+        },
+        "good": 9,
+        "n": 22,
+        "rtf": 2,
+        "wins": 9,
+        "wr_pct": 40.91
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 6,
+        "n": 12,
+        "rtf": 2,
+        "wins": 6,
+        "wr_pct": 50.0
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 34.05614763482946
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 9,
+      "min_wr": 40.91
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 0,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 8,
+        "n": 16,
+        "rtf": 1,
+        "wins": 8,
+        "wr_pct": 50.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6915416314776435
+        },
+        {
+          "key": "f_gate_side_ret_3m_pct",
+          "op": "<=",
+          "threshold": 0.9082652134423164
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 0,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 8,
+        "n": 16,
+        "rtf": 1,
+        "wins": 8,
+        "wr_pct": 50.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6915416314776435
+        },
+        {
+          "key": "f_micro_side_ret_3m",
+          "op": "<=",
+          "threshold": 0.8886067914947393
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 5,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 7,
+        "n": 15,
+        "rtf": 3,
+        "wins": 7,
+        "wr_pct": 46.67
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.22931206378564134
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6614586699383378
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 9,
+        "n": 20,
+        "rtf": 2,
+        "wins": 9,
+        "wr_pct": 45.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_gate_side_ret_3m_pct",
+          "op": "<=",
+          "threshold": 0.9082652134423164
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6745866123753829
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 9,
+        "n": 20,
+        "rtf": 2,
+        "wins": 9,
+        "wr_pct": 45.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_micro_side_ret_3m",
+          "op": "<=",
+          "threshold": 0.8886067914947393
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6745866123753829
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 10,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 6,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 6,
+        "n": 16,
+        "rtf": 0,
+        "wins": 7,
+        "wr_pct": 43.75
+      },
+      "VALIDATION": {
+        "bad": 1,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 1
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 2,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_gate_positioning_oi_change_pct",
+          "op": "<=",
+          "threshold": -0.04152312078794518
+        },
+        {
+          "key": "f_micro_selected_clv_last",
+          "op": ">=",
+          "threshold": 0.6363636363636327
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 4,
+        "n": 8,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 14,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 2,
+          "STALL_NO_EDGE": 5,
+          "TRUE_WRONG_DIRECTION": 9
+        },
+        "good": 8,
+        "n": 22,
+        "rtf": 0,
+        "wins": 9,
+        "wr_pct": 40.91
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_gate_positioning_oi_change_pct",
+          "op": "<=",
+          "threshold": 0.04124567392702616
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 4,
+        "class_mix": {
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 1,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 9,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 6,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 10,
+        "n": 25,
+        "rtf": 6,
+        "wins": 10,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 4,
+        "n": 10,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.1753864446911409
+        },
+        {
+          "key": "f_new_accel_5_vs_15",
+          "op": "<=",
+          "threshold": 0.4791006666666666
+        }
+      ],
+      "min_oos_n": 9,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 5,
+        "n": 8,
+        "rtf": 0,
+        "wins": 5,
+        "wr_pct": 62.5
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 8,
+        "n": 20,
+        "rtf": 3,
+        "wins": 8,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 12,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 41.67
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_f_coin_minus_market_5m",
+          "op": "<=",
+          "threshold": 0.9264458247191465
+        }
+      ],
+      "min_oos_n": 8,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 8,
+          "RIGHT_THEN_FAILURE": 5,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 8,
+        "n": 20,
+        "rtf": 5,
+        "wins": 8,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 4,
+        "n": 10,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.16465422610867192
+        },
+        {
+          "key": "f_new_accel_5_vs_15",
+          "op": "<=",
+          "threshold": 0.4791006666666666
+        }
+      ],
+      "min_oos_n": 7,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 5,
+        "n": 8,
+        "rtf": 0,
+        "wins": 5,
+        "wr_pct": 62.5
+      },
+      "TRAIN": {
+        "bad": 10,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 4,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 8,
+        "n": 20,
+        "rtf": 2,
+        "wins": 8,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 4,
+        "n": 10,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_new_accel_5_vs_15",
+          "op": "<=",
+          "threshold": 0.4791006666666666
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 8,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 6,
+        "n": 15,
+        "rtf": 2,
+        "wins": 6,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 2,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "features": [
+        {
+          "key": "f_micro_reversal_pressure",
+          "op": "<=",
+          "threshold": 26.693121095114034
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.2718590697488713
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 2,
+        "class_mix": {
+          "RECOVERED_DRAWDOWN": 3,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 3,
+        "n": 5,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 60.0
+      },
+      "TRAIN": {
+        "bad": 7,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 6,
+        "n": 15,
+        "rtf": 2,
+        "wins": 6,
+        "wr_pct": 40.0
+      },
+      "VALIDATION": {
+        "bad": 2,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RIGHT_THEN_FAILURE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 2,
+        "n": 5,
+        "rtf": 1,
+        "wins": 2,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.1753864446911409
+        }
+      ],
+      "min_oos_n": 5,
+      "min_wr": 40.0
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 5,
+        "n": 9,
+        "rtf": 1,
+        "wins": 5,
+        "wr_pct": 55.56
+      },
+      "TRAIN": {
+        "bad": 9,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 7,
+        "n": 18,
+        "rtf": 2,
+        "wins": 7,
+        "wr_pct": 38.89
+      },
+      "VALIDATION": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "features": [
+        {
+          "key": "f_micro_side_ret_5m",
+          "op": "<=",
+          "threshold": 1.0486073184052591
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        }
+      ],
+      "min_oos_n": 9,
+      "min_wr": 38.89
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 1
+        },
+        "good": 5,
+        "n": 8,
+        "rtf": 0,
+        "wins": 5,
+        "wr_pct": 62.5
+      },
+      "TRAIN": {
+        "bad": 11,
+        "class_mix": {
+          "CORRECT_RUNNER": 7,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 5,
+          "TRUE_WRONG_DIRECTION": 6
+        },
+        "good": 10,
+        "n": 24,
+        "rtf": 3,
+        "wins": 10,
+        "wr_pct": 41.67
+      },
+      "VALIDATION": {
+        "bad": 5,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 5,
+        "n": 13,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 38.46
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_new_accel_5_vs_15",
+          "op": "<=",
+          "threshold": 0.4791006666666666
+        }
+      ],
+      "min_oos_n": 8,
+      "min_wr": 38.46
+    },
+    {
+      "RESERVE": {
+        "bad": 5,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 5,
+        "n": 11,
+        "rtf": 1,
+        "wins": 5,
+        "wr_pct": 45.45
+      },
+      "TRAIN": {
+        "bad": 14,
+        "class_mix": {
+          "CORRECT_RUNNER": 9,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 3,
+          "STALL_NO_EDGE": 6,
+          "TRUE_WRONG_DIRECTION": 8
+        },
+        "good": 12,
+        "n": 29,
+        "rtf": 3,
+        "wins": 12,
+        "wr_pct": 41.38
+      },
+      "VALIDATION": {
+        "bad": 5,
+        "class_mix": {
+          "CORRECT_RUNNER": 5,
+          "RIGHT_THEN_FAILURE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 5,
+        "n": 13,
+        "rtf": 3,
+        "wins": 5,
+        "wr_pct": 38.46
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.44412033610518964
+        },
+        {
+          "key": "f_f_coin_minus_market_15m",
+          "op": "<=",
+          "threshold": 1.505887835187758
+        }
+      ],
+      "min_oos_n": 11,
+      "min_wr": 38.46
+    },
+    {
+      "RESERVE": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 1,
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 4,
+        "n": 9,
+        "rtf": 1,
+        "wins": 4,
+        "wr_pct": 44.44
+      },
+      "TRAIN": {
+        "bad": 14,
+        "class_mix": {
+          "CORRECT_RUNNER": 8,
+          "RECOVERED_DRAWDOWN": 2,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 6,
+          "TRUE_WRONG_DIRECTION": 8
+        },
+        "good": 10,
+        "n": 26,
+        "rtf": 2,
+        "wins": 10,
+        "wr_pct": 38.46
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 4,
+          "RIGHT_THEN_FAILURE": 2,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 4,
+        "n": 10,
+        "rtf": 2,
+        "wins": 4,
+        "wr_pct": 40.0
+      },
+      "features": [
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.3530055556482284
+        },
+        {
+          "key": "f_f_coin_minus_market_15m",
+          "op": "<=",
+          "threshold": 1.505887835187758
+        }
+      ],
+      "min_oos_n": 9,
+      "min_wr": 38.46
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "CORRECT_RUNNER": 2,
+          "RECOVERED_DRAWDOWN": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 6,
+        "rtf": 0,
+        "wins": 3,
+        "wr_pct": 50.0
+      },
+      "TRAIN": {
+        "bad": 10,
+        "class_mix": {
+          "CORRECT_RUNNER": 6,
+          "RECOVERED_DRAWDOWN": 5,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 7
+        },
+        "good": 11,
+        "n": 22,
+        "rtf": 1,
+        "wins": 11,
+        "wr_pct": 50.0
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 3,
+        "n": 8,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 37.5
+      },
+      "features": [
+        {
+          "key": "f_gate_positioning_oi_change_pct",
+          "op": "<=",
+          "threshold": 0.13556477824632207
+        },
+        {
+          "key": "f_f_taker_selected_share_3m",
+          "op": ">=",
+          "threshold": 0.6614586699383378
+        }
+      ],
+      "min_oos_n": 6,
+      "min_wr": 37.5
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 6,
+        "class_mix": {
+          "CORRECT_RUNNER": 8,
+          "RIGHT_THEN_FAILURE": 4,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 4
+        },
+        "good": 8,
+        "n": 18,
+        "rtf": 4,
+        "wins": 8,
+        "wr_pct": 44.44
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 2,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 8,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 37.5
+      },
+      "features": [
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.1497135444667066
+        },
+        {
+          "key": "f_new_accel_5_vs_15",
+          "op": "<=",
+          "threshold": 0.4791006666666666
+        }
+      ],
+      "min_oos_n": 7,
+      "min_wr": 37.5
+    },
+    {
+      "RESERVE": {
+        "bad": 3,
+        "class_mix": {
+          "RECOVERED_DRAWDOWN": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 2
+        },
+        "good": 3,
+        "n": 7,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 42.86
+      },
+      "TRAIN": {
+        "bad": 8,
+        "class_mix": {
+          "CORRECT_RUNNER": 7,
+          "RECOVERED_DRAWDOWN": 1,
+          "RIGHT_THEN_FAILURE": 2,
+          "STALL_NO_EDGE": 3,
+          "TRUE_WRONG_DIRECTION": 5
+        },
+        "good": 8,
+        "n": 18,
+        "rtf": 2,
+        "wins": 8,
+        "wr_pct": 44.44
+      },
+      "VALIDATION": {
+        "bad": 4,
+        "class_mix": {
+          "CORRECT_RUNNER": 3,
+          "RIGHT_THEN_FAILURE": 1,
+          "STALL_NO_EDGE": 1,
+          "TRUE_WRONG_DIRECTION": 3
+        },
+        "good": 3,
+        "n": 8,
+        "rtf": 1,
+        "wins": 3,
+        "wr_pct": 37.5
+      },
+      "features": [
+        {
+          "key": "f_f_selected_slope5_norm",
+          "op": "<=",
+          "threshold": 0.1753864446911409
+        },
+        {
+          "key": "f_gate_impulse_concentration_ratio",
+          "op": "<=",
+          "threshold": 0.5067683790444277
+        }
+      ],
+      "min_oos_n": 7,
+      "min_wr": 37.5
+    }
+  ],
+  "transition_matrix": {
+    "CORRECT_RUNNER->CORRECT_RUNNER": 16,
+    "CORRECT_RUNNER->STALL_NO_EDGE": 3,
+    "RECOVERED_DRAWDOWN->CORRECT_RUNNER": 29,
+    "RECOVERED_DRAWDOWN->RECOVERED_DRAWDOWN": 15,
+    "RIGHT_THEN_FAILURE->RIGHT_THEN_FAILURE": 34,
+    "RIGHT_THEN_FAILURE->STALL_NO_EDGE": 26,
+    "RIGHT_THEN_FAILURE->TRUE_WRONG_DIRECTION": 16,
+    "STALL_NO_EDGE->STALL_NO_EDGE": 3,
+    "STALL_NO_EDGE->TRUE_WRONG_DIRECTION": 2,
+    "TRUE_WRONG_DIRECTION->STALL_NO_EDGE": 12,
+    "TRUE_WRONG_DIRECTION->TRUE_WRONG_DIRECTION": 53
+  },
+  "version": "lq3f-clean-open-lane-rebuild-v1"
+}
