@@ -59,14 +59,19 @@ function render(){
  text("w1dGlobalMode",s.global_mode||"UNKNOWN");
  text("w1dGate",s.execution_gate||"UNKNOWN");
  text("w1dLiveAccounts",s.account_count===undefined?"N/A":s.account_count+" registered");
+ const notVerified=ctx.accounts.filter(x=>x.futures_status!=="VERIFIED_READ_ONLY");
  text("w1dAccountsState",ctx.accounts.length?
-  "Akun yang terdaftar tidak otomatis RUN. Verifikasi signed GET Futures dan izin API per akun.":
+  (notVerified.length?
+   notVerified.length+" akun masih BELUM diverifikasi Binance. Pilih akun, klik VERIFY BINANCE (GET ONLY). Status IP UNVERIFIED berarti Binance belum diperiksa dari VPS, bukan bukti whitelist salah.":
+   "Binance signed GET terverifikasi untuk akun terdaftar. LIVE RUN tetap dikunci menunggu execution gate dan proteksi.") :
   "0 akun Binance Futures pada W1D LIVE. Tambahkan nama akun lalu SAVE API Key ke Vault.");
  text("w1dOpenCount",ctx.positions.filter(x=>
    ["OPEN","OPENING","CLOSING","UNKNOWN"].includes(x.state)).length);
  table("w1dAccountRows",ctx.accounts.map(a=>[
-   a.account_name,a.status,a.credential_state,a.futures_status,
-   a.ip_restricted?"ON":"UNVERIFIED",a.available_usdt??"N/A"
+   a.account_name,a.status,a.credential_state,
+   a.futures_status+(a.futures_error?" · "+a.futures_error:
+      a.futures_status==="NOT_VERIFIED"?" · CLICK VERIFY BINANCE":""),
+   a.ip_restricted?"VERIFIED":"NOT YET VERIFIED",a.available_usdt??"N/A"
  ]),"Belum ada akun terdaftar. Klik + Add Account.",6);
  table("w1dLivePositionRows",ctx.positions.map(p=>[
    p.account_name,p.symbol,p.side,p.state,p.filled_entry_qty,p.exchange_remaining_qty,
@@ -104,8 +109,12 @@ async function refresh(force=false){
   ]);
   ctx.status=control;ctx.accounts=accounts.accounts||[];
   ctx.positions=positions.positions||[];ctx.orders=orders.orders||[];
-  ctx.authorized=true;ctx.lastRead=Date.now();ctx.message="";
-  feedback("CONNECTED · Private W1D backend authorized. Trade sender remains disabled.");
+  const firstAuthorization=!ctx.authorized;
+  ctx.authorized=true;ctx.lastRead=Date.now();
+  // Never erase signed Binance VERIFY success/error on ordinary polling.
+  // Admin authorization != Binance exchange verification.
+  if(firstAuthorization&&!ctx.message)
+   feedback("ADMIN CONNECTED ONLY · Next: select account and click VERIFY BINANCE (GET ONLY). LIVE trade sender disabled.");
  }catch(e){ctx.authorized=false;feedback("AUTH/BACKEND FAILED: "+badCode(e),true);}
  finally{ctx.busy=false;render();}
 }
