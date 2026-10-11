@@ -942,6 +942,7 @@ function switchStrategy(next){
     window.StrongStage5.activate(next==='STRONG');
     if(window.W1DTab)window.W1DTab.activate(next==='W1D');
     renderStrategyContext();renderTop();if(next==='DLS')renderDLS();
+    if(next!=='W1D')renderControl(); // restore older strategy's cached status chip
     showTerminalTab(next==='W1D'?'w1dsummary':next==='DLS'?'dlspositions':next==='STRONG'?'strongpaper':'positions');
     // Reuse the existing 5m/15m/1h candle array without another candle request
     // when changing strategy tab, only redraw W1D's own source markers.
