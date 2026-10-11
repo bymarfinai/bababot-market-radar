@@ -1,0 +1,173 @@
+/* W1D Operations: authenticated private account admin; no direct Binance order API.
+ * API Key/Secret exist only in the form until HTTPS POST, then fields cleared.
+ * RUN is an audited backend request which is rejected until authorization/
+ * verified Binance account, emergency SL and actual executor are ready.
+ */
+(function(global){
+"use strict";
+const BASE="https://core-prod.43-153-193-103.sslip.io/w1d";
+const el=k=>document.getElementById(k);
+const ctx={authorized:false,busy:false,lastRead:0,status:null,accounts:[],
+ positions:[],orders:[],message:""};
+const text=(id,x)=>{if(el(id))el(id).textContent=String(x??"—");};
+const token=()=>(el("w1dAdminToken")?.value||"").trim()||
+ sessionStorage.getItem("baba_control_token_v1")||"";
+const fmt=(x,n=4)=>x===null||x===undefined||x===""?"N/A":
+ Number(x).toLocaleString("en-US",{minimumFractionDigits:n,maximumFractionDigits:n});
+const badCode=e=>String(e.message||"UNAVAILABLE").replace(/[^A-Z0-9_:,-]/g,"").slice(0,350);
+function feedback(message,bad=false){
+ ctx.message=message;
+ text("w1dControlAction",message);text("w1dAccountAction",message);
+ text("w1dKeyResult",message);
+ const status=el("w1dControlAction");
+ if(status)status.style.color=bad?"#f6465d":"#0ecb81";
+}
+function authorized(){
+ if(!token())throw Error("AUTH_REQUIRED: Isi Admin Token di tab API & Accounts");
+}
+async function api(method,path,payload){
+ authorized();
+ const c=new AbortController(),timer=setTimeout(()=>c.abort(),path.endsWith("/verify")?45000:14000);
+ try{
+  const res=await fetch(BASE+path,{
+    method,mode:"cors",credentials:"omit",cache:"no-store",signal:c.signal,
+    headers:{"X-Baba-Control-Token":token(),...(method!=="GET"?
+      {"Content-Type":"application/json"}:{})},
+    ...(method!=="GET"?{body:JSON.stringify(payload??{})}:{})
+  });
+  const response=await res.json().catch(()=>({error:"INVALID_SERVER_RESPONSE"}));
+  if(!res.ok||response.ok!==true)
+   throw Error(response.error||("HTTP_"+res.status));
+  return response;
+ }finally{clearTimeout(timer);}
+}
+function tcell(tr,value){
+ const cell=document.createElement("td");cell.textContent=String(value??"—");
+ tr.appendChild(cell);return cell;
+}
+function table(id,rows,empty,cols){
+ const tb=el(id);if(!tb)return;tb.replaceChildren();
+ if(!rows.length){const tr=document.createElement("tr"),td=document.createElement("td");
+ td.colSpan=cols;td.className="empty";td.textContent=empty;tr.appendChild(td);tb.appendChild(tr);return}
+ rows.forEach(row=>{const tr=document.createElement("tr");
+ row.forEach(value=>tcell(tr,value));tb.appendChild(tr)});
+}
+function render(){
+ text("w1dAuthState",ctx.authorized?"AUTHORIZED · PRIVATE":"LOCKED");
+ if(!ctx.authorized)return;
+ const s=ctx.status||{};
+ text("w1dGlobalMode",s.global_mode||"UNKNOWN");
+ text("w1dGate",s.execution_gate||"UNKNOWN");
+ text("w1dLiveAccounts",s.account_count===undefined?"N/A":s.account_count+" registered");
+ text("w1dAccountsState",ctx.accounts.length?
+  "Akun yang terdaftar tidak otomatis RUN. Verifikasi signed GET Futures dan izin API per akun.":
+  "0 akun Binance Futures pada W1D LIVE. Tambahkan nama akun lalu SAVE API Key ke Vault.");
+ text("w1dOpenCount",ctx.positions.filter(x=>
+   ["OPEN","OPENING","CLOSING","UNKNOWN"].includes(x.state)).length);
+ table("w1dAccountRows",ctx.accounts.map(a=>[
+   a.account_name,a.status,a.credential_state,a.futures_status,
+   a.ip_restricted?"ON":"UNVERIFIED",a.available_usdt??"N/A"
+ ]),"Belum ada akun terdaftar. Klik + Add Account.",6);
+ table("w1dLivePositionRows",ctx.positions.map(p=>[
+   p.account_name,p.symbol,p.side,p.state,p.filled_entry_qty,p.exchange_remaining_qty,
+   p.entry_avg??"—",p.financial_verification==="VERIFIED"?
+      (p.verified_net_usdt??"N/A"):"N/A",p.financial_verification
+ ]),"Tidak ada posisi LIVE di database W1D.",9);
+ table("w1dOrderRows",ctx.orders.map(o=>[
+   o.account_name,o.symbol,o.side,o.origin,o.order_type,o.state,
+   o.requested_qty??"—",o.executed_qty??"—",o.average_fill_price??"—"
+ ]),"Tidak ada order LIVE W1D.",9);
+ const selector=el("w1dAccountSelect");if(selector){
+  const previous=selector.value;selector.replaceChildren();
+  const placeholder=document.createElement("option");placeholder.value="";
+  placeholder.textContent="Pilih akun Binance";selector.appendChild(placeholder);
+  ctx.accounts.forEach(a=>{const op=document.createElement("option");
+   op.value=a.account_id;op.textContent=a.account_name+" · "+a.credential_state;
+   selector.appendChild(op)});
+  if(ctx.accounts.some(a=>a.account_id===previous))selector.value=previous;
+ }
+ const run=el("w1dRun"),pause=el("w1dPause");
+ if(run){run.disabled=ctx.busy;run.title=(s.run_blockers||[]).join(", ")||"RUN requires live executor authorization"}
+ if(pause)pause.disabled=ctx.busy;
+ const blockers=(s.run_blockers||[]);
+ if(blockers.length)text("w1dControlAction",
+  ctx.message||"RUN LOCKED: "+blockers.join(" · ")+"; PAUSE tetap bisa disimpan.");
+}
+async function refresh(force=false){
+ if(ctx.busy||(!force&&Date.now()-ctx.lastRead<8000))return;
+ if(!token())return;
+ ctx.busy=true;
+ try{
+  const [control,accounts,positions,orders]=await Promise.all([
+   api("GET","/status"),api("GET","/accounts"),
+   api("GET","/positions"),api("GET","/orders")
+  ]);
+  ctx.status=control;ctx.accounts=accounts.accounts||[];
+  ctx.positions=positions.positions||[];ctx.orders=orders.orders||[];
+  ctx.authorized=true;ctx.lastRead=Date.now();ctx.message="";
+  feedback("CONNECTED · Private W1D backend authorized. Trade sender remains disabled.");
+ }catch(e){ctx.authorized=false;feedback("AUTH/BACKEND FAILED: "+badCode(e),true);}
+ finally{ctx.busy=false;render();}
+}
+async function invoke(action,fn,clearSecrets=false){
+ if(ctx.busy)return;
+ ctx.busy=true;render();
+ try{
+  const x=await fn();
+  ctx.message="";
+  feedback(action+" · VERIFIED BY W1D BACKEND"+(x.reason?" · "+x.reason:""));
+  return x;
+ }catch(e){feedback(action+" FAILED: "+badCode(e),true);return null;}
+ finally{
+  if(clearSecrets){if(el("w1dBinanceKey"))el("w1dBinanceKey").value="";
+   if(el("w1dBinanceSecret"))el("w1dBinanceSecret").value="";}
+  ctx.busy=false;ctx.lastRead=0;render();
+ }
+}
+function bind(){
+ const auth=el("w1dAuthorize");
+ if(auth)auth.addEventListener("click",()=>refresh(true));
+ const add=el("w1dAddAccount");
+ if(add)add.addEventListener("click",async()=>{
+  const name=el("w1dNewNickname")?.value.trim();
+  if(!name){feedback("Nama akun wajib diisi",true);return;}
+  const r=await invoke("ADD ACCOUNT",()=>api("POST","/accounts",{account_name:name}));
+  if(r){el("w1dNewNickname").value="";await refresh(true);}
+ });
+ const save=el("w1dSaveKeys");
+ if(save)save.addEventListener("click",async()=>{
+  const aid=el("w1dAccountSelect")?.value||"";
+  const key=el("w1dBinanceKey")?.value||"";
+  const secret=el("w1dBinanceSecret")?.value||"";
+  if(!aid||!key||!secret){feedback("Pilih akun dan isi API Key serta API Secret.",true);return;}
+  if(!global.confirm("Enkripsi API Key akun terpilih ke VPS W1D Vault? LIVE trading tetap DISABLED."))return;
+  const result=await invoke("ENCRYPTED VAULT",()=>api("POST",
+    "/accounts/"+encodeURIComponent(aid)+"/credentials",
+    {api_key:key,api_secret:secret}),true);
+  if(result)await refresh(true);
+ });
+ const verify=el("w1dVerifyBinance");
+ if(verify)verify.addEventListener("click",async()=>{
+  const aid=el("w1dAccountSelect")?.value;
+  if(!aid){feedback("Pilih akun untuk verifikasi read-only Binance",true);return;}
+  const result=await invoke("SIGNED FUTURES VERIFY",()=>api("POST",
+   "/accounts/"+encodeURIComponent(aid)+"/verify",{}));
+  if(result)await refresh(true);
+ });
+ const pause=el("w1dPause");
+ if(pause)pause.addEventListener("click",async()=>{
+  const result=await invoke("PAUSE W1D",()=>api("POST","/control/pause",{}));
+  if(result)await refresh(true);
+ });
+ const run=el("w1dRun");
+ if(run)run.addEventListener("click",async()=>{
+  const result=await invoke("RUN REQUEST",()=>api("POST","/control/run",{}));
+  if(result)await refresh(true);
+ });
+ const refreshB=el("w1dControlRefresh");
+ if(refreshB)refreshB.addEventListener("click",()=>refresh(true));
+}
+bind();
+global.W1DOperations={refresh,get control(){return ctx.status},
+ get authorized(){return ctx.authorized}};
+})(window);
