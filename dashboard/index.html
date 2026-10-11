@@ -115,8 +115,15 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 .w1d-tip{padding:10px 14px;background:#1c1a13;color:#e5c86b;border-left:3px solid var(--yellow);font-size:10px}
 .w1d-mini-table{width:100%;font-size:10px}.w1d-mini-table th,.w1d-mini-table td{font-size:10px;padding:10px}
 .w1d-pill{padding:3px 7px;border:1px solid var(--line);border-radius:4px;font-size:9px;color:var(--muted)}
+.w1d-auth-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line2)}.w1d-auth-row label{font-size:10px;color:var(--muted);min-width:105px}
+.w1d-auth-row input,.w1d-auth-row select,.w1d-credential-grid input{background:#0d1117;color:var(--text);border:1px solid var(--line);border-radius:4px;padding:9px 11px;font-size:11px;min-width:215px;max-width:440px;flex:1}
+.w1d-credential-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:10px;padding-top:10px}.w1d-credential-grid label{display:block;margin-bottom:6px;color:var(--muted);font-size:10px}
+.w1d-credential-grid input{width:100%;max-width:none}.w1d-actions,.w1d-control-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px}.w1d-control-actions{border-bottom:1px solid var(--line2);background:#11161c}
+.w1d-control-actions span{font-size:10px;color:var(--muted);flex:1}.w1d-run{background:#123729;color:#17d792;border-color:#126344;font-weight:750}
+.w1d-pause{background:#342515;color:#ffcb69;border-color:#78602f;font-weight:750}
+.w1d-actions button{font-size:10px}.w1d-vault-form p{font-size:10px}.w1d-vault-form .w1d-auth-row{padding-left:0}
 @media(max-width:1100px){.w1d-summary-grid{grid-template-columns:repeat(3,1fr)}.strategy-selector{flex-wrap:wrap}}
-@media(max-width:650px){.w1d-summary-grid{grid-template-columns:repeat(2,1fr)}.w1d-grid{grid-template-columns:1fr}.strategy-btn{min-width:110px}.strategy-selector{flex-wrap:wrap}}
+@media(max-width:650px){.w1d-credential-grid{grid-template-columns:1fr}.w1d-credential-grid input{min-width:0}.w1d-summary-grid{grid-template-columns:repeat(2,1fr)}.w1d-grid{grid-template-columns:1fr}.strategy-btn{min-width:110px}.strategy-selector{flex-wrap:wrap}}
 </style>
 <link rel="stylesheet" href="strong_stage5.css">
 <link rel="stylesheet" href="strong_paper_view.css?v=strong-independent-v1">
@@ -236,9 +243,11 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 
   <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="W1D">
     <button class="terminal-tab" data-tab="w1dsummary">Paper ↔ LIVE</button>
-    <button class="terminal-tab" data-tab="w1daccounts">Akun Binance &amp; Sizing</button>
-    <button class="terminal-tab" data-tab="w1dpositions">Riwayat W1D</button>
-    <button class="terminal-tab" data-tab="w1dcontrols">Safety &amp; Parity</button>
+    <button class="terminal-tab" data-tab="w1dlivepositions">LIVE Positions <span id="w1dOpenCount">—</span></button>
+    <button class="terminal-tab" data-tab="w1dorders">Order / Fill Ledger</button>
+    <button class="terminal-tab" data-tab="w1daccounts">API &amp; Accounts</button>
+    <button class="terminal-tab" data-tab="w1dpositions">Paper History</button>
+    <button class="terminal-tab" data-tab="w1dcontrols">RUN / PAUSE &amp; Safety</button>
   </div>
   <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="STRONG">
     <button class="terminal-tab" data-tab="strongpaper">Independent Paper (Forward)</button>
@@ -328,9 +337,47 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
       <p>Snapshot terakhir: <span id="w1dSnapshotAt">—</span> · <span id="w1dPrivacyLabel">LIVE N/A tanpa autentikasi dan signed Binance reconciliation</span></p>
     </div>
   </div>
+  <div class="terminal-pane" data-pane="w1dlivepositions">
+    <div class="w1d-banner"><strong>Binance USDⓈ-M · per-account position inventory</strong><span class="w1d-pill">SIGNED EXCHANGE ONLY · NOT PAPER</span></div>
+    <div class="w1d-block"><div class="table-wrap"><table class="w1d-mini-table"><thead><tr>
+      <th>Account</th><th>Symbol</th><th>Side</th><th>Exchange State</th><th>Entry Qty</th><th>Exchange Remaining</th><th>Entry</th><th>VERIFIED Net</th><th>Proof</th>
+    </tr></thead><tbody id="w1dLivePositionRows"><tr><td colspan="9" class="empty">Authorize W1D untuk melihat posisi asli Binance.</td></tr></tbody></table></div>
+    <p>UNKNOWN / unverified PnL ditampilkan N/A, bukan hasil estimasi paper.</p></div>
+  </div>
+  <div class="terminal-pane" data-pane="w1dorders">
+    <div class="w1d-banner"><strong>Exchange orders · exact account/order IDs</strong><span class="w1d-pill">NO PHANTOM FILLS</span></div>
+    <div class="w1d-block"><div class="table-wrap"><table class="w1d-mini-table"><thead><tr>
+      <th>Account</th><th>Symbol</th><th>Side</th><th>Origin</th><th>Type</th><th>Status</th><th>Request Qty</th><th>Fill Qty</th><th>Avg Fill</th>
+    </tr></thead><tbody id="w1dOrderRows"><tr><td colspan="9" class="empty">Authorize W1D untuk melihat order ledger.</td></tr></tbody></table></div>
+    <p>Order ACK tidak berarti FILLED. Binance fill harus terkonfirmasi melalui signed userTrades.</p></div>
+  </div>
   <div class="terminal-pane" data-pane="w1daccounts">
     <div class="w1d-banner"><strong>Multi-account Binance USDⓈ-M</strong><span id="w1dSizeMode">PREVIEW LOKAL · BELUM DISIMPAN DI LIVE</span></div>
-    <div class="w1d-tip" id="w1dAccountsState">Belum ada akun LIVE terhubung di database W1D. API Key tidak boleh dikirim atau disimpan melalui Vercel frontend.</div>
+    <div class="w1d-tip" id="w1dAccountsState">Isi admin token untuk mengaktifkan formulir Vault Binance W1D. Key hanya dikirim melalui HTTPS ke VPS dan disegel AES-256-GCM.</div>
+    <div class="w1d-auth-row">
+      <label for="w1dAdminToken">W1D Admin Token</label>
+      <input id="w1dAdminToken" type="password" autocomplete="off" spellcheck="false" placeholder="Admin control token (bukan Binance Key)">
+      <button type="button" class="w1d-btn" id="w1dAuthorize">VERIFY ACCESS</button>
+      <span id="w1dAuthState" class="w1d-pill">LOCKED</span>
+    </div>
+    <div class="w1d-auth-row"><label for="w1dNewNickname">Nama akun</label>
+      <input id="w1dNewNickname" type="text" maxlength="80" placeholder="Contoh: Main Futures">
+      <button type="button" class="w1d-btn" id="w1dAddAccount">+ Add Account</button>
+      <span id="w1dAccountAction">Belum tersambung</span>
+    </div>
+    <div class="w1d-block"><h3>Binance Account List</h3><div class="table-wrap"><table class="w1d-mini-table"><thead>
+      <tr><th>Account</th><th>Engine state</th><th>Vault</th><th>Binance Futures</th><th>IP Whitelist</th><th>Saldo Available (USDT)</th></tr>
+      </thead><tbody id="w1dAccountRows"><tr><td colspan="6" class="empty">VERIFY ACCESS dahulu.</td></tr></tbody></table></div></div>
+    <div class="w1d-block w1d-vault-form"><h3>Bind / Rotate API Key · encrypted W1D Vault</h3>
+      <div class="w1d-auth-row"><label for="w1dAccountSelect">Akun target</label><select id="w1dAccountSelect"><option value="">Pilih akun</option></select></div>
+      <div class="w1d-credential-grid">
+        <div><label for="w1dBinanceKey">Binance API Key</label><input id="w1dBinanceKey" type="password" autocomplete="off" spellcheck="false" placeholder="API Key Binance Futures"></div>
+        <div><label for="w1dBinanceSecret">Binance API Secret</label><input id="w1dBinanceSecret" type="password" autocomplete="off" spellcheck="false" placeholder="API Secret Binance Futures"></div>
+      </div>
+      <div class="w1d-actions"><button type="button" class="w1d-btn" id="w1dSaveKeys">SAVE TO ENCRYPTED VAULT</button>
+        <button type="button" class="w1d-btn" id="w1dVerifyBinance">VERIFY BINANCE (GET ONLY)</button></div>
+      <p id="w1dKeyResult">Key tidak dikirim sampai lu menekan SAVE dan mengotorisasi. Tidak disimpan ke localStorage, source JS, atau database plaintext.</p>
+    </div>
     <div class="w1d-grid">
       <div class="w1d-field"><h3>Target notional global · kalkulator</h3>
         <label for="w1dMarginReference">Modal acuan per trade (USDT)</label><input id="w1dMarginReference" type="number" min="0.01" step="0.01" value="1">
@@ -357,7 +404,13 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <p>Catatan LIVE akan berbeda dan memakai database W1D signed fills sendiri. Tidak ada posisi dummy yang ditampilkan sebagai LIVE.</p></div>
   </div>
   <div class="terminal-pane" data-pane="w1dcontrols">
-    <div class="w1d-banner"><strong>W1D LIVE operational safety · read-only</strong><span class="w1d-pill">NO MONEY ORDERS</span></div>
+    <div class="w1d-banner"><strong>W1D LIVE operational safety · backend-controlled</strong><span class="w1d-pill">ORDER SENDER DISABLED</span></div>
+    <div class="w1d-control-actions">
+      <button type="button" class="w1d-run w1d-btn" id="w1dRun" aria-label="Request W1D LIVE RUN">RUN W1D LIVE</button>
+      <button type="button" class="w1d-pause w1d-btn" id="w1dPause" aria-label="Pause W1D LIVE entries">PAUSE W1D</button>
+      <button type="button" class="w1d-btn" id="w1dControlRefresh">CHECK BACKEND</button>
+      <span id="w1dControlAction" role="status">Memerlukan VERIFY ACCESS di API &amp; Accounts. RUN akan ditolak sampai LIVE preflight lengkap.</span>
+    </div>
     <div class="w1d-summary-grid">
       <div class="w1d-summary-card real"><small>GLOBAL LIVE MODE</small><strong id="w1dGlobalMode">UNKNOWN</strong></div>
       <div class="w1d-summary-card real"><small>EXECUTION GATE</small><strong id="w1dGate">UNKNOWN</strong></div>
@@ -368,7 +421,8 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
       <p><strong>CLOSE normal:</strong> LP1B, Bridge, V4.3, Runner (dari frozen W1D). Tidak membuat take profit statis kedua.</p>
       <p><strong>Emergency SL:</strong> order CONDITIONAL STOP_MARKET lewat Binance USDⓈ-M Algo Order endpoint; terpisah dari CLOSE strategi. Stop belum di-approve/arm di production.</p>
       <p><strong>Reconciliation:</strong> order ID, fill, fee, funding, equity, commissionAsset dan posisi exchange sampai flat. LIVE performance N/A jika belum lengkap.</p>
-      <p><strong>PAUSE:</strong> memblokir entry baru, tidak boleh menghalangi exit yang aman. RUN, CLOSE ALL, approval API Key dan edit SL tidak tersedia pada tab ini sebelum backend W1D terautentikasi selesai.</p>
+      <p><strong>PAUSE:</strong> menulis mode PAUSE ke dedicated PostgreSQL W1D, lalu membaca ulang mode yang tersimpan. Existing safe CLOSE tidak diblokir.</p>
+      <p><strong>RUN:</strong> mengirim permintaan autentikasi ke backend W1D, bukan toggle browser. Selama execution gate DISABLED / tanpa akun verified / tanpa live executor, respons RUN ditolak (HTTP 423). Tidak pernah diam-diam membuka order.</p>
     </div>
   </div>
   <div class="terminal-pane active" data-pane="positions">
@@ -553,6 +607,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <script src="strong_stage5.js?v=strong-readonly-v2"></script>
 <script src="strong_paper_view.js?v=strong-independent-v1"></script>
 <script src="w1d_tab.js?v=w1d-native-tab-v1"></script>
+<script src="w1d_live_controls.js?v=w1d-private-controls-v1"></script>
 <script>
 (function(){
 'use strict';
@@ -941,6 +996,7 @@ function switchStrategy(next){
     state.activeStrategy=next;sessionStorage.setItem('baba_active_strategy_v1',next);
     window.StrongStage5.activate(next==='STRONG');
     if(window.W1DTab)window.W1DTab.activate(next==='W1D');
+    if(next==='W1D'&&window.W1DOperations)window.W1DOperations.refresh(false);
     renderStrategyContext();renderTop();if(next==='DLS')renderDLS();
     if(next!=='W1D')renderControl(); // restore older strategy's cached status chip
     showTerminalTab(next==='W1D'?'w1dsummary':next==='DLS'?'dlspositions':next==='STRONG'?'strongpaper':'positions');
@@ -1592,6 +1648,8 @@ async function refresh(){
   try{
     if(state.activeStrategy==='W1D'){
       if(window.W1DTab)await window.W1DTab.load(false);
+      // Independent private LIVE ledger refresh (10s), never a candle request.
+      if(window.W1DOperations&&!document.hidden)window.W1DOperations.refresh(false);
       state.lastRefresh=Date.now();
       return;
     }
@@ -1803,6 +1861,7 @@ var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)syncTokenInpu
 if(window.W1DTab)window.W1DTab.init();
 window.StrongStage5.init();if(window.StrongPaperUI)window.StrongPaperUI.init();window.StrongStage5.activate(state.activeStrategy==='STRONG');
 if(window.W1DTab)window.W1DTab.activate(state.activeStrategy==='W1D');
+if(state.activeStrategy==='W1D'&&window.W1DOperations)window.W1DOperations.refresh(false);
 renderStrategyContext();showTerminalTab(state.activeStrategy==='W1D'?'w1dsummary':state.activeStrategy==='DLS'?'dlspositions':state.activeStrategy==='STRONG'?'strongpaper':'positions');
 window.addEventListener('resize',function(){drawChart()});
 refresh().then(function(){if(saved)verifyControlToken(true);loadChart();if(state.activeStrategy==='DLS'){var seq=++state.strategyRequestSeq;loadDLSContext(seq)}});
