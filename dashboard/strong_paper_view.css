@@ -1,0 +1,17 @@
+/* STRONG Independent Forward Paper — scoped styles */
+#strongPaperPane .shadow-overview{grid-template-columns:repeat(4,minmax(130px,1fr));gap:0}
+#strongPaperPane .shadow-stat{padding:8px 10px}#strongPaperPane .shadow-stat strong{font-size:11px}
+#strongPaperPane .strong-notice{font-size:8px;padding:6px 10px;line-height:1.35}
+#strongPaperPane .paper-paper-label{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid var(--line2);font-size:8px;line-height:1.35}
+#strongPaperPane .paper-paper-label strong{color:var(--text);font-size:9px;letter-spacing:.01em}
+#strongPaperPane .paper-paper-label span{color:var(--muted);font-size:8px}
+#strongPaperPane .paper-paper-label button{margin-left:auto;font-size:8px;padding:5px 8px}
+#strongPaperPane th,#strongPaperPane td{white-space:nowrap}
+#strongPaperPane .cell-sub{white-space:normal}
+#strongPaperPane .paper-ledger-footer{padding:6px 10px;color:var(--muted2);font-size:7px;line-height:1.4;border-top:1px solid var(--line2)}
+
+@media(max-width:900px){#strongPaperPane .shadow-overview{grid-template-columns:repeat(2,minmax(130px,1fr))}}
+#strongPaperPane table{font-size:9px}
+#strongPaperPane .pane-meta{font-size:8px;padding:6px 10px}
+#strongPaperPane td{padding:6px 8px}
+#strongPaperPane th{font-size:8px;padding:6px 8px}
