@@ -18,6 +18,21 @@
           "value": "camera=(), microphone=(), geolocation=()"
         }
       ]
+    },
+    {
+      "source": "/w1d-stage12-summary.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/w1d-stage12-summary.json",
+      "destination": "https://radar.43-153-193-103.sslip.io/w1d-stage12-summary.json"
     }
   ]
 }
