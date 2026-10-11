@@ -82,6 +82,8 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 .ai-provider-strip{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));border-bottom:1px solid var(--line2)}.provider-card{padding:9px 10px;border-right:1px solid var(--line2);background:#0d1014}.provider-card:last-child{border-right:0}.provider-card .line{display:flex;justify-content:space-between;gap:8px;font-size:8px;margin-top:5px}.provider-card .model-role{font-size:7px;color:var(--muted);margin-top:3px}
 .ai-grid{display:grid;grid-template-columns:1fr 1fr}.ai-grid>div:first-child{border-right:1px solid var(--line2)}.ai-summary{padding:8px 10px;border-bottom:1px solid var(--line2)}
 .bar{height:4px;min-width:65px;background:#242a31;overflow:hidden;border-radius:999px}.bar>i{display:block;height:100%;background:var(--yellow)}
+.strategy-shell{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line2);background:#0d1014}.strategy-title span{display:block;font-size:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.strategy-title strong{display:block;font-size:11px;margin-top:2px}.strategy-selector{display:flex;gap:6px}.strategy-btn{min-width:145px;text-align:left;border:1px solid var(--line);background:#11151a;color:var(--muted);padding:7px 10px;border-radius:5px;cursor:pointer}.strategy-btn strong{display:block;font-size:10px;color:var(--text)}.strategy-btn span{display:block;font-size:7px;margin-top:2px}.strategy-btn.active{border-color:rgba(240,185,11,.7);background:rgba(240,185,11,.08)}.strategy-btn.active strong{color:var(--yellow)}.strategy-context{font-size:8px;color:var(--muted);text-align:right}.strategy-context strong{display:block;color:var(--text);font-size:10px;margin-bottom:2px}.strategy-surface{transition:opacity .14s ease,transform .14s ease}.strategy-switching{opacity:.42;transform:translateY(2px);pointer-events:none}.strategy-terminal-tabs{display:none}.strategy-terminal-tabs.active{display:flex}.dls-state-banner{padding:8px 10px;border-bottom:1px solid var(--line2);font-size:8px;color:var(--muted)}
+.dls-controls{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:7px;margin-top:10px}.dls-control-card.active{border-color:rgba(14,203,129,.55);background:var(--greenSoft)}.dls-control-card.paused{border-color:rgba(240,185,11,.55);background:var(--yellowSoft)}.dls-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid var(--line2)}.dls-lane-note{font-size:8px;color:var(--muted);margin-left:auto}.dls-source{font-size:7px;color:var(--muted2);margin-top:2px}
 .control-wrap{display:grid;grid-template-columns:1.15fr .85fr}.control-card{padding:15px;border-right:1px solid var(--line2);background:#0b0e11}.control-card:last-child{border-right:0}.control-primary{background:linear-gradient(180deg,#0e1217 0%,#0b0e11 100%)}.control-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.control-title h3{margin:3px 0 0;font-size:14px}.control-mode{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
 .control-current{display:grid;grid-template-columns:repeat(4,1fr);margin-top:12px;border:1px solid var(--line2);background:#101419}.control-current>div{padding:10px;border-right:1px solid var(--line2)}.control-current>div:last-child{border-right:0}.control-current span{display:block;font-size:7px;color:var(--muted);margin-bottom:5px;text-transform:uppercase}.control-current strong{font-size:10px}
 .mode-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.mode-card{appearance:none;text-align:left;padding:10px;border:1px solid var(--line);border-radius:4px;background:#11151a;color:var(--text);cursor:pointer;min-height:62px;transition:border-color .15s ease,background .15s ease,transform .15s ease}.mode-card:hover{border-color:#3b434d;background:#151a20}.mode-card:active{transform:translateY(1px)}.mode-card strong{display:block;font-size:10px;margin-bottom:5px}.mode-card span{display:block;font-size:7px;color:var(--muted);line-height:1.35}.mode-card.active[data-mode="RUN"]{border-color:rgba(14,203,129,.55);background:var(--greenSoft)}.mode-card.active[data-mode="PAUSE_ENTRIES"]{border-color:rgba(240,185,11,.55);background:var(--yellowSoft)}.mode-card.active[data-mode="EXIT_ONLY"]{border-color:rgba(246,70,93,.55);background:var(--redSoft)}.mode-card:disabled{opacity:.45;cursor:not-allowed}
@@ -96,15 +98,35 @@ canvas{width:100%;height:522px;display:block;background:#0b0e11}.chart-meta{heig
 footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;background:#0d1014;color:var(--muted2);font-size:8px;border-top:1px solid var(--line2)}
 @media(max-width:1450px){:root{--marketW:225px;--bookW:245px;--tradeW:285px}}
 @media(max-width:1180px){.workspace{grid-template-columns:220px minmax(480px,1fr) 250px}.trade-panel{grid-column:1/-1;border-top:1px solid var(--line2)}.trade-inner{display:grid;grid-template-columns:1fr 1fr;gap:12px}.symbolbar .metric:nth-last-child(-n+2){display:none}.health-metrics{grid-template-columns:repeat(4,minmax(90px,1fr))}.ai-provider-strip{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap,.ai-overview{display:block}.ai-grid>div:first-child,.control-card,.ai-decision-card{border-right:0;border-bottom:1px solid var(--line2)}.health-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}.ai-provider-strip{grid-template-columns:1fr 1fr}.ai-reason-grid{grid-template-columns:1fr}.control-current{grid-template-columns:1fr 1fr}.control-current>div:nth-child(2){border-right:0}.control-current>div:nth-child(-n+2){border-bottom:1px solid var(--line2)}.mode-selector{grid-template-columns:1fr}.token-row{flex-wrap:wrap}.token-row input{flex-basis:100%}}
+@media(max-width:850px){.topnav{display:none}.status-cluster .chip:nth-child(n+3){display:none}.workspace{display:block}.panel{border-right:0;border-bottom:1px solid var(--line2)}.market-panel .table-wrap{height:280px}.book-side{height:150px}canvas{height:370px}.trade-inner,.ai-grid,.control-wrap,.ai-overview{display:block}.ai-grid>div:first-child,.control-card,.ai-decision-card{border-right:0;border-bottom:1px solid var(--line2)}.health-metrics{grid-template-columns:repeat(2,minmax(100px,1fr))}.ai-provider-strip{grid-template-columns:1fr 1fr}.ai-reason-grid{grid-template-columns:1fr}.control-current{grid-template-columns:1fr 1fr}.control-current>div:nth-child(2){border-right:0}.control-current>div:nth-child(-n+2){border-bottom:1px solid var(--line2)}.mode-selector,.dls-controls{grid-template-columns:1fr}.strategy-shell{align-items:flex-start}.strategy-selector{width:100%}.strategy-btn{min-width:0;flex:1}.strategy-context{display:none}.token-row{flex-wrap:wrap}.token-row input{flex-basis:100%}}
+.w1d-banner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line2);background:#10151b;color:#b1bbc8;font-size:10px}
+.w1d-banner strong{color:var(--yellow)}.w1d-btn{background:#191f28;color:#ddd;border:1px solid var(--line);border-radius:4px;padding:7px 12px;font-size:10px;cursor:pointer}
+.w1d-btn:disabled{cursor:not-allowed;opacity:.45}.w1d-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(125px,1fr));gap:8px;padding:13px}
+.w1d-summary-card{padding:12px 13px;background:#11161c;border:1px solid var(--line2);border-radius:4px;min-width:0}
+.w1d-summary-card small{font-size:9px;display:block;color:var(--muted)}.w1d-summary-card strong{font-size:19px;font-weight:750;font-variant-numeric:tabular-nums;display:block;padding-top:5px;color:#eaecef}
+.w1d-summary-card.paper{border-top:2px solid var(--yellow)}.w1d-summary-card.real{border-top:2px solid #498bf5}
+.w1d-block{padding:14px;border-top:1px solid var(--line2)}.w1d-block h3{font-size:12px;color:#eaecef;margin:0 0 9px}
+.w1d-block p{font-size:10px;color:var(--muted);margin:6px 0}
+.w1d-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}
+.w1d-field{background:#11161c;border:1px solid var(--line2);border-radius:4px;padding:12px}
+.w1d-field label{font-size:10px;color:var(--muted);display:block;margin-bottom:4px}
+.w1d-field input{width:100%;background:#0d1116;border:1px solid var(--line);color:#fff;padding:8px;border-radius:4px;font-size:12px}
+.w1d-field .w1d-note{color:var(--muted);font-size:10px;margin-top:8px}
+.w1d-tip{padding:10px 14px;background:#1c1a13;color:#e5c86b;border-left:3px solid var(--yellow);font-size:10px}
+.w1d-mini-table{width:100%;font-size:10px}.w1d-mini-table th,.w1d-mini-table td{font-size:10px;padding:10px}
+.w1d-pill{padding:3px 7px;border:1px solid var(--line);border-radius:4px;font-size:9px;color:var(--muted)}
+@media(max-width:1100px){.w1d-summary-grid{grid-template-columns:repeat(3,1fr)}.strategy-selector{flex-wrap:wrap}}
+@media(max-width:650px){.w1d-summary-grid{grid-template-columns:repeat(2,1fr)}.w1d-grid{grid-template-columns:1fr}.strategy-btn{min-width:110px}.strategy-selector{flex-wrap:wrap}}
 </style>
+<link rel="stylesheet" href="strong_stage5.css">
+<link rel="stylesheet" href="strong_paper_view.css?v=strong-independent-v1">
 </head>
 <body>
 <div class="app">
 <header class="topbar">
   <div class="brand-row">
     <div class="brand"><div class="brand-mark"><span>BB</span></div><span>BabaBot</span></div>
-    <nav class="topnav"><a class="active" href="#overview">USDⓈ-M Futures</a><a href="#terminal">Trade</a><a href="#terminal">Positions</a><a href="#terminal">Orders</a><a href="#terminal">AI Risk</a><a href="/w1d-parity.html">W1D Paper vs LIVE</a></nav>
+    <nav class="topnav"><a class="active" href="#overview">USDⓈ-M Futures</a><a href="#terminal">Trade</a><a href="#terminal">Positions</a><a href="#terminal">Orders</a><a href="#terminal">AI Risk</a></nav>
   </div>
   <div class="status-cluster">
     <span class="chip"><span id="apiDot" class="dot"></span><span id="apiChip">API CONNECTING</span></span>
@@ -113,7 +135,18 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   </div>
 </header>
 
-<section id="overview">
+<div class="strategy-shell">
+  <div class="strategy-title"><span>Strategy Workspace</span><strong id="activeStrategyTitle">FLOW GUARD</strong></div>
+  <div class="strategy-selector">
+    <button class="strategy-btn active" data-strategy="FLOW_GUARD"><strong>FLOW GUARD</strong><span id="flowGuardStrategyStatus">RUNNING</span></button>
+    <button class="strategy-btn" data-strategy="DLS"><strong>DLS</strong><span id="dlsStrategyStatus">PAUSED · SHADOW</span></button>
+    <button class="strategy-btn" data-strategy="STRONG"><strong>STRONG</strong><span id="strongStrategyStatus">MASTER OFF · SHADOW</span></button>
+    <button class="strategy-btn" data-strategy="W1D"><strong>W1D LIVE</strong><span id="w1dStrategyStatus">PAUSE · READ-ONLY</span></button>
+  </div>
+  <div class="strategy-context"><strong id="strategyContextTitle">Flow Guard paper</strong><span id="strategyContextNote">Primary paper dataset · isolated from DLS</span></div>
+</div>
+
+<section id="overview" class="strategy-surface">
   <div class="symbolbar">
     <div class="symbol-main">
       <div class="symbol-pair"><strong id="topSymbol">—</strong><span class="perp">PERP</span></div>
@@ -125,10 +158,10 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <div class="metric"><span>Funding</span><strong id="topFunding">—</strong></div>
     <div class="metric"><span>Regime</span><strong id="topRegime">—</strong></div>
     <div class="metric"><span>Moving / Actionable</span><strong><span id="stMoving">—</span> / <span id="stActionable">—</span></strong></div>
-    <div class="metric"><span>Open / Total WR</span><strong><span id="stOpen">—</span> / <span id="stWr">—</span></strong></div>
-    <div class="metric"><span>LONG · Closed / WR / PnL</span><strong id="stLongPerf">—</strong></div>
-    <div class="metric"><span>SHORT · Closed / WR / PnL</span><strong id="stShortPerf">—</strong></div>
-    <div class="metric"><span>Total Paper PnL</span><strong id="stPnl">—</strong></div>
+    <div class="metric"><span id="stOpenLabel">Open / Total WR</span><strong><span id="stOpen">—</span> / <span id="stWr">—</span></strong></div>
+    <div class="metric"><span id="stLongPerfLabel">LONG · Closed / WR / PnL</span><strong id="stLongPerf">—</strong></div>
+    <div class="metric"><span id="stShortPerfLabel">SHORT · Closed / WR / PnL</span><strong id="stShortPerf">—</strong></div>
+    <div class="metric"><span id="stPnlLabel">Flow Guard PnL</span><strong id="stPnl">—</strong></div>
     <div style="display:none"><span id="stUniverse">—</span><span id="stClosed">—</span><span id="stReviews">—</span><span id="stAge">—</span></div>
   </div>
 
@@ -166,7 +199,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     </aside>
 
     <aside class="panel trade-panel">
-      <div class="panel-head"><div><div class="panel-title">BabaBot Signal</div><div class="panel-sub">Deterministic + AI context</div></div></div>
+      <div class="panel-head"><div><div class="panel-title">BabaBot Signal</div><div id="strategySignalContext" class="panel-sub">Deterministic + AI context</div></div></div>
       <div class="trade-inner">
         <div>
           <div class="trade-symbol"><div><h3 id="selSymbol">—</h3><div id="selPrice" class="big-price">—</div></div><div id="selDecision"><span class="badge neutral">—</span></div></div>
@@ -183,8 +216,8 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   </div>
 </section>
 
-<section id="terminal" class="bottom-terminal">
-  <div class="terminal-tabs">
+<section id="terminal" class="bottom-terminal strategy-surface">
+  <div class="terminal-tabs strategy-terminal-tabs active" data-strategy-tabs="FLOW_GUARD">
     <button class="terminal-tab active" data-tab="positions">Positions <span id="positionsMeta">—</span></button>
     <button class="terminal-tab" data-tab="shadow">Protection Shadow <span id="shadowMeta">—</span></button>
     <button class="terminal-tab" data-tab="openorders">Open Orders</button>
@@ -194,7 +227,150 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <button class="terminal-tab" data-tab="ai">AI Risk <span id="aiMeta">—</span></button>
     <button class="terminal-tab" data-tab="control">Trading Control</button>
   </div>
+  <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="DLS">
+    <button class="terminal-tab" data-tab="dlspositions">Positions <span id="dlsMeta">—</span></button>
+    <button class="terminal-tab" data-tab="dlshistory">History</button>
+    <button class="terminal-tab" data-tab="dlsdecisions">Decisions <span id="dlsDecisionMeta">—</span></button>
+    <button class="terminal-tab" data-tab="dlscontrol">DLS Control</button>
+  </div>
 
+  <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="W1D">
+    <button class="terminal-tab" data-tab="w1dsummary">Paper ↔ LIVE</button>
+    <button class="terminal-tab" data-tab="w1daccounts">Akun Binance &amp; Sizing</button>
+    <button class="terminal-tab" data-tab="w1dpositions">Riwayat W1D</button>
+    <button class="terminal-tab" data-tab="w1dcontrols">Safety &amp; Parity</button>
+  </div>
+  <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="STRONG">
+    <button class="terminal-tab" data-tab="strongpaper">Independent Paper (Forward)</button>
+    <button class="terminal-tab" data-tab="strongpositions">Shadow (Legacy Research) <span id="strongPositionsMeta">—</span></button>
+    <button class="terminal-tab" data-tab="stronghistory">Shadow History</button>
+    <button class="terminal-tab" data-tab="strongdecisions">Shadow Decisions</button>
+    <button class="terminal-tab" data-tab="strongprotection">Shadow Protection</button>
+    <button class="terminal-tab" data-tab="strongcontrol">STRONG Control</button>
+  </div>
+
+  <div class="terminal-pane" data-pane="strongpaper" id="strongPaperPane">
+    <div class="paper-paper-label"><strong>STRONG INDEPENDENT PAPER · FORWARD ONLY</strong><span>Own ledger · LONG · entry after QUALIFIED_STRONG · excludes legacy shadow PnL</span><button id="strongPaperRefresh" class="btn secondary">REFRESH TABLE</button></div>
+    <div id="strongPaperNotice" class="strong-notice">Connecting independent paper ledger...</div>
+    <div id="strongPaperOverview" class="shadow-overview"></div>
+    <div class="pane-meta" id="strongPaperMeta">New independent paper positions only; no T0 backfill.</div>
+    <div class="table-wrap"><table><thead><tr><th>Symbol / Side</th><th>Status</th><th>Independent Entry / Qualified</th><th>Entry Market / Fill</th><th>Observed Mark</th><th>Observed MFE</th><th>Observed MAE</th><th>Closed Net PnL</th><th>Closed / Reason</th></tr></thead><tbody id="strongPaperRows"><tr><td colspan="9" class="empty">Independent paper ledger loading.</td></tr></tbody></table></div>
+    <div class="pane-meta">Independent paper receipt events · OPEN / MARK / CLOSE / DATA_GAP · not shadow T0 events</div>
+    <div class="table-wrap"><table><thead><tr><th>Observed at</th><th>Event</th><th>Symbol</th><th>Price</th><th>Trade timestamp</th></tr></thead><tbody id="strongPaperEventRows"><tr><td colspan="5" class="empty">No paper events yet.</td></tr></tbody></table></div>
+    <div class="paper-ledger-footer">PnL realized = CLOSED independent paper only. OPEN/DATA_GAP/CENSORED excluded from WR. MFE/MAE use observed marks, not full-tick extremes. Fee and slippage modeled; this is not Binance LIVE execution.</div>
+  </div>
+
+  <div class="terminal-pane" data-pane="strongpositions">
+    <div id="strongOverview" class="shadow-overview"></div>
+    <div id="strongDataState" class="strong-notice">STRONG Shadow Legacy Research · T0 virtual results, not Independent Paper PnL</div>
+    <div class="pane-meta" id="strongPositionsInfo">Original T0 entry · causal gate · no backfill</div>
+    <div class="table-wrap"><table><thead><tr><th>Source T0</th><th>Symbol / Side</th><th>Status</th><th>Original Entry / Qty / Notional</th><th>OPEN_LANE</th><th>EARLY60</th><th>STRONG120</th><th>Observed MFE</th><th>Observed MAE</th><th>Branch</th></tr></thead><tbody id="strongPositionRows"><tr><td colspan="10" class="empty">No STRONG positions yet.</td></tr></tbody></table></div>
+    <div class="strong-detail" id="strongSelectedDetail">Select a STRONG position for branch detail.</div>
+  </div>
+  <div class="terminal-pane" data-pane="stronghistory">
+    <div class="pane-meta" id="strongHistoryInfo">Virtual closed positions only · no unresolved PnL</div>
+    <div class="table-wrap"><table><thead><tr><th>Closed at</th><th>Symbol</th><th>Branch</th><th>Result</th><th>Realized PnL</th><th>ROI</th><th>Entry</th><th>Exit</th><th>Reason</th></tr></thead><tbody id="strongHistoryRows"><tr><td colspan="9" class="empty">No STRONG virtual close history.</td></tr></tbody></table></div>
+  </div>
+  <div class="terminal-pane" data-pane="strongdecisions">
+    <div class="pane-meta" id="strongDecisionsInfo">Causal gate outcomes · T0 → T60 → T120</div>
+    <div class="table-wrap"><table><thead><tr><th>Recorded</th><th>Event</th><th>Source / Position</th><th>Gate / Outcome</th></tr></thead><tbody id="strongDecisionRows"><tr><td colspan="4" class="empty">No STRONG decisions yet.</td></tr></tbody></table></div>
+  </div>
+  <div class="terminal-pane" data-pane="strongprotection">
+    <div class="pane-meta">Three independent T0 branches · virtual only · full OOS parity pending</div>
+    <div id="strongBranchOverview" class="shadow-overview"></div>
+    <div class="table-wrap"><table><thead><tr><th>Original T0</th><th>Branch</th><th>Status</th><th>Virtual Net</th><th>Peak</th><th>Arm</th><th>Unarmed Telemetry</th></tr></thead><tbody id="strongProtectionRows"><tr><td colspan="7" class="empty">No STRONG protection branches.</td></tr></tbody></table></div>
+    <div class="pane-meta">Virtual actions; executed_at_ms is intentionally null</div>
+    <div class="table-wrap"><table><thead><tr><th>Sample</th><th>Branch</th><th>Action</th><th>Price</th><th>Quantity</th><th>Virtual PnL Δ</th><th>Reason</th></tr></thead><tbody id="strongActionRows"><tr><td colspan="7" class="empty">No virtual STRONG actions.</td></tr></tbody></table></div>
+  </div>
+  <div class="terminal-pane" data-pane="strongcontrol">
+    <div class="control-wrap">
+      <div class="control-card control-primary">
+        <div class="control-title"><div><div class="panel-sub">Dedicated STRONG Shadow</div><h3>Independent Controls</h3></div><span class="badge neutral" id="strongControlBadge">MASTER OFF</span></div>
+        <div class="strong-notice">Changes apply to <strong>strong_control_state</strong> only. MASTER may resume only in SHADOW mode after engine and three-branch checks. No real orders; Flow Guard/DLS unaffected.</div>
+        <div class="dls-controls strong-control-grid">
+          <button class="mode-card" id="strongMasterPause" data-strong-setting="master_enabled"><strong>MASTER — OFF</strong><span>Shadow-only activation / emergency PAUSE</span></button>
+          <button class="mode-card" data-strong-setting="v43_enabled"><strong>V4.3 PRIMARY</strong><span>Virtual full close · T0</span></button>
+          <button class="mode-card" data-strong-setting="v42_shadow_enabled"><strong>V4.2 SHADOW</strong><span>Virtual reduce/runner · T0</span></button>
+          <button class="mode-card" data-strong-setting="unarmed_shadow_enabled"><strong>UNARMED SHADOW</strong><span>Observe only after STRONG120</span></button>
+        </div>
+        <div class="control-token-box">
+          <div class="control-token-head"><strong>Admin Token — same browser session as Flow Guard/DLS</strong><span id="strongTokenBadge" class="muted">Not authorized</span></div>
+          <div class="token-row"><input id="strongControlToken" type="password" autocomplete="off" placeholder="Admin control token"><button class="btn secondary" id="strongVerifyToken">VERIFY</button><button class="btn secondary" id="strongClearToken">CLEAR</button></div>
+          <div id="strongControlMessage" class="control-message muted">MASTER remains OFF.</div>
+        </div>
+      </div>
+      <div class="control-card">
+        <div class="control-title"><div><div class="panel-sub">STRONG Runtime</div><h3>Containment Status</h3></div><span class="badge neutral">VIRTUAL ONLY</span></div>
+        <div class="system-list">
+          <div class="system-line"><span>Engine heartbeat</span><strong id="strongEngineStatus">—</strong></div>
+          <div class="system-line"><span>Forward boundary</span><strong id="strongEngineBoundary">—</strong></div>
+          <div class="system-line"><span>Source PAUSED_SKIP</span><strong id="strongPausedSkip">—</strong></div>
+          <div class="system-line"><span>Database authority</span><strong class="green">strong_* ONLY</strong></div>
+          <div class="system-line"><span>Protector authority</span><strong>NONE</strong></div>
+          <div class="system-line"><span>Historical parity</span><strong class="yellow">PENDING</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal-pane" data-pane="w1dsummary">
+    <div class="w1d-banner"><span><strong>W1D T+150 · independent paper → Binance USDⓈ-M</strong> · keputusan entry/close mengikuti W1D 1:1; nilai fill, fee, funding berbeda</span><span><span id="w1dSnapshotAge">—</span> · <button type="button" class="w1d-btn" id="w1dRefresh">Refresh W1D saja</button></span></div>
+    <div id="w1dWarning" class="w1d-tip">Mengambil snapshot W1D…</div>
+    <div class="w1d-summary-grid">
+      <div class="w1d-summary-card paper"><small>PAPER · NET PNL</small><strong id="w1dPaperNet">—</strong></div>
+      <div class="w1d-summary-card paper"><small>PAPER · CLOSED / WIN / LOSS</small><strong><span id="w1dPaperClosed">—</span> / <span id="w1dPaperWins">—</span> / <span id="w1dPaperLosses">—</span></strong></div>
+      <div class="w1d-summary-card paper"><small>PAPER · WIN RATE</small><strong id="w1dPaperWR">—</strong></div>
+      <div class="w1d-summary-card real"><small>LIVE · VERIFIED NET</small><strong id="w1dLiveNet">N/A</strong></div>
+      <div class="w1d-summary-card real"><small>LIVE · CLOSED / WR</small><strong><span id="w1dLiveClosed">N/A</span> / <span id="w1dLiveWR">N/A</span></strong></div>
+    </div>
+    <div class="w1d-block"><h3>Perbandingan akuntansi (USDT)</h3>
+      <div class="table-wrap"><table class="w1d-mini-table"><thead><tr><th>Indikator</th><th>W1D PAPER</th><th>BINANCE LIVE (signed ledger)</th></tr></thead><tbody id="w1dParityRows"><tr><td colspan="3">Menunggu data</td></tr></tbody></table></div>
+      <p>Snapshot terakhir: <span id="w1dSnapshotAt">—</span> · <span id="w1dPrivacyLabel">LIVE N/A tanpa autentikasi dan signed Binance reconciliation</span></p>
+    </div>
+  </div>
+  <div class="terminal-pane" data-pane="w1daccounts">
+    <div class="w1d-banner"><strong>Multi-account Binance USDⓈ-M</strong><span id="w1dSizeMode">PREVIEW LOKAL · BELUM DISIMPAN DI LIVE</span></div>
+    <div class="w1d-tip" id="w1dAccountsState">Belum ada akun LIVE terhubung di database W1D. API Key tidak boleh dikirim atau disimpan melalui Vercel frontend.</div>
+    <div class="w1d-grid">
+      <div class="w1d-field"><h3>Target notional global · kalkulator</h3>
+        <label for="w1dMarginReference">Modal acuan per trade (USDT)</label><input id="w1dMarginReference" type="number" min="0.01" step="0.01" value="1">
+        <label for="w1dLeverageTarget" style="margin-top:8px">Target leverage (×)</label><input id="w1dLeverageTarget" type="number" min="1" max="125" step="1" value="50">
+        <p class="w1d-note">Target nominal posisi: <strong id="w1dTargetNotional">$50.00</strong>. Preview ini <strong>belum menyimpan setting akun</strong>.</p>
+        <div class="table-wrap"><table class="w1d-mini-table"><thead><tr><th>Batas Binance (ilustrasi)</th><th>Margin diperlukan</th></tr></thead><tbody>
+        <tr><td>50×</td><td id="w1dExample50">—</td></tr><tr><td>25×</td><td id="w1dExample25">—</td></tr><tr><td>10×</td><td id="w1dExample10">—</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="w1d-field"><h3>API Binance · IP whitelist</h3>
+        <label>Outbound IP VPS, bukan IP Vercel/browser</label>
+        <strong id="w1dEgressIP">BELUM TERVERIFIKASI</strong>
+        <p class="w1d-note">Verified: <span id="w1dEgressAsOf">N/A</span>. Jika IP berubah, whitelist akun harus diperbarui sebelum LIVE.</p>
+        <button type="button" class="w1d-btn" id="w1dCopyIP">Copy IP</button><span id="w1dIpCopyState" class="w1d-note"></span>
+        <p class="w1d-note">Nama akun, tambah/hapus akun, masukkan API Key/Secret, validasi key, leverage bracket per simbol, saldo/margin, dan sinkronisasi leverage akan menggunakan backend W1D Vault terautentikasi. <strong>Belum diaktifkan</strong>; variabel Railway tidak otomatis menjadi akun LIVE.</p>
+        <p>Connected accounts: <strong id="w1dLiveAccounts">N/A</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="terminal-pane" data-pane="w1dpositions">
+    <div class="w1d-banner"><strong>W1D Paper trade history</strong><span id="w1dHistoryCount">—</span></div>
+    <div class="w1d-block"><label for="w1dSearch">Pair </label><input id="w1dSearch" placeholder="BTCUSDT" style="background:#0b0e11;color:#eee;border:1px solid #2b3139;padding:7px;border-radius:3px"> <label for="w1dFilter">Status </label><select id="w1dFilter" style="background:#0b0e11;color:#eee;border:1px solid #2b3139;padding:7px;border-radius:3px"><option value="ALL">Semua</option><option value="OPEN">OPEN</option><option value="CLOSED">CLOSED</option></select>
+    <div class="table-wrap"><table class="w1d-mini-table"><thead><tr><th>Pair</th><th>Status</th><th>Entry time</th><th>Entry price</th><th>Exit price</th><th>Net PnL</th><th>W1D Close reason</th></tr></thead><tbody id="w1dPaperRows"><tr><td colspan="7">Menunggu data</td></tr></tbody></table></div>
+    <p>Catatan LIVE akan berbeda dan memakai database W1D signed fills sendiri. Tidak ada posisi dummy yang ditampilkan sebagai LIVE.</p></div>
+  </div>
+  <div class="terminal-pane" data-pane="w1dcontrols">
+    <div class="w1d-banner"><strong>W1D LIVE operational safety · read-only</strong><span class="w1d-pill">NO MONEY ORDERS</span></div>
+    <div class="w1d-summary-grid">
+      <div class="w1d-summary-card real"><small>GLOBAL LIVE MODE</small><strong id="w1dGlobalMode">UNKNOWN</strong></div>
+      <div class="w1d-summary-card real"><small>EXECUTION GATE</small><strong id="w1dGate">UNKNOWN</strong></div>
+      <div class="w1d-summary-card real"><small>DAILY LOSS LIMIT (USDT)</small><strong id="w1dDailyRisk">UNSET</strong></div>
+    </div>
+    <div class="w1d-block"><h3>Strategi 1:1 dan proteksi Binance Futures</h3>
+      <p><strong>OPEN:</strong> sinyal W1D Paper → Binance MARKET BUY, hanya setelah autentikasi, verifikasi leverage/bracket/fee dan posisi exchange.</p>
+      <p><strong>CLOSE normal:</strong> LP1B, Bridge, V4.3, Runner (dari frozen W1D). Tidak membuat take profit statis kedua.</p>
+      <p><strong>Emergency SL:</strong> order CONDITIONAL STOP_MARKET lewat Binance USDⓈ-M Algo Order endpoint; terpisah dari CLOSE strategi. Stop belum di-approve/arm di production.</p>
+      <p><strong>Reconciliation:</strong> order ID, fill, fee, funding, equity, commissionAsset dan posisi exchange sampai flat. LIVE performance N/A jika belum lengkap.</p>
+      <p><strong>PAUSE:</strong> memblokir entry baru, tidak boleh menghalangi exit yang aman. RUN, CLOSE ALL, approval API Key dan edit SL tidak tersedia pada tab ini sebelum backend W1D terautentikasi selesai.</p>
+    </div>
+  </div>
   <div class="terminal-pane active" data-pane="positions">
     <div id="healthInspector" class="health-inspector"><div class="health-empty">Health V2 inspector waits for an open paper position.</div></div>
     <div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Side</th><th>Status</th><th>Entry</th><th>Mark</th><th>PnL</th><th>Base</th><th>Adaptive</th><th>MFE</th><th>MAE</th><th>Giveback</th><th>Penalty</th><th>Deterministic</th><th>AI</th><th>Final</th></tr></thead><tbody id="positionRows"><tr><td colspan="15" class="empty"><strong>Loading positions</strong><span>Health V2 lifecycle state appears here.</span></td></tr></tbody></table></div>
@@ -215,6 +391,37 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
         <tbody id="shadowRows"><tr><td colspan="9" class="empty"><strong>Loading Protection Shadow</strong><span>One source trade will appear as four independent virtual protector outcomes.</span></td></tr></tbody>
       </table></div>
     </div>
+  </div>
+
+  <div class="terminal-pane" data-pane="dlspositions">
+    <div class="shadow-shell">
+      <div id="dlsOverview" class="shadow-overview">
+        <div class="shadow-stat"><span>DLS Total</span><strong>—</strong><small>shadow-paper only</small></div>
+        <div class="shadow-stat"><span>LONG Lane</span><strong>—</strong><small>RD5C + proof + V4.3-LS</small></div>
+        <div class="shadow-stat"><span>SHORT Lane</span><strong>—</strong><small>RD5J + V4.2</small></div>
+        <div class="shadow-stat"><span>Engine</span><strong>—</strong><small>isolated side-lane</small></div>
+      </div>
+      <div class="dls-toolbar">
+        <button class="btn dls-filter active" data-dls-filter="ALL">ALL</button>
+        <button class="btn dls-filter" data-dls-filter="LONG">LONG</button>
+        <button class="btn dls-filter" data-dls-filter="SHORT">SHORT</button>
+        <span id="dlsScope" class="dls-lane-note">Forward boundary · isolated from Flow Guard</span>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Time</th><th>Symbol</th><th>Lane</th><th>Status</th><th>Gate</th><th>Proof</th><th>Entry</th><th>PnL</th><th>Protector</th><th>Exit / Reason</th></tr></thead>
+        <tbody id="dlsRows"><tr><td colspan="10" class="empty"><strong>Loading DLS positions</strong><span>Only DLS active/proof positions appear here.</span></td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="terminal-pane" data-pane="dlshistory">
+    <div class="pane-meta"><span id="dlsHistoryMeta">DLS closed / skipped history</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Closed</th><th>Symbol</th><th>Lane</th><th>Result</th><th>Entry</th><th>Exit</th><th>MFE / MAE</th><th>Protector</th><th>Reason</th></tr></thead><tbody id="dlsHistoryRows"><tr><td colspan="9" class="empty">No DLS history yet.</td></tr></tbody></table></div>
+  </div>
+
+  <div class="terminal-pane" data-pane="dlsdecisions">
+    <div class="pane-meta"><span id="dlsDecisionScope">RD4C → RD5B → lane gate decisions</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Time</th><th>Symbol</th><th>Decision</th><th>Lane</th><th>Gate</th><th>Reason</th><th>Source</th></tr></thead><tbody id="dlsDecisionRows"><tr><td colspan="7" class="empty">No DLS decisions yet.</td></tr></tbody></table></div>
   </div>
 
   <div class="terminal-pane" data-pane="openorders">
@@ -309,10 +516,43 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
       </div>
     </div>
   </div>
+  <div class="terminal-pane" data-pane="dlscontrol">
+    <div class="control-wrap">
+      <div class="control-card control-primary">
+        <div class="control-title"><div><div class="panel-sub">DLS Shadow Paper</div><h3>Independent DLS Control</h3></div><span id="dlsControlBadge" class="badge neutral">LOADING</span></div>
+        <div class="dls-state-banner">These controls write only to <strong>dls_control_state</strong>. Flow Guard control mode is not changed.</div>
+        <div class="dls-controls">
+          <button class="mode-card dls-control-card" data-dls-control="master"><strong id="dlsMasterLabel">MASTER —</strong><span>Emergency entry pause for both DLS lanes</span></button>
+          <button class="mode-card dls-control-card" data-dls-control="long"><strong id="dlsLongLabel">LONG —</strong><span>RD5C + +0.18 proof + V4.3-LS</span></button>
+          <button class="mode-card dls-control-card" data-dls-control="short"><strong id="dlsShortLabel">SHORT —</strong><span>RD5J candidate + V4.2</span></button>
+        </div>
+        <div class="control-token-box">
+          <div class="control-token-head"><div><div class="panel-sub">Admin Control Token</div><strong>Authorize DLS controls</strong></div><span id="dlsTokenStateText" class="muted">Not verified</span></div>
+          <div class="token-row"><input id="dlsControlToken" type="password" autocomplete="off" placeholder="Same admin control token"><button id="dlsVerifyToken" class="btn secondary">VERIFY</button><button id="dlsClearToken" class="btn secondary">CLEAR</button></div>
+          <div class="control-helper">Same authorization token as Flow Guard controls. Stored only in this browser tab.</div>
+          <div id="dlsControlMessage" class="muted control-message">DLS is currently isolated from Flow Guard.</div>
+        </div>
+      </div>
+      <div class="control-card">
+        <div class="control-title"><div><div class="panel-sub">DLS Runtime</div><h3>Side-lane State</h3></div><span class="badge neutral">SHADOW ONLY</span></div>
+        <div class="system-list">
+          <div class="system-line"><span>Engine</span><strong id="dlsSysEngine">—</strong></div>
+          <div class="system-line"><span>Master</span><strong id="dlsSysMaster">—</strong></div>
+          <div class="system-line"><span>LONG</span><strong id="dlsSysLong">—</strong></div>
+          <div class="system-line"><span>SHORT</span><strong id="dlsSysShort">—</strong></div>
+          <div class="system-line"><span>Forward boundary</span><strong id="dlsSysBoundary">—</strong></div>
+          <div class="system-line"><span>DB authority</span><strong class="green">DLS TABLES ONLY</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer><span>BabaBot USDⓈ-M Futures Terminal · refresh 10s</span><span>Market data + guarded execution controls</span></footer>
 </div>
+<script src="strong_stage5.js?v=strong-readonly-v2"></script>
+<script src="strong_paper_view.js?v=strong-independent-v1"></script>
+<script src="w1d_tab.js?v=w1d-native-tab-v1"></script>
 <script>
 (function(){
 'use strict';
@@ -323,11 +563,12 @@ var state={
   livePreflight:null,liveSummary:null,liveOrders:[],livePositions:[],
   shadow:null,shadowContract:null,shadowAdapters:null,shadowSettlementContract:null,shadowRuntime:null,shadowError:null,
   shadowSettlements:{},selectedShadowParentId:null,
+  dlsStatus:null,dlsPositions:[],dlsEvents:[],dlsFilter:'ALL',dlsBusy:false,dlsFetchedAt:0,dlsEventsFetchedAt:0,activeStrategy:'FLOW_GUARD',strategyRequestSeq:0,
   selectedSymbol:null,interval:'5m',candles:[],radarFilter:'ALL',lastRefresh:null,
   ticker:null,depth:null,marketSearch:'',terminalTab:'positions',selectedClosedPositionId:null,
   liquidity:null,lqZonesEnabled:true,lqSnapshotAsOf:null,lqSnapshotEntryPrice:null,lqSnapshotPositionId:null,
   liquidityKey:null,liquidityFetchedAt:0,chartRequestSeq:0,refreshBusy:false,
-  controlAuthVerified:false,controlBusy:false,apiFailures:[]
+  controlAuthVerified:false,controlBusy:false,apiFailures:[],flowTabFetched:{}
 };
 function el(id){return document.getElementById(id)}
 function num(v,d){if(v===null||v===undefined||v==='')return '—';return Number(v).toFixed(d===undefined?2:d)}
@@ -342,7 +583,7 @@ function badge(v){return '<span class="badge '+clsVerdict(v)+'">'+(v||'—')+'</
 function esc(s){return String(s===null||s===undefined?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 async function getJSON(path,timeoutMs){
   var controller=new AbortController();
-  var timer=setTimeout(function(){controller.abort()},timeoutMs||12000);
+  var timer=setTimeout(function(){controller.abort()},timeoutMs||8000);
   try{
     var r=await fetch(API+path,{cache:'no-store',signal:controller.signal});
     if(!r.ok)throw new Error(path+' HTTP '+r.status);
@@ -432,26 +673,53 @@ function renderTop(){
   el('stMoving').textContent=scanInRun?(r.moving_candidate_count===undefined?'—':r.moving_candidate_count):0;
   var actionable=scanInRun?(r.candidates||[]).filter(function(x){return x.decision==='LONG'||x.decision==='SHORT'}).length:0;
   if(el('stActionable'))el('stActionable').textContent=actionable;
-  el('stOpen').textContent=run.open_positions===undefined?0:run.open_positions;
-  var runPositions=boundary?state.positions.filter(function(x){return Number(x.opened_at_ms||0)>=boundary}):state.positions;
-  var partial=runPositions.reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
-  var realized=Number(run.net_pnl||0)+partial;
-  var sides=run.by_side||{};
-  ['LONG','SHORT'].forEach(function(side){
-    var d=sides[side]||{};
-    var sideOpenPartial=runPositions.filter(function(x){return String(x.side||'').toUpperCase()===side}).reduce(function(s,x){return s+Number(x.realized_pnl||0)},0);
-    var sidePnl=Number(d.net_pnl||0)+sideOpenPartial;
-    var wr=d.win_rate_pct===null||d.win_rate_pct===undefined?'—':num(d.win_rate_pct,1)+'%';
-    var closed=d.closed_positions===undefined?0:Number(d.closed_positions||0);
-    var node=el(side==='LONG'?'stLongPerf':'stShortPerf');
-    if(node){
-      node.textContent=closed+'t · '+wr+' · '+money(sidePnl);
-      node.className='value '+(sidePnl>=0?'green':'red');
-    }
-  });
-  el('stPnl').textContent=money(realized);el('stPnl').className='value '+(realized>=0?'green':'red');
-  el('stClosed').textContent=run.closed_positions===undefined?'—':run.closed_positions;
-  el('stWr').textContent=run.win_rate_pct===null||run.win_rate_pct===undefined?'—':num(run.win_rate_pct,1)+'%';
+
+  if(state.activeStrategy==='STRONG'){
+    window.StrongStage5.renderTop();
+  }else if(state.activeStrategy==='W1D'){
+    if(window.W1DTab)window.W1DTab.renderTop();
+  }else if(state.activeStrategy==='DLS'){
+    var ds=state.dlsStatus&&state.dlsStatus.summary||{},all=ds.all||{},lng=ds.long||{},sh=ds.short||{};
+    var dlsActive=Number(all.open||0)+Number(all.reduced||0)+Number(all.wait_proof||0);
+    var dlsRealized=Number(all.closed_pnl_usdt||0)+Number(all.open_realized_pnl_usdt||0);
+    el('stOpen').textContent=dlsActive;
+    el('stWr').textContent=all.win_rate_pct===null||all.win_rate_pct===undefined?'—':num(all.win_rate_pct,1)+'%';
+    [['LONG',lng],['SHORT',sh]].forEach(function(pair){
+      var side=pair[0],d=pair[1]||{},node=el(side==='LONG'?'stLongPerf':'stShortPerf');
+      var sidePnl=Number(d.closed_pnl_usdt||0)+Number(d.open_realized_pnl_usdt||0);
+      var wr=d.win_rate_pct===null||d.win_rate_pct===undefined?'—':num(d.win_rate_pct,1)+'%';
+      if(node){node.textContent=Number(d.closed||0)+'t · '+wr+' · '+money(sidePnl);node.className='value '+(sidePnl>=0?'green':'red')}
+    });
+    el('stPnl').textContent=money(dlsRealized);el('stPnl').className='value '+(dlsRealized>=0?'green':'red');
+    el('stClosed').textContent=all.closed===undefined?'—':all.closed;
+    if(el('stOpenLabel'))el('stOpenLabel').textContent='DLS Active / Total WR';
+    if(el('stLongPerfLabel'))el('stLongPerfLabel').textContent='DLS LONG · Closed / WR / PnL';
+    if(el('stShortPerfLabel'))el('stShortPerfLabel').textContent='DLS SHORT · Closed / WR / PnL';
+    if(el('stPnlLabel'))el('stPnlLabel').textContent='DLS Shadow PnL';
+  }else{
+    el('stOpen').textContent=run.open_positions===undefined?0:run.open_positions;
+    var runPositions=boundary?state.positions.filter(function(x){return Number(x.opened_at_ms||0)>=boundary}):state.positions;
+    var partial=runPositions.reduce(function(sum,x){return sum+Number(x.realized_pnl||0)},0);
+    var realized=Number(run.net_pnl||0)+partial;
+    var sides=run.by_side||{};
+    ['LONG','SHORT'].forEach(function(side){
+      var d=sides[side]||{};
+      var sideOpenPartial=runPositions.filter(function(x){return String(x.side||'').toUpperCase()===side}).reduce(function(sum,x){return sum+Number(x.realized_pnl||0)},0);
+      var sidePnl=Number(d.net_pnl||0)+sideOpenPartial;
+      var wr=d.win_rate_pct===null||d.win_rate_pct===undefined?'—':num(d.win_rate_pct,1)+'%';
+      var closed=d.closed_positions===undefined?0:Number(d.closed_positions||0);
+      var node=el(side==='LONG'?'stLongPerf':'stShortPerf');
+      if(node){node.textContent=closed+'t · '+wr+' · '+money(sidePnl);node.className='value '+(sidePnl>=0?'green':'red')}
+    });
+    el('stPnl').textContent=money(realized);el('stPnl').className='value '+(realized>=0?'green':'red');
+    el('stClosed').textContent=run.closed_positions===undefined?'—':run.closed_positions;
+    el('stWr').textContent=run.win_rate_pct===null||run.win_rate_pct===undefined?'—':num(run.win_rate_pct,1)+'%';
+    if(el('stOpenLabel'))el('stOpenLabel').textContent='Flow Guard Open / Total WR';
+    if(el('stLongPerfLabel'))el('stLongPerfLabel').textContent='Flow Guard LONG · Closed / WR / PnL';
+    if(el('stShortPerfLabel'))el('stShortPerfLabel').textContent='Flow Guard SHORT · Closed / WR / PnL';
+    if(el('stPnlLabel'))el('stPnlLabel').textContent='Flow Guard PnL';
+  }
+
   el('stReviews').textContent=a.total_reviews===undefined?'—':a.total_reviews;
   el('stAge').textContent=age(r.scan_finished_at_ms);
   var apiFailCount=(state.apiFailures||[]).length;
@@ -461,6 +729,8 @@ function renderTop(){
   el('historyMeta').textContent=(h.signal_count===undefined?'—':h.signal_count)+' signals · '+(h.trade_event_count===undefined?'—':h.trade_event_count)+' events';
   el('sysDb').textContent=h.backend||'—';el('sysSignals').textContent=h.signal_count===undefined?'—':h.signal_count;el('sysEvents').textContent=h.trade_event_count===undefined?'—':h.trade_event_count;
   el('feeMeta').textContent='fees '+money(Number(p.fees||0));
+  if(state.activeStrategy==='STRONG')window.StrongStage5.renderTop();
+  if(state.activeStrategy==='W1D'&&window.W1DTab)window.W1DTab.renderTop();
 }
 function renderControl(){
   var c=state.control||{},pf=state.livePreflight||{};
@@ -621,6 +891,64 @@ function showTerminalTab(name){
   state.terminalTab=name;
   document.querySelectorAll('.terminal-tab').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name)});
   document.querySelectorAll('.terminal-pane').forEach(function(p){p.classList.toggle('active',p.dataset.pane===name)});
+  if(window.StrongPaperUI)window.StrongPaperUI.activate(state.activeStrategy==='STRONG'&&name==='strongpaper');
+  if(state.activeStrategy==='STRONG'&&window.StrongStage5){window.StrongStage5.context();window.StrongStage5.renderTop();}
+  if(state.activeStrategy==='W1D'&&window.W1DTab)window.W1DTab.render();
+}
+function renderStrategyContext(){
+  var isDLS=state.activeStrategy==='DLS',dc=state.dlsStatus&&state.dlsStatus.controls||{},fc=state.control||{};
+  document.querySelectorAll('.strategy-btn').forEach(function(b){b.classList.toggle('active',b.dataset.strategy===state.activeStrategy)});
+  document.querySelectorAll('.strategy-terminal-tabs').forEach(function(t){t.classList.toggle('active',t.dataset.strategyTabs===state.activeStrategy)});
+  if(el('activeStrategyTitle'))el('activeStrategyTitle').textContent=
+    state.activeStrategy==='W1D'?'W1D — LONG T+150':isDLS?'DLS — DUAL LANE':'FLOW GUARD';
+  if(el('strategyContextTitle'))el('strategyContextTitle').textContent=
+    state.activeStrategy==='W1D'?'W1D Paper ↔ Binance LIVE':isDLS?'DLS shadow-paper':'Flow Guard paper';
+  if(el('strategyContextNote'))el('strategyContextNote').textContent=
+    state.activeStrategy==='W1D'?'Frozen W1D decisions · isolated live database':isDLS?'Dedicated dls_* dataset · no Flow Guard authority':'Primary paper dataset · isolated from DLS';
+  if(el('strategySignalContext'))el('strategySignalContext').textContent=
+    state.activeStrategy==='W1D'?'Market radar context only · NOT W1D signal':'Deterministic + AI context';
+  if(el('flowGuardStrategyStatus'))el('flowGuardStrategyStatus').textContent=(fc.mode||'RUN')+(fc.entries_enabled===false?' · ENTRIES BLOCKED':'');
+  if(el('dlsStrategyStatus'))el('dlsStrategyStatus').textContent=(dc.master_enabled?'RUNNING':'PAUSED')+' · SHADOW';
+  if(window.StrongStage5)window.StrongStage5.context();
+  if(state.activeStrategy==='W1D'&&window.W1DTab)window.W1DTab.renderTop();
+}
+async function loadDLSContext(requestSeq){
+  var seq=requestSeq||++state.strategyRequestSeq;
+  var res=await Promise.allSettled([getJSON('/dls/status'),getJSON('/dls/positions?limit=200')]);
+  if(seq!==state.strategyRequestSeq||state.activeStrategy!=='DLS')return;
+  if(res[0].status==='fulfilled')state.dlsStatus=res[0].value;
+  if(res[1].status==='fulfilled')state.dlsPositions=res[1].value.positions||[];
+  state.dlsFetchedAt=Date.now();
+  renderStrategyContext();renderTop();renderDLS();
+}
+async function loadDLSEvents(force){
+  if(state.activeStrategy!=='DLS')return;
+  if(!force&&state.dlsEventsFetchedAt&&Date.now()-state.dlsEventsFetchedAt<10000){renderDLS();return}
+  var seq=state.strategyRequestSeq;
+  try{
+    var x=await getJSON('/dls/events?limit=250');
+    if(seq!==state.strategyRequestSeq||state.activeStrategy!=='DLS')return;
+    state.dlsEvents=x.events||[];state.dlsEventsFetchedAt=Date.now();renderDLS();
+  }catch(e){console.error('DLS decisions refresh failed',e)}
+}
+function switchStrategy(next){
+  next=(next==='DLS'||next==='STRONG'||next==='W1D')?next:'FLOW_GUARD';
+  if(next===state.activeStrategy){renderStrategyContext();return}
+  var seq=++state.strategyRequestSeq;
+  document.querySelectorAll('.strategy-surface').forEach(function(x){x.classList.add('strategy-switching')});
+  window.setTimeout(function(){
+    if(seq!==state.strategyRequestSeq)return;
+    state.activeStrategy=next;sessionStorage.setItem('baba_active_strategy_v1',next);
+    window.StrongStage5.activate(next==='STRONG');
+    if(window.W1DTab)window.W1DTab.activate(next==='W1D');
+    renderStrategyContext();renderTop();if(next==='DLS')renderDLS();
+    showTerminalTab(next==='W1D'?'w1dsummary':next==='DLS'?'dlspositions':next==='STRONG'?'strongpaper':'positions');
+    // Reuse the existing 5m/15m/1h candle array without another candle request
+    // when changing strategy tab, only redraw W1D's own source markers.
+    drawChart();
+    requestAnimationFrame(function(){document.querySelectorAll('.strategy-surface').forEach(function(x){x.classList.remove('strategy-switching')})});
+    if(next==='DLS')loadDLSContext(seq);
+  },90);
 }
 function renderHealthInspector(){
   var map=latestEvalMap();
@@ -858,6 +1186,62 @@ function renderApprovals(){
       '<td>'+(x.confidence===null||x.confidence===undefined?'—':num(Number(x.confidence)*100,0)+'%')+'</td><td>'+((x.latency_ms||0)/1000).toFixed(1)+'s</td></tr>';
   }).join(''):'<tr><td colspan="7" class="empty">No model reviews.</td></tr>';
 }
+function renderDLS(){
+  var root=state.dlsStatus||{},sum=root.summary||{},all=sum.all||{},lng=sum.long||{},sh=sum.short||{},eng=root.engine||{};
+  var active=Number(all.open||0)+Number(all.reduced||0)+Number(all.wait_proof||0);
+  if(el('dlsMeta'))el('dlsMeta').textContent=active+' active · '+Number(all.closed||0)+' closed';
+  if(el('dlsOverview'))el('dlsOverview').innerHTML=
+    '<div class="shadow-stat"><span>DLS Total</span><strong class="'+(Number(all.closed_pnl_usdt||0)>=0?'green':'red')+'">'+money(Number(all.closed_pnl_usdt||0))+'</strong><small>'+Number(all.closed||0)+' closed · '+(all.win_rate_pct===null||all.win_rate_pct===undefined?'—':num(all.win_rate_pct,1)+'% WR')+'</small></div>'+
+    '<div class="shadow-stat"><span>LONG Lane</span><strong class="'+(Number(lng.closed_pnl_usdt||0)>=0?'green':'red')+'">'+money(Number(lng.closed_pnl_usdt||0))+'</strong><small>'+Number(lng.open||0)+' open · '+Number(lng.wait_proof||0)+' proof · '+Number(lng.closed||0)+' closed</small></div>'+
+    '<div class="shadow-stat"><span>SHORT Lane</span><strong class="'+(Number(sh.closed_pnl_usdt||0)>=0?'green':'red')+'">'+money(Number(sh.closed_pnl_usdt||0))+'</strong><small>'+Number(sh.open||0)+' open · '+Number(sh.closed||0)+' closed · '+(sh.win_rate_pct===null||sh.win_rate_pct===undefined?'—':num(sh.win_rate_pct,1)+'% WR')+'</small></div>'+
+    '<div class="shadow-stat"><span>Engine</span><strong class="'+(String(eng.status||'').toUpperCase()==='RUNNING'?'green':'amber')+'">'+esc(eng.status||'—')+'</strong><small>'+esc(eng.engine_version||'—')+'</small></div>';
+  if(el('dlsScope'))el('dlsScope').textContent='Forward boundary '+(eng.start_ms?dt(eng.start_ms):'—')+' · Flow Guard source is read-only';
+
+  var selected=(state.dlsPositions||[]).filter(function(x){return state.dlsFilter==='ALL'||String(x.lane||'').toUpperCase()===state.dlsFilter});
+  var activeRows=selected.filter(function(x){return ['OPEN','REDUCED','WAIT_PROOF'].indexOf(String(x.status||'').toUpperCase())>=0});
+  var historyRows=selected.filter(function(x){return ['CLOSED','SKIPPED'].indexOf(String(x.status||'').toUpperCase())>=0});
+  if(el('dlsRows'))el('dlsRows').innerHTML=activeRows.length?activeRows.map(function(x){
+    var pnl=x.display_pnl_usdt===null||x.display_pnl_usdt===undefined?null:Number(x.display_pnl_usdt);
+    var proof=x.proof_ret_pct===null||x.proof_ret_pct===undefined?'—':pct(x.proof_ret_pct);
+    var gate=(x.lane_gate||'—')+(x.lane_gate_pass===true?' PASS':'');
+    return '<tr><td><div class="cell-main">'+dt(x.opened_at_ms||x.created_at_ms)+'</div><div class="cell-sub">'+age(x.created_at_ms)+' ago</div></td>'+
+      '<td><strong>'+esc(x.symbol)+'</strong><div class="dls-source">'+esc(x.source_position_id||'')+'</div></td><td>'+badge(x.lane||x.side)+'</td><td>'+badge(x.status)+'</td>'+
+      '<td>'+esc(gate)+'</td><td class="mono">'+proof+'</td><td class="mono">'+px(x.entry_price)+'</td><td class="'+(pnl===null?'muted':(pnl>=0?'green':'red'))+'">'+(pnl===null?'—':money(pnl))+'</td>'+
+      '<td><div>'+esc(x.protector||'—')+'</div><div class="cell-sub">'+esc(x.protector_state||'—')+'</div></td><td><div class="mono">'+px(x.exit_price)+'</div><div class="cell-sub">'+esc(prettyReason(x.close_reason||'—'))+'</div></td></tr>';
+  }).join(''):'<tr><td colspan="10" class="empty"><strong>No active DLS positions</strong><span>DLS is isolated; closed trades are under DLS History.</span></td></tr>';
+
+  if(el('dlsHistoryMeta'))el('dlsHistoryMeta').textContent=historyRows.length+' DLS closed/skipped · filter '+state.dlsFilter;
+  if(el('dlsHistoryRows'))el('dlsHistoryRows').innerHTML=historyRows.length?historyRows.map(function(x){
+    var pnl=x.realized_pnl===null||x.realized_pnl===undefined?null:Number(x.realized_pnl);
+    return '<tr><td>'+dt(x.closed_at_ms||x.created_at_ms)+'</td><td><strong>'+esc(x.symbol)+'</strong></td><td>'+badge(x.lane||x.side)+'</td>'+
+      '<td class="'+(pnl===null?'muted':(pnl>=0?'green':'red'))+'">'+(pnl===null?badge(x.status):money(pnl))+'<div class="cell-sub">'+esc(x.status||'—')+'</div></td>'+
+      '<td class="mono">'+px(x.entry_price)+'</td><td class="mono">'+px(x.exit_price)+'</td><td><span class="green">'+pct(x.mfe_pct)+'</span> / <span class="red">'+pct(x.mae_pct)+'</span></td>'+
+      '<td>'+esc(x.protector||'—')+'</td><td class="reason-cell">'+esc(prettyReason(x.close_reason||'—'))+'</td></tr>';
+  }).join(''):'<tr><td colspan="9" class="empty"><strong>No DLS history in this filter</strong><span>Flow Guard history is stored and rendered separately.</span></td></tr>';
+
+  var events=state.dlsEvents||[];
+  if(el('dlsDecisionMeta'))el('dlsDecisionMeta').textContent=events.length+' events';
+  if(el('dlsDecisionRows'))el('dlsDecisionRows').innerHTML=events.length?events.map(function(e){
+    var p=e.payload||{},sig=String(e.source_signal_id||''),symbol=sig.split(':')[0]||'—';
+    var lane=p.route||((String(e.event_type||'').indexOf('LONG')>=0)?'LONG':(String(e.event_type||'').indexOf('SHORT')>=0?'SHORT':'—'));
+    var gate=p.lane_gate||'—',reason=p.reason||e.event_type||'—';
+    return '<tr><td>'+dt(e.observed_at_ms)+'</td><td><strong>'+esc(symbol)+'</strong></td><td>'+badge(e.event_type)+'</td><td>'+badge(lane)+'</td><td>'+esc(gate)+'</td><td class="reason-cell">'+esc(prettyReason(reason))+'</td><td class="mono">'+esc(e.source_position_id||'—')+'</td></tr>';
+  }).join(''):'<tr><td colspan="7" class="empty"><strong>No DLS decisions</strong><span>Decision events live only in dls_events.</span></td></tr>';
+
+  document.querySelectorAll('.dls-filter').forEach(function(b){b.classList.toggle('active',b.dataset.dlsFilter===state.dlsFilter)});
+  renderDLSControls();
+}
+function renderDLSControls(){
+  var root=state.dlsStatus||{},c=root.controls||{},configured=root.control_token_configured!==false,engine=root.engine||{};
+  var running=String(engine.status||'').toUpperCase()==='RUNNING';
+  if(el('dlsControlBadge')){el('dlsControlBadge').textContent=running?'RUNNING':'OFFLINE';el('dlsControlBadge').className='badge '+(running?'long':'short')}
+  var defs=[['master','master_enabled','dlsMasterLabel','MASTER'],['long','long_enabled','dlsLongLabel','LONG'],['short','short_enabled','dlsShortLabel','SHORT']];
+  defs.forEach(function(d){var b=document.querySelector('.dls-control-card[data-dls-control="'+d[0]+'"]');if(!b)return;var on=!!c[d[1]];b.classList.toggle('active',on);b.classList.toggle('paused',!on);b.disabled=!configured||state.dlsBusy;if(el(d[2]))el(d[2]).textContent=d[3]+' '+(on?'RUN':'PAUSED')});
+  if(el('dlsSysEngine')){el('dlsSysEngine').textContent=engine.status||'—';el('dlsSysEngine').className=running?'green':'amber'}
+  [['dlsSysMaster','master_enabled'],['dlsSysLong','long_enabled'],['dlsSysShort','short_enabled']].forEach(function(x){if(el(x[0])){var on=!!c[x[1]];el(x[0]).textContent=on?'RUN':'PAUSED';el(x[0]).className=on?'green':'amber'}});
+  if(el('dlsSysBoundary'))el('dlsSysBoundary').textContent=engine.start_ms?dt(engine.start_ms):'—';
+  if(el('dlsTokenStateText')){el('dlsTokenStateText').textContent=state.controlAuthVerified?'Verified for this tab':'Not verified';el('dlsTokenStateText').className=state.controlAuthVerified?'green':'muted'}
+}
 function renderPositionHistoryDetail(){
   var box=el('positionHistoryDetail');
   if(!box)return;
@@ -1079,6 +1463,8 @@ function drawLiquidityZones(ctx,zones,y,padL,plotW,padT,plotH,firstTime,lastTime
   });
 }
 function chartEntryMarkers(){
+  if(state.activeStrategy==='W1D'&&window.W1DTab)
+    return window.W1DTab.chartMarkers(state.selectedSymbol);
   var byId={};
   function add(row,isOpen,source){
     if(!row)return;
@@ -1181,9 +1567,9 @@ async function loadChart(){
     ?Promise.resolve(null)
     :(zoneCacheFresh?Promise.resolve(state.liquidity):getJSON(zonePath,12000));
   var results=await Promise.allSettled([
-    getJSON(klinePath),
-    getJSON('/market/ticker?symbol='+s),
-    getJSON('/market/depth?symbol='+s+'&limit=20'),
+    getJSON(klinePath,12000),
+    getJSON('/market/ticker?symbol='+s,12000),
+    getJSON('/market/depth?symbol='+s+'&limit=20',12000),
     zonePromise
   ]);
   if(requestSeq!==state.chartRequestSeq)return;
@@ -1203,61 +1589,83 @@ async function refresh(){
   if(state.refreshBusy)return;
   state.refreshBusy=true;
   try{
+    if(state.activeStrategy==='W1D'){
+      if(window.W1DTab)await window.W1DTab.load(false);
+      state.lastRefresh=Date.now();
+      return;
+    }
+    if(state.activeStrategy==='STRONG'){
+      if(window.StrongPaperUI&&window.StrongPaperUI.isSelected())await window.StrongPaperUI.load(false);
+      else await window.StrongStage5.load(false);
+      state.lastRefresh=Date.now();return;
+    }
+    if(state.activeStrategy==='DLS'){
+      var seq=state.strategyRequestSeq;
+      var light=await Promise.allSettled([
+        getJSON('/radar/latest',8000),
+        getJSON('/dls/status',5000),
+        getJSON('/dls/positions?limit=200',5000)
+      ]);
+      if(seq!==state.strategyRequestSeq||state.activeStrategy!=='DLS')return;
+      state.apiFailures=light.map(function(x,i){return x.status==='rejected'?i:null}).filter(function(x){return x!==null});
+      if(light[0].status==='fulfilled')state.radar=light[0].value;
+      if(light[1].status==='fulfilled')state.dlsStatus=light[1].value;
+      if(light[2].status==='fulfilled')state.dlsPositions=light[2].value.positions||[];
+      state.dlsFetchedAt=Date.now();state.lastRefresh=Date.now();chooseDefaultSymbol();renderStrategyContext();renderTop();renderRadar();renderDLS();renderSelected();
+      return;
+    }
     var res=await Promise.allSettled([
-      getJSON('/radar/latest'),
-      getJSON('/paper/summary'),
-      getJSON('/positions/open'),
-      getJSON('/positions/evaluations/latest-open'),
-      getJSON('/positions/history?limit=120'),
-      getJSON('/approval/summary'),
-      getJSON('/approval/reviews?limit=100'),
-      getJSON('/approval/models?limit=120'),
-      getJSON('/paper/orders?limit=120'),
-      getJSON('/history/signals?limit=120'),
-      getJSON('/history/summary'),
-      getJSON('/control/state'),
-      getJSON('/live/preflight'),
-      getJSON('/live/summary'),
-      getJSON('/live/orders?limit=80'),
-      getJSON('/live/positions'),
-      getJSON('/shadow/protection/positions?limit=120'),
-      getJSON('/shadow/protection/contract'),
-      getJSON('/shadow/protection/adapters'),
-      getJSON('/shadow/protection/settlement'),
-      getJSON('/shadow/protection/runtime')
+      getJSON('/radar/latest',8000),
+      getJSON('/paper/summary',8000),
+      getJSON('/positions/open',8000),
+      getJSON('/positions/evaluations/latest-open',8000),
+      getJSON('/control/state',8000),
+      getJSON('/history/summary',8000)
     ]);
     state.apiFailures=res.map(function(x,i){return x.status==='rejected'?i:null}).filter(function(x){return x!==null});
     state.radar=settledValue(res[0],state.radar);
     state.paper=settledValue(res[1],state.paper);
     state.positions=(settledValue(res[2],{positions:state.positions}).positions||[]);
     state.evals=(settledValue(res[3],{evaluations:state.evals}).evaluations||[]);
-    state.positionHistory=(settledValue(res[4],{positions:state.positionHistory}).positions||[]);
-    state.approvalSummary=settledValue(res[5],state.approvalSummary);
-    state.approvals=(settledValue(res[6],{reviews:state.approvals}).reviews||[]);
-    state.models=(settledValue(res[7],{reviews:state.models}).reviews||[]);
-    state.orders=(settledValue(res[8],{orders:state.orders}).orders||[]);
-    state.history=(settledValue(res[9],{signals:state.history}).signals||[]);
-    state.historySummary=settledValue(res[10],state.historySummary);
-    state.control=settledValue(res[11],state.control);
-    state.livePreflight=settledValue(res[12],state.livePreflight);
-    state.liveSummary=settledValue(res[13],state.liveSummary);
-    state.liveOrders=(settledValue(res[14],{orders:state.liveOrders}).orders||[]);
-    state.livePositions=(settledValue(res[15],{positions:state.livePositions}).positions||[]);
-    state.shadow=settledValue(res[16],state.shadow);
-    state.shadowContract=settledValue(res[17],state.shadowContract);
-    state.shadowAdapters=settledValue(res[18],state.shadowAdapters);
-    state.shadowSettlementContract=settledValue(res[19],state.shadowSettlementContract);
-    state.shadowRuntime=settledValue(res[20],state.shadowRuntime);
-    state.shadowError=res[16].status==='rejected'?String(res[16].reason&&res[16].reason.message||res[16].reason):null;
-    state.lastRefresh=Date.now();chooseDefaultSymbol();renderTop();renderControl();renderRadar();renderPositions();renderProtectionShadow();renderPositionHistory();renderApprovals();renderOrders();renderHistory();renderOpenOrders();renderSelected();
-    if(state.selectedShadowParentId)await loadShadowSettlements(state.selectedShadowParentId,true);
-    await loadChart();
+    state.control=settledValue(res[4],state.control);
+    state.historySummary=settledValue(res[5],state.historySummary);
+    state.lastRefresh=Date.now();chooseDefaultSymbol();renderStrategyContext();renderTop();renderControl();renderRadar();renderPositions();renderSelected();
   }catch(e){el('apiDot').className='dot bad';el('apiChip').textContent='API ERROR';console.error(e)}
   finally{state.refreshBusy=false}
 }
-function controlToken(){
-  return el('controlToken').value.trim()||sessionStorage.getItem('baba_control_token_v1')||'';
+async function loadFlowTab(name,force){
+  if(state.activeStrategy!=='FLOW_GUARD')return;
+  var now=Date.now(),last=Number(state.flowTabFetched[name]||0);
+  if(!force&&last&&now-last<10000)return;
+  try{
+    var res;
+    if(name==='shadow'){
+      res=await Promise.allSettled([
+        getJSON('/shadow/protection/positions?limit=120',12000),getJSON('/shadow/protection/contract',8000),getJSON('/shadow/protection/adapters',8000),getJSON('/shadow/protection/settlement',8000),getJSON('/shadow/protection/runtime',8000)
+      ]);
+      state.shadow=settledValue(res[0],state.shadow);state.shadowContract=settledValue(res[1],state.shadowContract);state.shadowAdapters=settledValue(res[2],state.shadowAdapters);state.shadowSettlementContract=settledValue(res[3],state.shadowSettlementContract);state.shadowRuntime=settledValue(res[4],state.shadowRuntime);state.shadowError=res[0].status==='rejected'?String(res[0].reason&&res[0].reason.message||res[0].reason):null;renderProtectionShadow();
+      if(state.selectedShadowParentId)await loadShadowSettlements(state.selectedShadowParentId,true);
+    }else if(name==='positionhistory'){
+      var ph=await getJSON('/positions/history?limit=120',10000);state.positionHistory=ph.positions||[];renderPositionHistory();
+    }else if(name==='orders'||name==='openorders'){
+      res=await Promise.allSettled([getJSON('/paper/orders?limit=120',10000),getJSON('/live/orders?limit=80',10000),getJSON('/history/signals?limit=120',10000)]);
+      state.orders=(settledValue(res[0],{orders:state.orders}).orders||[]);state.liveOrders=(settledValue(res[1],{orders:state.liveOrders}).orders||[]);state.history=(settledValue(res[2],{signals:state.history}).signals||[]);renderOrders();renderOpenOrders();
+    }else if(name==='signals'){
+      res=await Promise.allSettled([getJSON('/history/signals?limit=120',10000),getJSON('/history/summary',8000)]);state.history=(settledValue(res[0],{signals:state.history}).signals||[]);state.historySummary=settledValue(res[1],state.historySummary);renderHistory();renderTop();
+    }else if(name==='ai'){
+      res=await Promise.allSettled([getJSON('/approval/summary',8000),getJSON('/approval/reviews?limit=100',10000),getJSON('/approval/models?limit=120',10000)]);state.approvalSummary=settledValue(res[0],state.approvalSummary);state.approvals=(settledValue(res[1],{reviews:state.approvals}).reviews||[]);state.models=(settledValue(res[2],{reviews:state.models}).reviews||[]);renderApprovals();
+    }else if(name==='control'){
+      res=await Promise.allSettled([getJSON('/live/preflight',10000),getJSON('/live/summary',10000),getJSON('/live/positions',10000),getJSON('/control/state',8000)]);state.livePreflight=settledValue(res[0],state.livePreflight);state.liveSummary=settledValue(res[1],state.liveSummary);state.livePositions=(settledValue(res[2],{positions:state.livePositions}).positions||[]);state.control=settledValue(res[3],state.control);renderControl();renderStrategyContext();
+    }
+    state.flowTabFetched[name]=Date.now();
+  }catch(e){console.error('Flow tab refresh failed',name,e)}
 }
+function controlToken(){
+  var fg=el('controlToken'),dls=el('dlsControlToken'),saved=sessionStorage.getItem('baba_control_token_v1')||'';
+  return ((state.activeStrategy==='DLS'&&dls)?dls.value.trim():'')||(fg?fg.value.trim():'')||(dls?dls.value.trim():'')||saved;
+}
+function syncTokenInputs(value){if(el('controlToken'))el('controlToken').value=value||'';if(el('dlsControlToken'))el('dlsControlToken').value=value||'';}
+
 async function verifyControlToken(silent){
   var token=controlToken();
   if(!token){
@@ -1274,18 +1682,40 @@ async function verifyControlToken(silent){
     if(!r.ok)throw new Error(body.error||('HTTP '+r.status));
     state.controlAuthVerified=true;
     if(body.control)state.control=body.control;
-    sessionStorage.setItem('baba_control_token_v1',token);
-    if(!silent){el('controlMessage').textContent='Control token verified. Mode controls are unlocked for this tab.';el('controlMessage').className='green control-message'}
+    sessionStorage.setItem('baba_control_token_v1',token);syncTokenInputs(token);
+    if(el('dlsTokenStateText')){el('dlsTokenStateText').textContent='Verified for this tab';el('dlsTokenStateText').className='green'}
+    if(!silent){if(el('controlMessage')){el('controlMessage').textContent='Control token verified. Mode controls are unlocked for this tab.';el('controlMessage').className='green control-message'}if(el('dlsControlMessage')){el('dlsControlMessage').textContent='Admin token verified. DLS controls unlocked.';el('dlsControlMessage').className='green control-message'}}
     return true;
   }catch(e){
     state.controlAuthVerified=false;
     sessionStorage.removeItem('baba_control_token_v1');
-    el('controlMessage').textContent='Token verification failed: '+e.message;
-    el('controlMessage').className='red control-message';
+    if(el('controlMessage')){el('controlMessage').textContent='Token verification failed: '+e.message;el('controlMessage').className='red control-message'}
+    if(el('dlsControlMessage')){el('dlsControlMessage').textContent='Token verification failed: '+e.message;el('dlsControlMessage').className='red control-message'}
     return false;
   }finally{
     state.controlBusy=false;renderControl();
   }
+}
+async function setDLSControl(kind){
+  if(!state.controlAuthVerified){
+    if(el('dlsControlMessage')){el('dlsControlMessage').textContent='Verify the Admin Control Token first.';el('dlsControlMessage').className='amber control-message'}
+    (el('dlsControlToken')||el('controlToken')).focus();return;
+  }
+  var c=state.dlsStatus&&state.dlsStatus.controls||{};
+  var field=kind==='master'?'master_enabled':kind==='long'?'long_enabled':'short_enabled';
+  var next=!c[field];
+  if(kind==='master'&&!next&&!confirm('Pause DLS MASTER entries? Existing DLS positions will continue protector management. Flow Guard is unaffected.'))return;
+  var token=controlToken();state.dlsBusy=true;renderDLSControls();
+  var body={reason:'dashboard_dls_stage3'};body[field]=next;
+  try{
+    var r=await fetch(API+'/dls/control',{method:'POST',headers:{'Content-Type':'application/json','X-Baba-Control-Token':token},body:JSON.stringify(body)});
+    var x=await r.json();if(!r.ok)throw new Error(x.error||('HTTP '+r.status));
+    if(!state.dlsStatus)state.dlsStatus={};state.dlsStatus.controls=x.controls;
+    if(el('dlsControlMessage')){el('dlsControlMessage').textContent=(kind.toUpperCase())+' '+(next?'RUNNING':'PAUSED')+' · Flow Guard untouched';el('dlsControlMessage').className='green control-message'}
+  }catch(e){
+    if(String(e.message).indexOf('invalid_control_token')>=0){state.controlAuthVerified=false;sessionStorage.removeItem('baba_control_token_v1')}
+    if(el('dlsControlMessage')){el('dlsControlMessage').textContent='DLS control failed: '+e.message;el('dlsControlMessage').className='red control-message'}
+  }finally{state.dlsBusy=false;renderStrategyContext();renderTop();renderDLS();}
 }
 async function setMode(mode){
   if(!state.controlAuthVerified){
@@ -1344,28 +1774,38 @@ async function setLiveArm(armed){
 }
 document.querySelectorAll('.radar-filter').forEach(function(b){b.onclick=function(){document.querySelectorAll('.radar-filter').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.radarFilter=b.dataset.filter;renderRadar()}});
 if(el('marketSearch'))el('marketSearch').addEventListener('input',function(){state.marketSearch=this.value.trim();renderRadar()});
-document.querySelectorAll('.terminal-tab').forEach(function(b){b.onclick=function(){showTerminalTab(b.dataset.tab)}});
+document.querySelectorAll('.terminal-tab').forEach(function(b){b.onclick=function(){showTerminalTab(b.dataset.tab);if(state.activeStrategy==='DLS'&&b.dataset.tab==='dlsdecisions')loadDLSEvents(false);if(state.activeStrategy==='FLOW_GUARD')loadFlowTab(b.dataset.tab,false);if(state.activeStrategy==='STRONG')window.StrongStage5.load(false)}});
+document.querySelectorAll('.strategy-btn').forEach(function(b){b.onclick=function(){switchStrategy(b.dataset.strategy)}});
 showTerminalTab('positions');
 document.querySelectorAll('.interval-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('.interval-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');state.interval=b.dataset.interval;loadChart()}});
 el('lqZonesBtn').onclick=function(){state.lqZonesEnabled=!state.lqZonesEnabled;if(!state.lqZonesEnabled){state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0}renderLiquidityPanel();loadChart()};
 el('lqLiveBtn').onclick=function(){state.lqSnapshotAsOf=null;state.lqSnapshotEntryPrice=null;state.lqSnapshotPositionId=null;state.liquidity=null;state.liquidityKey=null;state.liquidityFetchedAt=0;renderLiquidityPanel();loadChart()};
 document.querySelectorAll('.control-btn').forEach(function(b){b.onclick=function(){setMode(b.dataset.mode)}});
+document.querySelectorAll('.dls-control-card').forEach(function(b){b.onclick=function(){setDLSControl(b.dataset.dlsControl)}});
+document.querySelectorAll('.dls-filter').forEach(function(b){b.onclick=function(){state.dlsFilter=b.dataset.dlsFilter;renderDLS()}});
 el('armLive').onclick=function(){setLiveArm(true)};
 el('disarmLive').onclick=function(){setLiveArm(false)};
 el('verifyToken').onclick=function(){verifyControlToken(false)};
+el('dlsVerifyToken').onclick=function(){verifyControlToken(false)};
 el('clearToken').onclick=function(){
   sessionStorage.removeItem('baba_control_token_v1');el('controlToken').value='';state.controlAuthVerified=false;
   el('controlMessage').textContent='Control token cleared from this browser tab.';el('controlMessage').className='muted control-message';renderControl();
 };
+el('dlsClearToken').onclick=function(){sessionStorage.removeItem('baba_control_token_v1');syncTokenInputs('');state.controlAuthVerified=false;if(el('dlsControlMessage')){el('dlsControlMessage').textContent='Control token cleared from this browser tab.';el('dlsControlMessage').className='muted control-message'}renderControl();renderDLSControls();};
+el('dlsControlToken').addEventListener('input',function(){state.controlAuthVerified=false;if(el('controlToken'))el('controlToken').value=this.value;if(el('dlsControlMessage')){el('dlsControlMessage').textContent='Token changed. Verify it to unlock DLS controls.';el('dlsControlMessage').className='muted control-message'}renderControl();renderDLSControls();});
 el('controlToken').addEventListener('input',function(){
-  state.controlAuthVerified=false;
+  state.controlAuthVerified=false;if(el('dlsControlToken'))el('dlsControlToken').value=this.value;
   el('controlMessage').textContent='Token changed. Verify it to unlock controls.';
   el('controlMessage').className='muted control-message';renderControl();
 });
-var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)el('controlToken').value=saved;
+var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)syncTokenInputs(saved);var savedStrategy=sessionStorage.getItem('baba_active_strategy_v1');if(savedStrategy==='DLS'||savedStrategy==='STRONG'||savedStrategy==='W1D')state.activeStrategy=savedStrategy;
+if(window.W1DTab)window.W1DTab.init();
+window.StrongStage5.init();if(window.StrongPaperUI)window.StrongPaperUI.init();window.StrongStage5.activate(state.activeStrategy==='STRONG');
+if(window.W1DTab)window.W1DTab.activate(state.activeStrategy==='W1D');
+renderStrategyContext();showTerminalTab(state.activeStrategy==='W1D'?'w1dsummary':state.activeStrategy==='DLS'?'dlspositions':state.activeStrategy==='STRONG'?'strongpaper':'positions');
 window.addEventListener('resize',function(){drawChart()});
-refresh().then(function(){if(saved)verifyControlToken(true)});
-setInterval(refresh,10000);setInterval(function(){if(state.radar){el('stAge').textContent=age(state.radar.scan_finished_at_ms)}},1000);
+refresh().then(function(){if(saved)verifyControlToken(true);loadChart();if(state.activeStrategy==='DLS'){var seq=++state.strategyRequestSeq;loadDLSContext(seq)}});
+setInterval(refresh,10000);setInterval(function(){if(!document.hidden)loadChart()},30000);setInterval(function(){if(state.radar){el('stAge').textContent=age(state.radar.scan_finished_at_ms)}},1000);
 })();
 </script>
 </body>
