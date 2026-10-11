@@ -52,6 +52,11 @@ function renderTop(){
  set("stLongPerfLabel","W1D Paper · Closed / WR / Net");
  set("stShortPerfLabel","Binance LIVE · Verified / WR / Net");
  set("stPnlLabel","W1D Paper Net (USDT)");
+ // These top-bar candidates belong to Flow Guard radar, NOT W1D signals.
+ set("stMoving","—");set("stActionable","—");
+ set("controlChip",d&&d.controls?
+   "W1D "+String(d.controls.global_mode||"UNKNOWN")+" · "+String(d.controls.execution_gate||"UNKNOWN"):
+   "W1D CONTROL UNVERIFIED");
  set("stOpen",p.open===undefined?"—":p.open);
  set("stWr",pct(p.wr_pct));
  set("stLongPerf",(p.closed===undefined?"—":p.closed+"t · "+pct(p.wr_pct)+" · "+usdt(p.net_pnl_usdt)));
