@@ -82,8 +82,9 @@ function render(){
  set("w1dLiveNet",usdt(l.net_pnl_usdt));set("w1dLiveWR",pct(l.wr_pct));
  set("w1dLiveClosed",l.verified_closed??"N/A");set("w1dLiveAccounts",
    l.connected===false?"0 akun":"N/A · privasi akun");
- set("w1dGlobalMode",String(c.global_mode??"UNKNOWN"));
- set("w1dGate",String(c.execution_gate??"UNKNOWN"));
+ const privateControl=global.W1DOperations&&global.W1DOperations.control||null;
+ set("w1dGlobalMode",String(privateControl?.global_mode??c.global_mode??"UNKNOWN"));
+ set("w1dGate",String(privateControl?.execution_gate??c.execution_gate??"UNKNOWN"));
  set("w1dDailyRisk",String(c.daily_loss_limit_usdt??"UNSET"));
  const warning=el("w1dWarning");
  if(warning){warning.textContent=state.lastError?
@@ -94,6 +95,7 @@ function render(){
  const egress=d&&d.binance_api_egress||{};
  set("w1dEgressIP",egress.ip||"BELUM TERVERIFIKASI");
  set("w1dEgressAsOf",egress.verified_at_utc||"N/A");
+ if(!(global.W1DOperations&&global.W1DOperations.authorized))
  set("w1dAccountsState",l.status==="NO_REGISTERED_ACCOUNTS"?
   "Belum ada akun LIVE di database W1D — koneksi API tidak dapat diasumsikan dari Railway.":
   l.status==="PRIVATE_ACCOUNT_DATA_NOT_EXPOSED"?
