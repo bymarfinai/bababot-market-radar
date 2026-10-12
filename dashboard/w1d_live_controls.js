@@ -57,6 +57,16 @@ function sizingDisplay(){
  text("w1dSizingVersion",ctx.sizing?.version??"—");
  text("w1dSizingSavedAt",ctx.sizing?.saved_at?
   new Date(ctx.sizing.saved_at).toLocaleString("id-ID",{timeZone:"Asia/Jakarta"}):"—");
+ const policy=ctx.status?.preflight_rounding_policy;
+ const verified=policy?.approval_state==="USER_APPROVED" &&
+   policy?.rounding_direction==="DOWN_ONLY" &&
+   policy?.scope==="MARK_QUANTITY_PREFLIGHT_ONLY" &&
+   policy?.max_downward_shortfall_pct==="1.000000" &&
+   policy?.live_order_authorized===false &&
+   policy?.binance_market_slippage_approved===false;
+ text("w1dRoundingPolicy",verified?
+      "1.00% · ROUND DOWN ONLY · PREFLIGHT v"+policy.version:
+      "NOT VERIFIED · NO LIVE APPROVAL");
  text("w1dSizingLiveNotice",
   ctx.sizing?.active_sizing_state==="CONFIGURED"?
   "Active sizing exists separately; draft edit DOES NOT change exchange leverage.":
