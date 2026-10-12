@@ -67,6 +67,23 @@ function sizingDisplay(){
  text("w1dRoundingPolicy",verified?
       "1.00% · ROUND DOWN ONLY · PREFLIGHT v"+policy.version:
       "NOT VERIFIED · NO LIVE APPROVAL");
+ const mp=ctx.status?.preflight_isolated_policy;
+ const isolated=mp?.strategy==="W1D_LIVE" &&
+  mp?.required_margin_mode==="ISOLATED" &&
+  mp?.change_scope==="SIGNAL_SYMBOL_ONLY" &&
+  mp?.policy_approval==="USER_APPROVED" &&
+  mp?.version===1 &&
+  mp?.account_must_be_flat===true &&
+  mp?.account_open_orders_must_be_zero===true &&
+  mp?.fresh_signed_get_required===true &&
+  mp?.signed_requery_after_change_required===true &&
+  mp?.allow_bulk_pair_changes===false &&
+  mp?.margin_mode_exchange_post_authorized===false &&
+  mp?.leverage_exchange_post_authorized===false &&
+  mp?.live_order_authorized===false;
+ text("w1dIsolatedPolicy",isolated?
+      "ISOLATED · SIGNAL PAIR ONLY · POLICY v"+mp.version:
+      "NOT VERIFIED · NO MARGIN CHANGE");
  text("w1dSizingLiveNotice",
   ctx.sizing?.active_sizing_state==="CONFIGURED"?
   "Active sizing exists separately; draft edit DOES NOT change exchange leverage.":
