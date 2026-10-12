@@ -103,7 +103,10 @@ function syncSizingDraft(saved){
  ctx.sizing=saved;ctx.sizingLoaded=true;
  if(!ctx.sizingEdited&&saved&&saved.saved){
   const m=el("w1dMarginReference"),l=el("w1dLeverageTarget");
-  if(m)m.value=String(saved.reference_margin_usdt);
+  if(m){
+   const n=Number(saved.reference_margin_usdt);
+   m.value=Number.isFinite(n)&&n>=1&&n<=1000000?n.toFixed(2):"";
+  }
   if(l)l.value=String(saved.desired_leverage);
  }
  if(!sizingDirty())ctx.sizingEdited=false;
@@ -240,13 +243,16 @@ async function invoke(action,fn,clearSecrets=false,buttonId=null){
 async function saveSizing(){
  if(!ctx.authorized){feedback("VERIFY ACCESS dulu sebelum SAVE & APPLY sizing",true);return;}
  if(!ctx.sizingLoaded){feedback("DRAFT NOT LOADED: klik CHECK BACKEND terlebih dahulu",true);return;}
- const raw=el("w1dMarginReference")?.value?.trim();
+ const inputMargin=el("w1dMarginReference")?.value?.trim()||"";
+ const validDecimal=/^[0-9]+(?:\.[0-9]{1,2}0*)?$/.test(inputMargin);
+ const marginValue=Number(inputMargin);
  const lv=Number(el("w1dLeverageTarget")?.value);
- if(!raw||!/^(?:[0-9]+)(?:\.[0-9]{1,2})?$/.test(raw)||Number(raw)<1||
-    Number(raw)>1000000||!Number.isInteger(lv)||lv<1||lv>125){
+ if(!validDecimal||!Number.isFinite(marginValue)||marginValue<1||
+    marginValue>1000000||!Number.isInteger(lv)||lv<1||lv>125){
   feedback("SIZING INVALID: margin $1–$1,000,000 (maksimal 2 desimal); leverage integer 1–125",true);
   return;
  }
+ const raw=marginValue.toFixed(2);
  if(!sizingDirty()&&ctx.sizing?.applied)return;
  const result=await invoke("SAVE & APPLY GLOBAL SIZING",
   ()=>api("POST","/sizing-draft",{
