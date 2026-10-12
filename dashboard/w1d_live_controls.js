@@ -84,6 +84,15 @@ function sizingDisplay(){
  text("w1dIsolatedPolicy",isolated?
       "ISOLATED · SIGNAL PAIR ONLY · POLICY v"+mp.version:
       "NOT VERIFIED · NO MARGIN CHANGE");
+ const sync=ctx.status?.margin_sync_readiness;
+ const safeSync=sync?.binance_margin_post_allowed===false &&
+   sync?.live_order_authorized===false &&
+   sync?.real_margin_changes===0 &&
+   sync?.margin_policy==="ISOLATED_PER_SIGNAL_ONLY";
+ text("w1dMarginSyncReadiness",safeSync?
+      sync.status+" · DRY RUN / NO LIVE WRITE":
+      "NOT VERIFIED · NO CONFIGURATION CHANGE");
+
  text("w1dSizingLiveNotice",
   ctx.sizing?.active_sizing_state==="CONFIGURED"?
   "Active sizing exists separately; draft edit DOES NOT change exchange leverage.":
