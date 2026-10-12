@@ -396,6 +396,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
         </div>
         <p class="w1d-note">Versi DB: <strong id="w1dSizingVersion">—</strong> · Tersimpan: <span id="w1dSizingSavedAt">—</span></p>
         <p class="w1d-note" id="w1dSizingLiveNotice">Saat ini hanya preview. Save menyimpan draft ke PostgreSQL, BUKAN mengaktifkan konfigurasi Binance.</p>
+        <p class="w1d-note">Kebijakan pembulatan W1D (backend): <strong id="w1dRoundingPolicy">NOT VERIFIED</strong>. Hanya quantity berbasis harga mark; bukan persetujuan slippage fill MARKET. LIVE tetap terkunci.</p>
         <div class="table-wrap"><table class="w1d-mini-table"><thead><tr><th>Batas Binance (ilustrasi)</th><th>Margin diperlukan</th></tr></thead><tbody>
         <tr><td>50×</td><td id="w1dExample50">—</td></tr><tr><td>25×</td><td id="w1dExample25">—</td></tr><tr><td>10×</td><td id="w1dExample10">—</td></tr>
         </tbody></table></div>
@@ -620,7 +621,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <script src="strong_stage5.js?v=strong-readonly-v2"></script>
 <script src="strong_paper_view.js?v=strong-independent-v1"></script>
 <script src="w1d_tab.js?v=w1d-native-tab-v2-sizing"></script>
-<script src="w1d_live_controls.js?v=w1d-private-controls-v3-loading-sizing"></script>
+<script src="w1d_live_controls.js?v=w1d-private-controls-v4-rounding-policy"></script>
 <script>
 (function(){
 'use strict';
