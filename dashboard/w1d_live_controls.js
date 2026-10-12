@@ -21,7 +21,7 @@ const ACTION_LABELS={
  w1dPause:["PAUSE W1D","SAVING PAUSE…"],
  w1dRun:["RUN W1D LIVE","CHECKING RUN GATES…"],
  w1dControlRefresh:["CHECK BACKEND","REFRESHING STATUS…"],
- w1dSaveSizing:["SAVE GLOBAL DRAFT","SAVING DRAFT…"],
+ w1dSaveSizing:["SAVE & APPLY","SAVING & APPLYING…"],
  w1dReloadSizing:["RELOAD SAVED","LOADING SAVED…"]
 };
 function busyUi(){
@@ -29,7 +29,7 @@ function busyUi(){
   const b=el(id);if(!b)continue;
   const active=ctx.busy&&ctx.pendingAction===id;
   b.disabled=ctx.busy||
-    (id==="w1dSaveSizing"&&!sizingDirty()) ||
+    (id==="w1dSaveSizing"&&!sizingDirty()&&ctx.sizing?.applied===true) ||
     (id==="w1dReloadSizing"&&!ctx.authorized);
   b.classList.toggle("is-busy",active);
   b.textContent=active?labels[1]:labels[0];
@@ -46,10 +46,11 @@ function sizingDirty(){
        Number(lev)!==Number(d.desired_leverage??"");
 }
 function sizingStatus(){
- if(!ctx.authorized)return "LOGIN REQUIRED · GLOBAL DRAFT NOT LOADED";
- if(!ctx.sizingLoaded)return "LOADING GLOBAL DRAFT";
- return sizingDirty()?"UNSAVED CHANGES · NOT APPLIED":
-  ctx.sizing?.saved?"DRAFT SAVED v"+ctx.sizing.version+" · NOT LIVE":"NOT SAVED · NOT LIVE";
+ if(!ctx.authorized)return "LOGIN REQUIRED · GLOBAL SETTINGS NOT LOADED";
+ if(!ctx.sizingLoaded)return "LOADING GLOBAL SETTINGS";
+ if(sizingDirty())return "UNSAVED CHANGES · NOT APPLIED";
+ if(ctx.sizing?.applied)return "ACTIVE PREFLIGHT v"+ctx.sizing.active_profile_version+" · LIVE STILL PAUSED";
+ return ctx.sizing?.saved?"SAVED v"+ctx.sizing.version+" · CLICK SAVE & APPLY":"NOT SAVED · CLICK SAVE & APPLY";
 }
 function sizingDisplay(){
  text("w1dSizingSaveState",sizingStatus());
@@ -94,9 +95,9 @@ function sizingDisplay(){
       "NOT VERIFIED · NO CONFIGURATION CHANGE");
 
  text("w1dSizingLiveNotice",
-  ctx.sizing?.active_sizing_state==="CONFIGURED"?
-  "Active sizing exists separately; draft edit DOES NOT change exchange leverage.":
-  "Active LIVE profile UNCONFIGURED. Saving draft DOES NOT sync Binance or enable RUN.");
+  ctx.sizing?.applied?
+  "Saved AND ACTIVE for future W1D preflight · does NOT change Binance leverage, existing positions or enable LIVE RUN.":
+  "Not yet active in W1D preflight. Click SAVE & APPLY while PAUSED and flat; Binance remains unchanged.");
 }
 function syncSizingDraft(saved){
  ctx.sizing=saved;ctx.sizingLoaded=true;
@@ -237,7 +238,7 @@ async function invoke(action,fn,clearSecrets=false,buttonId=null){
  }
 }
 async function saveSizing(){
- if(!ctx.authorized){feedback("VERIFY ACCESS dulu sebelum menyimpan sizing draft",true);return;}
+ if(!ctx.authorized){feedback("VERIFY ACCESS dulu sebelum SAVE & APPLY sizing",true);return;}
  if(!ctx.sizingLoaded){feedback("DRAFT NOT LOADED: klik CHECK BACKEND terlebih dahulu",true);return;}
  const raw=el("w1dMarginReference")?.value?.trim();
  const lv=Number(el("w1dLeverageTarget")?.value);
@@ -246,15 +247,15 @@ async function saveSizing(){
   feedback("SIZING INVALID: margin $1–$1,000,000 (maksimal 2 desimal); leverage integer 1–125",true);
   return;
  }
- if(!sizingDirty())return;
- const result=await invoke("SAVE GLOBAL DRAFT",
+ if(!sizingDirty()&&ctx.sizing?.applied)return;
+ const result=await invoke("SAVE & APPLY GLOBAL SIZING",
   ()=>api("POST","/sizing-draft",{
     reference_margin_usdt:raw,desired_leverage:lv,
     expected_version:ctx.sizing.version
   }),false,"w1dSaveSizing");
  if(result&&result.sizing_draft){
   ctx.sizingEdited=false;syncSizingDraft(result.sizing_draft);
-  feedback("SAVED v"+result.sizing_draft.version+" · DATABASE VERIFIED · NOT APPLIED TO BINANCE");
+  feedback("APPLIED · PROFILE v"+result.sizing_draft.active_profile_version+" · $"+result.sizing_draft.target_notional_usdt+" NOTIONAL · NO BINANCE POST · LIVE PAUSED");
  }
 }
 async function reloadSizing(){
@@ -263,7 +264,7 @@ async function reloadSizing(){
  const result=await invoke("RELOAD SAVED",()=>api("GET","/sizing-draft"),false,"w1dReloadSizing");
  if(result?.sizing_draft){
   syncSizingDraft(result.sizing_draft);
-  feedback("DRAFT RELOADED FROM DATABASE v"+result.sizing_draft.version);
+  feedback("GLOBAL SETTINGS RELOADED · SAVED v"+result.sizing_draft.version+" · "+result.sizing_draft.profile_status);
  }
 }
 function bind(){
