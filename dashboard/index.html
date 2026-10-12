@@ -122,6 +122,12 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 .w1d-control-actions span{font-size:10px;color:var(--muted);flex:1}.w1d-run{background:#123729;color:#17d792;border-color:#126344;font-weight:750}
 .w1d-pause{background:#342515;color:#ffcb69;border-color:#78602f;font-weight:750}
 .w1d-actions button{font-size:10px}.w1d-vault-form p{font-size:10px}.w1d-vault-form .w1d-auth-row{padding-left:0}
+.w1d-sizing-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:10px 0;padding:8px 0;border-top:1px solid var(--line2)}
+.w1d-sizing-toolbar span{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}.w1d-sizing-save{background:#2f2813;border:1px solid #9a770e;color:var(--yellow);font-weight:760}
+.w1d-btn.is-busy{pointer-events:none;opacity:.75;cursor:wait}.w1d-btn.is-busy:before{content:"";display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:-2px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:w1d-spin .6s linear infinite}
+.w1d-btn.is-result-ok{box-shadow:inset 0 0 0 1px #0ecb81;color:#0ecb81}.w1d-btn.is-result-fail{box-shadow:inset 0 0 0 1px #f6465d;color:#f6465d}
+@keyframes w1d-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.w1d-btn.is-busy:before{animation:none}}
 @media(max-width:1100px){.w1d-summary-grid{grid-template-columns:repeat(3,1fr)}.strategy-selector{flex-wrap:wrap}}
 @media(max-width:650px){.w1d-credential-grid{grid-template-columns:1fr}.w1d-credential-grid input{min-width:0}.w1d-summary-grid{grid-template-columns:repeat(2,1fr)}.w1d-grid{grid-template-columns:1fr}.strategy-btn{min-width:110px}.strategy-selector{flex-wrap:wrap}}
 </style>
@@ -380,9 +386,16 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     </div>
     <div class="w1d-grid">
       <div class="w1d-field"><h3>Target notional global · kalkulator</h3>
-        <label for="w1dMarginReference">Modal acuan per trade (USDT)</label><input id="w1dMarginReference" type="number" min="0.01" step="0.01" value="1">
+        <label for="w1dMarginReference">Modal acuan per trade (USDT)</label><input id="w1dMarginReference" type="number" min="1" max="1000000" step="0.01" value="1">
         <label for="w1dLeverageTarget" style="margin-top:8px">Target leverage (×)</label><input id="w1dLeverageTarget" type="number" min="1" max="125" step="1" value="50">
-        <p class="w1d-note">Target nominal posisi: <strong id="w1dTargetNotional">$50.00</strong>. Preview ini <strong>belum menyimpan setting akun</strong>.</p>
+        <p class="w1d-note">Target nominal posisi: <strong id="w1dTargetNotional">$50.00</strong>. <strong>DRAFT:</strong> belum digunakan order W1D, belum disinkronkan ke leverage Binance.</p>
+        <div class="w1d-sizing-toolbar">
+          <button type="button" class="w1d-btn w1d-sizing-save" id="w1dSaveSizing">SAVE GLOBAL DRAFT</button>
+          <button type="button" class="w1d-btn" id="w1dReloadSizing">RELOAD SAVED</button>
+          <span id="w1dSizingSaveState" role="status" aria-live="polite">NOT SAVED · belum dibaca dari database</span>
+        </div>
+        <p class="w1d-note">Versi DB: <strong id="w1dSizingVersion">—</strong> · Tersimpan: <span id="w1dSizingSavedAt">—</span></p>
+        <p class="w1d-note" id="w1dSizingLiveNotice">Saat ini hanya preview. Save menyimpan draft ke PostgreSQL, BUKAN mengaktifkan konfigurasi Binance.</p>
         <div class="table-wrap"><table class="w1d-mini-table"><thead><tr><th>Batas Binance (ilustrasi)</th><th>Margin diperlukan</th></tr></thead><tbody>
         <tr><td>50×</td><td id="w1dExample50">—</td></tr><tr><td>25×</td><td id="w1dExample25">—</td></tr><tr><td>10×</td><td id="w1dExample10">—</td></tr>
         </tbody></table></div>
@@ -606,8 +619,8 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 </div>
 <script src="strong_stage5.js?v=strong-readonly-v2"></script>
 <script src="strong_paper_view.js?v=strong-independent-v1"></script>
-<script src="w1d_tab.js?v=w1d-native-tab-v1"></script>
-<script src="w1d_live_controls.js?v=w1d-private-controls-v2-verify"></script>
+<script src="w1d_tab.js?v=w1d-native-tab-v2-sizing"></script>
+<script src="w1d_live_controls.js?v=w1d-private-controls-v3-loading-sizing"></script>
 <script>
 (function(){
 'use strict';
