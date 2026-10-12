@@ -390,12 +390,12 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
         <label for="w1dLeverageTarget" style="margin-top:8px">Target leverage (×)</label><input id="w1dLeverageTarget" type="number" min="1" max="125" step="1" value="50">
         <p class="w1d-note">Target nominal posisi: <strong id="w1dTargetNotional">$50.00</strong>. <strong>DRAFT:</strong> belum digunakan order W1D, belum disinkronkan ke leverage Binance.</p>
         <div class="w1d-sizing-toolbar">
-          <button type="button" class="w1d-btn w1d-sizing-save" id="w1dSaveSizing">SAVE GLOBAL DRAFT</button>
+          <button type="button" class="w1d-btn w1d-sizing-save" id="w1dSaveSizing">SAVE &amp; APPLY</button>
           <button type="button" class="w1d-btn" id="w1dReloadSizing">RELOAD SAVED</button>
           <span id="w1dSizingSaveState" role="status" aria-live="polite">NOT SAVED · belum dibaca dari database</span>
         </div>
         <p class="w1d-note">Versi DB: <strong id="w1dSizingVersion">—</strong> · Tersimpan: <span id="w1dSizingSavedAt">—</span></p>
-        <p class="w1d-note" id="w1dSizingLiveNotice">Saat ini hanya preview. Save menyimpan draft ke PostgreSQL, BUKAN mengaktifkan konfigurasi Binance.</p>
+        <p class="w1d-note" id="w1dSizingLiveNotice">SAVE &amp; APPLY memperbarui profil sizing W1D untuk preflight berikutnya saat PAUSE. Tidak mengaktifkan LIVE atau mengubah leverage Binance.</p>
         <p class="w1d-note">Kebijakan pembulatan W1D (backend): <strong id="w1dRoundingPolicy">NOT VERIFIED</strong>. Hanya quantity berbasis harga mark; bukan persetujuan slippage fill MARKET. LIVE tetap terkunci.</p>
         <p class="w1d-note">Margin W1D (backend): <strong id="w1dIsolatedPolicy">NOT VERIFIED</strong>. ISOLATED hanya untuk pair dengan sinyal, bukan perubahan massal atau izin order LIVE.</p>
         <p class="w1d-note">Tahap 13B.5C · <strong id="w1dMarginSyncReadiness">STATUS NOT LOADED</strong>. Pemilihan pair otomatis hanya dari sinyal OPEN W1D yang valid, bukan pair historis.</p>
@@ -623,7 +623,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <script src="strong_stage5.js?v=strong-readonly-v2"></script>
 <script src="strong_paper_view.js?v=strong-independent-v1"></script>
 <script src="w1d_tab.js?v=w1d-native-tab-v2-sizing"></script>
-<script src="w1d_live_controls.js?v=w1d-private-controls-v6-controlled-margin-readiness"></script>
+<script src="w1d_live_controls.js?v=w1d-v7-global-sizing-save-apply"></script>
 <script>
 (function(){
 'use strict';
