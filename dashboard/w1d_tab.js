@@ -28,10 +28,12 @@ function amountNow(){
  const ref=el("w1dMarginReference"),target=el("w1dLeverageTarget");
  if(!ref||!target)return;
  const m=Number(ref.value),l=Number(target.value);
- const okay=Number.isFinite(m)&&m>0&&m<=100000&&Number.isInteger(l)&&l>=1&&l<=125;
+ const okay=Number.isFinite(m)&&m>=1&&m<=1000000&&Number.isInteger(l)&&l>=1&&l<=125;
  set("w1dTargetNotional",okay?"$"+fmt(m*l,2):"INVALID");
  [50,25,10].forEach(cap=>set("w1dExample"+cap,okay?"$"+fmt(m*l/Math.min(l,cap),2):"—"));
- set("w1dSizeMode","PREVIEW LOKAL · BELUM DISIMPAN DI LIVE");
+ if(global.W1DOperations&&global.W1DOperations.sizingStatus)
+   set("w1dSizeMode",global.W1DOperations.sizingStatus());
+ else set("w1dSizeMode","PREVIEW LOKAL · BELUM DISIMPAN DI LIVE");
 }
 function statusTag(){const d=state.data;const l=d?.live,c=d?.controls;
  const fresh=d&&Number.isFinite(Date.parse(d.generated_at_utc))&&(Date.now()-Date.parse(d.generated_at_utc)<120000);
@@ -153,7 +155,11 @@ function chartMarkers(symbol){
 }
 function init(){
  ["w1dMarginReference","w1dLeverageTarget"].forEach(k=>{
-  const e=el(k);if(e)e.addEventListener("input",amountNow);
+  const e=el(k);if(e)e.addEventListener("input",()=>{
+   amountNow();
+   if(global.W1DOperations&&global.W1DOperations.onSizingEdit)
+     global.W1DOperations.onSizingEdit();
+  });
  });
  const b=el("w1dRefresh");if(b)b.addEventListener("click",()=>load(true));
  ["w1dSearch","w1dFilter"].forEach(k=>{const e=el(k);if(e)e.addEventListener(
@@ -167,5 +173,5 @@ function init(){
  amountNow();
 }
 global.W1DTab={init,activate,load,render,renderTop,chartMarkers,isSelected,
- getSelectedSymbol:()=>state.selected};
+ previewNotional:amountNow,getSelectedSymbol:()=>state.selected};
 })(window);
