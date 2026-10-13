@@ -160,7 +160,7 @@ function render(){
  text("w1dAuthState",ctx.authorized?"AUTHORIZED · PRIVATE":"LOCKED");
  if(!ctx.authorized)return;
  const s=ctx.status||{};
- text("w1dGlobalMode",s.global_mode||"UNKNOWN");
+ text("w1dGlobalMode",(s.w1d_mode||"UNKNOWN")+" · SHARED "+(s.global_mode||"UNKNOWN"));
  text("w1dGate",s.execution_gate||"UNKNOWN");
  text("w1dLiveAccounts",s.account_count===undefined?"N/A":s.account_count+" registered");
  const notVerified=ctx.accounts.filter(x=>x.futures_status!=="VERIFIED_READ_ONLY");
@@ -305,12 +305,12 @@ function bind(){
  });
  const pause=el("w1dPause");
  if(pause)pause.addEventListener("click",async()=>{
-  const result=await invoke("PAUSE W1D",()=>api("POST","/control/pause",{}),false,"w1dPause");
+  const result=await invoke("PAUSE W1D",()=>api("POST","/control/w1d/pause",{}),false,"w1dPause");
   if(result)await refresh(true);
  });
  const run=el("w1dRun");
  if(run)run.addEventListener("click",async()=>{
-  const result=await invoke("RUN REQUEST",()=>api("POST","/control/run",{}),false,"w1dRun");
+  const result=await invoke("RUN REQUEST",()=>api("POST","/control/w1d/run",{}),false,"w1dRun");
   if(result)await refresh(true);
  });
  const refreshB=el("w1dControlRefresh");
