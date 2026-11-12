@@ -40,9 +40,12 @@ Never put the exported JSON in Git. Set `STRONG_PAPER_SNAPSHOT_JSON`
 as a **private server-side Vercel Preview environment variable** to render a
 point-in-time real-ledger preview. Production and LIVE controls remain unchanged.
 
-## Future live bridge
-Provision an authenticated, HTTPS-only read service for the exported schema
-in an isolated VPS2 process. Do not expose the SQLite files, source order-flow
+## Live bridge — connectivity pending
+The authenticated read service is installed on VPS2 as an isolated systemd unit
+listening on private WireGuard interface 10.77.22.2:8765. Unauthenticated
+requests return HTTP 401. VPS1 Caddy container cannot currently reach this
+private address (timeout), and shared ingress/firewall configurations remain
+unchanged to protect LIVE production. Do not expose the SQLite files, source order-flow
 tape, write endpoints, or public unauthenticated API. Next.js will consume the
 bridge without changing the browser contract. The online bridge is not
 considered ready until connectivity, auth, freshness and parity checks pass.
