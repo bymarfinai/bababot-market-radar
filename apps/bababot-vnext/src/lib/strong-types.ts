@@ -43,7 +43,7 @@ export type StrongSnapshot = {
 };
 
 export type StrongApiResponse = {
-  mode: "live" | "snapshot" | "unconfigured";
+  mode: "sync" | "live" | "snapshot" | "unconfigured";
   snapshot: StrongSnapshot | null;
   warning: string | null;
 };

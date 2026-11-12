@@ -1,60 +1,80 @@
-# BabaBot vNext — Stages 01 + 02
+# BabaBot vNext — Stage 02: VPS2 PAPER sync
 
-Next.js 15 / React 19 / TypeScript scaffold for STRONG LONG Independent PAPER.
-This app is intentionally isolated from the legacy `dashboard/` static production
-and from VPS1 trading controls. No trading/order POST endpoints exist here.
+The UI uses Next.js 16.4.6 and React 19.3.1 under `apps/bababot-vnext`.
+It is **not** the production LIVE trading application.
 
-## Stage 01
-- App Router scaffold under `apps/bababot-vnext/`.
-- Responsive dark research terminal with Overview, Strategies, Matched Compare,
-  Trade Explorer, and System Data views.
-- Legacy terminal remains available via explicit external link, not overwritten.
+## Architecture (NO VPS1)
 
-## Stage 02
-- Read-only Next.js endpoint `GET /api/strong`, schema v1.
-- Python SQLite exporter at `scripts/export-strong-vps2.py`. Opens five
-  independent VPS2 ledgers with SQLite `mode=ro` and `PRAGMA query_only=ON`.
-- All P/M outcomes are grouped by `sourceEventId` (not symbol). No automatic
-  portfolio PnL sum across strategies; shared candidate signals overlap.
-- Server-only `STRONG_READ_API_URL` + `STRONG_READ_API_TOKEN` support an
-  authenticated HTTPS read bridge when provisioned.
-- Server-only `STRONG_PAPER_SNAPSHOT_JSON` is an explicit, timestamped fallback
-  for preview deployments. Do not publish personal/strategy trade snapshots
-  to the public repository.
+```
+VPS2 RESEARCH (5 read-only SQLite ledgers)
+  exporter: export-strong-vps2.py
+  publisher: publish-strong-vps2.mjs
+     -- every 60s: check ledger diff (or heartbeat every 10min)
+     -- outbound HTTPS, private @vercel/blob
+          |
+Vercel private Blob (SIN1): research/strong-paper/latest.json
+          |
+Next.js GET /api/strong (server-only Blob token)
+          |
+Browser UI (read-only polling every 60s while visible)
+```
 
-## Run
-```sh
+No incoming port required on VPS2. No VPS1 gateway, DNS, firewall or LIVE execution changes.
+Private Blob credentials only exist in VPS2 local restricted env and Vercel server env.
+Do not commit keys or trade snapshots in public GitHub.
+
+## Source provenance
+- Original A: `ip01-independent-paper/v2_a_independent_paper.sqlite3`.
+- P01–P07: `strong-seven-modular-20261107/seven_forward.sqlite3`.
+- M01–M02: `strong-master-matrix-20261108/master_forward.sqlite3`.
+- M03: `strong-m03-modular-20261108/m03_forward.sqlite3`.
+- M04–M05: `strong-m04-m05-modular-20261109/m45_forward.sqlite3`.
+
+All DBs are opened `mode=ro` and `PRAGMA query_only=ON`.
+PnL, fees and close reasons come from original ledger. Matching is on full
+`sourceEventId`; sum metrics **per strategy**, not across overlapping branches.
+
+## VPS2 publisher
+Files to deploy on VPS2:
+`scripts/export-strong-vps2.py`, `scripts/publish-strong-vps2.mjs`,
+`deploy/bababot-paper-sync.service`, `deploy/bababot-paper-sync.timer`.
+
+Install npm in an isolated `/home/ubuntu/bababot-strong-sync` directory and
+add one secret file `/home/ubuntu/bababot-strong-sync/blob.env` with
+`BLOB_READ_WRITE_TOKEN=...` (mode 0600). Install a separate systemd
+oneshot service and timer (60-second interval). No order endpoint exists.
+
+The publisher computes a normalized payload hash excluding generatedAt and
+uploads on changes or when 10min have elapsed since last successful upload.
+It persists the last uploaded hash in a private local state file; failures
+are retried next timer execution. Private Blob overwrites use
+`allowOverwrite=true`, `addRandomSuffix=false`.
+
+## Vercel setup
+Vercel project: `bababot-vnext-research` (protected).
+Store: `bababot-vnext-paper-private`, private, SIN1.
+The store connection injects server-only `BLOB_READ_WRITE_TOKEN`.
+`GET /api/strong` always disables caching and checks actual snapshot timestamp;
+data older than 20min shows a stale warning, never fake live status.
+
+Optional signed read bridge via `STRONG_READ_API_URL` remains as a fallback,
+but it is not needed with private Blob and should not route via VPS1.
+Legacy `STRONG_PAPER_SNAPSHOT_JSON` remains as an explicit disaster fallback.
+
+## Local validation
+```bash
 cd apps/bababot-vnext
-npm install
+npm ci
 npm run typecheck
 npm run build
-npm run dev
+npm audit --omit=dev
 ```
+The Next.js route reads Blob dynamically. Without Blob credentials, it falls
+back to preview env snapshot, with mode `snapshot` rather than `sync`.
 
-## Export on VPS2 (read-only)
-```sh
-python3 scripts/export-strong-vps2.py --root /home/ubuntu/market-detektor-research > /tmp/strong-paper-snapshot.json
-python3 -m json.tool /tmp/strong-paper-snapshot.json >/dev/null
-```
-Never put the exported JSON in Git. Set `STRONG_PAPER_SNAPSHOT_JSON`
-as a **private server-side Vercel Preview environment variable** to render a
-point-in-time real-ledger preview. Production and LIVE controls remain unchanged.
-
-## Live bridge — connectivity pending
-The authenticated read service is installed on VPS2 as an isolated systemd unit
-listening on private WireGuard interface 10.77.22.2:8765. Unauthenticated
-requests return HTTP 401. VPS1 Caddy container cannot currently reach this
-private address (timeout), and shared ingress/firewall configurations remain
-unchanged to protect LIVE production. Do not expose the SQLite files, source order-flow
-tape, write endpoints, or public unauthenticated API. Next.js will consume the
-bridge without changing the browser contract. The online bridge is not
-considered ready until connectivity, auth, freshness and parity checks pass.
-
-## Security/invariants
-- No mutation of research SQLite ledgers; no DB writes in exporter.
-- No shared LIVE trading API, no Binance orders.
-- Exactly one `sourceEventId` per original qualification, one result per
-  strategy and event.
-- All times epoch ms UTC. PnL is realized net from source ledger; no invention.
-- Snapshot status and freshness always visible.
-- `STRONG_READ_API_TOKEN` never exposed to client JS.
+## Safety
+- No writes to PAPER ledgers.
+- No VPS1 requests or operations.
+- No auto orders, POST/PATCH/DELETE trading API or strategy changes.
+- Do not interpret ACTIVE as live process heartbeat; it is research enrollment.
+- No source data is invented; empty/invalid or stale snapshots are labeled.

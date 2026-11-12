@@ -14,6 +14,7 @@ const NAV: { id: View; label: string; description: string; symbol: string }[] = 
 ];
 
 const BLANK: StrongApiResponse = { mode: "unconfigured", snapshot: null, warning: null };
+const REFRESH_MS = 60000; // read-only refresh; does not trade or mutate PAPER
 const fmtMoney = (n: number | null | undefined, digits = 2) =>
   n == null ? "—" : `${n > 0 ? "+" : n < 0 ? "−" : ""}$${Math.abs(n).toFixed(digits)}`;
 const fmtNumber = (n: number | null | undefined) => n == null ? "—" : n.toLocaleString("en-US");
@@ -168,7 +169,8 @@ export default function StrongWorkspace() {
   useEffect(() => {
     const ctrl = new AbortController();
     void reload(ctrl.signal);
-    return () => ctrl.abort();
+    const timer = window.setInterval(() => { if (document.visibilityState === "visible") void reload(); }, REFRESH_MS);
+    return () => { ctrl.abort(); window.clearInterval(timer); };
   }, [reload]);
 
   const snapshot = payload.snapshot;
@@ -228,7 +230,7 @@ export default function StrongWorkspace() {
     <div className="main">
       <header className="topbar">
         <div className="breadcrumb"><span>BabaBot</span><span className="breadcrumb-sep">/</span><strong>STRONG LONG</strong><span className="breadcrumb-sep">/</span><strong>{NAV.find(n => n.id === view)?.label}</strong></div>
-        <div className="top-actions"><span className="top-date">VPS2 RESEARCH</span><span className={`source-mode ${payload.mode}`}>{payload.mode === "live" ? "LIVE READ" : payload.mode === "snapshot" ? "SNAPSHOT" : "NO SOURCE"}</span><button type="button" className="refresh-btn" disabled={loading} onClick={() => void reload()}>{loading ? "Loading..." : "↻ Refresh"}</button></div>
+        <div className="top-actions"><span className="top-date">VPS2 RESEARCH</span><span className={`source-mode ${payload.mode}`}>{payload.mode === "sync" ? "PAPER SYNC" : payload.mode === "live" ? "PAPER DIRECT" : payload.mode === "snapshot" ? "SNAPSHOT" : "NO SOURCE"}</span><button type="button" className="refresh-btn" disabled={loading} onClick={() => void reload()}>{loading ? "Loading..." : "↻ Refresh"}</button></div>
       </header>
 
       <div className="main-content">
@@ -237,7 +239,7 @@ export default function StrongWorkspace() {
           <span className="paper-indicator"><span/> PAPER ONLY</span>
         </div>
 
-        {(payload.warning || error) && <div className="notice" role="status"><span className="notice-symbol">ⓘ</span><div><strong>{error ? "Data API error" : payload.mode === "snapshot" ? "Timestamped source snapshot" : "Source configuration"}</strong><p>{error ?? payload.warning}</p></div></div>}
+        {(payload.warning || error) && <div className="notice" role="status"><span className="notice-symbol">ⓘ</span><div><strong>{error ? "Data API error" : payload.mode === "snapshot" ? "Timestamped source snapshot" : payload.mode === "sync" ? "Research sync status" : "Source configuration"}</strong><p>{error ?? payload.warning}</p></div></div>}
 
         {!configured ? <div className="unconfigured panel">
           <div className="empty-icon">◫</div><h2>VPS2 data source belum tersedia</h2><p>Frontend sudah terpasang. Data riset sengaja tidak dipalsukan: konfigurasi authenticated read bridge atau snapshot Vercel Preview diperlukan.</p>
@@ -301,10 +303,11 @@ export default function StrongWorkspace() {
               <section className="panel"><div className="section-eyebrow">DATA PROVENANCE</div><h2>Research Source</h2><div className="metrics-stack">
                 <div><span>Source</span><strong>VPS2 Independent PAPER</strong></div>
                 <div><span>API schema</span><strong>v{snapshot?.schemaVersion}</strong></div>
-                <div><span>Serving mode</span><StatusChip status={payload.mode.toUpperCase()}/></div>
-                <div><span>Snapshot generated</span><strong>{fmtTime(Date.parse(snapshot!.generatedAt))}</strong></div>
+                <div><span>Serving mode</span><StatusChip status={payload.mode === "sync" ? "PAPER SYNC" : payload.mode.toUpperCase()}/></div>
+                <div><span>Latest VPS2 sync</span><strong>{fmtTime(Date.parse(snapshot!.generatedAt))}</strong></div>
                 <div><span>Normalized trades</span><strong>{trades.length}</strong></div>
                 <div><span>Ledger families</span><strong>5 · read-only</strong></div>
+                <div><span>Browser refresh</span><strong>60 seconds (visible tab)</strong></div>
               </div></section>
               <section className="panel"><div className="section-eyebrow">SAFETY BOUNDARIES</div><h2>Execution Isolation</h2><div className="guard-list">
                 <div><span>✓</span> No POST, RUN or PAUSE controls in vNext</div>
@@ -314,7 +317,7 @@ export default function StrongWorkspace() {
                 <div><span>✓</span> All times rendered Asia/Jakarta</div>
               </div></section>
             </div>
-            <div className="subtle-alert">Source freshness and live connectivity are separate checks. A snapshot is not live data, and its last record time is not a heartbeat.</div>
+            <div className="subtle-alert">PAPER sync reads a private object uploaded from VPS2. This is not LIVE trading. The sync timestamp indicates the last successful publisher upload; it is separate from the latest trade activity.</div>
           </>}
         </>}
         <footer className="content-footer"><span>BabaBot vNext · Independent Research</span><span>VPS1 LIVE isolated • No orders • Source truth: VPS2</span></footer>

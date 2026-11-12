@@ -1,0 +1,13 @@
+[Unit]
+Description=Check VPS2 independent PAPER ledgers every minute
+
+[Timer]
+OnBootSec=45s
+OnUnitInactiveSec=60s
+RandomizedDelaySec=4s
+AccuracySec=5s
+Persistent=true
+Unit=bababot-paper-sync.service
+
+[Install]
+WantedBy=timers.target
