@@ -126,6 +126,7 @@ export default function VelaPaperChart({trade, matched}: {trade: StrongTrade; ma
         setReplay({active:s.active,playing:s.playing,cursorTime:s.cursorTime,remaining:s.remaining});
       };
       const onEnd=()=>{markerCutoff=Number.POSITIVE_INFINITY;repaint();setReplay({active:false,playing:false,cursorTime:null,remaining:0});};
+      chart.on("replay:start",onStep);
       chart.on("replay:step",onStep);
       chart.on("replay:end",onEnd);
       await chart.ready();
