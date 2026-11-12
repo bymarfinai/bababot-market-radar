@@ -57,14 +57,15 @@ export async function GET(req: NextRequest) {
     const archived=await readPrivateArchive(archiveKey(trade.sourceEventId,tf),token);
     if(archived && typeof archived==="object" && "bars" in archived &&
        Array.isArray(archived.bars) && "symbol" in archived &&
-       archived.symbol===symbol && "timeframe" in archived && archived.timeframe===tf &&
+       archived.symbol===symbol && "sourceEventId" in archived && archived.sourceEventId===trade.sourceEventId &&
+       "timeframe" in archived && archived.timeframe===tf &&
        "market" in archived && archived.market==="BINANCE_USDT_FUTURES") {
       try {
         const checked=archived.bars as Ohlcv[];
         if(checked.length>0 && checked.length<=1000) {
           const parsed=parseBinanceKlines(checked.map(b=>[b.time,b.open,b.high,b.low,b.close,b.volume]));
-          if(parsed.length===checked.length &&
-             parsed.every(b=>b.time>=startTime-CANDLE_INTERVALS[tf] && b.time<=endTime+CANDLE_INTERVALS[tf])) {
+          if(parsed.length===checked.length && parsed[0]?.time<=trade.openedAtMs &&
+             parsed.at(-1)!.time >= (trade.closedAtMs ?? trade.openedAtMs) - CANDLE_INTERVALS[tf]) {
             bars=parsed;
             source="vps2-archive";
           }

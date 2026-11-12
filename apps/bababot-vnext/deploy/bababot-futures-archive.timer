@@ -1,0 +1,13 @@
+[Unit]
+Description=Archive completed independent PAPER events from Binance USDT-M Futures
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=3min
+RandomizedDelaySec=15s
+AccuracySec=10s
+Persistent=true
+Unit=bababot-futures-archive.service
+
+[Install]
+WantedBy=timers.target
