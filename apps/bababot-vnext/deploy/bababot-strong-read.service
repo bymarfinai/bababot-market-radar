@@ -1,0 +1,25 @@
+[Unit]
+Description=BabaBot STRONG LONG VPS2 read-only ledger bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/bababot-strong-read
+EnvironmentFile=/home/ubuntu/bababot-strong-read/strong-read.env
+ExecStart=/usr/bin/python3 /home/ubuntu/bababot-strong-read/serve-strong-vps2.py --bind 10.77.22.2 --port 8765 --root /home/ubuntu/market-detektor-research
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+RestrictAddressFamilies=AF_INET AF_UNIX
+MemoryMax=160M
+CPUQuota=15%
+LimitNOFILE=128
+
+[Install]
+WantedBy=multi-user.target
