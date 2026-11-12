@@ -75,7 +75,7 @@ function StrategyTable({ strategies, selected, onSelect }: {
   return (
     <div className="table-wrap">
       <table className="data-table">
-        <thead><tr><th>Strategy</th><th>Activity</th><th className="num">Closed</th><th className="num">W / L</th><th className="num">WR</th><th className="num">Net PnL</th></tr></thead>
+        <thead><tr><th>Strategy</th><th>Enrollment</th><th className="num">Closed</th><th className="num">W / L</th><th className="num">WR</th><th className="num">Net PnL</th></tr></thead>
         <tbody>
           {strategies.map(s => <tr key={s.id} onClick={() => onSelect(s.id)}
             className={`clickable ${selected === s.id ? "selected" : ""}`} tabIndex={0}
@@ -250,7 +250,7 @@ export default function StrongWorkspace() {
               <div className="kpi"><span>Net Realized PnL</span><strong className={pnlClass(selected?.netPnl)}>{fmtMoney(selected?.netPnl)}</strong><small>Only CLOSED · {selected?.label}</small></div>
               <div className="kpi"><span>Win Rate</span><strong>{fmtPct(selected?.winRate)}</strong><small>{selected?.wins} WIN / {selected?.losses} LOSS</small></div>
               <div className="kpi"><span>Closed Trades</span><strong>{fmtNumber(selected?.closed)}</strong><small>{selected?.open ?? 0} open · {selected?.dataGap ?? 0} data gaps</small></div>
-              <div className="kpi"><span>Strategy Status</span><strong className="status-value">{selected?.activity}</strong><small>Independent forward PAPER</small></div>
+              <div className="kpi"><span>Research Enrollment</span><strong className="status-value">{selected?.activity}</strong><small>Registry configuration · not process heartbeat</small></div>
             </div>
             {(selected?.closed ?? 0) < 20 && <div className="subtle-alert">Sample warning: {selected?.label} memiliki {selected?.closed} CLOSED trade. WR dan PnL belum membuktikan keunggulan yang konsisten.</div>}
             <div className="overview-grid">
@@ -274,7 +274,7 @@ export default function StrongWorkspace() {
           </>}
 
           {view === "strategies" && <>
-            <div className="section-metrics"><span>{strategies.length} Registered strategies</span><span>{strategies.filter(s => s.activity === "ACTIVE").length} Active research branches</span><span>Original A as reference</span></div>
+            <div className="section-metrics"><span>{strategies.length} Registered strategy definitions</span><span>{strategies.filter(s => s.activity === "ACTIVE").length} Configured active branches</span><span>Original A as reference</span></div>
             <section className="panel"><div className="panel-head"><div><div className="section-eyebrow">INDEPENDENT PORTFOLIOS</div><h2>Strategy Registry</h2><p>Results are per branch. Do not add overlapping branches together as portfolio returns.</p></div></div><StrategyTable strategies={strategies} selected={currentId} onSelect={setStrategyId}/></section>
             <div className="panel details-panel"><div className="section-eyebrow">SELECTED BRANCH</div><h2>{selected?.label}</h2><div className="module-showcase">{selected?.moduleLabel}</div><p className="microcopy">Branch {selected?.family}. Transaksi mempunyai identitas PAPER masing-masing, tetapi dapat berasal dari satu kualifikasi sinyal yang sama.</p><button className="text-action" onClick={() => setView("overview")}>Open strategy performance →</button></div>
           </>}
