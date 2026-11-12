@@ -58,7 +58,7 @@ export default function VelaPaperChart({trade, matched}: {trade: StrongTrade; ma
       const activeTrades=matched.filter(t=>t.symbol===trade.symbol && t.sourceEventId===trade.sourceEventId);
       const markerTrades=activeTrades.filter(t=>t.openedAtMs>=start && t.openedAtMs<=end+CANDLE_INTERVALS[tf]);
       registerNativeIndicator({
-        type:markerType,title:"Recorded PAPER fills",shortTitle:"PAPER",paneHint:"price",overlay:true,
+        type:markerType,title:"PAPER ledger entry and exit",shortTitle:"PAPER",paneHint:"price",overlay:true,
         inputsSchema:()=>[],defaultInputs:()=>({}),
         create:()=>({
           start(ctx) {
@@ -129,14 +129,16 @@ export default function VelaPaperChart({trade, matched}: {trade: StrongTrade; ma
       chart.on("replay:start",onStep);
       chart.on("replay:step",onStep);
       chart.on("replay:end",onEnd);
-      await chart.ready();
-      if(!destroyed){setIndicatorReady(true);setShown(bars.length);}
+      // Assign teardown before asynchronous ready(): StrictMode unmounts and
+      // failures during first paint must never leak a canvas or indicator.
       cleanup=()=>{
         chart.replay.pause();
         chart.destroy();
         unregisterNativeIndicator(markerType);
         if(chartRef.current===chart)chartRef.current=null;
       };
+      await chart.ready();
+      if(!destroyed){setIndicatorReady(true);setShown(bars.length);}
       if(destroyed)cleanup();
     })().catch(e=>{if(!destroyed)setError(e instanceof Error?e.message:"Vela render error");});
     return ()=>{destroyed=true;cleanup();};

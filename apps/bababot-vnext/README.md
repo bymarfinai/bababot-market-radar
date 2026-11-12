@@ -89,3 +89,22 @@ back to preview env snapshot, with mode `snapshot` rather than `sync`.
 - Missing candle sources return a visible error; no fake candles or simulated price fills.
 - Vela attribution remains visible on chart and links to https://velacharts.dev, per Vela NOTICE.
 - No PineTS compiler, no order calls or VPS1 dependencies.
+
+## Stage 03 — Futures archive deployment and validation
+
+- VPS2-only archiver (`scripts/archive-strong-candles.mjs`) reads the same normalized PAPER source-event IDs and fetches real public Binance **FAPI** candles; no order endpoints, private credentials or DB mutations are involved.
+- Private blobs are keyed by SHA-256 of the complete source event ID at `research/strong-candles/<timeframe>/<sha256>.json`, separately for 1m, 5m, 15m, 1h and 4h.
+- Original VPS2 events (at initial audit) = 24, historical objects = 120; each carries Binance USDT-M Futures OHLCV with its source event, timeframe, and provenance.
+- One-time archive: `cd /home/ubuntu/bababot-strong-sync && node --env-file=blob.env archive-strong-candles.mjs --limit=200` (private `blob.env` file restricted to 0600).
+- Ongoing new-event archive: independent `bababot-futures-archive.timer` invokes a capped service (10 keys per run, around 3 minutes), not the trading/paper engines.
+- Web API returns HTTP 404 for any `tradeId` not present in VPS2 PAPER, HTTP 200 for real archived bars, HTTP 503 if no valid futures candle source is reachable.
+- Vela is **engine-free** here; PineTS is *not* installed. Built-in replay is candle-by-candle and does not reconstruct tick-level execution or validate intrabar stop-first outcomes.
+- All Vela rendering pages display visible Vela attribution linked to https://velacharts.dev. Its Apache-2.0 license and NOTICE are available under `public/licenses/`.
+
+### Stage-03 acceptance evidence — 2026-11-12
+
+- `GET /api/strong`: HTTP 200 with 13 strategies / 76 PAPER rows, mode `sync`.
+- Chart API for QUSDT, ELSAUSDT, BOMEUSDT, DUSKUSDT: HTTP 200, source `vps2-archive`, `market=BINANCE_USDT_FUTURES`.
+- Invalid PAPER trade ID: HTTP 404; unrecognized symbols are never fetched.
+- TypeScript/build passed with Next 16.4.6 and Vela 0.10.6; production npm audit zero as observed during local check.
+- **VPS1 LIVE is explicitly out of scope.** Work remains in draft PR and Vercel protected Preview; no merge to legacy production.
