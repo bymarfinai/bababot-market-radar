@@ -58,7 +58,7 @@ for(const g of groupsSorted){
     const startMs=Math.max(0,g.entryMs-ms*(tf==="1m"?80:110));
     const endMs=Math.min(Date.now(),Math.max(g.entryMs,g.lastMs)+ms*(tf==="1m"?45:40));
     const eventHash=createHash("sha256").update(g.sourceEventId,"utf8").digest("hex");
-    const key=\`research/strong-candles/\${tf}/\${eventHash}.json\`;
+    const key=`research/strong-candles/${tf}/${eventHash}.json`;
     const version=createHash("sha256").update(JSON.stringify({
       symbol:g.symbol,startMs,endMs,tf,sourceEventId:g.sourceEventId
     })).digest("hex");
@@ -85,7 +85,7 @@ async function archive(t){
   q.searchParams.set("endTime",String(t.endMs));
   q.searchParams.set("limit","1000");
   const resp=await fetch(q,{signal:AbortSignal.timeout(9000),redirect:"error"});
-  if(!resp.ok)throw Error(\`Binance Futures HTTP \${resp.status}\`);
+  if(!resp.ok)throw Error(`Binance Futures HTTP ${resp.status}`);
   const raw=await resp.json();
   if(!Array.isArray(raw)||raw.length===0||raw.length>1000)throw Error("Futures history empty/invalid");
   const byTime=new Map();
