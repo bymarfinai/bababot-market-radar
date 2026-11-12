@@ -78,3 +78,14 @@ back to preview env snapshot, with mode `snapshot` rather than `sync`.
 - No auto orders, POST/PATCH/DELETE trading API or strategy changes.
 - Do not interpret ACTIVE as live process heartbeat; it is research enrollment.
 - No source data is invented; empty/invalid or stale snapshots are labeled.
+
+## Stage 03 — Vela Chart / Futures PAPER Replay
+
+- New **Vela Chart & Replay** tab (engine-free Vela Apache-2.0; no PineTS dependency).
+- Binance **USDT-M perpetual Futures** Kline OHLCV, not Spot or invented candles.
+- Real PAPER marker timestamps/prices come from VPS2 ledger, matched by original source event.
+- Supports 1m/5m/15m/1h/4h, historical view, Vela drawing tools, causal one-bar-at-a-time replay.
+- Chart read endpoint `GET /api/market/candles?tradeId=<ledger-trade-id>&timeframe=5m`, guarded by actual PAPER snapshot; private cache path per source event + timeframe, with Binance FAPI fallback.
+- Missing candle sources return a visible error; no fake candles or simulated price fills.
+- Vela attribution remains visible on chart and links to https://velacharts.dev, per Vela NOTICE.
+- No PineTS compiler, no order calls or VPS1 dependencies.

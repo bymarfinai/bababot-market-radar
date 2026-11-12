@@ -20,7 +20,7 @@ function noStore(response: unknown, status = 200) {
 
 function archiveKey(sourceEventId: string, timeframe: CandleTimeframe): string {
   const hash = createHash("sha256").update(sourceEventId, "utf8").digest("hex");
-  return \`research/strong-candles/\${timeframe}/\${hash}.json\`;
+  return `research/strong-candles/${timeframe}/${hash}.json`;
 }
 async function readPrivateArchive(key:string, token:string): Promise<unknown | null> {
   try {
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   const tf=timeframe as CandleTimeframe;
   const paper=await loadStrongPaper();
   const trade=paper.snapshot?.trades.find(x=>x.id===tradeId);
-  if (!trade || !/^[A-Z0-9]{3,24}USDT$/.test(trade.symbol)) {
+  if (!trade || !/^[A-Z0-9]{1,24}USDT$/.test(trade.symbol)) {
     return noStore({error:"Trade not found in authorized VPS2 PAPER snapshot"},404);
   }
   const {startTime,endTime}=marketWindow(tf,trade.openedAtMs,trade.closedAtMs);

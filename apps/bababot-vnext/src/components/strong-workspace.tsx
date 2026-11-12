@@ -1,15 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import VelaPaperChart from "./vela-paper-chart";
 import type { StrongApiResponse, StrongStrategy, StrongTrade } from "@/lib/strong-types";
 
-type View = "overview" | "strategies" | "compare" | "trades" | "system";
+type View = "overview" | "strategies" | "compare" | "trades" | "chart" | "system";
 
 const NAV: { id: View; label: string; description: string; symbol: string }[] = [
   { id: "overview", label: "Overview", description: "Strategy health", symbol: "▦" },
   { id: "strategies", label: "Strategies", description: "Independent PAPER", symbol: "▤" },
   { id: "compare", label: "Matched Compare", description: "Same source event", symbol: "⇄" },
   { id: "trades", label: "Trade Explorer", description: "Entry & exit detail", symbol: "⌕" },
+  { id: "chart", label: "Vela Chart & Replay", description: "Futures PAPER fills", symbol: "◈" },
   { id: "system", label: "Data & System", description: "Source health", symbol: "◈" }
 ];
 
@@ -115,7 +117,7 @@ function TradeTable({ trades, onSelect, selectedId }: {
   </div>;
 }
 
-function TradeDetails({ trade, matches }: { trade: StrongTrade; matches: StrongTrade[] }) {
+function TradeDetails({ trade, matches, onOpenChart }: { trade: StrongTrade; matches: StrongTrade[]; onOpenChart: () => void }) {
   return <div className="details-panel">
     <div className="details-heading">
       <div><div className="section-eyebrow">TRADE INSPECTOR</div><h3>{trade.symbol} <span className="mini-tag">{trade.strategyId}</span></h3></div>
@@ -138,6 +140,7 @@ function TradeDetails({ trade, matches }: { trade: StrongTrade; matches: StrongT
         <span>{m.strategyId}</span><StatusChip status={m.status}/><span className={`mono ${pnlClass(m.netPnl)}`}>{fmtMoney(m.netPnl)}</span>
       </div>)}
     </div>
+    <button type="button" className="text-action" onClick={onOpenChart}>Open Binance Futures Vela Chart & Replay →</button>
     <p className="microcopy">Matched comparison menggunakan source event yang identik, bukan sekadar symbol. Branch yang tidak memiliki record tidak dianggap WIN, LOSS, atau SKIP.</p>
   </div>;
 }
@@ -180,9 +183,13 @@ export default function StrongWorkspace() {
   const currentId = selected?.id ?? strategyId;
   const ownTrades = useMemo(() => trades.filter(t => t.strategyId === currentId), [trades, currentId]);
   const selectedTrade = trades.find(t => t.id === tradeId) ?? null;
+  const chartTrade = selectedTrade ?? trades.find(t => t.strategyId === "M03" && t.status === "CLOSED") ?? trades[0] ?? null;
   const matchingTrades = useMemo(() => selectedTrade
     ? trades.filter(t => t.sourceEventId === selectedTrade.sourceEventId).sort((a,b) => a.strategyId.localeCompare(b.strategyId))
     : [], [trades, selectedTrade]);
+  const chartMatched = useMemo(() => chartTrade
+    ? trades.filter(t => t.sourceEventId === chartTrade.sourceEventId).sort((a,b) => a.strategyId.localeCompare(b.strategyId))
+    : [], [trades, chartTrade]);
   const grouped = useMemo(() => {
     const groups = new Map<string, StrongTrade[]>();
     for (const t of trades) {
@@ -203,6 +210,7 @@ export default function StrongWorkspace() {
     .sort((a,b) => (b.closedAtMs ?? 0) - (a.closedAtMs ?? 0)).slice(0,7), [ownTrades]);
 
   const selectTrade = (trade: StrongTrade) => { setTradeId(trade.id); setView("trades"); };
+  const chartOpen = (trade: StrongTrade) => { setTradeId(trade.id); setView("chart"); };
   const configured = snapshot !== null;
 
   return <div className="app-shell">
@@ -235,7 +243,7 @@ export default function StrongWorkspace() {
 
       <div className="main-content">
         <div className="page-heading">
-          <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
+          <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
           <span className="paper-indicator"><span/> PAPER ONLY</span>
         </div>
 
@@ -294,8 +302,22 @@ export default function StrongWorkspace() {
             <div className="trade-search"><label htmlFor="trade-search-input">SEARCH RECORDS</label><input id="trade-search-input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Symbol, strategy, close reason, source ID..."/><span>{explorerTrades.length} displayed / {trades.length} total</span></div>
             <div className="explorer-grid">
               <section className="panel"><div className="panel-head"><div><div className="section-eyebrow">READ-ONLY AUDIT TRAIL</div><h2>Independent PAPER Ledger</h2><p>Click a record for details and matched strategy outcomes.</p></div></div><TradeTable trades={explorerTrades} onSelect={selectTrade} selectedId={selectedTrade?.id}/></section>
-              <aside className="panel inspector">{selectedTrade ? <TradeDetails trade={selectedTrade} matches={matchingTrades}/> : <div className="inspector-empty"><span>⌕</span><h3>Select a trade</h3><p>Entry, exit, reason and cross-branch comparison appear here.</p></div>}</aside>
+              <aside className="panel inspector">{selectedTrade ? <TradeDetails trade={selectedTrade} matches={matchingTrades} onOpenChart={() => chartOpen(selectedTrade)}/> : <div className="inspector-empty"><span>⌕</span><h3>Select a trade</h3><p>Entry, exit, reason and cross-branch comparison appear here.</p></div>}</aside>
             </div>
+          </>}
+
+          {view === "chart" && <>
+            {chartTrade ? <>
+              <div className="chart-intro"><label htmlFor="chart-trade">SELECT ACTUAL PAPER RECORD</label>
+                <select id="chart-trade" value={chartTrade.id} onChange={e => setTradeId(e.target.value)}>
+                  {trades.map(t => <option value={t.id} key={t.id}>{t.symbol} · {t.strategyId} · {fmtTime(t.openedAtMs)} · {t.status} · {fmtMoney(t.netPnl)}</option>)}
+                </select>
+              </div>
+              <VelaPaperChart trade={chartTrade} matched={chartMatched}/>
+              <section className="panel"><div className="panel-head"><div><div className="section-eyebrow">MATCHED EVENT COHORT</div><h2>Same source event — {chartTrade.symbol}</h2><p>Only branches that actually recorded this event are shown.</p></div></div>
+                <TradeTable trades={chartMatched} selectedId={chartTrade.id} onSelect={chartOpen}/>
+              </section>
+            </> : <div className="panel empty-chart">PAPER ledger is empty — no chart event to display.</div>}
           </>}
 
           {view === "system" && <>
