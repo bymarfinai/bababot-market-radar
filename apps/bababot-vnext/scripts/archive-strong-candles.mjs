@@ -56,7 +56,8 @@ for(const g of groupsSorted){
   if(requested && !g.sourceEventId.includes(requested))continue;
   for(const [tf,ms] of Object.entries(tfIntervals)) {
     const startMs=Math.max(0,g.entryMs-ms*(tf==="1m"?80:110));
-    const endMs=Math.min(Date.now(),Math.max(g.entryMs,g.lastMs)+ms*(tf==="1m"?45:40));
+    const lastClosedBucket=Math.floor((Date.now()-ms)/ms)*ms;
+    const endMs=Math.min(lastClosedBucket,Math.max(g.entryMs,g.lastMs)+ms*(tf==="1m"?45:40));
     const eventHash=createHash("sha256").update(g.sourceEventId,"utf8").digest("hex");
     const key=`research/strong-candles/${tf}/${eventHash}.json`;
     const version=createHash("sha256").update(JSON.stringify({
@@ -69,6 +70,7 @@ function readState(){try{return JSON.parse(fs.readFileSync(stateFile,"utf8"))}ca
 const state=readState();
 if(typeof state!=="object"||!state)throw Error("Invalid archive state");
 const pending=tasks.filter(t=>state[t.key]?.version!==t.version).slice(0,limit);
+const attempted=pending.length;
 let errors=0,done=0;
 
 function save(){
@@ -127,7 +129,7 @@ async function worker(queue){
 }
 await Promise.all([worker(pending),worker(pending)]);
 console.log("FUTURES_ARCHIVE_SUMMARY",JSON.stringify({
-  events:groups.size,plans:tasks.length,attempted:pending.length,published:done,errors,
+  events:groups.size,plans:tasks.length,attempted,published:done,errors,
   remaining:tasks.filter(t=>state[t.key]?.version!==t.version).length
 }));
 if(errors)process.exitCode=1;
