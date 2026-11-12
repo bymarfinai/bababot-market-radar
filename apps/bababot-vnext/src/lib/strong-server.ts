@@ -42,7 +42,7 @@ export async function loadStrongPaper(): Promise<StrongApiResponse> {
       if (!result || result.statusCode !== 200 || !result.stream) {
         throw new Error("Private Blob snapshot missing.");
       }
-      if (result.size > 2_000_000) throw new Error("Unexpected snapshot size");
+      if (result.blob.size > 2_000_000) throw new Error("Unexpected snapshot size");
       const raw = await new Response(result.stream).text();
       const data = readSnapshot(raw);
       if (!data) throw new Error("Invalid VPS2 payload");
