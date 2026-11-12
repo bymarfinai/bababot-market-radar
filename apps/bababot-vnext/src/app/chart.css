@@ -1,0 +1,31 @@
+/* isolated Vela chart workspace */
+.vela-panel{min-width:0}
+.vela-host-wrap{position:relative;min-height:430px;overflow:hidden;border:1px solid #283b47;border-radius:11px;background:#0c131b}
+.vela-canvas{min-height:430px;height:430px;width:100%;overflow:hidden}
+.chart-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px;flex-wrap:wrap}
+.timeframes{display:flex;gap:4px;background:#0e1721;border:1px solid #30404f;border-radius:9px;padding:4px}
+.timeframes button{border:0;background:transparent;color:#8fa3b8;border-radius:6px;padding:8px 12px;font-size:11px;font-weight:750}
+.timeframes button.selected{background:#1d4140;color:#57dfcb}
+.chart-marketsource{font-size:10px;letter-spacing:1px;font-weight:800;color:#8097a7}
+.vela-attribution{font-size:11px;font-weight:700;color:#79cac7;white-space:nowrap;border-bottom:1px solid #4a9893;align-self:flex-start}
+.chart-state{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:#0d1721;color:#aec3d1;font-size:12px;padding:15px;text-align:center}
+.chart-state.error{color:#f19ba2}.chart-state.error span:last-child{font-size:11px;color:#96aabb}
+.chart-replay-controls{border:1px solid #2c4047;border-radius:9px;background:#12232a;display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:12px;padding:10px 13px;flex-wrap:wrap}
+.replay-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.replay-buttons button{font-size:11px;padding:9px 12px;border-radius:7px;border:1px solid #3a666b;background:#1b4446;color:#9cf0df}
+.replay-buttons button:disabled{opacity:.4;cursor:not-allowed}
+.replay-progress{font-size:10px;color:#98b4bc}
+.chart-legend{margin:16px 0;display:flex;flex-wrap:wrap;gap:20px;color:#91a7b5;font-size:10px;font-weight:750;letter-spacing:.6px}
+.chart-legend span{display:flex;gap:6px;align-items:center}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:50%}
+.swatch.entry{background:#31c7b7}.swatch.exit{background:#ee6e83}.swatch.candle{background:#acc6de}
+.chart-trades{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}
+.chart-trades>div{background:#172632;border:1px solid #293a47;border-radius:9px;padding:13px;min-width:0}
+.chart-trades small{display:block;color:#88a0af;font-size:10px;margin-bottom:8px}
+.chart-trades strong{font-size:12px;word-break:break-word}
+.chart-warning{font-size:11px;color:#ddbd8e;margin-bottom:10px}
+.chart-intro{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.chart-intro select{width:min(100%,660px);max-width:660px}
+.chart-event-title{font-size:11px;color:#8fa7b8}
+@media(max-width:850px){.chart-trades{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.chart-trades{grid-template-columns:repeat(2,minmax(0,1fr))}.vela-host-wrap,.vela-canvas{min-height:340px;height:340px}.timeframes button{padding:7px 8px}.chart-replay-controls{align-items:flex-start;flex-direction:column}}
