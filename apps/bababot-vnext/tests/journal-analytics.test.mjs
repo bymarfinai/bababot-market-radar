@@ -83,3 +83,11 @@ test("win-loss streaks and drawdown in USD from zero baseline",()=>{
  assert.equal(metrics.maxDrawdownUsd,7);
  assert.equal(metrics.netPnl,1);
 });
+
+test("mixed independent PAPER strategies are explicitly rejected from portfolio metrics",()=>{
+ const a=mk("l1","M03","SIGNAL:A",4,base);
+ const b=mk("r1","M04","SIGNAL:A",3,base);
+ assert.throws(()=>journalOverview([a,b]),/cannot aggregate independent PAPER strategies/);
+ assert.equal(journalOverview([a]).metrics.netPnl,4);
+ assert.equal(journalOverview([b]).metrics.netPnl,3);
+});

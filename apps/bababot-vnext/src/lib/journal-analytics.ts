@@ -28,7 +28,7 @@ export type JournalStats = {
   profitFactor: number | null; expectancy: number | null; avgWin: number | null; avgLossAbs: number | null;
   payoffRatio: number | null; bestTrade: number | null; worstTrade: number | null;
   avgDurationMs: number | null; medianDurationMs: number | null; maxDrawdownUsd: number;
-  maxWinStreak: number; maxLossStreak: number; maxConsecutivePnl: number | null;
+  maxWinStreak: number; maxLossStreak: number;
   uniqueSourceEvents: number; sampleWarning: string | null;
 };
 export type JournalOverview = {
@@ -92,6 +92,10 @@ function sortByNetAndCount<T extends {netPnl:number;trades:number}>(a:T,b:T):num
 }
 
 export function journalOverview(strategyTrades: readonly StrongTrade[]): JournalOverview {
+  const independentStrategies = new Set(strategyTrades.map(t => t.strategyId));
+  if (independentStrategies.size > 1) {
+    throw new Error("Journal PnL cannot aggregate independent PAPER strategies; select one branch.");
+  }
   const closed = orderedClosed(strategyTrades);
   const wins=closed.filter(t=>t.netPnl!>0);
   const losses=closed.filter(t=>t.netPnl!<0);
@@ -150,7 +154,6 @@ export function journalOverview(strategyTrades: readonly StrongTrade[]): Journal
     worstTrade:closed.length?Math.min(...closed.map(t=>t.netPnl!)):null,
     avgDurationMs:mean(durations), medianDurationMs:median(durations),
     maxDrawdownUsd,maxWinStreak,maxLossStreak,
-    maxConsecutivePnl:null,
     uniqueSourceEvents,
     sampleWarning:closed.length < 20
       ? `Small sample: only ${closed.length} CLOSED PAPER trade(s). Results are descriptive, not a validated trading edge.` : null
