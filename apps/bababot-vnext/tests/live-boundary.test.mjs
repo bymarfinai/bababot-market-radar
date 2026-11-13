@@ -20,10 +20,10 @@ test("LIVE UI does not import or use PAPER trades or fetch VPS1/exchange API",()
   assert.match(ui,/No Binance keys/);
   assert.doesNotMatch(ui,/StrongTrade|StrongSnapshot|useStrong|\/api\/strong|fetch\(|api\.binance\.com|window\.location/);
 });
-test("workspace switch and navigation visually separate LIVE and RESEARCH",()=>{
+test("workspace switch and navigation visually separate LIVE and PAPER",()=>{
   const ui=load("components/strong-workspace.tsx");
   assert.match(ui,/LIVE · VPS1/);
-  assert.match(ui,/RESEARCH · VPS2/);
+  assert.match(ui,/PAPER · VPS2/);
   assert.match(ui,/LiveWorkspace/);
   assert.match(ui,/setWorkspaceMode/);
   assert.match(ui,/workspaceMode === "live"/);

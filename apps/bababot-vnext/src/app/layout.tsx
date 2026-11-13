@@ -3,6 +3,7 @@ import "./globals.css";
 import "./chart.css";
 import "./journal.css";
 import "./live.css";
+import "./elliott.css";
 
 export const metadata: Metadata = {
   title: "BabaBot vNext | LIVE & RESEARCH",

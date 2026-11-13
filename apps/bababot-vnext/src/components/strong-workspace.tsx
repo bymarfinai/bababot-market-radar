@@ -4,10 +4,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import VelaPaperChart from "./vela-paper-chart";
 import TradeJournal from "./trade-journal";
 import LiveWorkspace, { type LiveSection } from "./live-workspace";
+import ElliottPaperWorkspace, { type ElliottView } from "./elliott-paper-workspace";
 import type { StrongApiResponse, StrongStrategy, StrongTrade } from "@/lib/strong-types";
 
 type View = "overview" | "strategies" | "compare" | "trades" | "journal" | "chart" | "system";
-type WorkspaceMode = "research" | "live";
+type WorkspaceMode = "paper" | "live";
+type PaperStrategy = "strong-long" | "elliott-wave";
 
 const NAV: { id: View; label: string; description: string; symbol: string }[] = [
   { id: "overview", label: "Overview", description: "Strategy health", symbol: "▦" },
@@ -162,7 +164,9 @@ export default function StrongWorkspace() {
   const [payload, setPayload] = useState<StrongApiResponse>(BLANK);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<View>("overview");
-  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("research");
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("paper");
+  const [paperStrategy, setPaperStrategy] = useState<PaperStrategy>("strong-long");
+  const [elliottView, setElliottView] = useState<ElliottView>("overview");
   const [liveSection, setLiveSection] = useState<LiveSection>("overview");
   const [strategyId, setStrategyId] = useState("M03");
   const [search, setSearch] = useState("");
@@ -185,12 +189,12 @@ export default function StrongWorkspace() {
     }
   }, []);
   useEffect(() => {
-    if (workspaceMode === "live") return; // No PAPER polling while LIVE shell is selected.
+    if (workspaceMode !== "paper" || paperStrategy !== "strong-long") return; // Never read STRONG LONG while viewing LIVE or Elliott Wave.
     const ctrl = new AbortController();
     void reload(ctrl.signal);
     const timer = window.setInterval(() => { if (document.visibilityState === "visible") void reload(); }, REFRESH_MS);
     return () => { ctrl.abort(); window.clearInterval(timer); };
-  }, [reload, workspaceMode]);
+  }, [reload, workspaceMode, paperStrategy]);
 
   const snapshot = payload.snapshot;
   const strategies = snapshot?.strategies ?? [];
@@ -233,7 +237,7 @@ export default function StrongWorkspace() {
     <aside className="sidebar">
       <a href="/" className="brand" aria-label="BabaBot home">
         <span className="brand-logo">B<span>✦</span></span>
-        <span className="brand-copy"><strong>BABABOT</strong><small>RESEARCH PLATFORM</small></span>
+        <span className="brand-copy"><strong>BABABOT</strong><small>TRADING PLATFORM</small></span>
       </a>
       <div className="sidebar-caption">WORKSPACES</div>
       <div className="workspace-switch" role="group" aria-label="Choose environment">
@@ -243,15 +247,15 @@ export default function StrongWorkspace() {
           <span className="workspace-option-copy"><strong>LIVE · VPS1</strong><small>Not Connected</small></span>
           <span className="workspace-option-state" aria-hidden="true" />
         </button>
-        <button type="button" className={`workspace-option ${workspaceMode === "research" ? "selected" : ""}`}
-          onClick={() => setWorkspaceMode("research")} aria-pressed={workspaceMode === "research"} title="RESEARCH · VPS2 — PAPER">
+        <button type="button" className={`workspace-option ${workspaceMode === "paper" ? "selected" : ""}`}
+          onClick={() => setWorkspaceMode("paper")} aria-pressed={workspaceMode === "paper"} title="PAPER · VPS2 — Select research strategy">
           <span className="workspace-option-icon" aria-hidden="true">▦</span>
-          <span className="workspace-option-copy"><strong>RESEARCH · VPS2</strong><small>Independent PAPER</small></span>
+          <span className="workspace-option-copy"><strong>PAPER · VPS2</strong><small>Research strategies</small></span>
           <span className="workspace-option-state" aria-hidden="true" />
         </button>
       </div>
       <div className="sidebar-scroll" role="region"
-        aria-label={workspaceMode === "live" ? "Daftar menu LIVE" : "Daftar menu RESEARCH"}
+        aria-label={workspaceMode === "live" ? "Daftar menu LIVE" : `Daftar menu PAPER ${paperStrategy === "strong-long" ? "STRONG LONG" : "Elliott Wave"}`}
         tabIndex={0}>
         {workspaceMode === "live" ? <>
           <div className="sidebar-caption nav-caption">LIVE MONITOR</div>
@@ -264,33 +268,70 @@ export default function StrongWorkspace() {
             </button>)}
           </nav>
         </> : <>
-          <div className="sidebar-caption nav-caption">STRONG LONG · PAPER</div>
-          <nav aria-label="STRONG LONG · RESEARCH">
-            {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
-              className={`nav-item ${view === item.id ? "active" : ""}`}
-              title={item.label} aria-current={view === item.id ? "page" : undefined}>
-              <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
-            </button>)}
-          </nav>
+          <div className="sidebar-caption nav-caption">PAPER STRATEGY</div>
+          <div className="paper-strategy-picker" role="group" aria-label="Select PAPER strategy">
+            <button type="button" className={`paper-strategy-option ${paperStrategy === "strong-long" ? "selected" : ""}`}
+              onClick={() => setPaperStrategy("strong-long")} aria-pressed={paperStrategy === "strong-long"} title="STRONG LONG · Connected PAPER">
+              <span className="paper-strategy-icon" aria-hidden="true">↗</span>
+              <span className="paper-strategy-copy"><strong>STRONG LONG</strong><small>Connected · PAPER ledger</small></span>
+            </button>
+            <button type="button" className={`paper-strategy-option ${paperStrategy === "elliott-wave" ? "selected" : ""}`}
+              onClick={() => setPaperStrategy("elliott-wave")} aria-pressed={paperStrategy === "elliott-wave"} title="Elliott Wave · Source not connected">
+              <span className="paper-strategy-icon" aria-hidden="true">∿</span>
+              <span className="paper-strategy-copy"><strong>Elliott Wave</strong><small>Not Connected · reserved</small></span>
+            </button>
+          </div>
+          <div className="paper-divider" />
+          {paperStrategy === "strong-long" ? <>
+            <div className="sidebar-caption">STRONG LONG · PAPER</div>
+            <nav aria-label="STRONG LONG · PAPER">
+              {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
+                className={`nav-item ${view === item.id ? "active" : ""}`}
+                title={item.label} aria-current={view === item.id ? "page" : undefined}>
+                <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
+              </button>)}
+            </nav>
+          </> : <>
+            <div className="sidebar-caption">ELLIOTT WAVE · PAPER</div>
+            <nav aria-label="Elliott Wave · PAPER">
+              {[
+                {id:"overview",label:"EW Overview",symbol:"▦",hint:"Performance shell"},
+                {id:"strategies",label:"EW Strategies",symbol:"▤",hint:"Strategy variants"},
+                {id:"trades",label:"EW Trade Explorer",symbol:"⌕",hint:"Entry & exit ledger"},
+                {id:"integration",label:"EW Data & System",symbol:"◇",hint:"Read-only connection plan"}
+              ].map(item => <button key={item.id} type="button"
+                onClick={() => setElliottView(item.id as ElliottView)}
+                className={`nav-item ${elliottView === item.id ? "active" : ""}`}
+                title={item.label} aria-current={elliottView === item.id ? "page" : undefined}>
+                <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.hint}</small></span>
+              </button>)}
+            </nav>
+          </>}
         </>}
       </div>
       <div className="sidebar-bottom">
         <a href="https://bababot-market-radar.vercel.app" target="_blank" rel="noreferrer" className="legacy-link">↗ Open Legacy BabaBot</a>
         <div className="sidebar-guard"><span className="guard-dot"/><div><strong>READ-ONLY MODE</strong><small>LIVE monitor & PAPER analytics</small></div></div>
-        <div className="sidebar-version">vNext 0.4 · LIVE Shell + Research</div>
+        <div className="sidebar-version">vNext 0.4 · LIVE / PAPER</div>
       </div>
     </aside>
 
     <div className="main">
       <header className="topbar">
         <div className="breadcrumb"><span>BabaBot</span><span className="breadcrumb-sep">/</span>
-          <strong>{workspaceMode === "live" ? "LIVE · VPS1" : "RESEARCH · VPS2"}</strong>
+          <strong>{workspaceMode === "live" ? "LIVE · VPS1" : "PAPER · VPS2"}</strong>
+          {workspaceMode === "paper" && <><span className="breadcrumb-sep">/</span>
+            <strong>{paperStrategy === "strong-long" ? "STRONG LONG" : "ELLIOTT WAVE"}</strong></>}
           <span className="breadcrumb-sep">/</span>
-          <strong>{workspaceMode === "live" ? LIVE_NAV.find(n => n.id === liveSection)?.label : NAV.find(n => n.id === view)?.label}</strong>
+          <strong>{workspaceMode === "live" ? LIVE_NAV.find(n => n.id === liveSection)?.label
+            : paperStrategy === "strong-long" ? NAV.find(n => n.id === view)?.label
+            : ({overview:"Overview",strategies:"Strategies",trades:"Trade Explorer",integration:"Data & System"} as Record<ElliottView,string>)[elliottView]}</strong>
         </div>
         {workspaceMode === "live" ? <div className="top-actions">
           <span className="top-date">VPS1 · ISOLATED</span><span className="source-mode live-disconnected">NOT CONNECTED</span>
-        </div> : <div className="top-actions"><span className="top-date">VPS2 RESEARCH</span>
+        </div> : paperStrategy === "elliott-wave" ? <div className="top-actions">
+          <span className="top-date">VPS2 PAPER · ELLIOTT WAVE</span><span className="source-mode elliott-disconnected">NOT CONNECTED</span>
+        </div> : <div className="top-actions"><span className="top-date">VPS2 PAPER · STRONG LONG</span>
           <span className={`source-mode ${payload.mode}`}>{payload.mode === "sync" ? "PAPER SYNC" : payload.mode === "live" ? "PAPER DIRECT" : payload.mode === "snapshot" ? "SNAPSHOT" : "NO SOURCE"}</span>
           <button type="button" className="refresh-btn" disabled={loading} onClick={() => void reload()}>{loading ? "Loading..." : "↻ Refresh"}</button>
         </div>}
@@ -304,13 +345,20 @@ export default function StrongWorkspace() {
               <p>Reserved LIVE monitoring space. No VPS1 data connection and no execution permissions.</p>
             </div>
             <span className="paper-indicator live-indicator"><span/> LIVE · NOT CONNECTED</span>
+          </> : paperStrategy === "elliott-wave" ? <>
+            <div><div className="section-eyebrow">MARKET DETEKTOR / PAPER / ELLIOTT WAVE</div>
+              <h1>{({overview:"EW Overview",strategies:"EW Strategies",trades:"EW Trade Explorer",integration:"EW Data & System"} as Record<ElliottView,string>)[elliottView]}</h1>
+              <p>Independent Elliott Wave PAPER strategies · separate from STRONG LONG · data not connected.</p>
+            </div>
+            <span className="paper-indicator"><span/> PAPER · NO SOURCE</span>
           </> : <>
-            <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG RESEARCH</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "journal" ? "Realized PAPER PnL, WIB calendar, risk path and fair matched-event comparison." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
+            <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG PAPER</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "journal" ? "Realized PAPER PnL, WIB calendar, risk path and fair matched-event comparison." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
             <span className="paper-indicator"><span/> PAPER ONLY</span>
           </>}
         </div>
 
-        {workspaceMode === "live" ? <LiveWorkspace section={liveSection} onSectionChange={setLiveSection}/> : <>
+        {workspaceMode === "live" ? <LiveWorkspace section={liveSection} onSectionChange={setLiveSection}/> :
+          paperStrategy === "elliott-wave" ? <ElliottPaperWorkspace view={elliottView} onViewChange={setElliottView} onSelectStrongLong={() => setPaperStrategy("strong-long")}/> : <>
         {(payload.warning || error) && <div className="notice" role="status"><span className="notice-symbol">ⓘ</span><div><strong>{error ? "Data API error" : payload.mode === "snapshot" ? "Timestamped source snapshot" : payload.mode === "sync" ? "Research sync status" : "Source configuration"}</strong><p>{error ?? payload.warning}</p></div></div>}
 
         {!configured ? <div className="unconfigured panel">
@@ -409,7 +457,7 @@ export default function StrongWorkspace() {
           </>}
         </>}
         </>}
-        <footer className="content-footer"><span>BabaBot vNext · {workspaceMode === "live" ? "LIVE Monitoring Shell" : "Independent Research"}</span><span>{workspaceMode === "live" ? "VPS1 not connected • Monitoring only • No orders" : "VPS1 isolated • PAPER source: VPS2 • No orders"}</span></footer>
+        <footer className="content-footer"><span>BabaBot vNext · {workspaceMode === "live" ? "LIVE Monitoring Shell" : paperStrategy === "strong-long" ? "STRONG LONG PAPER" : "Elliott Wave PAPER"}</span><span>{workspaceMode === "live" ? "VPS1 not connected • Monitoring only • No orders" : paperStrategy === "strong-long" ? "VPS1 isolated • PAPER source: VPS2 STRONG LONG" : "VPS2 Elliott Wave not connected • No fabricated results"}</span></footer>
       </div>
     </div>
   </div>;

@@ -193,3 +193,20 @@ are **not implemented** and are shown as such in the UI.
 LIVE viewing is not LIVE execution. No write endpoints are authorized by this
 shell. Research remains independently available even when the LIVE source is
 not reachable. Run `npm test` for journal and LIVE isolation checks.
+
+## PAPER strategy hierarchy (2026-11-13 UX refinement)
+
+Environment switcher: `LIVE · VPS1` (monitoring shell, disconnected) and
+`PAPER · VPS2` (research strategies). Under PAPER, users pick an independent
+**strategy family**: `STRONG LONG` (existing actual synchronized ledger with
+P01/P05/P07/M01–M05 etc. and all earlier Stage 01–04 features unchanged) or
+`Elliott Wave` (reserved UI only, not connected).
+
+Each PAPER strategy family has its own menu and views. Switching to Elliott Wave
+stops STRONG LONG polling while Elliott is selected, and never passes STRONG
+LONG trades to EW components. On return to STRONG LONG, its data refreshes.
+`GET /api/paper/elliott/status` is a no-network, no-store, read-only
+NOT_CONNECTED contract with `snapshot:null`; no EW outcomes are fabricated.
+Future actual EW PAPER wiring must first audit the independent VPS2 EW ledgers
+and satisfy source parity. VPS1 LIVE execution, the legacy production site, and
+PAPER trading processes are unchanged.
