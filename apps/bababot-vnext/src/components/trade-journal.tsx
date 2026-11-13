@@ -47,7 +47,7 @@ function exportJournalCsv(records:StrongTrade[],strategyId:string){
   const content="\uFEFF"+[header.join(","),...rows].join("\r\n");
   const url=URL.createObjectURL(new Blob([content],{type:"text/csv;charset=utf-8"}));
   const a=document.createElement("a");
-  a.href=url;a.download=\`bababot-paper-journal-\${fileSafe(strategyId)}-\${wibDateKey(Date.now())}.csv\`;
+  a.href=url;a.download=`bababot-paper-journal-${fileSafe(strategyId)}-${wibDateKey(Date.now())}.csv`;
   document.body.appendChild(a);a.click();a.remove();
   window.setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
@@ -67,11 +67,11 @@ function JournalCurve({points}: {points:JournalEquityPoint[]}) {
   const range=Math.max(hi-lo,0.1);
   const x=(i:number)=>pl+(W-pl-pr)*i/(points.length-1);
   const y=(v:number)=>pt+(H-pt-pb)*(hi-v)/range;
-  const path=points.map((p,i)=>\`\${i?"L":"M"}\${x(i).toFixed(2)},\${y(p.equity).toFixed(2)}\`).join(" ");
+  const path=points.map((p,i)=>`${i?"L":"M"}${x(i).toFixed(2)},${y(p.equity).toFixed(2)}`).join(" ");
   const last=points.at(-1)!;
   const axis=[hi,(hi+lo)/2,lo];
   return <div className="j-equity">
-    <svg role="img" aria-label="Cumulative net realized PAPER PnL in USD by chronological close time" viewBox={\`0 0 \${W} \${H}\`} preserveAspectRatio="none">
+    <svg role="img" aria-label="Cumulative net realized PAPER PnL in USD by chronological close time" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
       <defs><linearGradient id="j_equity_area" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stopColor="#35cdb4" stopOpacity=".25"/>
         <stop offset="1" stopColor="#35cdb4" stopOpacity="0"/>
@@ -81,7 +81,7 @@ function JournalCurve({points}: {points:JournalEquityPoint[]}) {
         <text x={pl-7} y={y(v)+4} fontSize="10" fill="#8a9fac" textAnchor="end">{v.toFixed(1)}</text>
       </g>)}
       <line x1={pl} y1={y(0)} x2={W-pr} y2={y(0)} stroke="#778ea1" opacity=".45" strokeDasharray="2 4"/>
-      <path d={path+\` L\${x(points.length-1)},\${H-pb} L\${x(0)},\${H-pb} Z\`} fill="url(#j_equity_area)"/>
+      <path d={path+` L${x(points.length-1)},${H-pb} L${x(0)},${H-pb} Z`} fill="url(#j_equity_area)"/>
       <path d={path} fill="none" stroke="#39cfb9" strokeWidth="2.8" strokeLinejoin="round" strokeLinecap="round"/>
       <circle cx={x(points.length-1)} cy={y(last.equity)} r="4.7" fill="#39cfb9" stroke="#11212a" strokeWidth="2"/>
       <text x={pl} y={H-6} fill="#7e93a3" fontSize="10">CLOSED 1</text>
@@ -97,8 +97,8 @@ function JournalDrawdown({points}: {points:JournalEquityPoint[]}) {
   const max=Math.max(...points.map(p=>p.drawdown),0.001);
   const x=(i:number)=>pl+(W-pl-pr)*i/(points.length-1);
   const y=(v:number)=>pt+(H-pt-pb)*v/max;
-  const path=points.map((p,i)=>\`\${i?"L":"M"}\${x(i).toFixed(2)},\${y(p.drawdown).toFixed(2)}\`).join(" ");
-  return <div className="j-drawdown"><svg role="img" aria-label="Drawdown in USD from prior cumulative realized PnL peak; not account balance drawdown" viewBox={\`0 0 \${W} \${H}\`} preserveAspectRatio="none">
+  const path=points.map((p,i)=>`${i?"L":"M"}${x(i).toFixed(2)},${y(p.drawdown).toFixed(2)}`).join(" ");
+  return <div className="j-drawdown"><svg role="img" aria-label="Drawdown in USD from prior cumulative realized PnL peak; not account balance drawdown" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
     <line x1={pl} y1={pt} x2={W-pr} y2={pt} stroke="#304150" strokeDasharray="3 5"/>
     <line x1={pl} y1={H-pb} x2={W-pr} y2={H-pb} stroke="#304150" strokeDasharray="3 5"/>
     <text x={pl-7} y={pt+4} fill="#8295a5" textAnchor="end" fontSize="10">$0</text>
@@ -110,7 +110,7 @@ function JournalDrawdown({points}: {points:JournalEquityPoint[]}) {
 function monthOffset(month:string,delta:number){
   const [y,m]=month.split("-").map(Number);
   const date=new Date(Date.UTC(y,m-1+delta,1));
-  return \`\${date.getUTCFullYear()}-\${String(date.getUTCMonth()+1).padStart(2,"0")}\`;
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,"0")}`;
 }
 function dayEntries(month:string){
   const [y,m]=month.split("-").map(Number);
@@ -118,7 +118,7 @@ function dayEntries(month:string){
   const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
   const days=new Date(Date.UTC(y,m,0)).getUTCDate();
   return [...Array.from({length:first},()=>null),
-    ...Array.from({length:days},(_,i)=>\`\${month}-\${String(i+1).padStart(2,"0")}\`)] as (string|null)[];
+    ...Array.from({length:days},(_,i)=>`${month}-${String(i+1).padStart(2,"0")}`)] as (string|null)[];
 }
 function PnlCalendar({month,days,chosenDay,onChangeMonth,onSelectDay}:{
   month:string;days:DateBucket[];chosenDay:string|null;
@@ -142,14 +142,14 @@ function PnlCalendar({month,days,chosenDay,onChangeMonth,onSelectDay}:{
     <div className="j-calendar-grid">
       {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((day,i)=><div key={i} className="j-day-name">{day}</div>)}
       {dates.map((date,i)=>{
-        if(!date)return <div key={\`empty-\${i}\`} className="j-day blank"/>;
+        if(!date)return <div key={`empty-${i}`} className="j-day blank"/>;
         const s=map.get(date);
         const intensity=s?0.08+Math.abs(s.netPnl)/max*0.28:0;
         const rgb=s?.netPnl===0?"102,134,164":(s?.netPnl??0)>0?"39,179,145":"223,107,122";
         return <button key={date} type="button" onClick={()=>onSelectDay(chosenDay===date?null:date)}
-          className={\`j-day \${s?"has-trade":""} \${chosenDay===date?"chosen":""}\`}
-          aria-pressed={chosenDay===date} title={\`\${date} · \${s?.trades??0} close(s) · \${fMoney(s?.netPnl??0)}\`}
-          style={{backgroundColor:s?\`rgba(\${rgb},\${intensity})\`:undefined}}>
+          className={`j-day ${s?"has-trade":""} ${chosenDay===date?"chosen":""}`}
+          aria-pressed={chosenDay===date} title={`${date} · ${s?.trades??0} close(s) · ${fMoney(s?.netPnl??0)}`}
+          style={{backgroundColor:s?`rgba(${rgb},${intensity})`:undefined}}>
           <span className="j-day-number">{date.slice(-2)}</span>
           {s&&<><strong className={pnlClass(s.netPnl)}>{fMoney(s.netPnl)}</strong>
             <small>{s.trades} closed</small></>}
@@ -177,7 +177,7 @@ function SmallStats({title,entries,onSelectSymbol}:{
           <span>{item.count} · {item.detail}</span></div>
         <strong className={pnlClass(item.value)}>{fMoney(item.value)}</strong>
       </div>
-      <div className="j-bar"><span style={{width:\`\${Math.min(100,Math.abs(item.value)/max*100)}%\`,
+      <div className="j-bar"><span style={{width:`${Math.min(100,Math.abs(item.value)/max*100)}%`,
         background:item.value>=0?"#329c86":"#bd6674"}}/></div>
     </div>)}
     {entries.length>8&&<span className="j-more">{entries.length-8} additional group(s) not shown</span>}
@@ -193,7 +193,7 @@ function JournalInspector({trade,onOpenChart}:{trade:StrongTrade|null;onOpenChar
       <div><dt>Entry (WIB)</dt><dd>{fDate(trade.openedAtMs)}</dd></div>
       <div><dt>Close (WIB)</dt><dd>{fDate(trade.closedAtMs)}</dd></div>
       <div><dt>Entry / exit</dt><dd className="mono">{trade.entryPrice??"—"} / {trade.exitPrice??"—"}</dd></div>
-      <div><dt>Net realized USD</dt><dd className={\`mono \${pnlClass(trade.netPnl)}\`}>{fMoney(trade.netPnl)}</dd></div>
+      <div><dt>Net realized USD</dt><dd className={`mono ${pnlClass(trade.netPnl)}`}>{fMoney(trade.netPnl)}</dd></div>
       <div><dt>Close reason</dt><dd>{trade.closeReason||"Not recorded"}</dd></div>
     </dl>
     <div className="j-source"><small>source_event_id</small><code>{trade.sourceEventId}</code></div>
@@ -246,8 +246,8 @@ export default function TradeJournal({snapshot,onOpenChart}:{
     setSelectedDay(null);
   }
   const selectedMonth=period!=="all";
-  const symbols=journal.symbols.map(x=>({key:x.symbol,count:x.trades,value:x.netPnl,detail:\`\${x.wins}W / \${x.losses}L\`}));
-  const reasons=journal.reasons.map(x=>({key:x.reason,count:x.trades,value:x.netPnl,detail:\`\${x.wins}W / \${x.losses}L\`}));
+  const symbols=journal.symbols.map(x=>({key:x.symbol,count:x.trades,value:x.netPnl,detail:`${x.wins}W / ${x.losses}L`}));
+  const reasons=journal.reasons.map(x=>({key:x.reason,count:x.trades,value:x.netPnl,detail:`${x.wins}W / ${x.losses}L`}));
   return <div className="j-root">
     <section className="j-control-bar">
       <div><label htmlFor="j-strategy">INDEPENDENT STRATEGY</label>
@@ -269,8 +269,8 @@ export default function TradeJournal({snapshot,onOpenChart}:{
     </div>
     <div className="j-kpis">
       <Metric name="Net realized PnL" value={fMoney(m.netPnl)} caption="USD · ledger CLOSED only" polarity={m.netPnl}/>
-      <Metric name="Win rate" value={fPercent(m.winRate)} caption={\`\${m.wins}W / \${m.losses}L / \${m.breakevens} BE\`}/>
-      <Metric name="CLOSED trades" value={String(m.closed)} caption={\`\${m.open} OPEN · \${m.unresolved} unresolved\`}/>
+      <Metric name="Win rate" value={fPercent(m.winRate)} caption={`${m.wins}W / ${m.losses}L / ${m.breakevens} BE`}/>
+      <Metric name="CLOSED trades" value={String(m.closed)} caption={`${m.open} OPEN · ${m.unresolved} unresolved`}/>
       <Metric name="Profit factor" value={fNumber(m.profitFactor)} caption="gross winning net ÷ losing net"/>
       <Metric name="Expectancy / trade" value={fMoney(m.expectancy)} caption="Average realized net USD" polarity={m.expectancy}/>
       <Metric name="Max realized drawdown" value={m.closed?"$"+m.maxDrawdownUsd.toFixed(2):"—"} caption="USD peak-to-trough; not equity %" />
@@ -344,7 +344,7 @@ export default function TradeJournal({snapshot,onOpenChart}:{
         <tbody>{compared.events.slice(0,35).map(e=><tr key={e.sourceEventId}>
           <td><strong>{e.symbol}</strong><small className="table-subtitle" title={e.sourceEventId}>{e.sourceEventId}</small></td>
           <td className={pnlClass(e.leftNet)}>{fMoney(e.leftNet)}</td><td className={pnlClass(e.rightNet)}>{fMoney(e.rightNet)}</td>
-          <td className={\`num mono \${pnlClass(e.deltaLeftMinusRight)}\`}>{fMoney(e.deltaLeftMinusRight)}</td>
+          <td className={`num mono ${pnlClass(e.deltaLeftMinusRight)}`}>{fMoney(e.deltaLeftMinusRight)}</td>
           <td><button type="button" className="j-table-action" onClick={()=>onOpenChart(e.left)}>Open chart ↗</button></td>
         </tr>)}</tbody>
       </table></div>:<div className="j-empty">No common CLOSED source events for this pair. No comparison is inferred.</div>}
@@ -374,11 +374,11 @@ export default function TradeJournal({snapshot,onOpenChart}:{
           {tableRows.length?<table className="data-table j-trades-table"><thead><tr>
             <th>Close (WIB)</th><th>Symbol</th><th>Outcome</th><th className="num">Net USD</th><th>Reason</th>
           </tr></thead><tbody>{tableRows.slice(0,200).map(t=><tr key={t.id} onClick={()=>setSelectedId(t.id)}
-            className={\`clickable \${focus?.id===t.id?"selected":""}\`} tabIndex={0}
+            className={`clickable ${focus?.id===t.id?"selected":""}`} tabIndex={0}
             onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelectedId(t.id);}}}>
             <td className="date-cell">{fDate(t.closedAtMs??t.openedAtMs)}</td>
-            <td><strong>{t.symbol}</strong></td><td><span className={\`j-outcome \${classifyTrade(t).toLowerCase()}\`}>{classifyTrade(t)}</span></td>
-            <td className={\`num mono \${pnlClass(t.netPnl)}\`}>{fMoney(t.netPnl)}</td>
+            <td><strong>{t.symbol}</strong></td><td><span className={`j-outcome ${classifyTrade(t).toLowerCase()}`}>{classifyTrade(t)}</span></td>
+            <td className={`num mono ${pnlClass(t.netPnl)}`}>{fMoney(t.netPnl)}</td>
             <td className="reason-cell">{t.closeReason??"—"}</td>
           </tr>)}</tbody></table>:<div className="j-empty">No ledger record matches the selected filters.</div>}
           {tableRows.length>200&&<p className="j-more">Showing newest 200 of {tableRows.length} records. CSV exports all matching rows.</p>}
