@@ -1,0 +1,44 @@
+/* PAPER strategy directory: connected STRONG LONG and reserved Elliott Wave */
+.paper-strategy-picker{display:flex;flex-direction:column;gap:6px;padding:0 3px 10px}
+.paper-strategy-option{display:flex;gap:11px;align-items:center;text-align:left;border:1px solid #2c3d4c;border-radius:9px;background:#151d28;color:#9cacc0;width:100%;padding:11px 10px;min-width:0}
+.paper-strategy-option:hover{background:#1d2b39;color:#e1f5f1}
+.paper-strategy-option.selected{background:#1e343b;border-color:#37726d;color:#7de8d2}
+.paper-strategy-icon{width:23px;flex:0 0 23px;text-align:center;font-size:18px}
+.paper-strategy-copy{min-width:0;display:flex;flex-direction:column;gap:4px}
+.paper-strategy-copy strong{font-size:11px;font-weight:740}
+.paper-strategy-copy small{font-size:9px;color:#8c9eaf;line-height:1.4}
+.paper-strategy-option.selected .paper-strategy-copy small{color:#83b9b2}
+.paper-divider{height:1px;margin:10px 7px;background:#2b3947}
+.source-mode.elliott-disconnected{color:#e7bb78;border-color:#645233;background:#252118}
+.elliott-root{display:flex;flex-direction:column;gap:17px;min-width:0}
+.elliott-alert{display:flex;align-items:flex-start;gap:17px;border:1px solid #47616b;border-radius:13px;background:linear-gradient(110deg,#19303b,#14232d);padding:22px}
+.elliott-alert-glyph{width:48px;height:48px;flex-shrink:0;display:grid;place-items:center;background:#20434a;color:#8ed9d9;border-radius:11px;font-size:27px}
+.elliott-alert>div:nth-child(2){flex:1;min-width:0}
+.elliott-alert h2{font-size:17px;color:#d7edf2;line-height:1.45}
+.elliott-alert p{margin-top:9px;font-size:11px;color:#96b6c4;line-height:1.75}
+.elliott-not-connected{display:inline-flex;align-self:flex-start;white-space:nowrap;border:1px solid #6b5437;border-radius:18px;padding:8px 10px;background:#2b241c;color:#ddba88;font-size:9px;font-weight:800;letter-spacing:.7px}
+.elliott-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.elliott-metric{background:linear-gradient(120deg,#14222b,#151d28);border:1px solid #2c414c;border-radius:11px;display:flex;flex-direction:column;gap:10px;padding:20px;min-width:0}
+.elliott-metric span{font-size:11px;color:#a3b9c7}
+.elliott-metric strong{font-size:29px;font-weight:780;color:#b5c7d0}
+.elliott-metric small{font-size:10px;color:#8295a9}
+.elliott-two-column{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.elliott-two-column h2{margin:0 0 12px}
+.elliott-empty{display:flex;align-items:center;justify-content:center;text-align:center;min-height:160px;flex-direction:column;gap:11px;color:#94afbb;padding:20px}
+.elliott-empty strong{font-size:12px;color:#afc9d4}
+.elliott-empty p{font-size:11px;max-width:570px;color:#8ba1b1;line-height:1.8}
+.elliott-footer{border-top:1px solid #263f4a;display:flex;justify-content:space-between;align-items:center;gap:15px;padding:20px 4px;color:#829aab;font-size:11px;flex-wrap:wrap}
+.elliott-footer button{background:#1d3740;border:1px solid #3a6d73;color:#a7dbd6;padding:10px 14px;font-size:11px;border-radius:8px}
+.elliott-pipeline{display:flex;align-items:stretch;gap:12px;overflow-x:auto;padding-bottom:14px}
+.elliott-pipeline>div{display:flex;flex:1;flex-direction:column;gap:8px;border-radius:9px;border:1px solid #375361;background:#142933;padding:16px;min-width:130px}
+.elliott-pipeline>div small{font-size:10px;color:#7e9eab}
+.elliott-pipeline>div strong{font-size:11px;color:#b2d5df;line-height:1.6}
+.elliott-pipeline>span{align-self:center;color:#6ea9aa}
+.elliott-rules{border-top:1px solid #304350;margin-top:20px;padding-top:17px}
+.elliott-rules h3{margin-bottom:9px}
+.elliott-rules p{color:#9cb3c0;line-height:1.8;margin-bottom:10px;font-size:11px}
+.elliott-endpoint{display:inline-block;margin-top:14px;background:#10222e;color:#8edccf;border:1px solid #3b636c;border-radius:7px;padding:11px 14px;font-size:11px}
+.elliott-contract-note{font-size:11px;color:#8fa5b8;margin-top:12px;line-height:1.6}
+@media(max-width:1250px){.elliott-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.paper-strategy-option{padding:10px 6px;justify-content:center}.paper-strategy-icon{width:auto;flex:0 0 auto}.paper-strategy-copy{display:none}.paper-strategy-picker{padding:0 0 9px}.elliott-two-column{grid-template-columns:1fr}}
+@media(max-width:580px){.elliott-alert{padding:16px;gap:12px;flex-wrap:wrap}.elliott-alert-glyph{width:38px;height:38px;font-size:22px}.elliott-metric{padding:14px}.elliott-metric strong{font-size:24px}.elliott-pipeline>div{min-width:105px;padding:12px}.elliott-pipeline{gap:7px}.elliott-pipeline>span{font-size:12px}}
