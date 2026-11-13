@@ -3,9 +3,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import VelaPaperChart from "./vela-paper-chart";
 import TradeJournal from "./trade-journal";
+import LiveWorkspace, { type LiveSection } from "./live-workspace";
 import type { StrongApiResponse, StrongStrategy, StrongTrade } from "@/lib/strong-types";
 
 type View = "overview" | "strategies" | "compare" | "trades" | "journal" | "chart" | "system";
+type WorkspaceMode = "research" | "live";
 
 const NAV: { id: View; label: string; description: string; symbol: string }[] = [
   { id: "overview", label: "Overview", description: "Strategy health", symbol: "▦" },
@@ -15,6 +17,15 @@ const NAV: { id: View; label: string; description: string; symbol: string }[] = 
   { id: "journal", label: "Trade Journal", description: "PnL & matched analytics", symbol: "▥" },
   { id: "chart", label: "Vela Chart & Replay", description: "Futures PAPER fills", symbol: "◈" },
   { id: "system", label: "Data & System", description: "Source health", symbol: "◈" }
+];
+
+const LIVE_NAV: { id: LiveSection; label: string; description: string; symbol: string }[] = [
+  { id: "overview", label: "LIVE Overview", description: "Account monitoring", symbol: "◉" },
+  { id: "positions", label: "Positions", description: "Margin & exposure", symbol: "▣" },
+  { id: "orders", label: "Orders", description: "Read-only order audit", symbol: "▤" },
+  { id: "risk", label: "Risk Guard", description: "Limits & safeguards", symbol: "◇" },
+  { id: "activity", label: "Activity", description: "Events & fills", symbol: "⌁" },
+  { id: "integration", label: "Integration", description: "Read-only connection plan", symbol: "⇄" }
 ];
 
 const BLANK: StrongApiResponse = { mode: "unconfigured", snapshot: null, warning: null };
@@ -151,6 +162,8 @@ export default function StrongWorkspace() {
   const [payload, setPayload] = useState<StrongApiResponse>(BLANK);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<View>("overview");
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("research");
+  const [liveSection, setLiveSection] = useState<LiveSection>("overview");
   const [strategyId, setStrategyId] = useState("M03");
   const [search, setSearch] = useState("");
   const [tradeId, setTradeId] = useState<string | null>(null);
@@ -172,11 +185,12 @@ export default function StrongWorkspace() {
     }
   }, []);
   useEffect(() => {
+    if (workspaceMode === "live") return; // No PAPER polling while LIVE shell is selected.
     const ctrl = new AbortController();
     void reload(ctrl.signal);
     const timer = window.setInterval(() => { if (document.visibilityState === "visible") void reload(); }, REFRESH_MS);
     return () => { ctrl.abort(); window.clearInterval(timer); };
-  }, [reload]);
+  }, [reload, workspaceMode]);
 
   const snapshot = payload.snapshot;
   const strategies = snapshot?.strategies ?? [];
@@ -222,36 +236,81 @@ export default function StrongWorkspace() {
         <span className="brand-copy"><strong>BABABOT</strong><small>RESEARCH PLATFORM</small></span>
       </a>
       <div className="sidebar-caption">WORKSPACES</div>
-      <div className="workspace-current"><span className="workspace-mark">↗</span><div><strong>STRONG LONG</strong><small>Independent PAPER</small></div><span className="workspace-chevron">⌄</span></div>
-      <div className="sidebar-scroll" role="region" aria-label="Daftar menu STRONG LONG" tabIndex={0}>
-        <div className="sidebar-caption nav-caption">STRONG LONG</div>
-        <nav aria-label="STRONG LONG">
-          {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
-            className={`nav-item ${view === item.id ? "active" : ""}`}
-            title={item.label} aria-current={view === item.id ? "page" : undefined}>
-            <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
-          </button>)}
-        </nav>
+      <div className="workspace-switch" role="group" aria-label="Choose environment">
+        <button type="button" className={`workspace-option live-option ${workspaceMode === "live" ? "selected" : ""}`}
+          onClick={() => setWorkspaceMode("live")} aria-pressed={workspaceMode === "live"} title="LIVE · VPS1 — Not Connected">
+          <span className="workspace-option-icon" aria-hidden="true">◉</span>
+          <span className="workspace-option-copy"><strong>LIVE · VPS1</strong><small>Not Connected</small></span>
+          <span className="workspace-option-state" aria-hidden="true" />
+        </button>
+        <button type="button" className={`workspace-option ${workspaceMode === "research" ? "selected" : ""}`}
+          onClick={() => setWorkspaceMode("research")} aria-pressed={workspaceMode === "research"} title="RESEARCH · VPS2 — PAPER">
+          <span className="workspace-option-icon" aria-hidden="true">▦</span>
+          <span className="workspace-option-copy"><strong>RESEARCH · VPS2</strong><small>Independent PAPER</small></span>
+          <span className="workspace-option-state" aria-hidden="true" />
+        </button>
+      </div>
+      <div className="sidebar-scroll" role="region"
+        aria-label={workspaceMode === "live" ? "Daftar menu LIVE" : "Daftar menu RESEARCH"}
+        tabIndex={0}>
+        {workspaceMode === "live" ? <>
+          <div className="sidebar-caption nav-caption">LIVE MONITOR</div>
+          <nav aria-label="LIVE · VPS1">
+            {LIVE_NAV.map(item => <button key={item.id} type="button"
+              onClick={() => setLiveSection(item.id)}
+              className={`nav-item ${liveSection === item.id ? "active" : ""}`}
+              title={item.label} aria-current={liveSection === item.id ? "page" : undefined}>
+              <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
+            </button>)}
+          </nav>
+        </> : <>
+          <div className="sidebar-caption nav-caption">STRONG LONG · PAPER</div>
+          <nav aria-label="STRONG LONG · RESEARCH">
+            {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
+              className={`nav-item ${view === item.id ? "active" : ""}`}
+              title={item.label} aria-current={view === item.id ? "page" : undefined}>
+              <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
+            </button>)}
+          </nav>
+        </>}
       </div>
       <div className="sidebar-bottom">
         <a href="https://bababot-market-radar.vercel.app" target="_blank" rel="noreferrer" className="legacy-link">↗ Open Legacy BabaBot</a>
-        <div className="sidebar-guard"><span className="guard-dot"/><div><strong>READ-ONLY MODE</strong><small>No LIVE / PAPER controls</small></div></div>
-        <div className="sidebar-version">vNext 0.4 · Stages 01–04</div>
+        <div className="sidebar-guard"><span className="guard-dot"/><div><strong>READ-ONLY MODE</strong><small>LIVE monitor & PAPER analytics</small></div></div>
+        <div className="sidebar-version">vNext 0.4 · LIVE Shell + Research</div>
       </div>
     </aside>
 
     <div className="main">
       <header className="topbar">
-        <div className="breadcrumb"><span>BabaBot</span><span className="breadcrumb-sep">/</span><strong>STRONG LONG</strong><span className="breadcrumb-sep">/</span><strong>{NAV.find(n => n.id === view)?.label}</strong></div>
-        <div className="top-actions"><span className="top-date">VPS2 RESEARCH</span><span className={`source-mode ${payload.mode}`}>{payload.mode === "sync" ? "PAPER SYNC" : payload.mode === "live" ? "PAPER DIRECT" : payload.mode === "snapshot" ? "SNAPSHOT" : "NO SOURCE"}</span><button type="button" className="refresh-btn" disabled={loading} onClick={() => void reload()}>{loading ? "Loading..." : "↻ Refresh"}</button></div>
+        <div className="breadcrumb"><span>BabaBot</span><span className="breadcrumb-sep">/</span>
+          <strong>{workspaceMode === "live" ? "LIVE · VPS1" : "RESEARCH · VPS2"}</strong>
+          <span className="breadcrumb-sep">/</span>
+          <strong>{workspaceMode === "live" ? LIVE_NAV.find(n => n.id === liveSection)?.label : NAV.find(n => n.id === view)?.label}</strong>
+        </div>
+        {workspaceMode === "live" ? <div className="top-actions">
+          <span className="top-date">VPS1 · ISOLATED</span><span className="source-mode live-disconnected">NOT CONNECTED</span>
+        </div> : <div className="top-actions"><span className="top-date">VPS2 RESEARCH</span>
+          <span className={`source-mode ${payload.mode}`}>{payload.mode === "sync" ? "PAPER SYNC" : payload.mode === "live" ? "PAPER DIRECT" : payload.mode === "snapshot" ? "SNAPSHOT" : "NO SOURCE"}</span>
+          <button type="button" className="refresh-btn" disabled={loading} onClick={() => void reload()}>{loading ? "Loading..." : "↻ Refresh"}</button>
+        </div>}
       </header>
 
       <div className="main-content">
         <div className="page-heading">
-          <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "journal" ? "Realized PAPER PnL, WIB calendar, risk path and fair matched-event comparison." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
-          <span className="paper-indicator"><span/> PAPER ONLY</span>
+          {workspaceMode === "live" ? <>
+            <div><div className="section-eyebrow">MARKET DETEKTOR / VPS1 LIVE MONITOR</div>
+              <h1>{LIVE_NAV.find(n => n.id === liveSection)?.label}</h1>
+              <p>Reserved LIVE monitoring space. No VPS1 data connection and no execution permissions.</p>
+            </div>
+            <span className="paper-indicator live-indicator"><span/> LIVE · NOT CONNECTED</span>
+          </> : <>
+            <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG RESEARCH</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "journal" ? "Realized PAPER PnL, WIB calendar, risk path and fair matched-event comparison." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
+            <span className="paper-indicator"><span/> PAPER ONLY</span>
+          </>}
         </div>
 
+        {workspaceMode === "live" ? <LiveWorkspace section={liveSection} onSectionChange={setLiveSection}/> : <>
         {(payload.warning || error) && <div className="notice" role="status"><span className="notice-symbol">ⓘ</span><div><strong>{error ? "Data API error" : payload.mode === "snapshot" ? "Timestamped source snapshot" : payload.mode === "sync" ? "Research sync status" : "Source configuration"}</strong><p>{error ?? payload.warning}</p></div></div>}
 
         {!configured ? <div className="unconfigured panel">
@@ -349,7 +408,8 @@ export default function StrongWorkspace() {
             <div className="subtle-alert">PAPER sync reads a private object uploaded from VPS2. This is not LIVE trading. The sync timestamp indicates the last successful publisher upload; it is separate from the latest trade activity.</div>
           </>}
         </>}
-        <footer className="content-footer"><span>BabaBot vNext · Independent Research</span><span>VPS1 LIVE isolated • No orders • Source truth: VPS2</span></footer>
+        </>}
+        <footer className="content-footer"><span>BabaBot vNext · {workspaceMode === "live" ? "LIVE Monitoring Shell" : "Independent Research"}</span><span>{workspaceMode === "live" ? "VPS1 not connected • Monitoring only • No orders" : "VPS1 isolated • PAPER source: VPS2 • No orders"}</span></footer>
       </div>
     </div>
   </div>;

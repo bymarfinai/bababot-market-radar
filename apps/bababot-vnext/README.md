@@ -156,3 +156,40 @@ npm audit --omit=dev
 Stage 04 introduces only browser read analytics. No new ingress, no VPS1
 changes and no database mutations. The feature remains on Vercel protected
 preview and in GitHub Draft PR until separately released.
+
+## LIVE workspace shell — UI only, not connected to VPS1
+
+Navigation now has **two explicit environment workspaces**:
+- **LIVE · VPS1**: overview, positions, orders, risk, activity, integration. This
+  is a non-operational monitoring placeholder. Every monetary value displays
+  an em dash, not $0, because the account, position and risk data are not
+  connected. This UI makes **no calls to VPS1** and has **no order controls**.
+- **RESEARCH · VPS2**: original STRONG LONG PAPER features, independently
+  synchronized from VPS2. Opening LIVE stops background PAPER polling until
+  the user switches back. Research and LIVE views have different menus, headers
+  and data sources. They do not share PnL or position counters.
+
+### Stage-zero server contract
+`GET /api/live/status` returns `status: "NOT_CONNECTED"`,
+`snapshot: null`, `lastSourceSyncAt: null` and
+`executionControlsEnabled: false`, with no-store caching. The endpoint
+has no outbound requests and no exchange secrets. Proposed future read routes
+are **not implemented** and are shown as such in the UI.
+
+### Future integration plan (requires separate authorization)
+1. Review VPS1 existing data models and independently determine authoritative
+   read-only position, fills, risk and account fields. No changes to trade
+   engine, account keys, systemd process, trading risk settings or firewall.
+2. Build separate, least-privilege **outbound** snapshot publisher from VPS1;
+   private authenticated server-side storage or signed channel. Never send
+   exchange credentials or VPS1 SSH/API address to browsers. Do not expose
+   ingress or order endpoints through the research bridge.
+3. Verify source timestamps, account scopes, schema versions, idempotent event
+   IDs, data freshness, redaction, and fail-closed missing/stale rendering.
+4. Enable read-only server API/UI one domain at a time (overview, positions,
+   orders, risk, activity), independently audited against VPS1. Production
+   promotion needs separate human approval and authenticated user access.
+
+LIVE viewing is not LIVE execution. No write endpoints are authorized by this
+shell. Research remains independently available even when the LIVE source is
+not reachable. Run `npm test` for journal and LIVE isolation checks.
