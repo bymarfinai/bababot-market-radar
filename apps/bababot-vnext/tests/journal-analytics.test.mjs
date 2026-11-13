@@ -28,7 +28,7 @@ test("only CLOSED realized ledger pnl counted; no double-counting open or gaps",
   assert.equal(metrics.unresolved,1);
   assert.equal(metrics.wins,1);assert.equal(metrics.losses,1);assert.equal(metrics.breakevens,1);
   assert.equal(metrics.netPnl,4);
-  assert.equal(metrics.winRate,100/3);
+  assert.ok(Math.abs(metrics.winRate - 100/3) < 1e-10);
   assert.equal(metrics.profitFactor,1.5);
   assert.equal(metrics.expectancy,4/3);
   assert.equal(metrics.maxDrawdownUsd,8);
