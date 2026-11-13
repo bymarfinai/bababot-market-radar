@@ -223,13 +223,16 @@ export default function StrongWorkspace() {
       </a>
       <div className="sidebar-caption">WORKSPACES</div>
       <div className="workspace-current"><span className="workspace-mark">↗</span><div><strong>STRONG LONG</strong><small>Independent PAPER</small></div><span className="workspace-chevron">⌄</span></div>
-      <div className="sidebar-caption nav-caption">STRONG LONG</div>
-      <nav aria-label="STRONG LONG">
-        {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
-          className={`nav-item ${view === item.id ? "active" : ""}`}>
-          <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
-        </button>)}
-      </nav>
+      <div className="sidebar-scroll" role="region" aria-label="Daftar menu STRONG LONG" tabIndex={0}>
+        <div className="sidebar-caption nav-caption">STRONG LONG</div>
+        <nav aria-label="STRONG LONG">
+          {NAV.map(item => <button key={item.id} type="button" onClick={() => setView(item.id)}
+            className={`nav-item ${view === item.id ? "active" : ""}`}
+            title={item.label} aria-current={view === item.id ? "page" : undefined}>
+            <span className="nav-icon">{item.symbol}</span><span className="nav-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
+          </button>)}
+        </nav>
+      </div>
       <div className="sidebar-bottom">
         <a href="https://bababot-market-radar.vercel.app" target="_blank" rel="noreferrer" className="legacy-link">↗ Open Legacy BabaBot</a>
         <div className="sidebar-guard"><span className="guard-dot"/><div><strong>READ-ONLY MODE</strong><small>No LIVE / PAPER controls</small></div></div>

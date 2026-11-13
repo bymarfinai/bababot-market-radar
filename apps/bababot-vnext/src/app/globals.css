@@ -13,18 +13,23 @@ button:disabled{opacity:.55;cursor:not-allowed}
 a{color:inherit;text-decoration:none}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,tr:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .app-shell{display:flex;min-height:100vh}
-.sidebar{width:252px;flex:0 0 252px;border-right:1px solid var(--line);background:#0f1620;padding:25px 15px 17px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:10}
-.brand{display:flex;align-items:center;gap:11px;padding:0 10px 30px}
+.sidebar{width:252px;flex:0 0 252px;border-right:1px solid var(--line);background:#0f1620;padding:25px 15px 17px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;height:100dvh;min-height:0;overflow:hidden;z-index:10}
+.brand{display:flex;align-items:center;gap:11px;padding:0 10px 30px;flex-shrink:0}
 .brand-logo{width:42px;height:42px;border:1px solid #366b72;border-radius:13px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#223b42,#0d171c);font-weight:850;font-size:23px;letter-spacing:-3px}
 .brand-logo span{color:var(--teal);font-size:13px;align-self:flex-start;margin-top:4px;letter-spacing:0}
 .brand-copy{display:flex;flex-direction:column;gap:4px;letter-spacing:2px}
 .brand-copy strong{font-size:14px}.brand-copy small{font-size:8px;color:var(--muted);letter-spacing:1.3px}
 .sidebar-caption{color:#64768b;font-size:9px;letter-spacing:2.1px;font-weight:800;margin:9px 12px 12px}
-.workspace-current{display:flex;gap:10px;align-items:center;padding:12px 12px;border:1px solid #305159;border-radius:11px;background:#17272d}
+.workspace-current{display:flex;gap:10px;align-items:center;padding:12px 12px;border:1px solid #305159;border-radius:11px;background:#17272d;flex-shrink:0}
 .workspace-mark{background:#26474a;width:33px;height:33px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:20px;color:var(--teal)}
 .workspace-current div{flex:1;display:flex;flex-direction:column;gap:5px}.workspace-current strong{font-size:11px;letter-spacing:.5px}.workspace-current small{font-size:10px;color:#89a7ac}.workspace-chevron{color:var(--muted)}
-.nav-caption{margin-top:29px}
-nav{display:flex;flex-direction:column;gap:5px}
+.sidebar-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#476071 transparent;scroll-padding-block:12px;padding:0 3px 12px 0}
+.sidebar-scroll::-webkit-scrollbar{width:6px}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:#476071;border-radius:8px}
+.sidebar-scroll::-webkit-scrollbar-track{background:transparent}
+.sidebar-scroll:focus-visible{outline:2px solid var(--teal);outline-offset:-2px;border-radius:8px}
+.sidebar-scroll .nav-caption{margin-top:29px}
+.sidebar-scroll nav{display:flex;flex-direction:column;gap:5px}
 .nav-item{display:flex;gap:13px;align-items:center;text-align:left;border:1px solid transparent;color:#8997a7;background:transparent;border-radius:10px;width:100%;padding:12px 13px;transition:background .14s}
 .nav-item:hover{background:#182330;color:var(--text)}
 .nav-item.active{background:#1c3437;color:var(--teal);border-color:#2b5b5a}
@@ -32,7 +37,7 @@ nav{display:flex;flex-direction:column;gap:5px}
 .nav-copy{display:flex;flex-direction:column;gap:4px}
 .nav-copy strong{font-size:12px;font-weight:650}.nav-copy small{color:#718297;font-size:10px}
 .nav-item.active .nav-copy small{color:#79a5a3}
-.sidebar-bottom{margin-top:auto;padding:0 7px}
+.sidebar-bottom{flex:0 0 auto;margin-top:8px;padding:0 7px;max-height:38dvh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#476071 transparent;border-top:1px solid var(--line)}
 .legacy-link{display:block;border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center;font-size:11px;color:#acbecb;margin-bottom:14px}
 .legacy-link:hover{border-color:#3a6971;color:white}
 .sidebar-guard{padding:14px 7px;border-top:1px solid var(--line);display:flex;align-items:flex-start;gap:9px}
