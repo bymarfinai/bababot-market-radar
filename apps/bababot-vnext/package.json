@@ -1,12 +1,13 @@
 {
   "name": "bababot-vnext",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/journal-analytics.test.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

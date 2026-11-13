@@ -108,3 +108,51 @@ back to preview env snapshot, with mode `snapshot` rather than `sync`.
 - Invalid PAPER trade ID: HTTP 404; unrecognized symbols are never fetched.
 - TypeScript/build passed with Next 16.4.6 and Vela 0.10.6; production npm audit zero as observed during local check.
 - **VPS1 LIVE is explicitly out of scope.** Work remains in draft PR and Vercel protected Preview; no merge to legacy production.
+
+## Stage 04 — Independent PAPER Trade Journal & Analytics
+
+The `Trade Journal` tab analyzes *one independent strategy at a time*; a month filter
+uses **Asia/Jakarta** close dates for CLOSED trades. It includes a realized
+net-PnL curve, USD-only high-water-mark drawdown, Profit Factor, expectancy,
+W/L and breakeven counts, holding time, profit/loss streaks, per-symbol
+contribution, exact ledger close-reason groups, a day-selectable calendar,
+filtered journal table, client-only CSV export, and replay links.
+
+**Matched comparison** takes two branches and restricts each comparison to
+common CLOSED `source_event_id` with matching symbols. Missing branch records
+are reported separately. No all-branch profit sum or false indication that an
+absent branch is a LOSS/SKIP. Each branch's count, Win Rate, and net PnL
+uses only recorded PAPER outcomes. Statistical edge cannot be concluded from
+these small samples.
+
+### Methodological boundaries
+- **Authoritative field:** source ledger `netPnl` (realized USD). We do *not*
+  recalculate round trips, fill quantities, commissions, gross profit or capital.
+- Journal PF = positive net-PnL sum / absolute negative net-PnL sum; +Infinity
+  is shown for nonzero positive trades with no recorded losses. No sample ⇒ null.
+- Max drawdown is **USD decline in cumulative realized PnL from its running
+  peak**, starting from $0. It is *not* account balance or drawdown %.
+- Avg realized net / CLOSED record is labeled **expectancy** (sample descriptive).
+- Calendar groups transactions by **CLOSED timestamp in WIB**, not signal
+  timestamp; OPEN records are excluded from realized PnL.
+- Breakevens (exact 0 net PnL) are included in the closed denominator but not
+  in WIN or LOSS counts. DATA_GAP and other unresolved rows remain separate.
+- No MAE/MFE, R-multiples, gross fees, ROI%, leverage-adjusted metrics or
+  execution-level FIFO/LIFO are estimated because required fields are absent.
+- The LuxAlgo Trade Journal repository is a useful MIT-licensed architectural
+  reference, but its execution-by-execution round-trip pipeline is deliberately
+  **not used** here: the VPS2 PAPER net realization remains the source of truth.
+
+### Test
+```bash
+cd apps/bababot-vnext
+npm ci
+npm test
+npm run typecheck
+npm run build
+npm audit --omit=dev
+```
+
+Stage 04 introduces only browser read analytics. No new ingress, no VPS1
+changes and no database mutations. The feature remains on Vercel protected
+preview and in GitHub Draft PR until separately released.

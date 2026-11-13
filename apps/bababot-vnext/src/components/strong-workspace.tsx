@@ -2,15 +2,17 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import VelaPaperChart from "./vela-paper-chart";
+import TradeJournal from "./trade-journal";
 import type { StrongApiResponse, StrongStrategy, StrongTrade } from "@/lib/strong-types";
 
-type View = "overview" | "strategies" | "compare" | "trades" | "chart" | "system";
+type View = "overview" | "strategies" | "compare" | "trades" | "journal" | "chart" | "system";
 
 const NAV: { id: View; label: string; description: string; symbol: string }[] = [
   { id: "overview", label: "Overview", description: "Strategy health", symbol: "▦" },
   { id: "strategies", label: "Strategies", description: "Independent PAPER", symbol: "▤" },
   { id: "compare", label: "Matched Compare", description: "Same source event", symbol: "⇄" },
   { id: "trades", label: "Trade Explorer", description: "Entry & exit detail", symbol: "⌕" },
+  { id: "journal", label: "Trade Journal", description: "PnL & matched analytics", symbol: "▥" },
   { id: "chart", label: "Vela Chart & Replay", description: "Futures PAPER fills", symbol: "◈" },
   { id: "system", label: "Data & System", description: "Source health", symbol: "◈" }
 ];
@@ -231,7 +233,7 @@ export default function StrongWorkspace() {
       <div className="sidebar-bottom">
         <a href="https://bababot-market-radar.vercel.app" target="_blank" rel="noreferrer" className="legacy-link">↗ Open Legacy BabaBot</a>
         <div className="sidebar-guard"><span className="guard-dot"/><div><strong>READ-ONLY MODE</strong><small>No LIVE / PAPER controls</small></div></div>
-        <div className="sidebar-version">vNext 0.1 · Stages 01–02</div>
+        <div className="sidebar-version">vNext 0.4 · Stages 01–04</div>
       </div>
     </aside>
 
@@ -243,7 +245,7 @@ export default function StrongWorkspace() {
 
       <div className="main-content">
         <div className="page-heading">
-          <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
+          <div><div className="section-eyebrow">MARKET DETEKTOR / STRONG LONG</div><h1>{NAV.find(n => n.id === view)?.label}</h1><p>{view === "overview" ? "Monitor forward PAPER outcomes and research branches in one place." : view === "compare" ? "Compare independent strategies only on identical source events." : view === "trades" ? "Inspect actual entry, exit, and source-event attribution." : view === "journal" ? "Realized PAPER PnL, WIB calendar, risk path and fair matched-event comparison." : view === "chart" ? "Recorded PAPER fills on real Binance Futures candles. Replay without look-ahead." : view === "system" ? "Verify provenance, freshness, and read-only integration status." : "Independent modular branches, separated from LIVE execution."}</p></div>
           <span className="paper-indicator"><span/> PAPER ONLY</span>
         </div>
 
@@ -305,6 +307,8 @@ export default function StrongWorkspace() {
               <aside className="panel inspector">{selectedTrade ? <TradeDetails trade={selectedTrade} matches={matchingTrades} onOpenChart={() => chartOpen(selectedTrade)}/> : <div className="inspector-empty"><span>⌕</span><h3>Select a trade</h3><p>Entry, exit, reason and cross-branch comparison appear here.</p></div>}</aside>
             </div>
           </>}
+
+          {view === "journal" && <TradeJournal snapshot={snapshot!} onOpenChart={chartOpen}/>}
 
           {view === "chart" && <>
             {chartTrade ? <>
