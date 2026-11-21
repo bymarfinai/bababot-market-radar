@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0e11">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'">
+<title>W1D · Paper vs LIVE | Market Detektor</title>
+<link rel="stylesheet" href="/w1d-parity.css">
+<script src="/w1d-parity.js" defer></script>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+ <a class="brand" href="/"><span class="logo">MD</span><span>Market Detektor <small>/ W1D</small></span></a>
+ <nav aria-label="Navigasi"><a href="/">Futures Terminal</a><a href="/w1d-parity.html" aria-current="page">W1D Parity</a></nav>
+ <div class="top-status"><span class="status-dot"></span><span id="systemStatus">Memuat data…</span></div>
+</header>
+<main>
+ <div class="title-row">
+  <div><div class="eyebrow">W1D LONG · MOMENTUM T+150</div><h1>Paper <span>vs</span> Binance LIVE</h1>
+  <p>Keputusan strategi W1D tetap sama. Hasil paper dan fill Binance dicatat terpisah, tanpa mencampur simulasi dengan uang riil.</p></div>
+  <div class="actions"><span class="pill" id="freshness">SNAPSHOT</span><button type="button" id="refresh">↻ Refresh snapshot</button></div>
+ </div>
+ <section class="notice" id="notice" role="status">Mengambil snapshot terverifikasi…</section>
+ <div class="section-header"><h2>Ringkasan performa</h2><span id="timestamp">Sumber data —</span></div>
+ <section class="two-columns" aria-label="Perbandingan akun">
+  <article class="panel accent-paper">
+   <div class="panel-head"><div><div class="category">W1D PAPER</div><h3>Simulasi independen</h3></div><span class="tag yellow">PAPER · BUKAN LIVE</span></div>
+   <div class="hero-stat"><span>NET PNL (USDT)</span><strong id="paperNet" class="money">—</strong><small>Setelah fee entry dan exit · funding tidak dimodelkan</small></div>
+   <div class="metric-grid">
+    <div><span>CLOSED</span><strong id="paperClosed">—</strong></div>
+    <div><span>WIN / LOSS</span><strong id="paperWinLoss">—</strong></div>
+    <div><span>WIN RATE</span><strong id="paperWr">—</strong></div>
+    <div><span>OPEN</span><strong id="paperOpen">—</strong></div>
+   </div>
+  </article>
+  <article class="panel accent-live">
+   <div class="panel-head"><div><div class="category">BINANCE USDⓈ-M</div><h3>Hasil akun riil</h3></div><span class="tag gray" id="liveStatus">BELUM TERSAMBUNG</span></div>
+   <div class="hero-stat"><span>NET PNL (USDT)</span><strong id="liveNet" class="money">N/A</strong><small>Hanya transaksi yang memenuhi sertifikasi ledger Binance</small></div>
+   <div class="metric-grid">
+    <div><span>VERIFIED CLOSED</span><strong id="liveClosed">N/A</strong></div>
+    <div><span>WIN / LOSS</span><strong id="liveWinLoss">N/A</strong></div>
+    <div><span>WIN RATE</span><strong id="liveWr">N/A</strong></div>
+    <div><span>UNVERIFIED</span><strong id="liveUnverified">N/A</strong></div>
+   </div>
+  </article>
+ </section>
+ <section class="panel comparison">
+  <div class="section-header inside"><h2>Perbandingan akuntansi</h2><span>USDT · angka sumber, bukan target profit</span></div>
+  <div class="table-scroll"><table id="compareTable">
+   <thead><tr><th>Indikator</th><th>W1D Paper</th><th>Binance LIVE</th><th>Penjelasan</th></tr></thead>
+   <tbody id="compareRows"><tr><td colspan="4">Menunggu data…</td></tr></tbody>
+  </table></div>
+ </section>
+ <div class="section-header result-head"><div><h2>Riwayat posisi W1D Paper</h2><p>Read-only · bukan riwayat transaksi riil Binance</p></div>
+ <div class="filters"><input type="search" id="symbolFilter" placeholder="Cari pair…" aria-label="Cari pair"><select id="stateFilter" aria-label="Filter status"><option value="ALL">Semua status</option><option value="CLOSED">CLOSED</option><option value="OPEN">OPEN</option></select></div></div>
+ <section class="panel history"><div class="table-scroll"><table>
+ <thead><tr><th>Pair</th><th>Posisi</th><th>Entry</th><th>Exit</th><th>NET PnL</th><th>Alasan CLOSE</th></tr></thead>
+ <tbody id="historyRows"><tr><td colspan="6">Menunggu data…</td></tr></tbody></table></div>
+ <div class="table-footer" id="historyMeta">—</div></section>
+ <section class="footnote"><strong>Interpretasi parity 1:1</strong>
+ <p>Parity di sini berarti sumber keputusan OPEN/CLOSE dari W1D sama. Harga fill, fee, funding, slippage, timing jaringan, dan emergency override bisa menghasilkan PnL LIVE berbeda. Halaman ini bersifat pembacaan saja: tidak menyediakan tombol RUN, CLOSE atau pembukaan posisi.</p>
+ <p class="muted">Snapshot tidak diperbarui otomatis dari Binance. Tombol Refresh memuat ulang berkas snapshot terakhir; waktu pengambilan data ada di bagian atas.</p></section>
+</main>
+<footer>Market Detektor · W1D verified accounting · <span id="version">Stage 12 / Read-only</span></footer>
+</div>
+</body>
+</html>

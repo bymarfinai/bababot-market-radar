@@ -1,0 +1,38 @@
+/* STRONG LONG VPS2 (M06–M08) + LIVE M07 panels inside the BabaBot terminal. */
+.v2-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:7px 10px;border-bottom:1px solid var(--line2);background:#0d1014}
+.v2-picker{display:flex;gap:4px}.v2-picker .btn{font-size:10px;padding:5px 12px}
+.v2-src{font-size:9px;color:var(--muted)}
+.v2-overview{grid-template-columns:repeat(6,minmax(110px,1fr))}
+.v2-row{cursor:pointer}.v2-row:hover td{background:#151a20}
+.m7-wrap{white-space:normal!important;word-break:break-word;max-width:520px;color:var(--muted)}
+.m7-hidden{display:none!important}
+.m7-grid{display:grid;grid-template-columns:1.25fr 1fr .9fr;border-bottom:1px solid var(--line2)}
+.m7-card{padding:14px;border-right:1px solid var(--line2);background:#0b0e11;min-width:0}
+.m7-card:last-child{border-right:0}
+.m7-card h3{margin:3px 0 8px;font-size:13px}
+.m7-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.m7-big{font-size:24px;font-weight:800;margin:4px 0 6px;display:block}
+.m7-sub{font-size:9px;color:var(--muted);line-height:1.5}
+.m7-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.m7-actions .btn{font-size:10px;padding:8px 12px}
+.btn.m7-danger{background:var(--red);color:#fff;padding:8px 12px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.m7-note{margin-top:8px;font-size:9px;color:var(--yellow2)}
+.m7-kv{display:grid;grid-template-columns:1fr 1fr;border-left:1px solid var(--line2);border-top:1px solid var(--line2)}
+.m7-kv div{padding:7px 8px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);min-width:0}
+.m7-kv span{display:block;font-size:7px;color:var(--muted);margin-bottom:3px;text-transform:uppercase}
+.m7-kv strong{display:block;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m7-hint{font-size:8px;color:var(--muted2);margin-top:8px;line-height:1.5}
+.m7-safety{margin:0;padding-left:14px;font-size:9px;color:var(--muted);line-height:1.7}
+#m7Dlg{background:#181a20;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:18px;width:min(400px,calc(100vw - 32px))}
+#m7Dlg::backdrop{background:#000a}
+#m7Dlg h3{margin:0 0 6px;font-size:14px}
+#m7Dlg label{display:block;font-size:9px;color:var(--muted);margin:10px 0 4px}
+#m7Dlg input,#m7Dlg select{width:100%;box-sizing:border-box;background:#0b0e11;border:1px solid var(--line);color:var(--text);padding:9px;border-radius:4px;font-size:15px;letter-spacing:.12em}
+.m7-err{color:var(--red);min-height:1em;font-size:11px}
+.m7-dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.m7-dlg-actions .btn{font-size:11px;padding:8px 14px}
+#m7Toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1e2329;border:1px solid var(--line);color:var(--text);padding:9px 14px;border-radius:6px;font-size:11px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+#m7Toast.show{opacity:1}
+@media(max-width:1000px){.m7-grid{grid-template-columns:1fr}.m7-card{border-right:0;border-bottom:1px solid var(--line2)}.v2-overview{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.v2-overview{grid-template-columns:repeat(2,1fr)}.m7-actions .btn{flex:1 1 auto}}
