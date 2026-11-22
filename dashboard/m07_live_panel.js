@@ -5,7 +5,8 @@
   const API = "https://core-prod.43-153-193-103.sslip.io/m07";
   const CONFIRM_LIVE = "M07 LIVE REAL MONEY";
   const el = (id) => document.getElementById(id);
-  const S = { active: false, status: null, positions: [], signals: [], orders: [], events: [], tFast: null, tSlow: null };
+  const S = { active: false, status: null, positions: [], signals: [], orders: [], events: [], tFast: null, tSlow: null,
+    research: null, researchAt: 0, showPre: false, jMode: "LIVE" };
 
   // ---------- helpers ----------
   const wib = (ms) => ms ? new Date(ms).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
@@ -153,7 +154,7 @@
     if (!S.positions.length) emptyRow(tb, 10, "Belum ada posisi M07. Muncul otomatis saat sinyal M07 masuk.");
     else { tb.replaceChildren(); S.positions.forEach((p) => {
       const tr = node("tr", "v2-row"); td(tr, wib(p.opened_at_ms), "mono"); td(tr, p.symbol);
-      const m = td(tr, ""); m.appendChild(node("span", "badge " + (p.send_mode === "LIVE" ? "yellow" : "muted"), p.send_mode));
+      const m = td(tr, ""); m.appendChild(node("span", "m7-tag " + (p.send_mode === "LIVE" ? "yellow" : "muted"), p.send_mode));
       td(tr, p.state); td(tr, px(p.entry_avg), "mono"); td(tr, px(p.stop_trigger), "mono red"); td(tr, px(p.exit_avg), "mono");
       td(tr, p.leverage ? p.leverage + "x" : "—"); td(tr, p.realized_pnl == null ? "—" : usd(p.realized_pnl), +p.realized_pnl > 0 ? "green" : +p.realized_pnl < 0 ? "red" : "");
       td(tr, p.close_reason);
@@ -182,13 +183,111 @@
       td(tr, (e.source_key ? e.source_key + "  " : "") + d, "m7-wrap"); tb.appendChild(tr); }); }
   }
 
+  // ---------- paper vs live ----------
+  const bps = (a, b) => (a && b ? (b / a - 1) * 10000 : null);
+  const mv = (e, x) => (e && x ? (x / e - 1) * 100 : null);
+  const fmtBps = (v) => (v === null ? "—" : (v >= 0 ? "+" : "") + v.toFixed(1) + " bps");
+  const fmtPct = (v) => (v === null ? "—" : (v >= 0 ? "+" : "") + v.toFixed(2) + "%");
+  function renderCompare() {
+    const root = el("m7CompareRoot"); if (!root) return;
+    const epoch = (S.status || {}).epoch_ms || null;
+    const paper = ((((S.research || {}).strategies || {}).M07 || {}).positions) || [];
+    const rows = {};
+    const row = (k) => rows[k] || (rows[k] = { key: k });
+    paper.forEach((p) => { const r = row(p.source_id); r.paper = p; r.symbol = p.symbol; r.t = p.opened_ms; });
+    S.positions.forEach((p) => { const r = row(p.source_key); r.live = p; r.symbol = r.symbol || p.symbol; r.t = r.t || +p.opened_at_ms; });
+    S.signals.forEach((g) => { const r = row(g.source_key); r.sig = g; r.symbol = r.symbol || g.symbol; r.t = r.t || +g.opened_at_ms || +g.picked_at_ms; });
+    let list = Object.values(rows).sort((a, b) => b.t - a.t);
+    list.forEach((r) => { r.pre = !!(epoch && r.t && r.t < epoch && !r.live && !r.sig); });
+    const preN = list.filter((r) => r.pre).length;
+    if (!S.showPre) list = list.filter((r) => !r.pre);
+    root.replaceChildren();
+
+    const bar = node("div", "v2-bar");
+    const left = node("div", "v2-picker");
+    const tg = node("button", "btn" + (S.showPre ? " active" : ""), (S.showPre ? "Sembunyikan" : "Tampilkan") + " trade paper sebelum executor aktif (" + preN + ")");
+    tg.onclick = () => { S.showPre = !S.showPre; renderCompare(); }; left.appendChild(tg); bar.appendChild(left);
+    bar.appendChild(node("div", "v2-src", "Dipasangkan per ID sinyal yang sama (paper M07 VPS2 ↔ executor VPS1). Executor aktif sejak " + (epoch ? wib(epoch) + " WIB" : "—") +
+      ". Selisih entry positif = beli lebih mahal; selisih exit positif = jual lebih tinggi."));
+    root.appendChild(bar);
+
+    const done = list.filter((r) => r.paper && r.live && r.paper.status === "CLOSED" && r.live.closed_at_ms);
+    const entryD = list.filter((r) => r.paper && r.live && r.live.entry_avg).map((r) => bps(r.paper.entry_price, +r.live.entry_avg));
+    const exitD = done.filter((r) => r.live.exit_avg).map((r) => bps(r.paper.exit_price, +r.live.exit_avg));
+    const same = done.filter((r) => String(r.live.close_reason || "").replace(/^TWIN:/, "") === String(r.paper.reason || "")).length;
+    const avg = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
+    const post = list.filter((r) => !r.pre);
+    const ov = node("div", "shadow-overview v2-overview");
+    const card = (l, v, c, sm) => { const d = node("div", "shadow-stat"); d.appendChild(node("span", "", l)); d.appendChild(node("strong", c || "", v)); if (sm) d.appendChild(node("small", "", sm)); ov.appendChild(d); };
+    card("Sinyal sejak aktif", String(post.length), "", "paper " + post.filter((r) => r.paper).length + " · diterima VPS1 " + post.filter((r) => r.sig).length);
+    card("Dieksekusi", String(post.filter((r) => r.live).length), "", "LIVE " + post.filter((r) => r.live && r.live.send_mode === "LIVE").length + " · SHADOW " + post.filter((r) => r.live && r.live.send_mode === "SHADOW").length);
+    card("Selisih entry rata-rata", fmtBps(avg(entryD)), avg(entryD) > 5 ? "red" : "", entryD.length + " pasangan");
+    card("Selisih exit rata-rata", fmtBps(avg(exitD)), avg(exitD) < -5 ? "red" : "", exitD.length + " pasangan closed");
+    card("Alasan close sama", done.length ? same + " / " + done.length : "—", done.length && same < done.length ? "yellow" : "", "paper vs executor");
+    card("PnL LIVE (asli)", usd(post.filter((r) => r.live && r.live.send_mode === "LIVE" && r.live.realized_pnl != null).reduce((a, r) => a + +r.live.realized_pnl, 0)), "", "net fee · SHADOW tidak dihitung");
+    root.appendChild(ov);
+
+    const heads = ["Sinyal (WIB)", "Simbol", "Mode", "Entry paper", "Entry exec", "Selisih entry", "Exit paper", "Exit exec", "Selisih exit",
+      "Alasan paper → exec", "Gerak paper", "Gerak exec", "PnL exec", "Catatan"];
+    const wrap = node("div", "table-wrap"), t = node("table"), th = node("thead"), hr = node("tr");
+    heads.forEach((h) => hr.appendChild(node("th", "", h))); th.appendChild(hr); t.appendChild(th);
+    const tb = node("tbody");
+    if (!list.length) { const tr = node("tr"), c = node("td", "empty");
+      c.colSpan = heads.length; c.appendChild(node("strong", "", "Menunggu siklus SHADOW pertama"));
+      c.appendChild(node("span", "", "Baris muncul otomatis begitu sinyal M07 masuk. Klik tombol di atas untuk melihat trade paper sebelum executor aktif."));
+      tr.appendChild(c); tb.appendChild(tr); }
+    list.forEach((r) => {
+      const p = r.paper, l = r.live, tr = node("tr", l ? "v2-row" : "");
+      td(tr, wib(r.t), "mono"); td(tr, r.symbol);
+      const mc = td(tr, ""); mc.appendChild(node("span", "m7-tag " + (l ? (l.send_mode === "LIVE" ? "yellow" : "muted") : "muted"), l ? l.send_mode : "—"));
+      const pe = p ? p.entry_price : null, le = l && l.entry_avg ? +l.entry_avg : null;
+      const px2 = p && p.status === "CLOSED" ? p.exit_price : null, lx = l && l.exit_avg ? +l.exit_avg : null;
+      td(tr, px(pe), "mono"); td(tr, px(le), "mono");
+      const eb = bps(pe, le); td(tr, fmtBps(eb), eb === null ? "" : eb > 5 ? "red" : eb < -5 ? "green" : "");
+      td(tr, px(px2), "mono"); td(tr, px(lx), "mono");
+      const xb = bps(px2, lx); td(tr, fmtBps(xb), xb === null ? "" : xb < -5 ? "red" : xb > 5 ? "green" : "");
+      td(tr, (p ? p.reason || (p.status === "OPEN" ? "OPEN" : "—") : "—") + " → " + (l ? l.close_reason || (isActivePos(l) ? "OPEN" : "—") : "—"));
+      const gp = mv(pe, px2), gl = mv(le, lx);
+      td(tr, fmtPct(gp), gp === null ? "" : gp >= 0 ? "green" : "red"); td(tr, fmtPct(gl), gl === null ? "" : gl >= 0 ? "green" : "red");
+      td(tr, l && l.realized_pnl != null ? usd(l.realized_pnl) : "—", l && +l.realized_pnl > 0 ? "green" : l && +l.realized_pnl < 0 ? "red" : "");
+      let note = "", nc = "";
+      if (r.pre) { note = "sebelum executor aktif"; nc = "muted"; }
+      else if (!l && r.sig) { note = "tidak dieksekusi: " + (r.sig.outcome || "") + (r.sig.reason ? " (" + r.sig.reason + ")" : ""); nc = "yellow"; }
+      else if (!l && !r.sig) { note = "sinyal tidak sampai ke VPS1"; nc = "red"; }
+      else if (l && !p) { note = "tidak ada di paper VPS2"; nc = "red"; }
+      else if (l && isActivePos(l)) { note = p && p.status === "CLOSED" ? "paper sudah close · exec masih menutup" : "berjalan"; nc = "yellow"; }
+      else if (l && p && p.status === "CLOSED") {
+        const ok = String(l.close_reason || "").replace(/^TWIN:/, "") === String(p.reason || "");
+        note = ok ? "cocok" : "alasan close beda"; nc = ok ? "green" : "yellow"; }
+      td(tr, note, nc);
+      if (l) tr.onclick = () => global.BabaChart && global.BabaChart.openTrade(l.symbol, l.opened_at_ms, l.entry_avg, "M07-" + l.position_id);
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); wrap.appendChild(t); root.appendChild(wrap);
+  }
+
+  function renderJournal() {
+    const root = el("m7JournalRoot"); if (!root || !global.BabaJournal) return;
+    const rows = S.positions.filter((p) => p.send_mode === S.jMode).map((p) => ({ id: p.position_id, symbol: p.symbol,
+      open_ms: +p.opened_at_ms, close_ms: p.closed_at_ms ? +p.closed_at_ms : null, entry: p.entry_avg ? +p.entry_avg : null,
+      exit: p.exit_avg ? +p.exit_avg : null, pnl: p.realized_pnl === null || p.realized_pnl === undefined ? null : +p.realized_pnl,
+      reason: p.close_reason, status: p.closed_at_ms && p.realized_pnl !== null && p.realized_pnl !== undefined ? "CLOSED" : "OPEN" }));
+    global.BabaJournal.render(root, rows, { key: "m07_" + S.jMode,
+      note: S.jMode === "LIVE" ? "Trade ASLI di Binance · PnL net fee dari ledger executor · tanggal close WIB" : "SHADOW = simulasi executor (tanpa order) · fee estimasi",
+      emptyText: S.jMode === "LIVE" ? "Belum ada trade LIVE. Muncul setelah SHADOW selesai + GO + PIN." : "Menunggu siklus SHADOW pertama (sinyal M07 belum masuk).",
+      extraButtons: (bar) => ["LIVE", "SHADOW"].forEach((m) => { const b = node("button", "btn" + (m === S.jMode ? " active" : ""), m);
+        b.onclick = () => { S.jMode = m; renderJournal(); }; bar.appendChild(b); }),
+      onTradeClick: (r) => global.BabaChart && global.BabaChart.openTrade(r.symbol, r.open_ms, r.entry, "M07-" + r.id) });
+  }
+
   // ---------- polling ----------
   async function loadStatus() { try { S.status = await get("/status"); renderStatus(); } catch (e) { setText("m07StrategyStatus", "VPS1 ?"); } }
   async function loadTables() {
     const jobs = [["/positions", (d) => { S.positions = d.positions || []; }], ["/signals", (d) => { S.signals = d.signals || []; }],
       ["/orders", (d) => { S.orders = d.orders || []; }], ["/events?limit=60", (d) => { S.events = d.events || []; }]];
+    if (Date.now() - S.researchAt > 30000) jobs.push(["/research", (d) => { S.research = d.research; S.researchAt = Date.now(); }]);
     await Promise.all(jobs.map(([p, f]) => get(p).then(f).catch(() => {})));
-    renderTables();
+    renderTables(); renderCompare(); renderJournal();
     if (S.active && global.BabaChart) global.BabaChart.redraw();
   }
 
@@ -269,5 +368,6 @@
         await post("pin-change", { pin: v.pin, slot: +v.slot, new_pin: v.new_pin }); return "PIN diganti."; } });
     loadStatus(); loadTables();
   }
-  global.M07Live = { init, activate, renderTop, chartMarkers, onTab: () => {} };
+  function onTab(name) { if (name === "m07compare") renderCompare(); if (name === "m07journal") renderJournal(); }
+  global.M07Live = { init, activate, renderTop, chartMarkers, onTab };
 })(window);

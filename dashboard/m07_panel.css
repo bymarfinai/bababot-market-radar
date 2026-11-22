@@ -36,3 +36,32 @@
 #m7Toast.show{opacity:1}
 @media(max-width:1000px){.m7-grid{grid-template-columns:1fr}.m7-card{border-right:0;border-bottom:1px solid var(--line2)}.v2-overview{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:560px){.v2-overview{grid-template-columns:repeat(2,1fr)}.m7-actions .btn{flex:1 1 auto}}
+/* journal (shared) */
+.j-select{background:#0b0e11;color:var(--text);border:1px solid var(--line);border-radius:3px;font-size:10px;padding:5px 6px}
+.j-empty{padding:26px 14px;text-align:center;color:var(--muted);font-size:11px}
+.j-curves{display:grid;grid-template-columns:1.4fr 1fr;border-bottom:1px solid var(--line2)}
+.j-curve{padding:8px 10px;border-right:1px solid var(--line2);min-width:0}.j-curve:last-child{border-right:0}
+.j-curve canvas{width:100%;display:block;border-radius:3px}
+.j-title{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 6px}
+.j-lower{display:grid;grid-template-columns:1.2fr 1fr;border-bottom:1px solid var(--line2)}
+.j-cal-box,.j-sym-box{padding:8px 10px;min-width:0}.j-cal-box{border-right:1px solid var(--line2)}
+.j-sym-box .table-wrap{max-height:230px}
+.j-cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.j-dow{font-size:8px;color:var(--muted2);text-align:center;padding:2px 0}
+.j-day{appearance:none;border:1px solid var(--line2);background:#0d1014;color:var(--muted2);border-radius:3px;min-height:42px;padding:3px;text-align:left;font:inherit;cursor:default;display:flex;flex-direction:column;gap:1px;min-width:0}
+.j-day b{font-size:9px;font-weight:600}.j-day span{font-size:9px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.j-day small{font-size:7px;color:var(--muted)}
+.j-day.pos{background:rgba(14,203,129,.12);border-color:rgba(14,203,129,.45);color:var(--green);cursor:pointer}
+.j-day.neg{background:rgba(246,70,93,.12);border-color:rgba(246,70,93,.45);color:var(--red);cursor:pointer}
+.j-day.flat{cursor:pointer;color:var(--text)}
+.j-day.sel{outline:2px solid var(--yellow2);outline-offset:-1px}
+.j-pad{visibility:hidden}
+/* strategy definition */
+.v2-def{padding:10px;border-bottom:1px solid var(--line2);background:#0d1014}
+.v2-def-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}.v2-def-head strong{font-size:12px}.v2-def-head span{font-size:9px;color:var(--muted)}
+.v2-def-grid{display:grid;grid-template-columns:.8fr 1.6fr;gap:12px}
+.v2-def-entry strong{font-size:11px;display:block;margin:3px 0}.v2-def-entry p{font-size:9px;color:var(--muted);margin:2px 0 9px;line-height:1.5}
+.v2-def-list{list-style:none;margin:4px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.v2-def-list li{font-size:9px;color:var(--muted);line-height:1.45}.v2-def-list b{color:var(--text);margin-right:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.v2-def-list em{font-style:normal}
+@media(max-width:1000px){.j-curves,.j-lower,.v2-def-grid{grid-template-columns:1fr}.j-curve,.j-cal-box{border-right:0;border-bottom:1px solid var(--line2)}.v2-def-list{grid-template-columns:1fr}}
+.m7-tag{display:inline-block;font-size:8px;font-weight:700;padding:2px 6px;border-radius:2px;border:1px solid var(--line);letter-spacing:.03em}

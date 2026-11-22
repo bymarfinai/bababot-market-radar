@@ -5,6 +5,33 @@
   const API = "https://core-prod.43-153-193-103.sslip.io/m07";
   const NAMES = ["M06", "M07", "M08"];
   const PARENT_NOTE = { M06: "M03 + R30/D2", M07: "M04 E1 + R30/D2 · diikuti LIVE", M08: "M05 + R30/D2" };
+  // Official definitions: VPS2 M06_M08_PAPER_REGISTRY_20261115.json + research notes (frozen, 15 Nov 2026).
+  const EXITS = ["F", "UPP30", "SPR", "SFD", "TIME602", "F15", "AT10", "QD90R", "R30_FAST_BREAK", "D2_120_EARLY_STALL"];
+  const DEF = {
+    M06: { tech: "SL-M03-R30D2", parent: "M03", entry: "SAME_ORIGINAL_A_ENTRY", exits: EXITS,
+      desc: "Proteksi dasar M03 + R30 fast breakdown + D2-120 failed momentum", replay: "28t · 21W/7L · +$17.01" },
+    M07: { tech: "SL-M04-R30D2", parent: "M04", entry: "M04_E1_IDENTICAL", exits: EXITS,
+      desc: "Filter entry E1 dari M04 + R30 fast breakdown + D2-120 failed momentum · strategi yang diikuti LIVE", replay: "26t · 21W/5L · +$25.08" },
+    M08: { tech: "SL-M05-R30D2", parent: "M05", entry: "SAME_ORIGINAL_A_ENTRY", exits: EXITS.slice(0, 8).concat(["D1_T90_WEAK", "R30_FAST_BREAK", "D2_120_EARLY_STALL"]),
+      desc: "Exit D1 dari M05 + R30 fast breakdown + D2-120 failed momentum", replay: "28t · 21W/7L · +$22.98" },
+  };
+  const ENTRY_TXT = {
+    SAME_ORIGINAL_A_ENTRY: "Sama dengan entry Original A: setiap sinyal Original A yang qualified dibuka.",
+    M04_E1_IDENTICAL: "Gate E1 dari M04: hanya sinyal Original A yang lolos filter E1 yang dibuka (lebih selektif).",
+  };
+  const MOD_TXT = {
+    F: "Fast V4.3 (cek tiap 1 dtk): arm saat +0,5%, lalu jaga profit (retention) dan runner.",
+    UPP30: "UPP: keluar bila gagal di awal; target akhir +0,30%.",
+    SPR: "Ambil profit bersyarat: checkpoint T+30, lalu target +0,45%.",
+    SFD: "Struktur 5 detik lower-high / lower-low terkonfirmasi → keluar.",
+    TIME602: "Batas waktu: keluar di trade publik pertama pada/sesudah T+602 dtk.",
+    F15: "T+15: return ≤ -0,07% dan belum pernah positif → keluar.",
+    AT10: "Peak ≥ +0,25% tapi T+10 ≤ +0,05% (giveback ≥ 0,20 poin) → pasang TP +0,40% sampai T+180.",
+    QD90R: "Peak awal +0,12–0,25%, lalu T+90 ≤ -0,18% (turun ≥ 0,12 poin dari T+60) → keluar saat reclaim +0,10%, breakdown -0,40%, atau T+180.",
+    R30_FAST_BREAK: "R30: breakdown cepat di menit pertama → keluar lebih awal.",
+    D2_120_EARLY_STALL: "D2-120: momentum gagal yang lambat (sekitar 2 menit) → keluar.",
+    D1_T90_WEAK: "D1 (warisan M05): T+90 ≤ -0,30% dan peak < +0,12% (plus cek lain) → keluar.",
+  };
   const s = { active: false, data: null, fresh: false, age: null, err: null, pick: "M07", timer: null, seq: 0 };
   const el = (id) => document.getElementById(id);
   const txt = (v) => (v === null || v === undefined || v === "" ? "—" : String(v));
@@ -14,7 +41,7 @@
   const wib = (ms) => ms ? new Date(ms).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
     hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + " WIB" : "—";
   const dur = (a, b) => { if (!a || !b) return "—"; const sec = Math.round((b - a) / 1000);
-    return sec < 60 ? sec + " dtk" : Math.floor(sec / 60) + "m " + (sec % 60) + "d"; };
+    return sec < 60 ? sec + " dtk" : Math.floor(sec / 60) + " mnt " + (sec % 60) + " dtk"; };
   const pct = (e, x) => (e && x ? ((x / e - 1) * 100).toFixed(2) + "%" : "—");
 
   function node(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls;
@@ -106,7 +133,7 @@
     rows.forEach((r) => {
       const tr = node("tr", "v2-row"); tr.tabIndex = 0;
       td(tr, wib(r.opened_ms), "mono"); td(tr, r.symbol);
-      const sc = td(tr, ""); sc.appendChild(node("span", "badge " + (r.status === "OPEN" ? "reduce" : ""), r.status));
+      const sc = td(tr, ""); sc.appendChild(node("span", "m7-tag " + (r.status === "OPEN" ? "yellow" : "muted"), r.status));
       td(tr, px(r.entry_price), "mono"); td(tr, wib(r.close_ms), "mono"); td(tr, px(r.exit_price), "mono");
       const mv = r.entry_price && r.exit_price ? r.exit_price / r.entry_price - 1 : null;
       td(tr, pct(r.entry_price, r.exit_price), mv === null ? "" : mv >= 0 ? "green" : "red");
@@ -137,13 +164,55 @@
     root.appendChild(cmp);
   }
 
+  function journalRows(st) {
+    return (st ? st.positions : []).map((r) => ({ id: r.source_id, symbol: r.symbol, open_ms: r.opened_ms, close_ms: r.close_ms,
+      entry: r.entry_price, exit: r.exit_price, pnl: r.pnl, reason: r.reason, status: r.status }));
+  }
+
+  function renderDefinition(root) {
+    const d = DEF[s.pick], box = node("div", "v2-def");
+    const head = node("div", "v2-def-head");
+    head.appendChild(node("strong", "", s.pick + " · " + d.tech + " · induk " + d.parent));
+    head.appendChild(node("span", "", d.desc));
+    box.appendChild(head);
+    const grid = node("div", "v2-def-grid");
+    const ent = node("div", "v2-def-entry");
+    ent.appendChild(node("div", "m7-label", "Aturan entry"));
+    ent.appendChild(node("strong", "", d.entry));
+    ent.appendChild(node("p", "", ENTRY_TXT[d.entry] || ""));
+    ent.appendChild(node("div", "m7-label", "Aturan exit"));
+    ent.appendChild(node("p", "", "Close = modul mana pun yang terpenuhi PALING AWAL (atau close Original A induk). Nama modul itu yang tercatat di kolom \"Alasan close\"."));
+    ent.appendChild(node("div", "m7-label", "Replay 28 sumber lama (bukan hasil forward)"));
+    ent.appendChild(node("p", "", d.replay));
+    grid.appendChild(ent);
+    const mods = node("div", "v2-def-mods");
+    mods.appendChild(node("div", "m7-label", d.exits.length + " modul exit"));
+    const ul = node("ul", "v2-def-list");
+    const st = stats(strat());
+    d.exits.forEach((m) => { const li = node("li"); li.appendChild(node("b", "", m));
+      const hit = st.byReason[m]; li.appendChild(node("span", "", MOD_TXT[m] || ""));
+      if (hit) li.appendChild(node("em", hit.net >= 0 ? "green" : "red", "  · " + hit.n + "× close, " + usd(hit.net)));
+      ul.appendChild(li); });
+    mods.appendChild(ul); grid.appendChild(mods); box.appendChild(grid);
+    root.appendChild(box);
+  }
+
   function render() {
     chip();
     const st = stats(strat());
     const meta = el("vps2Meta"); if (meta) meta.textContent = st.closed + "t" + (st.open ? " · " + st.open + " open" : "");
-    const a = el("vps2TradesRoot"), b = el("vps2StatsRoot");
+    const a = el("vps2TradesRoot"), b = el("vps2StatsRoot"), j = el("vps2JournalRoot");
     if (a) { a.replaceChildren(); renderPicker(a); renderOverview(a, st); renderTrades(a, st); }
-    if (b) { b.replaceChildren(); renderPicker(b); renderStats(b, st); }
+    if (b) { b.replaceChildren(); renderPicker(b); renderDefinition(b); renderStats(b, st); }
+    if (j && global.BabaJournal) {
+      global.BabaJournal.render(j, journalRows(strat()), { key: "vps2_" + s.pick,
+        emptyText: "Belum ada trade closed untuk " + s.pick + ".",
+        note: "Paper resmi VPS2 · PnL dari ledger paper (sudah termasuk fee paper) · tanggal close WIB",
+        extraButtons: (bar) => NAMES.forEach((n) => { const b2 = node("button", "btn" + (n === s.pick ? " active" : ""), n);
+          b2.onclick = () => { s.pick = n; try { sessionStorage.setItem("baba_vps2_pick", n); } catch (_) {} render();
+            if (global.BabaChart) { global.BabaChart.refreshTop(); global.BabaChart.redraw(); } }; bar.appendChild(b2); }),
+        onTradeClick: (r) => global.BabaChart && global.BabaChart.openTrade(r.symbol, r.open_ms, r.entry, "VPS2-" + r.id) });
+    }
   }
 
   function renderTop() {
@@ -180,5 +249,7 @@
     try { const p = sessionStorage.getItem("baba_vps2_pick"); if (NAMES.includes(p)) s.pick = p; } catch (_) {}
     load();
   }
-  global.StrongVPS2 = { init, activate, load, render, renderTop, chartMarkers, onTab: () => {} };
+  function onTab(name) { if (name === "vps2journal" || name === "vps2stats") render(); }
+  function data() { return s.data; }
+  global.StrongVPS2 = { init, activate, load, render, renderTop, chartMarkers, onTab, data };
 })(window);

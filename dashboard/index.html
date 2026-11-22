@@ -133,7 +133,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 </style>
 <link rel="stylesheet" href="strong_stage5.css">
 <link rel="stylesheet" href="strong_paper_view.css?v=strong-independent-v1">
-<link rel="stylesheet" href="m07_panel.css?v=1">
+<link rel="stylesheet" href="m07_panel.css?v=3">
 </head>
 <body>
 <div class="app">
@@ -237,14 +237,17 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <section id="terminal" class="bottom-terminal strategy-surface">
   <div class="terminal-tabs strategy-terminal-tabs active" data-strategy-tabs="VPS2">
     <button class="terminal-tab" data-tab="vps2trades">Trades M06–M08 <span id="vps2Meta">—</span></button>
-    <button class="terminal-tab" data-tab="vps2stats">Statistik &amp; alasan close</button>
+    <button class="terminal-tab" data-tab="vps2journal">Jurnal</button>
+    <button class="terminal-tab" data-tab="vps2stats">Statistik &amp; definisi strategi</button>
   </div>
   <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="M07">
     <button class="terminal-tab" data-tab="m07control">Kontrol &amp; status <span id="m07Meta">—</span></button>
+    <button class="terminal-tab" data-tab="m07compare">Paper vs LIVE</button>
     <button class="terminal-tab" data-tab="m07positions">Posisi LIVE / SHADOW</button>
     <button class="terminal-tab" data-tab="m07signals">Sinyal</button>
     <button class="terminal-tab" data-tab="m07orders">Order</button>
     <button class="terminal-tab" data-tab="m07events">Log</button>
+    <button class="terminal-tab" data-tab="m07journal">Jurnal LIVE</button>
   </div>
   <div class="terminal-tabs strategy-terminal-tabs" data-strategy-tabs="FLOW_GUARD">
     <button class="terminal-tab active" data-tab="positions">Positions <span id="positionsMeta">—</span></button>
@@ -281,7 +284,10 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
   </div>
 
   <div class="terminal-pane" data-pane="vps2trades"><div id="vps2TradesRoot"><div class="pane-meta">Memuat snapshot VPS2…</div></div></div>
+  <div class="terminal-pane" data-pane="vps2journal"><div id="vps2JournalRoot"><div class="pane-meta">Memuat jurnal…</div></div></div>
   <div class="terminal-pane" data-pane="vps2stats"><div id="vps2StatsRoot"></div></div>
+  <div class="terminal-pane" data-pane="m07compare"><div id="m7CompareRoot"><div class="pane-meta">Memuat perbandingan…</div></div></div>
+  <div class="terminal-pane" data-pane="m07journal"><div id="m7JournalRoot"><div class="pane-meta">Memuat jurnal…</div></div></div>
   <div class="terminal-pane" data-pane="m07control">
     <div class="m7-grid">
       <div class="m7-card">
@@ -686,8 +692,9 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <script src="w1d_live_controls.js?v=w1d-independent-entry-20261013"></script>
 <dialog id="m7Dlg"><form method="dialog" id="m7DlgForm"><h3 id="m7DlgTitle">—</h3><div class="m7-sub" id="m7DlgText"></div><div id="m7DlgFields"></div><p class="m7-err" id="m7DlgErr"></p><div class="m7-dlg-actions"><button type="button" class="btn secondary" id="m7DlgCancel">Batal</button><button type="submit" class="btn primary" id="m7DlgOk">OK</button></div></form></dialog>
 <div id="m7Toast" role="status"></div>
-<script src="strong_vps2_view.js?v=1"></script>
-<script src="m07_live_panel.js?v=1"></script>
+<script src="baba_journal.js?v=2"></script>
+<script src="strong_vps2_view.js?v=3"></script>
+<script src="m07_live_panel.js?v=3"></script>
 <script>
 (function(){
 'use strict';
