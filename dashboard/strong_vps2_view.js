@@ -14,7 +14,7 @@
   const wib = (ms) => ms ? new Date(ms).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", day: "2-digit", month: "short",
     hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + " WIB" : "—";
   const dur = (a, b) => { if (!a || !b) return "—"; const sec = Math.round((b - a) / 1000);
-    return sec < 60 ? sec + " dtk" : Math.floor(sec / 60) + "m " + (sec % 60) + "d"; };
+    return sec < 60 ? sec + " dtk" : Math.floor(sec / 60) + " mnt " + (sec % 60) + " dtk"; };
   const pct = (e, x) => (e && x ? ((x / e - 1) * 100).toFixed(2) + "%" : "—");
 
   function node(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls;
@@ -106,7 +106,7 @@
     rows.forEach((r) => {
       const tr = node("tr", "v2-row"); tr.tabIndex = 0;
       td(tr, wib(r.opened_ms), "mono"); td(tr, r.symbol);
-      const sc = td(tr, ""); sc.appendChild(node("span", "badge " + (r.status === "OPEN" ? "reduce" : ""), r.status));
+      const sc = td(tr, ""); sc.appendChild(node("span", "m7-tag " + (r.status === "OPEN" ? "yellow" : "muted"), r.status));
       td(tr, px(r.entry_price), "mono"); td(tr, wib(r.close_ms), "mono"); td(tr, px(r.exit_price), "mono");
       const mv = r.entry_price && r.exit_price ? r.exit_price / r.entry_price - 1 : null;
       td(tr, pct(r.entry_price, r.exit_price), mv === null ? "" : mv >= 0 ? "green" : "red");
@@ -137,13 +137,27 @@
     root.appendChild(cmp);
   }
 
+  function journalRows(st) {
+    return (st ? st.positions : []).map((r) => ({ id: r.source_id, symbol: r.symbol, open_ms: r.opened_ms, close_ms: r.close_ms,
+      entry: r.entry_price, exit: r.exit_price, pnl: r.pnl, reason: r.reason, status: r.status }));
+  }
+
   function render() {
     chip();
     const st = stats(strat());
     const meta = el("vps2Meta"); if (meta) meta.textContent = st.closed + "t" + (st.open ? " · " + st.open + " open" : "");
-    const a = el("vps2TradesRoot"), b = el("vps2StatsRoot");
+    const a = el("vps2TradesRoot"), b = el("vps2StatsRoot"), j = el("vps2JournalRoot");
     if (a) { a.replaceChildren(); renderPicker(a); renderOverview(a, st); renderTrades(a, st); }
     if (b) { b.replaceChildren(); renderPicker(b); renderStats(b, st); }
+    if (j && global.BabaJournal) {
+      global.BabaJournal.render(j, journalRows(strat()), { key: "vps2_" + s.pick,
+        emptyText: "Belum ada trade closed untuk " + s.pick + ".",
+        note: "Paper resmi VPS2 · PnL dari ledger paper (sudah termasuk fee paper) · tanggal close WIB",
+        extraButtons: (bar) => NAMES.forEach((n) => { const b2 = node("button", "btn" + (n === s.pick ? " active" : ""), n);
+          b2.onclick = () => { s.pick = n; try { sessionStorage.setItem("baba_vps2_pick", n); } catch (_) {} render();
+            if (global.BabaChart) { global.BabaChart.refreshTop(); global.BabaChart.redraw(); } }; bar.appendChild(b2); }),
+        onTradeClick: (r) => global.BabaChart && global.BabaChart.openTrade(r.symbol, r.open_ms, r.entry, "VPS2-" + r.id) });
+    }
   }
 
   function renderTop() {
@@ -180,5 +194,7 @@
     try { const p = sessionStorage.getItem("baba_vps2_pick"); if (NAMES.includes(p)) s.pick = p; } catch (_) {}
     load();
   }
-  global.StrongVPS2 = { init, activate, load, render, renderTop, chartMarkers, onTab: () => {} };
+  function onTab(name) { if (name === "vps2journal" || name === "vps2stats") render(); }
+  function data() { return s.data; }
+  global.StrongVPS2 = { init, activate, load, render, renderTop, chartMarkers, onTab, data };
 })(window);
