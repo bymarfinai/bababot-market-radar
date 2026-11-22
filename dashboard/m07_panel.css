@@ -55,13 +55,5 @@
 .j-day.flat{cursor:pointer;color:var(--text)}
 .j-day.sel{outline:2px solid var(--yellow2);outline-offset:-1px}
 .j-pad{visibility:hidden}
-/* strategy definition */
-.v2-def{padding:10px;border-bottom:1px solid var(--line2);background:#0d1014}
-.v2-def-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}.v2-def-head strong{font-size:12px}.v2-def-head span{font-size:9px;color:var(--muted)}
-.v2-def-grid{display:grid;grid-template-columns:.8fr 1.6fr;gap:12px}
-.v2-def-entry strong{font-size:11px;display:block;margin:3px 0}.v2-def-entry p{font-size:9px;color:var(--muted);margin:2px 0 9px;line-height:1.5}
-.v2-def-list{list-style:none;margin:4px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
-.v2-def-list li{font-size:9px;color:var(--muted);line-height:1.45}.v2-def-list b{color:var(--text);margin-right:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-.v2-def-list em{font-style:normal}
-@media(max-width:1000px){.j-curves,.j-lower,.v2-def-grid{grid-template-columns:1fr}.j-curve,.j-cal-box{border-right:0;border-bottom:1px solid var(--line2)}.v2-def-list{grid-template-columns:1fr}}
+@media(max-width:1000px){.j-curves,.j-lower{grid-template-columns:1fr}.j-curve,.j-cal-box{border-right:0;border-bottom:1px solid var(--line2)}}
 .m7-tag{display:inline-block;font-size:8px;font-weight:700;padding:2px 6px;border-radius:2px;border:1px solid var(--line);letter-spacing:.03em}
