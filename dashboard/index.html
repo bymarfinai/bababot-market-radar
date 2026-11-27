@@ -133,7 +133,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 </style>
 <link rel="stylesheet" href="strong_stage5.css">
 <link rel="stylesheet" href="strong_paper_view.css?v=strong-independent-v1">
-<link rel="stylesheet" href="m07_panel.css?v=4">
+<link rel="stylesheet" href="m07_panel.css?v=5">
 </head>
 <body>
 <div class="app">
@@ -161,6 +161,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
     <button class="strategy-btn" data-strategy="W1D"><strong>W1D LIVE</strong><span id="w1dStrategyStatus">PAUSE · READ-ONLY</span></button>
     </div>
   </div>
+  <div id="srcHealth" class="src-pill unknown" role="status" aria-live="polite" title="Memeriksa sumber sinyal VPS2…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">SUMBER …</span></div>
   <div class="strategy-context"><strong id="strategyContextTitle">Riset paper resmi M06 / M07 / M08</strong><span id="strategyContextNote">Read-only snapshot VPS2 · tiap 60 dtk</span></div>
 </div>
 
@@ -303,6 +304,7 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
           <button class="btn secondary yellow" id="m7Live">LIVE (uang asli)</button>
         </div>
         <div id="m7LiveNote" class="m7-note">—</div>
+        <div id="m7SrcNote" class="m7-src-note unknown"><strong>Sumber sinyal VPS2: memeriksa…</strong></div>
       </div>
       <div class="m7-card"><div class="m7-label">Akun Binance &amp; sistem</div><div id="m7Kv" class="m7-kv" style="margin-top:8px"></div></div>
       <div class="m7-card">
@@ -692,9 +694,10 @@ footer{height:30px;padding:0 12px;display:flex;align-items:center;justify-conten
 <script src="w1d_live_controls.js?v=w1d-independent-entry-20261013"></script>
 <dialog id="m7Dlg"><form method="dialog" id="m7DlgForm"><h3 id="m7DlgTitle">—</h3><div class="m7-sub" id="m7DlgText"></div><div id="m7DlgFields"></div><p class="m7-err" id="m7DlgErr"></p><div class="m7-dlg-actions"><button type="button" class="btn secondary" id="m7DlgCancel">Batal</button><button type="submit" class="btn primary" id="m7DlgOk">OK</button></div></form></dialog>
 <div id="m7Toast" role="status"></div>
+<script src="source_health.js?v=1"></script>
 <script src="baba_journal.js?v=2"></script>
 <script src="strong_vps2_view.js?v=4"></script>
-<script src="m07_live_panel.js?v=3"></script>
+<script src="m07_live_panel.js?v=4"></script>
 <script>
 (function(){
 'use strict';
@@ -1960,7 +1963,7 @@ el('controlToken').addEventListener('input',function(){
 var saved=sessionStorage.getItem('baba_control_token_v1');if(saved)syncTokenInputs(saved);var savedStrategy=sessionStorage.getItem('baba_active_strategy_v1');if(savedStrategy==='VPS2'||savedStrategy==='M07')state.activeStrategy=savedStrategy;
 if(window.W1DTab)window.W1DTab.init();
 window.StrongStage5.init();if(window.StrongPaperUI)window.StrongPaperUI.init();window.StrongStage5.activate(state.activeStrategy==='STRONG');
-if(window.StrongVPS2){window.StrongVPS2.init();window.StrongVPS2.activate(state.activeStrategy==='VPS2')}if(window.M07Live){window.M07Live.init();window.M07Live.activate(state.activeStrategy==='M07')}
+if(window.StrongVPS2){window.StrongVPS2.init();window.StrongVPS2.activate(state.activeStrategy==='VPS2')}if(window.M07Live){window.M07Live.init();window.M07Live.activate(state.activeStrategy==='M07')}if(window.SourceHealth)window.SourceHealth.init();
 if(window.W1DTab)window.W1DTab.activate(state.activeStrategy==='W1D');
 if(state.activeStrategy==='W1D'&&window.W1DOperations)window.W1DOperations.refresh(false);
 renderStrategyContext();showTerminalTab(state.activeStrategy==='VPS2'?'vps2trades':state.activeStrategy==='M07'?'m07control':state.activeStrategy==='W1D'?'w1dsummary':state.activeStrategy==='DLS'?'dlspositions':state.activeStrategy==='STRONG'?'strongpaper':'positions');

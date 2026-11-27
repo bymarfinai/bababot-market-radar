@@ -130,7 +130,7 @@
       ["PnL M07 hari ini (WIB)", usd(today), +today > 0 ? "green" : +today < 0 ? "red" : ""],
       ["Akun Binance", flat === null ? "—" : flat ? "FLAT" : "ADA POSISI / ORDER", flat === false ? "red" : ""],
       ["Executor", ex.alive ? "HIDUP" : "MATI", ex.alive ? "green" : "red"],
-      ["Sinyal VPS2", (ex.source_fresh ? "tersambung" : "TERPUTUS") + " · " + age(ex.source_heartbeat_age_ms), ex.source_fresh ? "green" : "red"],
+      ["Relay VPS2 → VPS1", (ex.source_fresh ? "tersambung" : "TERPUTUS") + " · " + age(ex.source_heartbeat_age_ms), ex.source_fresh ? "green" : "red"],
       ["Kembaran exit VPS1", (st.twin || {}).alive ? "HIDUP" : "MATI", (st.twin || {}).alive ? "green" : "red"],
       ["Withdraw API", p.enableWithdrawals ? "ON ⚠" : "OFF", p.enableWithdrawals ? "red" : "green"],
     ];
